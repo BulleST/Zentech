@@ -19,6 +19,7 @@ import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { AlertComponent } from './parts/alert/alert.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @NgModule({
     declarations: [
@@ -35,6 +36,7 @@ import { FormsModule } from '@angular/forms';
         ToastrModule.forRoot(),
         NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
         FormsModule,
+        TranslateModule.forRoot()
     ],
     providers: [
         CurrencyPipe,
@@ -50,9 +52,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppModule {
     constructor(
-        private config: PrimeNGConfig
+        private config: PrimeNGConfig,
+        private translateService: TranslateService
 
     ) {
+        this.translateService.setDefaultLang('pt-BR');
 
         this.config.setTranslation({
             startsWith: 'Começa com',
@@ -85,6 +89,15 @@ export class AppModule {
             strong: 'Forte',
             emptyMessage: 'Nenhum resultado encontrado',
             emptyFilterMessage: 'Nenhum resultado encontrado',
+            dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+            dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            chooseYear: 'Ano',
+           chooseMonth: 'Mês',
+           chooseDate: 'Dia',
+           today: 'Hoje',
+           dateFormat: 'dd/mm/yy'
         })
         this.config.filterMatchModeOptions = {
             text: [

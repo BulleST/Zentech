@@ -3,6 +3,7 @@ import { FilterMatchMode } from "primeng/api";
 
 export class PessoaList {
     id: number = 0;
+    idEncrypted?: string = '';
     nome: string = '';
     cpf: string = '';
     saldo: string = '';
@@ -38,6 +39,22 @@ export class PessoaRequestMany {
     isValid = true;
 }
 
+export class PessoaRelatorio {
+    id: number = 0;
+    nome: string = '';
+    cpf: number = 0;
+    dataOperacao: Date = new Date;
+    valorOperacao: number = 0;
+    valorOperacaoMoeda: string = '';
+    limiteAtribuido: number = 0;
+    limiteAtribuidoMoeda: string = '';
+    limiteConsumido: number = 0;
+    limiteConsumidoMoeda: string = '';
+    saldoLimite: number = 0;
+    saldoLimiteMoeda: string = '';
+    chargeBack: boolean = false;
+    status: string = '';
+}
 
 export var pessoaColumns: Column[] = [
     {
@@ -48,7 +65,8 @@ export var pessoaColumns: Column[] = [
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
         field: 'nome',
@@ -59,6 +77,7 @@ export var pessoaColumns: Column[] = [
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
+        showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
@@ -67,9 +86,10 @@ export var pessoaColumns: Column[] = [
         maskType: MaskType.cpf,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        filterMatchMode: FilterMatchMode.CONTAINS,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
         field: 'saldo',
@@ -77,18 +97,20 @@ export var pessoaColumns: Column[] = [
         maskType: MaskType.money,
         filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
+        filterShowAddButton: false,
         filterShowMatchMode: true,
+        showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'inclusao',
         header: 'Inclusão',
         maskType: MaskType.date,
-        filterType: FilterType.text,
+        filterType: FilterType.date,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
+        showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
@@ -99,7 +121,8 @@ export var pessoaColumns: Column[] = [
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
         booleanValues: {
             'true': 'ativo',
             'false': 'inativo',

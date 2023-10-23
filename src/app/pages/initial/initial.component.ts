@@ -33,10 +33,7 @@ export class InitialComponent {
 
     @HostListener('paste', ['$event'])
     paste(e: ClipboardEvent) {
-        console.log('oi')
-
         this.modal.onPaste.emit(e);
-      
     }
 
 }

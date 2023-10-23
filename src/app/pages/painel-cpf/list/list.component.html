@@ -54,11 +54,53 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns *ngIf="list.length > 0">
                     <tr class="grey">
-                        <th [pSortableColumn]="item.field" *ngFor="let item of columns">
+                        <!-- <th [pSortableColumn]="'id'">
                             <div class="d-flex align-items-center justify-content-between">
+                                <span class="me-auto" [innerHTML]="'Id'"></span>
+                                <p-sortIcon [field]="'id'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'id'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th [pSortableColumn]="'nome'">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="me-auto" [innerHTML]="'Nome'"></span>
+                                <p-sortIcon [field]="'nome'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th [pSortableColumn]="'cpf'">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="me-auto" [innerHTML]="'CPF'"></span>
+                                <p-sortIcon [field]="'cpf'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                            </div>
+                        </th>
+                        <th [pSortableColumn]="'saldo'">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="me-auto" [innerHTML]="'Saldo'"></span>
+                                <p-sortIcon [field]="'saldo'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'saldo'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false">
+                                    <ng-template pTemplate="filter" let-filter="filterCallback">
+                                        <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3"></p-slider>
+                                        <div class="flex align-items-center px-2">
+                                            <span>{{ activityValues[0] }}</span>
+                                            <span>{{ activityValues[1] }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-columnFilter>
+                            </div>
+                        </th> -->
+                        <th [pSortableColumn]="item.field" *ngFor="let item of columns">
+                            <div class="d-flex align-items-baseline justify-content-between">
                                 <span class="me-auto" [innerHTML]="item.header"></span>
                                 <p-sortIcon [field]="item.field"></p-sortIcon>
-                                <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [matchMode]="item.filterMatchMode" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton"></p-columnFilter>
+                                <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [matchMode]="item.filterMatchMode" [showOperator]="item.showOperator" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton">
+                                    <ng-template pTemplate="filter" let-filter="filterCallback" 
+                                        *ngIf="item.booleanValues || item.maskType == 'cpf'">
+                                        <p-dropdown *ngIf="item.booleanValues" [(ngModel)]="currentBooleanFilter" [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'}, {value: false, label: 'Inativo'} ]" (onChange)="filter($event.value); currentBooleanFilter = $event.value" placeholder="Todos" optionLabel="label" optionValue="value"></p-dropdown>
+                                        <input type="text" *ngIf="item.maskType == 'cpf'" pInputText mask="000.000.000-00" #cpf="ngModel" ngModel (change)="filter(cpf.value); currentCPFFilter = cpf.value;" placeholder="000.000.000-00"  />
+                                    </ng-template>
+                                </p-columnFilter>
                             </div>
                         </th>
                         <th class="td-actions">Ações</th>
@@ -80,13 +122,13 @@
                             </ng-template>
                         </td>
                         <td class="td-actions">
-                            <a class="btn btn-small btn-dark" [routerLink]="['relatorio', item.id]"><small>Visualizar</small></a>
+                            <a class="btn btn-small btn-dark" [routerLink]="['relatorio', item.idEncrypted]"><small>Visualizar</small></a>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td colspan="7" class="py-2 px-2 bg-light border-0 border-light">
+                        <td colspan="7" class="py-2 px-3 border-0 border-light">
                             <p *ngIf="loading" class="py-1 px-1">
                                 <span class="spinner-border spinner-border-sm me-1"></span>
                                 <span>Carregando... </span>

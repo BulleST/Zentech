@@ -5,6 +5,8 @@ import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
+import { Crypto } from 'src/app/utils/crypto';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-list',
@@ -19,22 +21,27 @@ export class ListComponent {
     list: PessoaList[] = [];
     filters: string[] = [];
     columns = pessoaColumns;
+    currentBooleanFilter: any;
+    currentCPFFilter: any;
 
     constructor(
         private table: Table,
-        private router: Router
+        private router: Router,
+        private crypto: Crypto,
+        private datepipe: DatePipe,
     ) { 
         var index = 0;
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index.toString().padStart(11, '0'), inclusao: new Date(), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.format()
     }
 
     ngAfterViewChecked(): void {
@@ -42,6 +49,16 @@ export class ListComponent {
             this.table.currentPageChange();
         }, 200);
     }
+
+    format() {
+        this.list = this.list.map(x => {
+            x.idEncrypted = this.crypto.encrypt(x.id) ?? undefined;
+            x.cpf = x.cpf.toString().padStart(11, '0')
+            x.inclusao = this.datepipe.transform(x.inclusao, 'yyyy-MM-dd') as unknown as Date;
+            return x;
+        })
+    }
+
     getCellData(row: any, col: Column): any {
         return this.table.getCellData(row, col);
     }
@@ -54,5 +71,4 @@ export class ListComponent {
         }
         return title;
     }
-
 }

@@ -149,7 +149,7 @@
                                         <td>{{item.idNum}}</td>
                                         <td>{{item.tipoErro}}</td>
                                         <td class="td-actions">
-                                            <button class="btn btn-small btn-dark">excluir</button>
+                                            <button type="button" (click)="removeItem(item, page, file)" class="btn btn-small btn-dark">excluir</button>
                                         </td>
                                     </tr>
                                 </ng-template>

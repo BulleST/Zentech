@@ -61,59 +61,73 @@ export class Table {
 
 
     exibirMenuTable() {
-      setTimeout(() => {
-        let tr = $('tr.selected'); 
-        if (tr) {
-            let td = $(tr).find('.td-actions');
-            if (td) {
-                let top = ($(td).offset()?.top ?? 0);
-                let left = ($(td).offset()?.left ?? 0);
-                $('.actions__nav').css({
-                    'display': 'flex',
-                    'top': top + 'px',
-                    'left': left + 'px',
-                    'opacity': 1,
-                    'visibility': 'visible',
-                });
+        setTimeout(() => {
+            let tr = $('tr.selected');
+            if (tr) {
+                let td = $(tr).find('.td-actions');
+                if (td) {
+                    let top = ($(td).offset()?.top ?? 0);
+                    let left = ($(td).offset()?.left ?? 0);
+                    $('.actions__nav').css({
+                        'display': 'flex',
+                        'top': top + 'px',
+                        'left': left + 'px',
+                        'opacity': 1,
+                        'visibility': 'visible',
+                    });
+                }
             }
-        }
-      }, 10);
+        }, 10);
     }
 
-    
+
     getCellData(row: any, col: Column): any {
         const nestedProperties: string[] = col.field.split('.');
         let value: any = row;
-        
+
         for (const prop of nestedProperties) {
             value = value ? value[prop] ?? undefined : undefined;
         }
         if (col.maskType && value != undefined && value.toString().trim() != '') {
-            if (col.maskType == MaskType.percentage) {
+            if (col.maskType == MaskType.number) { 
+                value = this.currency.transform(value.toString(), 'BRL', '', col.decimal); 
+            }
+            else if (col.maskType == MaskType.percentage) {
                 value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
-            } else if (col.maskType == MaskType.money) {
+            } 
+            else if (col.maskType == MaskType.money) {
                 value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
-            } else if (col.maskType == MaskType.cnpj) {
+            } 
+            else if (col.maskType == MaskType.cnpj) {
                 value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
-            } else if (col.maskType == MaskType.cpf) {
+            } 
+            else if (col.maskType == MaskType.cpf) {
                 value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
-            } else if (col.maskType == MaskType.rg) {
+            } 
+            else if (col.maskType == MaskType.rg) {
                 value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
-            } else if (col.maskType == MaskType.any && col.mask) {
+            } 
+            else if (col.maskType == MaskType.any && col.mask) {
                 value = this.mask.applyMask(value, col.mask);
-            } else if (col.maskType == MaskType.date) {
+            } 
+            else if (col.maskType == MaskType.date) {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
-            } else if (col.maskType == MaskType.dateTime) {
+            } 
+            else if (col.maskType == MaskType.dateTime) {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
-            } else if (col.maskType == MaskType.boolean) {
+            } 
+            else if (col.maskType == MaskType.boolean) {
                 value = col.booleanValues[value]
-            } else if (col.maskType == MaskType.telefoneCelular) {
-                value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000' ))
-            } else if (col.maskType == MaskType.substring) {
+            } 
+            else if (col.maskType == MaskType.telefoneCelular) {
+                value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
+            } 
+            else if (col.maskType == MaskType.substring) {
                 if (col.substringLength && value.length > col.substringLength) {
                     value = value.substring(0, col.substringLength) + '...'
                 }
-            } else {
+            } 
+            else {
                 return value ?? '-';
             }
 
@@ -146,13 +160,13 @@ export class Table {
         $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').unbind('click')
         $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').on('click', (e) => {
             let currentPage = parseInt($(e.target).text()) ?? 1;
-            if(currentPage != this.currentPage.value) {
+            if (currentPage != this.currentPage.value) {
                 this.onRowUnselect();
             }
             classe.currentPage.next(currentPage)
         })
     }
-    
+
     goToCurrentPage() {
         setTimeout(() => {
             $('p-table').find('p-paginator').find('.p-paginator-pages').find(`.p-paginator-page:contains(${this.currentPage.value})`).trigger('click')

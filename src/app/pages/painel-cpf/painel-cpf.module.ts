@@ -17,6 +17,8 @@ registerLocaleData(localePt);
 
 import { AccordionModule } from 'primeng/accordion';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TagModule } from 'primeng/tag';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
     declarations: [
@@ -36,6 +38,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
         NgxMaskModule.forChild(),
         AccordionModule,
         SharedModule,
+        TagModule,
+        InputTextModule
     ],
     providers: [
         CurrencyPipe,

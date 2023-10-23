@@ -58,18 +58,14 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     setActive() {
         this.activeIndex = Array.of(this.files.length).map(x => x == 0 ? 0 : x - 1)
-        console.log(this.activeIndex);
     }
 
 
     @HostListener('paste', ['$event'])
     paste(e: ClipboardEvent) {
         this.activeIndex = [];
-        console.log('oi')
         var list = e.clipboardData?.getData('text/plain').split('\r\n').map(x => x.trim()).filter(x => x != '') ?? [];
-        console.log(list)
         var id = this.setNewId(this.files.map(x => x.pages.map(y => y.list).flat(1)).flat(1));
-        console.log(id)
 
         for (var item of list) {
             var cells = item.split('\t');
@@ -217,7 +213,17 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         });
     }
 
+    removeItem(item: PessoaRequestMany, page: page, file: file){
+        var fileIndex = this.files.findIndex(x => x.id == file.id);
+        var pageIndex = file.pages.findIndex(x => x.id == page.id);
+        var pessoaIndex = page.list.findIndex(x => x.id == item.id && x.cpf == item.cpf);
+        if (fileIndex != -1 && pageIndex != -1 && pessoaIndex != -1) {
+            this.files[fileIndex].pages[pageIndex].list.splice(pessoaIndex, 1);
+        } else {
+            this.toastr.error('Não foi possível remover item.')
+        }
 
+    }
     send(model: NgForm) {
         this.loading = true;
         this.erro = '';

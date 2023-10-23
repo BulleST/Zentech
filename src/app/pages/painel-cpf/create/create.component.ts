@@ -71,7 +71,6 @@ export class CreateComponent implements OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.modal.setOpen(false);
         this.subscription.forEach(item => item.unsubscribe());
     }
 

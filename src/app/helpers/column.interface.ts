@@ -10,6 +10,7 @@ export interface Column {
     filterType: FilterType, 
     filterDisplay: FilterDisplay,
     filterShowMatchMode?: boolean;
+    showOperator?: boolean;
     filterShowAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
     booleanValues?: any;
@@ -31,6 +32,7 @@ export enum FilterDisplay {
 
 export enum MaskType {
     undefined,
+    number = 'number',
     money = 'money',
     percentage = 'percentage',
     date = 'date',
