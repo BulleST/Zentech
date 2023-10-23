@@ -1,0 +1,17 @@
+.login__form {
+    max-width: 800px!important;
+}
+
+.login__form-img {
+    height: 130px!important;
+    background-position: 0 -230px!important;
+}
+
+.login__form {
+    max-height: 1000px!important;
+}
+
+/* .login__form-form {
+    max-height: 490px!important; 
+    overflow: auto!important;
+} */

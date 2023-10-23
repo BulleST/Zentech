@@ -1,0 +1,176 @@
+<div (paste)="paste($event)" >
+    <ng-template #icon>
+        <img src="./../../../../assets/img/icon-excel.png">
+    </ng-template>
+    <ng-template #template>
+        <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+            <label for="file" class="input-file-container">
+                <p class="icon">
+                    <i class="pi pi-upload"></i>
+                </p>
+                <h3>Clique e arraste para selecionar arquivo</h3>
+                <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
+                <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p>
+                <input type="file"
+                       hidden
+                       name="file"
+                       id="file"
+                       #file="ngModel"
+                       [ngModel]
+                       multiple
+                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                       (change)="readExcel1($event)">
+            </label>
+            <p-accordion [multiple]="true" *ngIf="files.length > 0" [activeIndex]="activeIndex">
+                <p-accordionTab *ngFor="let file of files">
+                    <ng-template pTemplate="header">
+                        <div>{{file.nome}}</div>
+                    </ng-template>
+                    <ng-template pTemplate="content">
+                        <div class="table-responsive content">
+                            <p-table *ngFor="let page of file.pages" 
+                                [value]="page.list"
+                                styleClass="table table-stripped p-datatable-striped"
+                                [globalFilterFields]="filters"
+                                [filterDelay]="100">
+                                <ng-template pTemplate="header">
+                                    <tr class="grey bg-dark" *ngIf="page.nome">
+                                        <th></th>
+                                        <th colspan="13">{{page.nome}}</th>
+                                    </tr>
+                                    <tr class="grey">
+                                        <th>#</th>
+                                        <th>
+                                            <span>CPF</span>
+                                            <p-sortIcon [field]="'cpf'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Nome</span>
+                                            <p-sortIcon [field]="'nome'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Data de Nascimento</span>
+                                            <p-sortIcon [field]="'dataNascimento'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'dataNascimento'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Situação</span>
+                                            <p-sortIcon [field]="'situacao'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'situacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Data Inscrição</span>
+                                            <p-sortIcon [field]="'dataInscricao'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'dataInscricao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Dígito</span>
+                                            <p-sortIcon [field]="'digito'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'digito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Controle</span>
+                                            <p-sortIcon [field]="'controle'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'controle'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Ano Óbito</span>
+                                            <p-sortIcon [field]="'anoObito'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'anoObito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Status</span>
+                                            <p-sortIcon [field]="'status'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'status'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Data Cap.</span>
+                                            <p-sortIcon [field]="'dataCap'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'dataCap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Hora Cap.</span>
+                                            <p-sortIcon [field]="'horaCap'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'horaCap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>IdNum</span>
+                                            <p-sortIcon [field]="'idNum'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'idNum'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th>
+                                            <span>Tipo Erro</span>
+                                            <p-sortIcon [field]="'tipoErro'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'tipoErro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                    
+                                        </th>
+                                        <th class="td-actions"></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                                    <tr >
+                                        <td>{{item.id}}</td>
+                                        <td>
+                                            <span *ngIf="!item.isValid" class="me-2 flag flag-text flag-danger" title="CPF inválido">
+                                                <fa-icon [icon]="faCircleXmark"></fa-icon>
+                                            </span>
+                                            <span *ngIf="item.isDuplicate" class="me-2 flag flag-text flag-warning" title="CPF duplicado">
+                                                <fa-icon [icon]="faTriangleExclamation"></fa-icon>
+                                            </span>
+                                            <span *ngIf="!item.isDuplicate && item.isValid" class="me-2 flag flag-text flag-green" title="CPF válido">
+                                                <fa-icon [icon]="faCircleCheck"></fa-icon>
+                                            </span>
+                                            {{item.cpf | mask : '000.000.000-00'}}
+                                        </td>
+                                        <td>{{item.nome}}</td>
+                                        <td>{{item.dataNascimento}}</td>
+                                        <td>{{item.situacao}}</td>
+                                        <td>{{item.dataInscricao}}</td>
+                                        <td>{{item.digito}}</td>
+                                        <td>{{item.controle}}</td>
+                                        <td>{{item.anoObito}}</td>
+                                        <td>{{item.status}}</td>
+                                        <td>{{item.dataCap}}</td>
+                                        <td>{{item.horaCap}}</td>
+                                        <td>{{item.idNum}}</td>
+                                        <td>{{item.tipoErro}}</td>
+                                        <td class="td-actions">
+                                            <button class="btn btn-small btn-dark">excluir</button>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </ng-template>
+                </p-accordionTab>
+            </p-accordion>
+            <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
+                <div class="m-0">
+                    <p class="text-info">Clique aqui para saber como deve ser o arquivo XLSX</p>
+                </div>
+                <div *ngIf="erro || form.invalid" class="m-0">
+                    <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                    <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+                </div>
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <span>Salvar</span>
+                </button>
+            </div>
+        </form>
+    </ng-template>
+</div>

@@ -1,0 +1,171 @@
+/* .login {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    flex-flow: wrap;
+}
+
+.login__bg {
+    background-size: auto 100vh;
+    background-position: right top;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column;
+}
+
+.login__bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #002d34b3, #2804278f);
+}
+
+.login__bg img {
+    filter: drop-shadow(2px 4px 6px black);
+    z-index: 1;
+    position: fixed;
+    opacity: 0.6;
+    max-width: 300px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+}
+
+@keyframes loginBGLogo {
+    from {
+        max-width: 0;
+    }
+
+    to {
+        max-width: 300px;
+    }
+}
+
+.login__form {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    padding: 7vh 0;
+}
+
+.login__form-inner {
+    min-height: 70vh;
+    width: 100%;
+}
+
+.login__form-inner img {
+    position: relative;
+    width: 250px;
+    margin: 4vh auto 0;
+    height: calc(90px);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+
+@media (max-width: 800px) {
+    .login__bg {
+        display: none;
+    }
+    .login__bg img {
+        position: static;
+        top: 0;
+        transform: none;
+    }
+}
+ */
+
+ .login {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+    /* background-image: url(https://investnews.com.br/wp-content/uploads/2021/08/coins-are-stacked-together-with-morning-sun-shining-scaled.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: red; */
+    background: linear-gradient(45deg, var(--primary), #061d25);
+}
+.login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00bcd43d;
+}
+.login__form {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 400px;
+    display: flex;
+    flex-flow: column;
+    padding: 0 0;
+    background-color: white;
+    max-height: 500px;
+    /* height: 95vh; */
+    box-shadow: 3px 3px 3px #00000045;
+    overflow: hidden;
+    z-index: 1;
+}
+.login__form-form {
+    padding: 10px 3vw 20px;
+    /* height: 70%; */
+}
+
+.login__form-img {
+    background-image: url(https://investnews.com.br/wp-content/uploads/2021/08/coins-are-stacked-together-with-morning-sun-shining-scaled.jpg);
+    width: 100%;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-shadow: 2px 2px 2px #013446;
+    font-weight: 100;
+    position: relative;
+    text-align: center;
+    padding: 0 30px;
+}
+
+.login__form-img::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000091;
+    z-index: 0;
+}
+
+.login__form-img p, .login__form-img .login-title {
+    position: relative;
+    z-index: 1;
+}

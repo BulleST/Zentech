@@ -1,0 +1,126 @@
+
+<ng-template #icon>
+    <fa-icon [icon]="faUser"></fa-icon>
+</ng-template>
+<ng-template #template>
+    <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+        <div class="form-row">
+            <div class="form-group col-lg-8 col-md-8 col-sm-6 col-12">
+                <label for="nome">Nome Completo: <span class="text-danger">*</span></label>
+                <input type="text"
+                        class="form-control"
+                        name="nome"
+                        id="nome"
+                        #nome="ngModel"
+                        [(ngModel)]="objeto.nome"
+                        required
+                        pattern="\S(.*\S)?"
+                        (change)="objeto.nome = nome.value.trim(); ">
+                <div *ngIf="nome.touched && nome.errors">
+                    <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="nome.errors['pattern']">
+                        <span *ngIf="nome.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+                <label for="cpf">CPF: <span class="text-danger">*</span></label>
+                <input type="text"
+                        class="form-control"
+                        name="cpf"
+                        id="cpf"
+                        #cpf="ngModel"
+                        [(ngModel)]="objeto.cpf"
+                        mask="000.000.000-00"
+                        placeholder="000.000.000-00"
+                        required
+                        pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                        (change)="validaCPF(cpf, cpf.value)">
+                <div *ngIf="cpf.touched && cpf.errors">
+                    <p class="text-danger" *ngIf="cpf.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="cpf.errors['mask'] || cpf.errors['invalid']">CPF inválido.</p>
+                    <p class="text-danger" *ngIf="cpf.errors['jaCadastrado']">CPF já cadastrado</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
+                <input type="date"
+                        class="form-control"
+                        name="dataNascimento"
+                        id="dataNascimento"
+                        #dataNascimento="ngModel"
+                        [(ngModel)]="objeto.dataNascimento"
+                        (ngModelChange)="validateDataNascimento();"
+                        [min]="dataNascimentoMin"
+                        [max]="dataNascimentoMax"
+                        required>
+                <div *ngIf="dataNascimento.touched && dataNascimento.errors">
+                    <p class="text-danger" *ngIf="dataNascimento.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="dataNascimento.errors['date']">Data inválida.</p>
+                    <p class="text-danger" *ngIf="dataNascimento.errors['min']"><small>Data mínima é {{dataNascimentoMin}}</small></p>
+                    <p class="text-danger" *ngIf="dataNascimento.errors['max']"><small>Data máxima é {{dataNascimentoMax}}</small></p>
+                </div>
+            </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
+                <label for="nomeMae">Nome da Mãe: <span class="text-danger">*</span></label>
+                <input type="text"
+                        class="form-control"
+                        name="nomeMae"
+                        id="nomeMae"
+                        #nomeMae="ngModel"
+                        [(ngModel)]="objeto.nomeMae"
+                        required
+                        pattern="\S(.*\S)?"
+                        (change)="objeto.nomeMae = nomeMae.value.trim(); ">
+                <div *ngIf="nomeMae.touched && nomeMae.errors">
+                    <p class="text-danger" *ngIf="nomeMae.errors['required']">Este campo é obrigatório.</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                <label for="email">E-mail: <span class="text-danger">*</span></label>
+                <input type="email"
+                        [email]="true"
+                        class="form-control"
+                        name="email"
+                        id="email"
+                        #email="ngModel"
+                        [(ngModel)]="objeto.email"
+                        required
+                        [pattern]="emailPattern">
+                <div *ngIf="email.touched && email.errors">
+                    <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido.</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                <label for="email">Observações: </label>
+                <textarea class="form-control"
+                        name="obs"
+                        id="obs"
+                        #obs="ngModel"
+                        [(ngModel)]="objeto.obs">
+                </textarea>
+                <div *ngIf="obs.touched && obs.errors">
+                    <p class="text-danger" *ngIf="obs.errors">{{email.errors|json}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
+            <div *ngIf="erro || form.invalid" class="m-0">
+                <p class="text-danger" *ngFor="let err of erro">{{err | json}}</p>
+                <p *ngIf="form.invalid && erro.length == 0" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+            </div>
+            <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                <span>Salvar</span>
+            </button>
+        </div>
+    </form>
+</ng-template>
+

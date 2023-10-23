@@ -1,0 +1,16 @@
+<header style="z-index: 1; position: relative;">
+    <app-header></app-header>
+</header>
+<main style="z-index: 0; position: relative;">
+    <router-outlet></router-outlet>
+</main>
+
+
+<app-modal 
+    [title]="title" 
+    [template]="template" 
+    [style]="style" 
+    [routerBack]="routerBack" 
+    [activatedRoute]="activatedRoute" 
+    [icon]="icon">
+</app-modal>
