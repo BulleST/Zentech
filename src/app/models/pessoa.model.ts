@@ -6,9 +6,11 @@ export class PessoaList {
     idEncrypted?: string = '';
     nome: string = '';
     cpf: string = '';
-    saldo: string = '';
+    saldo: number = 0;
     inclusao: Date = '' as unknown as Date;
     status: boolean = false;
+
+    filterConcat?: string = '';
 }
 
 export class PessoaRequest {
@@ -94,8 +96,9 @@ export var pessoaColumns: Column[] = [
     {
         field: 'saldo',
         header: 'Saldo',
-        maskType: MaskType.money,
+        maskType: MaskType.number,
         filterType: FilterType.numeric,
+        decimal: '1.2',
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: true,
@@ -111,7 +114,7 @@ export var pessoaColumns: Column[] = [
         filterShowAddButton: true,
         filterShowMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
+        filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
         field: 'status',

@@ -93,7 +93,7 @@
 
 .table .grey th,
 .table th.grey {
-    background-color: var(--grey);
+    background-color: rgb(var(--grey));
     color: #fff;
 }
 
@@ -127,7 +127,6 @@
     height: 25px;
     margin-top: -1px;
 }
-
 
 .p-column-filter-menu-button .p-icon-wrapper .p-icon.pi-filter-icon {
     margin-left: -1px;
@@ -287,16 +286,16 @@ tr.selectable {
     padding: 0px 0px 10px;
 }
 
-/* .p-inputwrapper .p-dropdown {
-    margin-bottom: 10px;
-} */
-
 .p-inputwrapper .p-dropdown {
     border: 1px #b7afaf solid;
     border-radius: 5px;
     padding: 2px 8px;
 }
 
+.p-dropdown:hover {
+    border: 1px rgb(var(--grey)) solid;
+    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+}
 
 .p-column-filter-constraint {
     padding: 10px 0;
@@ -322,11 +321,10 @@ tr.selectable {
 .p-column-filter-matchmode-dropdown:hover,
 .p-column-filter-operator-dropdown:hover,
 .p-column-filter-constraint input:hover {
-    border: 1px var(--primary) solid;
-    box-shadow: 0px 0px 2px 2px #1044566e;
+    border: 1px rgb(var(--grey)) solid;
+    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
     cursor: pointer;
 }
-
 
 .p-column-filter-buttonbar {
     display: flex;
@@ -336,27 +334,29 @@ tr.selectable {
 
 .p-column-filter-buttonbar .p-button.p-button-outlined {
     padding: 5px 10px;
-    border: 1px var(--primary) solid;
+    border: 1px rgb(var(--secondary)) solid;
     border-radius: 3px;
-    color: var(--primary);
+    color: rgb(var(--secondary));
     background: none;
     white-space: nowrap;
     margin-right: 6px;
 }
 
-.p-column-filter-buttonbar .p-button-outlined:hover,
 .p-column-filter-buttonbar .p-button:hover {
-    box-shadow: 0px 0px 2px 2px #1044566e;
+    box-shadow: 0 0 0px 2px rgb(var(--primary) / 40%);
+}
+
+.p-column-filter-buttonbar .p-button-outlined:hover {
+    box-shadow: 0 0 0px 2px rgb(var(--secondary) / 40%);
 }
 
 .p-column-filter-buttonbar .p-button {
     padding: 5px 10px;
-    border: 1px var(--primary) solid;
+    border: 1px rgb(var(--primary)) solid;
     border-radius: 3px;
     color: #fff;
-    background-color: var(--primary);
+    background-color: rgb(var(--primary));
 }
-
 
 .p-inputnumber-button-group {
     display: flex;
@@ -366,8 +366,8 @@ tr.selectable {
     padding: 0;
     display: flex;
     align-items: center;
-    border: 1px var(--primary) solid;
-    background-color: var(--primary);
+    border: 1px rgb(var(--grey)) solid;
+    background-color: rgb(var(--grey));
     color: #fff;
     flex: 1 1 auto;
     width: 30px;
@@ -395,15 +395,23 @@ tr.selectable {
     border-radius: 0 0 5px 0px;
 }
 
+.p-inputnumber:hover {
+    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    border-radius: 5px;
+}
 
+.p-inputnumber .p-inputnumber-input:hover {
+    box-shadow: none;
+}
 
 .p-inputnumber .p-inputnumber-input {
     border-radius: 5px 0 0 5px;
 }
 
 .p-inputnumber-button-group .p-inputnumber-button:hover {
-    box-shadow: 0px 0px 2px 2px #1044566e;
+    /* box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%); */
     cursor: pointer;
+    background-color: rgb(var(--secondary));
 }
 
 .p-column-filter-matchmode-dropdown {
@@ -487,13 +495,42 @@ tr.selectable {
 }
 
 .p-calendar {
-    
     margin-top: 10px;
 }
+
+.p-calendar .p-inputtext {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.p-calendar .p-inputtext:hover {
+    border: 1px rgb(var(--grey)) solid;
+}
+
+.p-calendar .p-datepicker-trigger {
+    padding: 0 9px;
+    border: 1px rgb(var(--grey)) solid;
+    background-color: rgb(var(--grey));
+    border-radius: 0 5px 5px 0;
+    color: #fff;
+}
+
+.p-calendar:hover {
+    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    border-radius: 5px
+}
+
+.p-calendar .p-inputtext:hover {
+    box-shadow: none;
+}
+
+.p-calendar:hover .p-inputtext {
+    border: 1px rgb(var(--grey)) solid;
+}
+
 .p-datepicker .p-datepicker-header .p-datepicker-title {
     line-height: 1;
 }
-
 
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-year,
 .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
@@ -536,7 +573,6 @@ tr.selectable {
 }
 
 .p-datepicker table td>span {
-
     width: 25px;
     height: 25px;
     border-radius: 50%;
@@ -569,10 +605,10 @@ tr.selectable {
 
 .p-column-filter-add-button {
     padding: 5px 10px;
-    border: 1px var(--grey) solid;
+    border: 1px rgb(var(--grey)) solid;
     border-radius: 3px;
     color: #fff;
-    background-color: var(--grey);
+    background-color: rgb(var(--grey));
     width: 100%;
 }
 

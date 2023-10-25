@@ -106,7 +106,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-color: red; */
-    background: linear-gradient(45deg, var(--primary), #061d25);
+    background: linear-gradient(45deg, rgb(var(--primary)), #061d25);
 }
 .login::before {
     content: '';

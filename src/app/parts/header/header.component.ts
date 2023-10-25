@@ -7,6 +7,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { Header } from 'src/app/utils/header';
 import { AlertService } from '../alert/alert.service';
 import { MenuItem } from 'primeng/api';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -25,13 +26,20 @@ export class HeaderComponent implements AfterViewInit {
     perfil = '';
     subscription: Subscription[] = [];
 
+    homeActive = true;
 
     constructor(
         private accountService: AccountService,
         private header: Header,
         private alertService: AlertService,
-
+        private router: Router
     ) {
+
+        this.router.events.subscribe(res => {
+            if(res instanceof NavigationEnd)
+                this.homeActive = res.url == '/'
+        })
+
         this.userLogado = this.accountService.accountValue;
         var account = this.accountService.account.subscribe(async res => {
             this.userLogado = res;

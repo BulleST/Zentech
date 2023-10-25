@@ -47,58 +47,28 @@
                             <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2">
                                 <i class="pi pi-search"></i>
                                 <input pInputText type="text" class="form-control "
-                                       (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Buscar registro" />
+                                       (input)="dt.filterGlobal(filter.value , 'contains')" 
+                                       #filter 
+                                       placeholder="Buscar registro" />
                             </div>
                         </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns *ngIf="list.length > 0">
                     <tr class="grey">
-                        <!-- <th [pSortableColumn]="'id'">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="me-auto" [innerHTML]="'Id'"></span>
-                                <p-sortIcon [field]="'id'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'id'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th [pSortableColumn]="'nome'">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="me-auto" [innerHTML]="'Nome'"></span>
-                                <p-sortIcon [field]="'nome'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th [pSortableColumn]="'cpf'">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="me-auto" [innerHTML]="'CPF'"></span>
-                                <p-sortIcon [field]="'cpf'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-                            </div>
-                        </th>
-                        <th [pSortableColumn]="'saldo'">
-                            <div class="d-flex align-items-center justify-content-between">
-                                <span class="me-auto" [innerHTML]="'Saldo'"></span>
-                                <p-sortIcon [field]="'saldo'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'saldo'" [display]="'menu'" [matchMode]="'CONTAINS'" [showOperator]="false" [showMatchModes]="false" [showAddButton]="false">
-                                    <ng-template pTemplate="filter" let-filter="filterCallback">
-                                        <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($event.values)" styleClass="m-3"></p-slider>
-                                        <div class="flex align-items-center px-2">
-                                            <span>{{ activityValues[0] }}</span>
-                                            <span>{{ activityValues[1] }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-columnFilter>
-                            </div>
-                        </th> -->
                         <th [pSortableColumn]="item.field" *ngFor="let item of columns">
                             <div class="d-flex align-items-baseline justify-content-between">
                                 <span class="me-auto" [innerHTML]="item.header"></span>
                                 <p-sortIcon [field]="item.field"></p-sortIcon>
                                 <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [matchMode]="item.filterMatchMode" [showOperator]="item.showOperator" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton">
-                                    <ng-template pTemplate="filter" let-filter="filterCallback" 
-                                        *ngIf="item.booleanValues || item.maskType == 'cpf'">
-                                        <p-dropdown *ngIf="item.booleanValues" [(ngModel)]="currentBooleanFilter" [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'}, {value: false, label: 'Inativo'} ]" (onChange)="filter($event.value); currentBooleanFilter = $event.value" placeholder="Todos" optionLabel="label" optionValue="value"></p-dropdown>
-                                        <input type="text" *ngIf="item.maskType == 'cpf'" pInputText mask="000.000.000-00" #cpf="ngModel" ngModel (change)="filter(cpf.value); currentCPFFilter = cpf.value;" placeholder="000.000.000-00"  />
+                                    <ng-template *ngIf="item.booleanValues" pTemplate="filter" let-filter="filterCallback">
+                                        <p-dropdown [(ngModel)]="currentBooleanFilter" [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'}, {value: false, label: 'Inativo'} ]" (onChange)="filter($event.value); currentBooleanFilter = $event.value" placeholder="Todos" optionLabel="label" optionValue="value"></p-dropdown>
+                                    </ng-template>
+                                    <ng-template *ngIf="item.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
+                                        <input type="text" pInputText mask="000.000.000-00" #cpf="ngModel" ngModel (change)="filter(cpf.value); currentCPFFilter = cpf.value;" placeholder="000.000.000-00"  />
+                                    </ng-template>
+                                    <ng-template *ngIf="item.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
+                                        <p-calendar [(ngModel)]="currentDateFilter" (onSelect)="filter($event);" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
                                     </ng-template>
                                 </p-columnFilter>
                             </div>
@@ -135,8 +105,8 @@
                             </p>
                             <p *ngIf="!loading">
                                 <span>Nenhum registro encontrado.</span>
-                                <a [routerLink]="['cadastrar']" class="ms-1">Clique aqui para adicionar</a> ou 
-                                <a [routerLink]="['importar']" class="ms-1">Importe dados de um excel</a>
+                                <!-- <a [routerLink]="['cadastrar']" class="ms-1">Clique aqui para adicionar</a> ou 
+                                <a [routerLink]="['importar']" class="ms-1">Importe dados de um excel</a> -->
                             </p>
                         </td>
                     </tr>

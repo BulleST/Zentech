@@ -57,6 +57,7 @@ export class AppModule {
 
     ) {
         this.translateService.setDefaultLang('pt-BR');
+        this.translateService.use('pt-BR');
 
         this.config.setTranslation({
             startsWith: 'Começa com',
@@ -94,10 +95,14 @@ export class AppModule {
             dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
             monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             chooseYear: 'Ano',
-           chooseMonth: 'Mês',
-           chooseDate: 'Dia',
-           today: 'Hoje',
-           dateFormat: 'dd/mm/yy'
+            chooseMonth: 'Mês',
+            chooseDate: 'Dia',
+            today: 'Hoje',
+            dateFormat: 'dd/mm/yy',
+            prevYear: 'Anterior',
+            nextYear: 'Próximo',
+            prevMonth: 'Anterior',
+            nextMonth: 'Próximo',
         })
         this.config.filterMatchModeOptions = {
             text: [

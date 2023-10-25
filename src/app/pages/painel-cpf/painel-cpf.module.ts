@@ -19,7 +19,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { CalendarModule } from 'primeng/calendar';
 @NgModule({
     declarations: [
         PainelCpfComponent,
@@ -39,7 +39,8 @@ import { InputTextModule } from 'primeng/inputtext';
         AccordionModule,
         SharedModule,
         TagModule,
-        InputTextModule
+        InputTextModule,
+        CalendarModule
     ],
     providers: [
         CurrencyPipe,

@@ -6,7 +6,8 @@ import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
 import { Crypto } from 'src/app/utils/crypto';
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MaskApplierService } from 'ngx-mask';
 
 @Component({
     selector: 'app-list',
@@ -19,28 +20,31 @@ export class ListComponent {
     faCreditCard = faCreditCard;
     loading = false;
     list: PessoaList[] = [];
-    filters: string[] = [];
+    filters: string[] = ['id', 'nome', 'cpf', 'inclusao', 'status', 'saldo', 'filterConcat'];
     columns = pessoaColumns;
     currentBooleanFilter: any;
     currentCPFFilter: any;
-
+    currentDateFilter: Date;
+    
     constructor(
         private table: Table,
         private router: Router,
         private crypto: Crypto,
         private datepipe: DatePipe,
+        private mask: MaskApplierService,
+        private currency: CurrencyPipe
     ) { 
         var index = 0;
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
-        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: index.toString().padEnd(5, '0') })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
+        this.list.push({id: ++index, nome: 'Pessoa ' + index, cpf: index as unknown as string, inclusao: new Date(new Date().getFullYear(), index, new Date().getDate()), status: index % 2 == 0, saldo: parseFloat(index.toString().padEnd(5, '0')) })
         this.format()
     }
 
@@ -53,8 +57,11 @@ export class ListComponent {
     format() {
         this.list = this.list.map(x => {
             x.idEncrypted = this.crypto.encrypt(x.id) ?? undefined;
-            x.cpf = x.cpf.toString().padStart(11, '0')
-            x.inclusao = this.datepipe.transform(x.inclusao, 'yyyy-MM-dd') as unknown as Date;
+            x.cpf = x.cpf.toString().padStart(11, '0');
+            x.filterConcat = this.mask.applyMask(x.cpf, '000.000.000-00')
+            x.filterConcat += this.datepipe.transform(x.inclusao, 'dd/MM/yyyy', 'UTC')
+            x.filterConcat += (x.status ? 'Ativo' : 'Inativo');
+            x.filterConcat +=  this.currency.transform(x.saldo.toString(), 'BRL', '', '1.2'); 
             return x;
         })
     }
@@ -71,4 +78,5 @@ export class ListComponent {
         }
         return title;
     }
+
 }

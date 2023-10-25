@@ -5,13 +5,13 @@
     left: 0;
     width: 100%;
     background-color: white;
-    background-color: var(--primary);
+    background-color: #3B3B47;
     box-shadow: 2px 2px 2px #0000000d;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 0px;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
 }
 
 .header-logo {
@@ -23,7 +23,7 @@
 }
 
 .header-logo img {
-    max-height: 80%;
+    height: 35px;
     width: auto;
     margin: auto 0;
     display: block;
@@ -31,21 +31,37 @@
 
 .header-navigation {
     margin-left: auto;
-    margin-right: 10px;
     height: 100%;
     display: flex;
-    align-items: center;
 }
 
 .header-navigation-link {
-    min-height: 30px;
+    height: 100%;
     display: flex;
     align-items: center;
     padding: 0px 15px;
     text-decoration: none;
     color: #ffffff;
-    border: 1px var(--primary-dark) solid;
-    background: var(--primary-light);
+    position: relative;
+}
+
+.header-navigation-link:hover {
+    background-color: #0006;
+}
+
+.header-navigation-link.router-active {
+    background-color: rgb(var(--primary) / 60%);
+}
+
+.header-navigation-link:not(.header-navigation-link:first-child)::before {
+    /* content: ''; */
+    position: absolute;
+    width: 2px;
+    height: 50%;
+    background: white;
+    left: 0;
+    top: 50%;
+    translate: -50% -50%;
 }
 
 .header__userLogado {
@@ -65,25 +81,21 @@
     height: 100%;
     padding: 0 25px 0 30px;
     box-sizing: border-box;
-    background-color: #fff;
-    background-color: var(--primary);
+    background-color: #3B3B47;
     z-index: 2;
     position: relative;
     cursor: pointer;
-    margin: auto 0;
+    margin: auto 0px auto 10px;
     transition: .3s;
     border: none;
 }
 
 .header__userLogado-content:hover {
-    background-color: #f5f5f5;
-    background-color: var(--primary-dark);
+    background-color: #0006;
 }
 
 .header__userLogado-content.header__userLogado-submenu--open {
-    border: 1px #d2d2d2 solid;
-    border-color: var(--primary);
-    background-color: var(--primary-dark);
+    background-color: rgb(var(--primary) / 60%);
     border-top: none;
     border-bottom: none;
     height: 100%;
@@ -102,11 +114,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--primary);
+    color: rgb(var(--primary));
 }
 
 .header__userLogado-img fa-icon svg {
-    color: var(--primary);
+    color: rgb(var(--primary));
 }
 
 .header__userLogado-text {
@@ -209,5 +221,28 @@ p.header__userLogado-submenu-link {
     .header__userLogado-text {
         overflow: hidden;
         flex: 0 1 60%;
+    }
+}
+
+.header.header-home {
+    background-color: rgb(var(--secondary));
+    box-shadow: 2px 2px 8px 5px #00000030;
+    animation: home .7s;
+}
+
+.header.header-home .header-logo {
+    display: none;
+}
+
+.header.header-home .header__userLogado-content {
+    background-color: rgb(var(--secondary));
+}
+@keyframes home {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
     }
 }

@@ -69,10 +69,12 @@
 }
 .modal__header h3 {
     font-size: 20px;
-    color: var(--primary);
+    color: rgb(var(--secondary));
 }
+
 .modal__header .icon {
     margin-right: 6px;
+    color: rgb(var(--primary));
 }
 .modal__header .icon > svg {
     font-size: 16px;

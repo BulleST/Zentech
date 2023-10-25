@@ -79,7 +79,7 @@ input {
     width: 35px;
     display: flex;
     justify-content: center;
-    background-color: var(--primary);
+    background-color: rgb(var(--primary));
     color: #fff;
 }
 

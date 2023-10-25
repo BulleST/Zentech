@@ -7,11 +7,13 @@ import { HeaderComponent } from 'src/app/parts/header/header.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MenubarModule } from 'primeng/menubar';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     InitialComponent,
     HeaderComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,
