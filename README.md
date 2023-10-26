@@ -1,6 +1,6 @@
 # Para a publicação
 ### npm i angular-cli-ghpages
-### ng build --base-href "https://bullest.github.io/ZenTech/"
+### ng build --base-href "https://bullest.github.io/Zentech/"
 ### npx angular-cli-ghpages --dir=dist/zentech
 
 
