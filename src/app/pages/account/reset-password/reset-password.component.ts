@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronCircleLeft, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 import { lastValueFrom } from 'rxjs';
 import { ResetPassword } from 'src/app/models/account.model';
 import { AlertService } from 'src/app/parts/alert/alert.service';
@@ -14,6 +14,9 @@ import { getError } from 'src/app/utils/error';
 })
 export class ResetPasswordComponent {
     faChevronCircleLeft = faChevronCircleLeft;
+    faLock = faLock;
+    faUnlock = faUnlock;
+
     objeto: ResetPassword = new ResetPassword;
     loading = false;
     erro = '';
@@ -25,9 +28,9 @@ export class ResetPasswordComponent {
         private alertService: AlertService,
     ) {
         this.objeto.token = this.activatedRoute.snapshot.queryParams['token'];
-        if (this.objeto.token == '' || this.objeto.token == undefined) {
-            this.router.navigate(['account', 'error']);
-        }
+        // if (this.objeto.token == '' || this.objeto.token == undefined) {
+        //     this.router.navigate(['account', 'error']);
+        // }
     }
 
     send() {

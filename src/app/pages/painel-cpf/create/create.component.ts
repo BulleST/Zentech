@@ -19,7 +19,7 @@ export class CreateComponent implements OnDestroy {
     faUser = faUser;
     modalOpen = false;
     objeto: PessoaRequest = new PessoaRequest;
-    erro: any[] = [];
+    erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
     routerBack: string[] = ['../'];
@@ -128,7 +128,7 @@ export class CreateComponent implements OnDestroy {
 
     send(model: NgForm) {
         this.loading = true;
-        this.erro = [];
+        this.erro = '';
 
     }
 }

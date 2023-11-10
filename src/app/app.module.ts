@@ -33,7 +33,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         HttpClientModule,
         AppRoutingModule,
         FontAwesomeModule,
-        ToastrModule.forRoot(),
+        ToastrModule.forRoot({
+            preventDuplicates: true,
+            enableHtml: true,
+        }),
         NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
         FormsModule,
         TranslateModule.forRoot()
@@ -44,7 +47,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
-        //   { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+          { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
         //   { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 
     ],

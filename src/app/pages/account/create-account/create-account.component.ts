@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faChevronCircleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronCircleLeft, faEnvelope, faLock, faPhone, faUnlock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Register } from 'src/app/models/account.model';
 import { AccountService } from 'src/app/services/account.service';
@@ -17,12 +17,17 @@ import { getError } from 'src/app/utils/error';
 })
 export class CreateAccountComponent implements OnDestroy {
     faChevronCircleLeft = faChevronCircleLeft;
+    faEnvelope = faEnvelope;
+    faLock = faLock;
+    faUnlock = faUnlock;
+    faUser = faUser;
+    faPhone = faPhone;
+
     objeto = new Register;
     loading: boolean = false;
     erro = '';
     subscription: Subscription[] = [];
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-
     constructor(
         private toastr: ToastrService,
         private router: Router,
@@ -38,7 +43,7 @@ export class CreateAccountComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    cadastrar(form: NgForm) {
+    send(form: NgForm) {
         this.loadingUtils.loading.next(true);
         this.objeto.telefoneCelular = parseInt(this.objeto.telefoneCelular.toString());
         this.objeto.acceptTerms = true;
