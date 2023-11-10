@@ -265,10 +265,16 @@ a.btn-pink.disabled:not([href]) {
     border-color: rgb(var(--primary));
 }
 
-.link,
+.link {
+    color: rgb(var(--primary));
+    text-decoration: underline;
+    text-underline-position: under;
+    cursor: pointer;
+}
+
 .btn-link {
-    color: rgb(var(--primary)) !important;
-    text-decoration: underline !important;
+    color: rgb(var(--primary));
+    text-decoration: underline;
     text-underline-position: under;
     cursor: pointer;
 }

@@ -1,155 +1,151 @@
-<section class="login">
-    <div class="login__form">
-        <div class="login__form-img">
-            <h3 class="login-title mb-1">Me cadastrar</h3>
-            <p>Insira seus dados nos campos abaixo para efetuar seu cadastro</p>
+<div class="mb-3 row">
+    <h3 class="account-title mb-0">Me cadastrar</h3>
+    <p class="account-text mb-0">Insira seus dados nos campos abaixo para efetuar seu cadastro.</p>
+    <a class="link d-flex" [routerLink]="['..', 'login']">
+        <fa-icon [icon]="faChevronCircleLeft" class="me-2"></fa-icon> voltar </a>
+</div>
+<form #form="ngForm" (ngSubmit)="send(form)">
+    <div class="row">
+        <div class="form-group col-lg-7 col-md-7 col-sm-6 col-12 mb-2">
+            <div class="form-floating">
+                <input type="name"
+                       class="form-control"
+                       id="name"
+                       name="name"
+                       #name="ngModel"
+                       [(ngModel)]="objeto.name"
+                       placeholder="   "
+                       required>
+                <label for="name">
+                    <span class="form-control-icon"><fa-icon [icon]="faUser"></fa-icon></span>
+                    <span class="ms-3">Nome Completo <span class="text-danger">*</span></span>
+                </label>
+            </div>
+            <div *ngIf="name.touched && name.errors" class="p-1 py-0">
+                <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p>
+            </div>
         </div>
-        <div class="login__form-form">
-            <div class="login__form-inner">
-                <a class="link d-flex align-items-baseline mb-2" [routerLink]="['..', 'login']">
-                    <fa-icon [icon]="faChevronCircleLeft" class="me-2"></fa-icon> voltar
-                </a>
-                <form #form="ngForm" (ngSubmit)="cadastrar(form)">
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <div class="form-floating">
-                                <input type="name"
-                                       class="form-control"
-                                       id="name"
-                                       name="name"
-                                       #name="ngModel"
-                                       [(ngModel)]="objeto.name"
-                                       placeholder="   "
-                                       required>
-                                <label for="name">
-                                    <span>Nome completo <span class="text-danger">*</span></span>
-                                </label>
-                            </div>
-                            <div *ngIf="name.errors != null && name.touched" class="pl-2 pt-2 pb-0">
-                                <!-- <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-16 col-md-6 col-sm-12 col-12 mb-2">
-                            <div class="form-floating">
-                                <input type="text"
-                                       class="form-control"
-                                       id="telefoneCelular"
-                                       name="telefoneCelular"
-                                       #telefoneCelular="ngModel"
-                                       [(ngModel)]="objeto.telefoneCelular"
-                                       mask="(00) 0000-0000||(00) 0.0000-0000"
-                                       placeholder="(11) x.0000-0000"
-                                       pattern="^\(?[1-9]{2}\)? ?(?:[0-9]|9[0-9])[0-9]{3}\-?[0-9]{4}$"
-                                       required>
-                                <label for="telefoneCelular">
-                                    <span>Telefone/Celular <span class="text-danger">*</span></span>
-                                </label>
-                            </div>
-                            <div *ngIf="telefoneCelular.errors != null && telefoneCelular.touched" class="pl-2 pt-2 pb-0">
-                                <!-- <p class="text-danger" *ngIf="telefoneCelular.errors['required']">Este campo é obrigatório.</p> -->
-                                <p class="text-danger" *ngIf="telefoneCelular.errors['mask']">Telefone/celular inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <div class="form-floating">
-                                <input type="email"
-                                       [email]="true"
-                                       class="form-control"
-                                       id="email"
-                                       name="email"
-                                       #email="ngModel"
-                                       [(ngModel)]="objeto.email"
-                                       placeholder="example@gmail.com"
-                                       required
-                                       [pattern]="emailPattern">
-                                <label for="email">
-                                    <span>E-mail <span class="text-danger">*</span></span>
-                                </label>
-                            </div>
-                            <div *ngIf="email.errors != null && email.touched" class="pl-2 pt-2 pb-0">
-                                <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
-                                <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <div class="form-floating">
-                                <input [type]="showHide.value ? 'password' : 'text'"
-                                       class="form-control"
-                                       id="password"
-                                       name="password"
-                                       #password="ngModel"
-                                       [(ngModel)]="objeto.password"
-                                       placeholder="******"
-                                       required
-                                       minlength="6">
-                                <label for="password">
-                                    <span>Senha <span class="text-danger">*</span>
-                                    </span>
-                                </label>
-                            </div>
-                            <div *ngIf="password.errors != null && password.touched" class="pl-2 pt-2 pb-0">
-                                <p class="text-danger" *ngIf="password.errors['required']">Este campo é obrigatório.</p>
-                                <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter pelo menos {{password.errors['requiredLength']}} caracteres.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <div class="form-floating">
-                                <input [type]="showHide.value ? 'password' : 'text'"
-                                       class="form-control"
-                                       id="confirmPassword"
-                                       name="confirmPassword"
-                                       #confirmPassword="ngModel"
-                                       [(ngModel)]="objeto.confirmPassword"
-                                       placeholder="******"
-                                       required
-                                       minlength="4">
-                                <label for="confirmPassword">
-                                    <span>Confirmar Senha <span class="text-danger">*</span></span>
-                                </label>
-                            </div>
-                            <div *ngIf="confirmPassword.errors != null && confirmPassword.touched" class="pl-2 pt-2 pb-0">
-                                <p class="text-danger" *ngIf="confirmPassword.errors['required']">Esse campo é obrigatório</p>
-                                <p class="text-danger" *ngIf="confirmPassword.errors['minlength']">Confirmação de senha deve conter pelo menos 4 caracteres.</p>
-                            </div>
-                            <p class="text-danger p-2" *ngIf="password.value != confirmPassword.value">Senhas não são iguais</p>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <div class="d-flex align-items-center">
-                                <input type="checkbox"
-                                       name="showHide"
-                                       id="showHide"
-                                       #showHide="ngModel"
-                                       ngModel
-                                       [value]="true">
-                                <label for="showHide" class="ml-2">
-                                    <span *ngIf="showHide.value">Exibir</span>
-                                    <span *ngIf="!showHide.value">Esconder</span> senha </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <p class="text-danger text-center col-12 mt-3" *ngIf="erro">{{erro}}</p>
-                        <p class="text-center col-12 mb-3">Ao clicar em "cadastrar" você concorda com os 
-                            <a class="link" routerLink="./termos-de-uso" >termos de uso</a> 
-                            do planner.</p>
-                        <div class="form-group form-floating col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading || (password.value != confirmPassword.value)">Cadastrar</button>
-                        </div>
-                    </div>
-                </form>
+        <div class="form-group col-lg-5 col-md-5 col-sm-6 col-12 mb-2">
+            <div class="form-floating">
+                <input type="text"
+                       class="form-control"
+                       id="telefoneCelular"
+                       name="telefoneCelular"
+                       #telefoneCelular="ngModel"
+                       [(ngModel)]="objeto.telefoneCelular"
+                       mask="(00) 0000-0000||(00) 0.0000-0000"
+                       placeholder="(11) x.0000-0000"
+                       pattern="^\(?[1-9]{2}\)? ?(?:[0-9]|9[0-9])[0-9]{3}\-?[0-9]{4}$"
+                       required>
+                <label for="telefoneCelular">
+                    <span class="form-control-icon"><fa-icon [icon]="faPhone"></fa-icon></span>
+                    <span class="ms-3">Telefone/Celular<span class="text-danger">*</span></span>
+                </label>
+            </div>
+            <div *ngIf="telefoneCelular.errors != null && telefoneCelular.touched" class="p-1 py-0">
+                <p class="text-danger" *ngIf="telefoneCelular.errors['required']">Este campo é obrigatório.</p>
+                <p class="text-danger" *ngIf="telefoneCelular.errors['mask']">Telefone/celular inválido</p>
             </div>
         </div>
     </div>
-</section>
-
+    <div class="row">
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+            <div class="form-floating">
+                <input type="email"
+                       [email]="true"
+                       class="form-control"
+                       id="email"
+                       name="email"
+                       #email="ngModel"
+                       [(ngModel)]="objeto.email"
+                       placeholder="example@gmail.com"
+                       required
+                       [pattern]="emailPattern">
+                <label for="email">
+                    <span class="form-control-icon"><fa-icon [icon]="faEnvelope"></fa-icon></span>
+                    <span class="ms-3">E-mail <span class="text-danger">*</span></span>
+                </label>
+            </div>
+            <div *ngIf="email.errors != null && email.touched" class="p-1 py-0">
+                <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+            <div class="form-floating">
+                <input [type]="showHide.value ? 'password' : 'text'"
+                       class="form-control"
+                       id="password"
+                       name="password"
+                       #password="ngModel"
+                       [(ngModel)]="objeto.password"
+                       placeholder="******"
+                       required
+                       minlength="6">
+                <label for="password">
+                    <span class="form-control-icon">
+                        <fa-icon [icon]="faLock" *ngIf="!showHide.value"></fa-icon>
+                        <fa-icon [icon]="faUnlock" *ngIf="showHide.value"></fa-icon>
+                    </span>
+                    <span class="ms-3">Senha <span class="text-danger">*</span></span>
+                </label>
+            </div>
+            <div *ngIf="password.errors != null && password.touched" class="p-1 py-0">
+                <p class="text-danger" *ngIf="password.errors['required']">Este campo é obrigatório.</p>
+                <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter pelo menos {{password.errors['requiredLength']}} caracteres.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+            <div class="form-floating">
+                <input [type]="showHide.value ? 'password' : 'text'"
+                       class="form-control"
+                       id="confirmPassword"
+                       name="confirmPassword"
+                       #confirmPassword="ngModel"
+                       [(ngModel)]="objeto.confirmPassword"
+                       placeholder="******"
+                       required
+                       minlength="4">
+                <label for="confirmPassword">
+                    <span class="form-control-icon">
+                        <fa-icon [icon]="faLock" *ngIf="!showHide.value"></fa-icon>
+                        <fa-icon [icon]="faUnlock" *ngIf="showHide.value"></fa-icon>
+                    </span>
+                    <span class="ms-3">Confirmar Senha <span class="text-danger">*</span></span>
+                </label>
+            </div>
+            <div *ngIf="confirmPassword.errors != null && confirmPassword.touched" class="p-1 py-0">
+                <p class="text-danger" *ngIf="confirmPassword.errors['required']">Esse campo é obrigatório</p>
+                <p class="text-danger" *ngIf="confirmPassword.errors['minlength']">Confirmação de senha deve conter pelo menos 4 caracteres.</p>
+            </div>
+            <p class="text-danger p-2" *ngIf="password.value != confirmPassword.value">Senhas não são iguais</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+            <div class="d-flex align-items-center">
+                <input type="checkbox"
+                       name="showHide"
+                       id="showHide"
+                       #showHide="ngModel"
+                       ngModel
+                       [value]="true">
+                <label for="showHide" class="ml-2">
+                    <span *ngIf="showHide.value">Exibir</span>
+                    <span *ngIf="!showHide.value">Esconder</span> senha </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <p class="text-danger text-center col-12 mt-3" *ngIf="erro">{{erro}}</p>
+        <p class="text-center col-12 mb-3">Ao clicar em "cadastrar" você concorda com os <a class="link" routerLink="./termos-de-uso">termos de uso</a> do planner.</p>
+        <div class="form-group form-floating col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading || (password.value != confirmPassword.value)">Cadastrar</button>
+        </div>
+    </div>
+</form>
 <router-outlet></router-outlet>

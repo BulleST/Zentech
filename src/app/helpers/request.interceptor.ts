@@ -95,6 +95,8 @@ export class RequestInterceptor implements HttpInterceptor {
                                 setTimeout(() => {
                                     this.table.goToCurrentPage();
                                 }, 100);
+                                this.table.loading.next(false)
+                                this.loadingUtils.loading.next(false);
                             }
 
                         }
@@ -117,6 +119,8 @@ export class RequestInterceptor implements HttpInterceptor {
                     else if (notToastr.length == 0) {
                         this.toastr.error(msg);
                     }
+                    this.table.loading.next(false)
+                    this.loadingUtils.loading.next(false);
 
                     return throwError(() => new Error(msg));
 
@@ -133,3 +137,5 @@ export class RequestInterceptor implements HttpInterceptor {
         );
     }
 }
+
+

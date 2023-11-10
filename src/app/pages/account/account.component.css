@@ -1,171 +1,190 @@
-/* .login {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    flex-flow: wrap;
-}
-
-.login__bg {
-    background-size: auto 100vh;
-    background-position: right top;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+.form-container {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-flow: column;
 }
 
-.login__bg::after {
-    content: '';
+.form-control-icon {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, #002d34b3, #2804278f);
-}
-
-.login__bg img {
-    filter: drop-shadow(2px 4px 6px black);
-    z-index: 1;
-    position: fixed;
-    opacity: 0.6;
-    max-width: 300px;
     top: 50%;
-    transform: translateY(-50%);
-    z-index: -1;
+    left: 10px;
+    translate: 0 -50%;
+    line-height: 1;
+    color: #4069fd;
 }
 
-@keyframes loginBGLogo {
-    from {
-        max-width: 0;
-    }
-
-    to {
-        max-width: 300px;
-    }
+.form-container .form-control {
+    /* padding-left: 30px; */
+    border-color: #4069fd;
 }
 
-.login__form {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 500px;
-    display: flex;
-    align-items: center;
-    min-height: 100vh;
-    padding: 7vh 0;
-}
-
-.login__form-inner {
-    min-height: 70vh;
-    width: 100%;
-}
-
-.login__form-inner img {
-    position: relative;
-    width: 250px;
-    margin: 4vh auto 0;
-    height: calc(90px);
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-}
-
-
-@media (max-width: 800px) {
-    .login__bg {
-        display: none;
-    }
-    .login__bg img {
-        position: static;
-        top: 0;
-        transform: none;
-    }
-}
- */
-
- .login {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-flow: wrap;
-    /* background-image: url(https://investnews.com.br/wp-content/uploads/2021/08/coins-are-stacked-together-with-morning-sun-shining-scaled.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: red; */
-    background: linear-gradient(45deg, rgb(var(--primary)), #061d25);
-}
-.login::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #00bcd43d;
-}
-.login__form {
-    width: 90%;
-    margin: 0 auto;
-    max-width: 400px;
-    display: flex;
-    flex-flow: column;
-    padding: 0 0;
+.form-control.ng-invalid:not(.form-control[readonly]):not(.form-control[disabled]),
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]):-internal-autofill-selected,
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]) {
     background-color: white;
-    max-height: 500px;
-    /* height: 95vh; */
-    box-shadow: 3px 3px 3px #00000045;
-    overflow: hidden;
-    z-index: 1;
-}
-.login__form-form {
-    padding: 10px 3vw 20px;
-    /* height: 70%; */
+    border-color: #4069fd;
+    background-image: none !important;
 }
 
-.login__form-img {
-    background-image: url(https://investnews.com.br/wp-content/uploads/2021/08/coins-are-stacked-together-with-morning-sun-shining-scaled.jpg);
-    width: 100%;
-    height: 180px;
-    background-size: cover;
-    background-position: center;
+.form-floating>.form-control-plaintext~label::after,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after,
+.form-floating>.form-select~label::after {
+    background: transparent;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+    --height: 48px;
+    line-height: 1;
+    height: var(--height);
+    min-height: var(--height);
+    padding-bottom: 17px !important;
+}
+
+.form-floating>label {
+    padding: 0 .75rem;
     display: flex;
-    flex-flow: column;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    text-shadow: 2px 2px 2px #013446;
-    font-weight: 100;
-    position: relative;
-    text-align: center;
-    padding: 0 30px;
 }
 
-.login__form-img::after {
-    content: '';
+.account {
+    display: flex;
+    min-height: 100vh;
+    background: #f7f7f7;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-inner {
+    --account-width: 900px;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    max-width: var(--account-width);
+    width: 90%;
+    padding: 40px 20px;
+    background-color: #ffffffcc;
+    z-index: 1;
+    box-shadow: 2px 2px 9px rgb(0 0 0 / 27%);
+    border-radius: 25px 4px 25px 4px;
+}
+
+.account-left {
+    flex-basis: 100%;
+    max-width: calc((var(--account-width) / 2) - 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-left img {
+    max-width: 100%;
+    width: 70%;
+    filter: drop-shadow(1px 1px 0px rgb(0 0 0 / 9%));
+}
+
+.account-right {
+    flex-basis: 100%;
+    max-width: calc((var(--account-width) / 2) - 20px);
+    padding: 15px;
+    text-align: left;
+}
+
+.account-right form {
+    width: 100%;
+}
+
+.account-title {
+    text-transform: uppercase;
+    text-align: left;
+    margin-right: auto;
+    font-size: 20px;
+    margin-bottom: 9px;
+}
+
+.account-text {
+    text-align: left;
+    margin-right: auto;
+    font-size: 15px;
+    margin-bottom: 15px;
+    font-weight: 100;
+}
+
+.account-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #00000091;
     z-index: 0;
+    overflow: hidden;
 }
 
-.login__form-img p, .login__form-img .login-title {
-    position: relative;
+.account-bg-top,
+.account-bg-bottom {
+    --size: 1000px;
+    width: var(--size);
+    height: var(--size);
+}
+
+.account-bg-bottom span,
+.account-bg-top span {
+    background-color: rgb(var(--primary));
+    background-color: #000;
+    display: block;
+    border-radius: 50%;
+    position: absolute;
+    --size: 550px;
+    width: var(--size);
+    height: var(--size);
     z-index: 1;
+}
+
+.account-bg-top span {
+    top: 0;
+    left: 0;
+    translate: -40% -40%;
+}
+
+.account-bg-bottom span {
+    bottom: 0;
+    top: unset;
+    right: 0;
+    left: auto;
+    translate: 40% 40%;
+}
+
+.account-bg-bottom span:nth-child(1),
+.account-bg-top span:nth-child(1) {
+    --size-child: calc(var(--size) / 1.23);
+    opacity: 0.25;
+    z-index: 3;
+    width: calc(var(--size-child) + 15px);
+    height: calc(var(--size-child) + 15px);
+}
+
+.account-bg-bottom span:nth-child(2),
+.account-bg-top span:nth-child(2) {
+    --size-child: calc(var(--size) / 1.1);
+    opacity: 0.2;
+    z-index: 0;
+    width: calc(var(--size-child) + 75px);
+    height: calc(var(--size-child) + 75px);
+}
+
+.account-bg-bottom span:nth-child(3),
+.account-bg-top span:nth-child(3) {
+    --size-child: calc(var(--size) / 1);
+    opacity: 0.25;
+    z-index: 0;
+    width: calc(var(--size-child) + 125px);
+    height: calc(var(--size-child) + 125px);
+}
+
+.link {
+    color: #4069fd;
 }

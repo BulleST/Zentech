@@ -6,6 +6,7 @@
     <nav class="header-navigation">
         <a class="header-navigation-link" routerLink="/" [class.router-active]="homeActive">Home</a>
         <a class="header-navigation-link" [routerLink]="['painel-cpf']" routerLinkActive="router-active">Painel CPF</a>
+        <a class="header-navigation-link" [routerLink]="['usuarios']" routerLinkActive="router-active">Gerenciar usuários</a>
     </nav>
     <div class="header__userLogado">
         <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="menuHeaderOpen"

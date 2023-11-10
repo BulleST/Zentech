@@ -10,6 +10,8 @@ import { NgxMaskModule } from "ngx-mask";
 import { ListSharedComponent } from "./list/list.component";
 import { ModalComponent } from './modal/modal.component';
 import { InputNumberComponent } from './input-number/input-number.component';
+import { DropdownModule } from "primeng/dropdown";
+import { CalendarModule } from "primeng/calendar";
 
 @NgModule({
     declarations: [
@@ -25,6 +27,8 @@ import { InputNumberComponent } from './input-number/input-number.component';
         TableModule,
         NgxMaskModule.forChild(),
         ToastrModule,
+        DropdownModule,
+        CalendarModule,
     ],
     exports: [
         ListSharedComponent,

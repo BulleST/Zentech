@@ -40,6 +40,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     subscription: Subscription[] = [];
 
     first = 2;
+    
+    currentBooleanFilter: any;
+    currentCPFFilter: any;
+    currentDateFilter: Date;
 
     constructor(
         private table: Table,
@@ -47,7 +51,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     ) {
         this.filters = this.columns.map(x => x.field);
 
-        var loading = this.table.loading.subscribe(res => this.loading = res);
+        var loading = this.table.loading.subscribe(res => {
+            this.loading = res;
+            console.log(res)
+        });
         this.subscription.push(loading);
 
         if (this.selectable) {

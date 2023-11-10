@@ -1,17 +1,13 @@
-.login__form {
-    max-width: 800px!important;
+::ng-deep .account-inner {
+    --account-width: 1000;
+    align-items: center;
 }
 
-.login__form-img {
-    height: 130px!important;
-    background-position: 0 -230px!important;
+:ng-deep .account-left {
+    display: none
 }
 
-.login__form {
-    max-height: 1000px!important;
-}
 
-/* .login__form-form {
-    max-height: 490px!important; 
-    overflow: auto!important;
-} */
+:ng-deep .account-right {
+    
+}
