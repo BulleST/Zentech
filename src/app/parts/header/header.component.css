@@ -23,10 +23,11 @@
 }
 
 .header-logo img {
-    height: 35px;
+    height: 20px;
     width: auto;
     margin: auto 0;
     display: block;
+    max-height: 100%;
 }
 
 .header-navigation {
