@@ -89,3 +89,27 @@ input {
 .input-group {
     overflow: hidden;
 }
+
+.form-floating>.form-control-plaintext~label::after,
+.form-floating>.form-control:focus~label::after,
+.form-floating>.form-control:not(:placeholder-shown)~label::after,
+.form-floating>.form-select~label::after {
+    background: transparent;
+}
+
+.form-floating>.form-control,
+.form-floating>.form-control-plaintext,
+.form-floating>.form-select {
+    --height: 48px;
+    line-height: 1;
+    height: var(--height);
+    min-height: var(--height);
+    padding-bottom: 17px !important;
+}
+
+.form-floating>label {
+    padding: 0 .75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
