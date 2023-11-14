@@ -3,8 +3,9 @@ import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@an
 import { ActivatedRoute } from '@angular/router';
 import { faCheck, faChevronLeft, faFile, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaRelatorio } from 'src/app/models/pessoa.model';
+import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Modal } from 'src/app/utils/modal';
 
@@ -34,15 +35,23 @@ export class RelatorioComponent implements OnDestroy, AfterViewInit {
     private modal: Modal,
     private crypto: Crypto,
     private datepipe: DatePipe,
+    private pessoaService: PessoaService
+
   ) {
     this.routeBackOptions = { relativeTo: this.activatedRoute };
 
     var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
     this.subscription.push(getOpen);
 
-    activatedRoute.params.subscribe(p => {
+    var params = activatedRoute.params.subscribe(p => {
       if (p['id']) {
-        this.objeto.id = this.crypto.decrypt(p['id']);
+          this.objeto.id = this.crypto.decrypt(p['id']);
+        lastValueFrom(this.pessoaService.get(this.objeto.id))
+        .then(res => {
+        })
+        .catch(res => {
+
+        })
         this.objeto.nome = 'Maria Eduarda da Silva Correia';
         this.objeto.cpf = (5418503006).toString().padStart(11, '0') as unknown as number;
         this.objeto.dataOperacao = this.datepipe.transform(new Date, 'yyyy-MM-dd') as unknown as Date;
@@ -56,11 +65,11 @@ export class RelatorioComponent implements OnDestroy, AfterViewInit {
         this.objeto.saldoLimiteMoeda = '$';
         this.objeto.chargeBack = 'Sim' as unknown as boolean;
         this.objeto.status = 'Blocked - não pode ser enviado';
-        console.log(this.objeto)
       } else {
         this.voltar();
       }
     });
+    this.subscription.push(params);
 
   }
 

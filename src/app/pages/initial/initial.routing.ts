@@ -7,15 +7,22 @@ const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 
 const routes: Routes = [
-    { path: '', component: InitialComponent, children: [
-        { path: '', component: HomeComponent },
-        { path: 'painel-cpf', loadChildren: painelCPF },
-        { path: 'usuarios', loadChildren: usuarios },
-    ] }
+    {
+        path: '', component: InitialComponent, children: [
+            {
+                path: '', component: HomeComponent, children: [
+                    { path: 'minha-conta', loadComponent: () => import('./my-account/my-account.component').then(x => x.MyAccountComponent), children: [
+                    ] }
+                ]
+            },
+            { path: 'painel-cpf', loadChildren: painelCPF},
+            { path: 'usuarios', loadChildren: usuarios},
+        ]
+    }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class InitialRoutingModule { }

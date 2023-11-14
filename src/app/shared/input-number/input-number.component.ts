@@ -81,7 +81,6 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
 
     validate(where?: string ) {
-        // console.log('validate', where, this.autoReplaceValue)
         this.input.control.setValue(this.valueInput)
         if (this.required == true && !this.valueInput.toString().trim()) {
             this.input.control.setErrors(Object.assign({}, { required: true }));
@@ -115,7 +114,6 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
 
     inputChanged() {
-        // console.log('inputChanged')
         this.valueChanges.emit(this.valueInput);
         this.ngModelChanged.emit(this.input)
     }

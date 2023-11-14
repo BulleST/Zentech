@@ -26,12 +26,10 @@ export class HomeComponent implements OnDestroy, AfterViewInit {
     }
 
    async ngAfterViewInit() {
-    console.log($('.home'))
         $('.home').append(`<div class="home__background" style="background-image: url(assets/img/logo-animation.gif)" ></div>`)
     }
 
     ngOnDestroy(): void {
-        console.log('tchau')
         this.subscriptions.forEach(e => e.unsubscribe());
         $('.home__background').remove()
     }

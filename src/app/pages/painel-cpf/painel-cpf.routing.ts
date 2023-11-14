@@ -5,6 +5,8 @@ import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { ImportacaoComponent } from './importacao/importacao.component';
 import { RelatorioComponent } from './relatorio/relatorio.component';
+import { DeleteComponent } from './delete/delete.component';
+import { DetailsComponent } from './details/details.component';
 
 const routes: Routes = [
     {
@@ -12,7 +14,12 @@ const routes: Routes = [
             { path: '', component: ListComponent, children: [
                 { path: 'cadastrar', component: CreateComponent },
                 { path: 'importar', component: ImportacaoComponent },
-                { path: 'relatorio/:id', component: RelatorioComponent }
+                { path: 'relatorio/:id', component: RelatorioComponent },
+                { path: 'detalhes/:id', component: DetailsComponent },
+                { path: 'excluir/:id', component: DeleteComponent },                   
+                { path: 'minha-conta', loadComponent: () => import('./../initial/my-account/my-account.component').then(x => x.MyAccountComponent), children: [
+                ]  }
+
             ] },
         ]
     },

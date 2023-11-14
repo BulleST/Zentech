@@ -8,8 +8,8 @@ import { Table } from "./table";
     providedIn: 'root'
 })
 export class Header {
-    open = new BehaviorSubject<boolean>(false);
-    menuHeaderOpen = new BehaviorSubject<boolean>(false);
+    menuMobileOpen = new BehaviorSubject<boolean>(false);
+    minhaContaOpen = new BehaviorSubject<boolean>(false);
 
     constructor(
         private crypto: Crypto, 
@@ -18,52 +18,46 @@ export class Header {
 
     }
 
-    public get aside(): boolean {
-        var a = localStorage.getItem('navigation') ? this.crypto.decrypt(localStorage.getItem('navigation')) as boolean : false;
-        this.setMenuAside(a);
-        return this.open.value;
+    toggleMenuMobile(): void {
+        this.setMenuMobile(!this.menuMobileOpen.value);
     }
 
-    toggleMenuAside(): void {
-        this.setMenuAside(!this.open.value);
-    }
-
-    setMenuAside(value: boolean) {
+    setMenuMobile(value: boolean) {
         var encryted = this.crypto.encrypt(value) ?? '';
         localStorage.setItem('navigation', encryted);
-        this.open.next(value);
+        this.menuMobileOpen.next(value);
     }
 
 
-    toggleMenuHeader(): void {
-        this.menuHeaderOpen.next(!this.menuHeaderOpen.value);
+    toggleMenuMinhaConta(): void {
+        this.minhaContaOpen.next(!this.minhaContaOpen.value);
     }
 
-    openMenuHeader() {
-        this.menuHeaderOpen.next(true);
+    openMenuMinhaConta() {
+        this.minhaContaOpen.next(true);
     }
 
-    closeMenuHeader() {
-        this.menuHeaderOpen.next(false);
+    closeMenuMinhaConta() {
+        this.minhaContaOpen.next(false);
     }
 
     clickOut() {
         var classe = this;
         $('body').on('click', function (e) {
-            // classe.setMenuAside(false);
-            classe.closeMenuHeader();
+            classe.closeMenuMinhaConta();
+            classe.setMenuMobile(false);
         });
         
         $('.header__userLogado').on('click', function (e) {
             e.stopPropagation();
         });
 
-        // $('.navigation__toggle').on('click', function (e) {
-        //     e.stopPropagation();
-        // });
+        $('.btn-mobile').on('click', function (e) {
+            e.stopPropagation();
+        });
 
-        // $('.aside').on('click', function (e) {
-        //     e.stopPropagation();
-        // });
+        $('.header').on('click', function (e) {
+            e.stopPropagation();
+        });
     }
 }

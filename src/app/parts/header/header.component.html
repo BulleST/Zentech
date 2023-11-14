@@ -1,21 +1,22 @@
-<header class="header" [class.header-home]="homeActive">
+
+<header class="header" [class.header-mobile]="isMobile" [class.header-home]="homeActive">
+    <div class="header-btn-mobile" *ngIf="isMobile">
+        <button class="btn btn-mobile" (click)="toggleMenuMobile()" [class.mobile-open]="menuMobileOpen">
+            <span><fa-icon [icon]="faBars" *ngIf="!menuMobileOpen"></fa-icon></span>
+            <span><fa-icon [icon]="faTimes" *ngIf="menuMobileOpen"></fa-icon></span>
+        </button>
+    </div>
     <div class="header-logo">
-        <!-- <img src="assets/img/logo-planner.png" alt="Logo Planner"> -->
         <img src="assets/img/logotext-white.png" alt="Logo ZenTech">
     </div>
-    <nav class="header-navigation">
-        <a class="header-navigation-link" routerLink="/" [class.router-active]="homeActive">Home</a>
-        <a class="header-navigation-link" [routerLink]="['painel-cpf']" routerLinkActive="router-active">Painel CPF</a>
-        <a class="header-navigation-link" [routerLink]="['usuarios']" routerLinkActive="router-active">Gerenciar usuários</a>
-    </nav>
     <div class="header__userLogado">
-        <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="menuHeaderOpen"
-             (click)="toggleMenuHeader()">
+        <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="menuMinhaContaOpen"
+             (click)="toggleMenuMinhaConta()">
             <div class="header__userLogado-img">
                 <fa-icon [icon]="faUser"></fa-icon>
             </div>
             <div class="header__userLogado-text" *ngIf="!userLogado">
-                <p>calmeida.no@gmail.com</p>
+                <p>teste@gmail.com</p>
                 <p>Teste</p>
             </div>
             <div class="header__userLogado-text" *ngIf="userLogado">
@@ -24,10 +25,15 @@
             </div>
         </div>
     </div>
+    <nav class="header-navigation" [class.header-navigation-mobile]="isMobile" [class.mobile-open]="menuMobileOpen">
+        <a class="header-navigation-link" routerLink="/" [class.router-active]="homeActive">Home</a>
+        <a class="header-navigation-link" [routerLink]="['painel-cpf']" routerLinkActive="router-active">Painel CPF</a>
+        <a class="header-navigation-link" [routerLink]="['usuarios']" routerLinkActive="router-active">Gerenciar usuários</a>
+    </nav>
 </header>
-<div class="header__userLogado-submenu" [class.header__userLogado-submenu--open]="menuHeaderOpen">
+<div class="header__userLogado-submenu" [class.header__userLogado-submenu--open]="menuMinhaContaOpen">
     <p class="header__userLogado-submenu-link">Bem-vindo</p>
-    <a class="header__userLogado-submenu-link" [routerLink]="['my-account']">
+    <a class="header__userLogado-submenu-link" (click)="minhaConta()">
         <span style="margin-right: 8px;">
             <fa-icon [icon]="faIdCard"></fa-icon>
         </span> Meus dados </a>

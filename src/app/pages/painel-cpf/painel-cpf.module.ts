@@ -20,6 +20,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
+import { DeleteComponent } from './delete/delete.component';
+import { DetailsComponent } from './details/details.component';
 @NgModule({
     declarations: [
         PainelCpfComponent,
@@ -27,6 +29,8 @@ import { CalendarModule } from 'primeng/calendar';
         CreateComponent,
         RelatorioComponent,
         ImportacaoComponent,
+        DeleteComponent,
+        DetailsComponent
     ],
     imports: [
         CommonModule,

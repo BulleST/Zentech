@@ -1,8 +1,12 @@
-<header style="z-index: 1; position: relative;">
-    <app-header></app-header>
-</header>
-<main style="z-index: 0; position: relative;">
-    <router-outlet></router-outlet>
+<main class="main" 
+    [ngStyle]="{ 'z-index': modalOpen ? '3' : '0', 'position': 'relative'}"
+    (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
+    <header style="z-index: 1; position: relative;">
+        <app-header></app-header>
+    </header>
+    <div class="main-content">
+        <router-outlet></router-outlet>
+    </div>
 </main>
 
 

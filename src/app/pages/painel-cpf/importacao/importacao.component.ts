@@ -3,8 +3,10 @@ import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
-import { PessoaRequestMany } from 'src/app/models/pessoa.model';
+import { Subscription, lastValueFrom } from 'rxjs';
+import { PessoaImportacao } from 'src/app/models/pessoa-crud.model';
+import { PessoaService } from 'src/app/services/pessoa.service';
+import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
 import { validaCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
@@ -27,7 +29,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     routeBackOptions: any;
     activeIndex: number[] = [];
     files: file[] = [];
-    filters = ['id', 'cpf', 'nome', 'dataNascimento', 'situacao', 'dataInscricao', 'digito', 'controle', 'anoObito', 'status', 'dataCap', 'horaCap', 'idNum', 'tipoErro', ]
+    filters = [ 'cpf', 'nome', 'dataNascimento', 'situacao', 'dataInscricao', 'digito',  'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro' ]
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
@@ -36,6 +38,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         private toastr: ToastrService,
         private modal: Modal,
         private activatedRoute: ActivatedRoute,
+        private pessoaService: PessoaService
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.modal.title.next('Importar Arquivo')
@@ -73,17 +76,17 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 id: id++,
                 cpf: cells[0].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') ?? '-',
                 nome: cells[1] ?? '-',
-                dataNascimento: cells[2] ?? '-',
-                situacao: cells[3] ?? '-',
-                dataInscricao: cells[4] ?? '-',
-                digito: cells[5] ?? '-',
-                controle: cells[6] ?? '-',
-                anoObito: cells[7] ?? '-',
-                status: cells[8] ?? '-',
-                dataCap: cells[9] ?? '-',
-                horaCap: cells[10] ?? '-',
-                idNum: cells[11] ?? '-',
-                tipoErro: cells[12] ?? '-',
+                dataNascimento: cells[2],
+                situacao: cells[3],
+                dataInscricao: cells[4],
+                digito: cells[5],
+                excel_Controle: cells[6],
+                anoObito: cells[7],
+                excel_Status: cells[8],
+                excel_Data_Cap: cells[9],
+                excel_Hora_Cap: cells[10],
+                excel_IdNum: cells[11],
+                excel_Erro: cells[12],
                 isValid: true,
                 isDuplicate: true,
             }
@@ -136,9 +139,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
             reader.onload = function (event) {
                 const data = reader.result;
-
                 var workBook = xlsx.read(data, { type: 'binary' });
-
                 var jsonData = workBook.SheetNames.reduce((content: any, name: any) => {
 
                     const sheet = workBook.Sheets[name];
@@ -151,20 +152,22 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                         list: content[name].map((item: pessoa) => {
                             return {
                                 id: id++,
-                                cpf: item.CPF.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') ?? '-',
+                                cpf: item.CPF ? item.CPF.toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0'): '-',
                                 nome: item.Nome ?? '-',
                                 dataNascimento: item.Data_Nascimento ?? '-',
                                 situacao: item.Situacao ?? '-',
-                                dataInscricao: item.Data_Inscricao ?? '-',
+                                dataInscricao:  item.Data_Inscricao ?? '-',
                                 digito: item.Digito ?? '-',
-                                controle: item.Controle ?? '-',
+                                excel_Controle: item.Controle ?? '-',
                                 anoObito: item.ano_obito ?? '-',
-                                status: item.Status ?? '-',
-                                dataCap: item.data_cap ?? '-',
-                                horaCap: item.hora_cap ?? '-',
-                                idNum: item.idnum ?? '-',
-                                tipoErro: item.TIPO_ERRO ?? '',
-                            }
+                                excel_Status: item.Status ?? '-',
+                                excel_Data_Cap: item.data_cap ?? '-',
+                                excel_Hora_Cap: item.hora_cap ?? '-',
+                                excel_IdNum: item.idnum ?? '-',
+                                excel_Erro: item.TIPO_ERRO ?? '-',
+                                isDuplicate: false, 
+                                isValid: true,
+                            } ;
                         })
                     }
                     fileModel.pages.push(pagina);
@@ -213,7 +216,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         });
     }
 
-    removeItem(item: PessoaRequestMany, page: page, file: file){
+    removeItem(item: PessoaImportacao, page: page, file: file){
         var fileIndex = this.files.findIndex(x => x.id == file.id);
         var pageIndex = file.pages.findIndex(x => x.id == page.id);
         var pessoaIndex = page.list.findIndex(x => x.id == item.id && x.cpf == item.cpf);
@@ -224,9 +227,60 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         }
 
     }
-    send(model: NgForm) {
+
+    formataData(dataString: string, horaString?: string, where?: string) {
+        var hour = 0;
+        var min = 0;
+        var seg = 0;
+        var date = dataString.split('/')
+
+        var year = parseInt(date[2]);
+        var month = parseInt(date[1]);
+        var day = parseInt(date[0]);
+        
+        if (horaString) {
+            var time = horaString.split(':');
+            hour = parseInt(time[0]);
+            min = parseInt(time[1]);
+            seg = parseInt(time[2]);
+        }
+        var fullDate = new Date(year, month, day, hour, min, seg).toISOString();
+        return fullDate;
+    }
+
+
+    send() {
         this.loading = true;
         this.erro = '';
+        var list = this.files.map(x => x.pages).flat(1).map(x => x.list).flat(1);
+        list = list.map(x => {
+            var dataCapUnformatted = x.excel_Data_Cap;
+
+            x.dataNascimento = this.formataData(x.dataNascimento, undefined, 'dataNascimento');
+            x.dataInscricao = this.formataData(x.dataInscricao, undefined, 'dataInscricao');
+            x.excel_Data_Cap = this.formataData(x.excel_Data_Cap, undefined, 'excel_Data_Cap');
+            x.excel_Hora_Cap = this.formataData(dataCapUnformatted,  x.excel_Hora_Cap, 'excel_Hora_Cap');
+            delete x.isValid;
+            delete x.id;
+            delete x.isDuplicate;
+            return x
+        })
+
+        if (list.length == 0) {
+            this.toastr.error('Nenhum item selecionado.');
+            this.erro = 'Nenhum item selecionado.';
+            return;
+        }
+        lastValueFrom(this.pessoaService.create(list))
+        .then(res => {
+            lastValueFrom(this.pessoaService.getList());
+            this.voltar();
+            this.loading = false;
+        })
+        .catch(res => {
+            this.loading = false;
+            this.erro = getError(res);
+        })
 
     }
 }
@@ -240,7 +294,7 @@ interface file {
 interface page {
     id: number;
     nome: string;
-    list: PessoaRequestMany[];
+    list: any[];
 }
 
 interface pessoa extends Object {

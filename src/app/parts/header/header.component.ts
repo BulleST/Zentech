@@ -1,5 +1,5 @@
-import { AfterViewInit, Component } from '@angular/core';
-import { faIdCard, faKey, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
+import { AfterViewInit, Component, HostListener } from '@angular/core';
+import { faBars, faIdCard, faKey, faSignOut, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
@@ -7,7 +7,8 @@ import { AccountService } from 'src/app/services/account.service';
 import { Header } from 'src/app/utils/header';
 import { AlertService } from '../alert/alert.service';
 import { MenuItem } from 'primeng/api';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
+import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 
 @Component({
     selector: 'app-header',
@@ -20,7 +21,11 @@ export class HeaderComponent implements AfterViewInit {
     faIdCard = faIdCard;
     faKey = faKey;
     faUser = faUser;
-    menuHeaderOpen = false;
+    faBars = faBars;
+    faTimes = faTimes;
+
+    menuMinhaContaOpen = false;
+    menuMobileOpen = false;
     userLogado?: Account;
     nomeAbreviado = '';
     perfil = '';
@@ -28,12 +33,17 @@ export class HeaderComponent implements AfterViewInit {
 
     homeActive = true;
 
+    isMobile: boolean = false;
+
     constructor(
         private accountService: AccountService,
         private header: Header,
         private alertService: AlertService,
-        private router: Router
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
+        private mobile: IsMobile,
     ) {
+        this.mobile.set();
 
         this.router.events.subscribe(res => {
             if(res instanceof NavigationEnd)
@@ -64,8 +74,14 @@ export class HeaderComponent implements AfterViewInit {
         });
         this.subscription.push(account);
 
-        var menuHeaderOpen = this.header.menuHeaderOpen.subscribe(res => this.menuHeaderOpen = res);
-        this.subscription.push(menuHeaderOpen);
+        var minhaContaOpen = this.header.minhaContaOpen.subscribe(res => this.menuMinhaContaOpen = res);
+        this.subscription.push(minhaContaOpen);
+
+        var mobileSubs = this.mobile.value.subscribe(res => this.isMobile = res == 'sm' || res == 'md')
+        this.subscription.push(mobileSubs);
+        
+        var menuMobileOpen = this.header.menuMobileOpen.subscribe(res => this.menuMobileOpen = res);
+        this.subscription.push(menuMobileOpen);
 
     }
 
@@ -77,13 +93,24 @@ export class HeaderComponent implements AfterViewInit {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    toggleMenuHeader(): void {
-        // this.menuHeaderOpen = !this.menuHeaderOpen;
-        this.header.toggleMenuHeader();
+    @HostListener('window:resize', ['$event'])
+    set() {
+       this.mobile.set();
+    }
+    toggleMenuMinhaConta(): void {
+        this.header.toggleMenuMinhaConta();
+    }
+
+    toggleMenuMobile() {
+        this.header.toggleMenuMobile()
     }
 
     sair() {
         this.accountService.logout();
+    }
+
+    minhaConta() {
+        this.router.navigate([this.router.url, 'minha-conta'], { relativeTo: this.activatedRoute, skipLocationChange: false, replaceUrl: true })
     }
 }
 

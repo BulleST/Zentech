@@ -10,6 +10,7 @@ import { FormComponent } from './form/form.component';
 const routes: Routes = [
     {
         path: '', component: ListComponent, title: 'ZenTech - Usuários', children: [
+                { path: 'minha-conta', loadComponent: () => import('./../initial/my-account/my-account.component').then(x => x.MyAccountComponent) },
             { path: 'cadastrar', component: FormComponent, title: 'ZenTech - Cadastrar usuário' },
             { path: 'editar/:usuario_id', component: FormComponent, title: 'ZenTech - Editar usuário', canActivate: [UserEditableAuth] },
             { path: 'excluir/:usuario_id', component: DeleteComponent, title: 'ZenTech - Excluir usuário', canActivate: [UserEditableAuth] },

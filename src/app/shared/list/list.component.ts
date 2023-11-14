@@ -51,10 +51,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     ) {
         this.filters = this.columns.map(x => x.field);
 
-        var loading = this.table.loading.subscribe(res => {
-            this.loading = res;
-            console.log(res)
-        });
+        var loading = this.table.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
         if (this.selectable) {

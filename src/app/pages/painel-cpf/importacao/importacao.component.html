@@ -1,9 +1,9 @@
 <div (paste)="paste($event)" >
     <ng-template #icon>
-        <img src="./../../../../assets/img/icon-excel.png">
+        <img src="assets/img/icon-excel.png">
     </ng-template>
     <ng-template #template>
-        <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+        <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
             <label for="file" class="input-file-container">
                 <p class="icon">
                     <i class="pi pi-upload"></i>
@@ -36,86 +36,86 @@
                                 <ng-template pTemplate="header">
                                     <tr class="grey bg-dark" *ngIf="page.nome">
                                         <th></th>
-                                        <th colspan="13">{{page.nome}}</th>
+                                        <th colspan="14">{{page.nome}}</th>
                                     </tr>
                                     <tr class="grey">
                                         <th>#</th>
-                                        <th>
-                                            <span>CPF</span>
-                                            <p-sortIcon [field]="'cpf'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-                    
+                                        <th> <!-- CPF -->
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <span class="me-auto">CPF</span>
+                                                <p-sortIcon [field]="'cpf'"></p-sortIcon>
+                                                <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            </div>
                                         </th>
-                                        <th>
+                                        <th> <!-- Nome -->
                                             <span>Nome</span>
                                             <p-sortIcon [field]="'nome'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Data de Nascimento -->
                                             <span>Data de Nascimento</span>
                                             <p-sortIcon [field]="'dataNascimento'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'dataNascimento'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-                    
                                         </th>
-                                        <th>
+                                        <th> <!-- Situação -->
                                             <span>Situação</span>
                                             <p-sortIcon [field]="'situacao'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'situacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Data Inscrição -->
                                             <span>Data Inscrição</span>
                                             <p-sortIcon [field]="'dataInscricao'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'dataInscricao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Dígito -->
                                             <span>Dígito</span>
                                             <p-sortIcon [field]="'digito'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'digito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Controle -->
                                             <span>Controle</span>
-                                            <p-sortIcon [field]="'controle'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'controle'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_Controle'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_Controle'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Ano Óbito -->
                                             <span>Ano Óbito</span>
                                             <p-sortIcon [field]="'anoObito'"></p-sortIcon>
                                             <p-columnFilter [type]="'text'" [field]="'anoObito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Status -->
                                             <span>Status</span>
-                                            <p-sortIcon [field]="'status'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'status'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_Status'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_Status'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Data Cap. -->
                                             <span>Data Cap.</span>
-                                            <p-sortIcon [field]="'dataCap'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'dataCap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_Data_Cap'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_Data_Cap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Hora Cap. -->
                                             <span>Hora Cap.</span>
-                                            <p-sortIcon [field]="'horaCap'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'horaCap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_Hora_Cap'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_Hora_Cap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- IdNum -->
                                             <span>IdNum</span>
-                                            <p-sortIcon [field]="'idNum'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'idNum'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_IdNum'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_IdNum'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
-                                        <th>
+                                        <th> <!-- Tipo Erro -->
                                             <span>Tipo Erro</span>
-                                            <p-sortIcon [field]="'tipoErro'"></p-sortIcon>
-                                            <p-columnFilter [type]="'text'" [field]="'tipoErro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                            <p-sortIcon [field]="'excel_Erro'"></p-sortIcon>
+                                            <p-columnFilter [type]="'text'" [field]="'excel_Erro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                     
                                         </th>
                                         <th class="td-actions"></th>
@@ -137,17 +137,17 @@
                                             {{item.cpf | mask : '000.000.000-00'}}
                                         </td>
                                         <td>{{item.nome}}</td>
-                                        <td>{{item.dataNascimento}}</td>
+                                        <td>{{item.dataNascimento  }}</td>
                                         <td>{{item.situacao}}</td>
-                                        <td>{{item.dataInscricao}}</td>
+                                        <td>{{item.dataInscricao  }}</td>
                                         <td>{{item.digito}}</td>
-                                        <td>{{item.controle}}</td>
+                                        <td>{{item.excel_Controle}}</td>
                                         <td>{{item.anoObito}}</td>
-                                        <td>{{item.status}}</td>
-                                        <td>{{item.dataCap}}</td>
-                                        <td>{{item.horaCap}}</td>
-                                        <td>{{item.idNum}}</td>
-                                        <td>{{item.tipoErro}}</td>
+                                        <td>{{item.excel_Status}}</td>
+                                        <td>{{item.excel_Data_Cap  }}</td>
+                                        <td>{{item.excel_Hora_Cap  }}</td>
+                                        <td>{{item.excel_IdNum}}</td>
+                                        <td>{{item.excel_Erro}}</td>
                                         <td class="td-actions">
                                             <button type="button" (click)="removeItem(item, page, file)" class="btn btn-small btn-dark">excluir</button>
                                         </td>

@@ -3,8 +3,10 @@ import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
-import { PessoaRequest } from 'src/app/models/pessoa.model';
+import { Subscription, lastValueFrom } from 'rxjs';
+import { PessoaFormulario } from 'src/app/models/pessoa-crud.model';
+import { PessoaService } from 'src/app/services/pessoa.service';
+import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
 import { validaCPF } from 'src/app/utils/validate-cpf';
 
@@ -18,7 +20,7 @@ export class CreateComponent implements OnDestroy {
     faChevronLeft = faChevronLeft;
     faUser = faUser;
     modalOpen = false;
-    objeto: PessoaRequest = new PessoaRequest;
+    objeto: PessoaFormulario = new PessoaFormulario;
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
@@ -37,6 +39,7 @@ export class CreateComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: Modal,
+        private pessoaService: PessoaService
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         
@@ -75,7 +78,7 @@ export class CreateComponent implements OnDestroy {
     }
 
     resetForm() {
-        this.objeto = new PessoaRequest;
+        this.objeto = new PessoaFormulario;
     }
 
     voltar() {
@@ -129,6 +132,17 @@ export class CreateComponent implements OnDestroy {
     send(model: NgForm) {
         this.loading = true;
         this.erro = '';
+
+        lastValueFrom(this.pessoaService.create([this.objeto]))
+        .then(res => {
+            lastValueFrom(this.pessoaService.getList());
+            this.voltar();
+            this.loading = false;
+        })
+        .catch(res => {
+            this.loading = false;
+            this.erro = getError(res);
+        })
 
     }
 }
