@@ -1,0 +1,7 @@
+.modal__header  .icon {
+    margin-right: 10px;
+    font-size: 13px;
+    transform: translateY(-2px);
+    line-height: 0.5;
+    display: inline-block;
+}

@@ -1,8 +1,14 @@
 
-export function validaCPF(doc: number) {
+export function validaCPF(doc: number | string) {
     var cpf: string = doc.toString();
+
+    var tryparse = parseInt(cpf)
+    if (Number.isNaN(tryparse) )
+        return false
+
     if (cpf.length > 11)
         return false;
+    
     cpf = cpf.padStart(11, '0')
     if (cpf.length != 11)
         return false;

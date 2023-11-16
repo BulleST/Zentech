@@ -14,31 +14,9 @@ import { getError } from '../utils/error';
 export class RequestInterceptor implements HttpInterceptor {
 
     excludeUrlsToastr = [
-        'tributacao/getAll',
-        'tipoLiquidez/getAll',
-        'tipoRisco/getAll',
-        'tipoAtivo/getAll',
-        'perfilAcesso/getAll',
-        'perfilInvestidor/getAll',
-        'estadoCivil/getAll',
-        'accounts/revoke-token',
-        'accounts/authenticate',
-        'accounts/refresh-token',
-        'accounts/verify-email',
-        'accounts/register',
-        'accounts/get-login',
     ];
 
     excludeUrlsLoading = [
-        'tributacao/getAll',
-        'tipoLiquidez/getAll',
-        'tipoRisco/getAll',
-        'tipoAtivo/getAll',
-        'perfilAcesso/getAll',
-        'perfilInvestidor/getAll',
-        'estadoCivil/getAll',
-        'accounts/verify-email',
-        'accounts/refresh-token',
     ];
 
     constructor(
@@ -62,7 +40,6 @@ export class RequestInterceptor implements HttpInterceptor {
             this.table.resetSelection();
         }
 
-            
 
         return next.handle(request).pipe(
             tap({
@@ -71,32 +48,36 @@ export class RequestInterceptor implements HttpInterceptor {
                         // request in progress
                         if (request.method == 'POST' || request.method == 'PUT' || request.method == 'PATCH' || request.method == 'DELETE') {
                             this.table.onRowUnselect();
-                        } else {
-                        }
+                        } 
                     }
                     else if (data instanceof HttpResponse) {
                         if ([200, 204, 201].includes(data.status)) {
-                            if (request.method == 'POST') {
-                                this.toastr.success('Operação concluída com sucesso');
-                            }
-                            else if (request.method == 'PUT') {
-                                this.toastr.success('Registro atualizado com sucesso');
-                                this.table.onRowUnselect();
-                            }
-                            else if (request.method == 'PATCH') {
-                                this.toastr.success('Registro atualizado com sucesso');
-                                this.table.onRowUnselect();
-                            }
-                            else if (request.method == 'DELETE') {
-                                this.toastr.success('Registro excluído com sucesso')
-                                this.table.onRowUnselect();
-                            }
-                            else if (request.method == 'GET') {
-                                setTimeout(() => {
-                                    this.table.goToCurrentPage();
-                                }, 100);
-                                this.table.loading.next(false)
-                                this.loadingUtils.loading.next(false);
+                            if (data.body.success == false) {
+                                
+                            } else {
+                                if (request.method == 'POST') {
+                                    this.toastr.success('Operação concluída com sucesso');
+                                }
+                                else if (request.method == 'PUT') {
+                                    this.toastr.success('Registro atualizado com sucesso');
+                                    this.table.onRowUnselect();
+                                }
+                                else if (request.method == 'PATCH') {
+                                    this.toastr.success('Registro atualizado com sucesso');
+                                    this.table.onRowUnselect();
+                                }
+                                else if (request.method == 'DELETE') {
+                                    this.toastr.success('Registro excluído com sucesso')
+                                    this.table.onRowUnselect();
+                                }
+                                else if (request.method == 'GET') {
+                                    setTimeout(() => {
+                                        this.table.goToCurrentPage();
+                                    }, 100);
+                                    this.table.loading.next(false)
+                                    this.loadingUtils.loading.next(false);
+                                }
+
                             }
 
                         }

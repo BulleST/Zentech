@@ -1,5 +1,5 @@
 import { PerfilAcesso } from "./account-perfil.model";
-import { FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
+import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { FilterMatchMode } from "primeng/api";
 
 export class Usuario {
@@ -25,10 +25,11 @@ export class UsuarioRequest {
 }
 
 
-export var userColumns = [
+export var userColumns: Column[] = [
     {
         field: 'id',
         header: 'Id',
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
     },
@@ -58,6 +59,7 @@ export var userColumns = [
     {
         field: 'perfilAcesso.perfil',
         header: 'Tipo de Acesso',
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
     },

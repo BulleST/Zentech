@@ -1,10 +1,10 @@
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { faChevronLeft, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaFormulario } from 'src/app/models/pessoa-crud.model';
+import { PessoaFormulario } from 'src/app/models/pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -16,10 +16,7 @@ import { validaCPF } from 'src/app/utils/validate-cpf';
     styleUrls: ['./create.component.css']
 })
 export class CreateComponent implements OnDestroy {
-    faTimes = faTimes;
-    faChevronLeft = faChevronLeft;
     faUser = faUser;
-    modalOpen = false;
     objeto: PessoaFormulario = new PessoaFormulario;
     erro: string = '';
     loading = false;
@@ -49,10 +46,6 @@ export class CreateComponent implements OnDestroy {
         var dataNascimentoMin = data;
         dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
         this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
-
-
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
 
         setTimeout(() => {
             this.modal.setOpen(true);

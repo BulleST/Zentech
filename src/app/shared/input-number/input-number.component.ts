@@ -38,17 +38,11 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
     viewInit = false;
 
     constructor(
-        private alertService: AlertService,
         private toastrService: ToastrService,
     ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['valueInput']) {
-            this.valueInput = changes['valueInput'].currentValue;
-            if (this.viewInit) {
-                // this.validate('ngOnChanges');
-            }
-        };
+        if (changes['valueInput']) this.valueInput = changes['valueInput'].currentValue;
         if (changes['mask']) this.mask = changes['mask'].currentValue;
         if (changes['suffix']) this.suffix = changes['suffix'].currentValue;
         if (changes['prefix']) this.prefix = changes['prefix'].currentValue;

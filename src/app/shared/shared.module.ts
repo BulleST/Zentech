@@ -12,12 +12,14 @@ import { ModalComponent } from './modal/modal.component';
 import { InputNumberComponent } from './input-number/input-number.component';
 import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
+import { SubModalComponent } from "./sub-modal/sub-modal.component";
 
 @NgModule({
     declarations: [
         ListSharedComponent,
         ModalComponent,
         InputNumberComponent,
+        SubModalComponent,
     ],
     imports: [
         CommonModule,
@@ -33,6 +35,7 @@ import { CalendarModule } from "primeng/calendar";
     exports: [
         ListSharedComponent,
         ModalComponent,
+        SubModalComponent,
         InputNumberComponent,
     ],
 })

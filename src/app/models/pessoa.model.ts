@@ -1,44 +1,84 @@
-import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 import { FilterMatchMode } from "primeng/api";
+import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
+
+export class Pessoa {
+    id: number = 0;
+    nome: string = '';
+    cpf: number = 0;
+    situacao: string = '';
+    dataInscricao: Date = new Date;
+    digito: string = '';
+    dataNascimento: Date = new Date;
+    nomeMae: string = '';
+    anoObito: number = 0;
+    telefone: string = '';
+    email: string = '';
+    obs: string = '';
+    excel_Status: string = '';
+    excel_Data_Cap: Date = new Date;
+    excel_Hora_Cap: Date = new Date;
+    excel_IdNum: string = '';
+    excel_Controle: string = '';
+    excel_Erro: string = '';
+    brConsulta_Status: string = '';
+    brConsulta_Data_Cap: Date = new Date;
+    brConsulta_Hora_Cap: Date = new Date;
+    brConsulta_Id_Consulta: string = '';
+    brConsulta_Controle: string = '';
+    brConsulta_Erro: string = '';
+    saldoAtual: number = 0;
+    dataCadastro: Date = new Date;
+    cadastradoPor: string = '';
+    dataAtualizacaoExcel: Date = new Date;
+    dataAtualizacaoBRConsulta: Date = new Date;
+}
 
 export class PessoaList {
     id: number = 0;
-    idEncrypted?: string = '';
     nome: string = '';
     cpf: string = '';
-    saldo: number = 0;
-    inclusao: Date = '' as unknown as Date;
-    status: boolean = false;
-
+    saldoAtual: number = 0;
+    dataCadastro: Date = '' as unknown as Date;
+    situacao: string = '';
     filterConcat?: string = '';
 }
 
-export class PessoaRequest {
+export class PessoaFormulario {
     nome: string = '';
-    cpf: number = '' as unknown as number;
-    telefone: number = '' as unknown as number;
-    email: string = '';
+    cpf: string = '';
     dataNascimento: Date = '' as unknown as Date;
     nomeMae: string = '';
-    obs?: string;
+    email: string = '';
+    obs: string = '';
 }
-export class PessoaRequestMany {
+
+export class PessoaImportacao {
     id: number = 0;
-    cpf: string = '';
     nome: string = '';
-    dataNascimento: string = '';
+    cpf: string = '';
+    dataNascimento: Date = '' as unknown as Date;
     situacao: string = '';
-    dataInscricao: string = '';
+    dataInscricao:  Date = '' as unknown as Date;
     digito: string = '';
-    controle: string = '';
     anoObito: string = '';
-    status: string = '';
-    dataCap: string = '';
-    horaCap: string = '';
-    idNum: string = '';
-    tipoErro: string = '';
-    isDuplicate = true;
-    isValid = true;
+    excel_Status: string = '';
+    excel_Data_Cap: Date = '' as unknown as Date;
+    excel_Hora_Cap: Date = '' as unknown as Date;
+    excel_IdNum: string = '';
+    excel_Controle: string = '';
+    excel_Erro: string = '';
+
+    isDuplicate? = true;
+    isValid? = true;
+    detalhes? = '';
+    sucesso? = true;
+}
+
+export class PessoaResponse {
+    nome: string = '';
+    cpf: number = '' as unknown as number;
+    sucesso: boolean = true;
+    detalhes: string = '';
 }
 
 export class PessoaRelatorio {
@@ -58,6 +98,7 @@ export class PessoaRelatorio {
     status: string = '';
 }
 
+
 export var pessoaColumns: Column[] = [
     {
         field: 'id',
@@ -73,8 +114,7 @@ export var pessoaColumns: Column[] = [
     {
         field: 'nome',
         header: 'Nome',
-        maskType: MaskType.substring,
-        substringLength: 22,
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -94,8 +134,8 @@ export var pessoaColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'saldo',
-        header: 'Saldo',
+        field: 'saldoAtual',
+        header: 'Saldo Atual',
         maskType: MaskType.number,
         filterType: FilterType.numeric,
         decimal: '1.2',
@@ -106,8 +146,8 @@ export var pessoaColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'inclusao',
-        header: 'Inclusão',
+        field: 'dataCadastro',
+        header: 'Data de Cadastro',
         maskType: MaskType.date,
         filterType: FilterType.date,
         filterDisplay: FilterDisplay.menu,
@@ -117,18 +157,14 @@ export var pessoaColumns: Column[] = [
         filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
-        field: 'status',
-        header: 'Status',
-        maskType: MaskType.boolean,
+        field: 'situacao',
+        header: 'Situação',
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
-        booleanValues: {
-            'true': 'ativo',
-            'false': 'inativo',
-        }
     }, 
 ];

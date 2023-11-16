@@ -1,12 +1,13 @@
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
+import { faChevronCircleLeft, faDollarSign, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { Pessoa } from 'src/app/models/pessoa-crud.model';
+import { PessoaSaldo } from 'src/app/models/pessoa-saldo.model';
+import { Pessoa } from 'src/app/models/pessoa.model';
+import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { tabChanged } from 'src/app/utils/tabview';
 
 @Component({
     selector: 'app-details',
@@ -14,62 +15,64 @@ import { Modal } from 'src/app/utils/modal';
     styleUrls: ['./details.component.css']
 })
 export class DetailsComponent implements OnDestroy {
-    faUser = faUser;
-    objeto: Pessoa = new Pessoa;
+    faIdCard = faIdCard;
+    faChevronCircleLeft = faChevronCircleLeft;
+    faDollarSign = faDollarSign;
+    pessoa: Pessoa = new Pessoa;
+    loadingPessoa = true;
+    saldos: PessoaSaldo[] = [];
+    loadingSaldo = true;
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
-    routeBackOptions: any;
-
-    @ViewChild('template') template: TemplateRef<any>
-    @ViewChild('icon') icon: TemplateRef<any>
+    activeIndex = 0;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
-        private modal: Modal,
         private pessoaService: PessoaService,
+        private pessoaSaldoService: PessoaSaldoService,
         private crypto: Crypto,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
 
+        this.activeIndex = parseInt(localStorage.getItem('tabIndex') ?? '0')
+        this.tabChanged(this.activeIndex)
         var params = this.activatedRoute.params.subscribe(p => {
-            if (p['id']) {
-                this.objeto.id = this.crypto.decrypt(p['id']);
-                lastValueFrom(this.pessoaService.get(this.objeto.id))
+            if (p['pessoa_id']) {
+                this.loadingPessoa = true;
+                this.loadingSaldo = true;
+                this.pessoa.id = this.crypto.decrypt(p['pessoa_id']);
+                lastValueFrom(this.pessoaService.get(this.pessoa.id))
                     .then(res => {
-                        this.objeto = res;
-                        setTimeout(() => {
-                            this.modal.setOpen(true);
-                        }, 200);
+                        this.pessoa = res;
                     })
                     .catch(res => {
-                        this.voltar();
                     })
+                    .finally(() => this.loadingPessoa = false)
+
+                lastValueFrom(this.pessoaSaldoService.getList(this.pessoa.id))
+                    .then(res => {
+                        this.saldos = res;
+                    })
+                    .catch(res => {
+                    })
+                    .finally(() => this.loadingSaldo = false)
             } else {
-                this.voltar();
             }
         });
         this.subscription.push(params);
     }
 
     ngAfterViewInit(): void {
-        this.modal.title.next('Detalhes')
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '800px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
 
     }
 
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
-
-    voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+    
+    tabChanged(index: number) {
+        tabChanged(index)
     }
+
 
 }

@@ -1,8 +1,9 @@
-import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import {  AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
-import { Column, MaskType } from 'src/app/helpers/column.interface';
+import { Column, FilterDisplay, FilterType, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Table } from 'src/app/utils/table';
@@ -12,7 +13,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit, AfterViewChecked {
+export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/*, AfterViewChecked*/ {
     maskType = MaskType;
     faFilter = faFilter;
     faTimes = faTimes;
@@ -24,31 +25,30 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() paginator: boolean = true;
     @Input() sortTable = true;
     @Input() menuTable = true;
-    @Input() createLink: string[] = [];
-    @Input() canCreate = true;
+    @Input() topActions: TemplateRef<any>;
     @Input() selectable = true;
-    @Input() columns = [{ field: 'id', header: 'Id', filterType: 'text', filterDisplay: 'menu' },];
+    @Input() columns: Column[] = [];
     @Input() tableLinks: MenuTableLink[] = [];
-    @Input() onCreate: any;
+
     selected?: any;
-    // selectedItems: any[] = [];
     filters: string[] = [];
     routeRow: string[] = [];
     loading = false;
     Role = Role;
 
     subscription: Subscription[] = [];
-
     first = 2;
-    
     currentBooleanFilter: any;
     currentCPFFilter: any;
     currentDateFilter: Date;
+
+    formatedList: any = [];
 
     constructor(
         private table: Table,
         private router: Router
     ) {
+
         this.filters = this.columns.map(x => x.field);
 
         var loading = this.table.loading.subscribe(res => this.loading = res);
@@ -66,12 +66,12 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes['list']) 
+
+        if (changes['list']) {
             this.list = changes['list'].currentValue;
+        }
         if (changes['selectable'])
             this.selectable = changes['selectable'].currentValue;
-        if (changes['createLink'])
-            this.createLink = changes['createLink'].currentValue;
         if (changes['filterLink'])
             this.filterLink = changes['filterLink'].currentValue;
         if (changes['filterTable'])
@@ -86,21 +86,40 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
             this.columns = changes['columns'].currentValue;
             this.filters = this.columns.map(x => x.field)
         }
-        if (changes['canCreate'])
-            this.canCreate = changes['canCreate'].currentValue;
-        if (changes['onCreate']) 
-            this.onCreate = changes['onCreate'].currentValue;
         if (changes['tableLinks'])
             this.tableLinks = changes['tableLinks'].currentValue;
+        if (changes['topActions'])
+            this.topActions = changes['topActions'].currentValue;
+
+        if (this.list.length > 0 && this.columns.length > 0) {
+            this.formata();
+        }
     }
     ngAfterViewInit(): void {
     }
     
     ngAfterViewChecked(): void {
-        setTimeout(() => {
-            this.table.currentPageChange();
-        }, 200);
+        this.table.currentPageChange();
+     
     }
+
+
+    formata() {
+        var newList: any[] = Object.assign([], this.list)
+        this.columns.forEach(col => {
+           newList = newList.map((row: any) => {
+                try {
+                    var a = this.formatCellData(row, col)
+                    row[col.field] = a;
+                } catch (e) {
+                }
+                return row;
+            })
+        })
+
+        this.formatedList = Object.assign([], newList);
+    }
+
 
     onRowSelect(event: any) {
         this.table.onRowSelect(event);
@@ -110,33 +129,25 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         this.table.onRowUnselect(event)
     }
 
-    getCellData(row: any, col: Column): any {
-        return this.table.getCellData(row, col);
+    formatCellData(row: any, col: Column): any {
+        var value = this.table.formatCellData(row, col);
+        return value
     }
     
-    gelCellTitle(row: any, col: Column) {
-        const nestedProperties: string[] = col.field.split('.');
-        let title: any = row;
-        for (const prop of nestedProperties) {
-            title = title ? title[prop] ?? undefined : undefined;
-        }
-        return title;
+    getCellValue(row: any, col: Column): any {
+        return this.table.getCellValue(row, col);
     }
-
-    create() {
-        if (this.canCreate) {
-            if (this.onCreate) {
-                this.onCreate();
-            }
-        }
-    }
-
-    eval(str:any, item: any) {
-        return eval(str) as boolean
-    }
-
+    
     onPageChange(e: any) {
 
+    }
+
+    primeNgDataFilter(value: Date, filterCallback: any, filter: ColumnFilter) {
+        if (value) {
+            filterCallback(new Date(value));
+        } else {
+            filter.clearFilter();
+        }
     }
 }
 

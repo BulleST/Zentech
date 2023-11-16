@@ -44,8 +44,8 @@ export class RelatorioComponent implements OnDestroy, AfterViewInit {
     this.subscription.push(getOpen);
 
     var params = activatedRoute.params.subscribe(p => {
-      if (p['id']) {
-          this.objeto.id = this.crypto.decrypt(p['id']);
+      if (p['pessoa_id']) {
+          this.objeto.id = this.crypto.decrypt(p['pessoa_id']);
         lastValueFrom(this.pessoaService.get(this.objeto.id))
         .then(res => {
         })

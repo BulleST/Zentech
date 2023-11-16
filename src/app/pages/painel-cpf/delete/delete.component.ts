@@ -16,7 +16,6 @@ import { Modal } from 'src/app/utils/modal';
 })
 export class DeleteComponent implements OnDestroy {
     faTrash = faTrash;
-    modalOpen = false;
     id: number = 0;
     erro: string = '';
     loading = false;
@@ -29,19 +28,16 @@ export class DeleteComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
         private modal: Modal,
         private pessoaService: PessoaService,
         private crypto: Crypto,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
     
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
     
         var params = activatedRoute.params.subscribe(p => {
-          if (p['id']) {
-              this.id = this.crypto.decrypt(p['id']);
+          if (p['pessoa_id']) {
+              this.id = this.crypto.decrypt(p['pessoa_id']);
             lastValueFrom(this.pessoaService.get(this.id))
             .then(res => {
                 setTimeout(() => {

@@ -40,9 +40,10 @@ export class Table {
 
     onRowSelect(event: any) {
         let row: any = event.data;
+        let target = event.originalEvent.target;
         if (row != undefined) {
             this.selected.next(row);
-            this.exibirMenuTable();
+            this.exibirMenuTable(target);
         }
     }
 
@@ -52,42 +53,33 @@ export class Table {
     }
 
     fecharMenuTable() {
-        $('.actions__nav').css({
+        $('.actions-nav').css({
             'display': 'none',
             'opacity': 0,
             'visibility': 'hidden',
         });
     }
 
+    exibirMenuTable(target: any) {
+        var td = target.tagName == 'TD' ? target : $(target).parents('td')
+        let tr = $(td).parent('tr');
+        let tdAcions = $(tr).find('.td-actions')
 
-    exibirMenuTable() {
-        setTimeout(() => {
-            let tr = $('tr.selected');
-            if (tr) {
-                let td = $(tr).find('.td-actions');
-                if (td) {
-                    let top = ($(td).offset()?.top ?? 0);
-                    let left = ($(td).offset()?.left ?? 0);
-                    $('.actions__nav').css({
-                        'display': 'flex',
-                        'top': top + 'px',
-                        'left': left + 'px',
-                        'opacity': 1,
-                        'visibility': 'visible',
-                    });
-                }
-            }
-        }, 10);
+        if (tr && td && tdAcions) {
+            let top = ($(tr).offset()?.top ?? 0);
+            let left = ($(tdAcions).offset()?.left ?? 0);
+            $('.actions-nav').css({
+                'display': 'flex',
+                'top': top + 'px',
+                'left': left + 'px',
+                'opacity': 1,
+                'visibility': 'visible',
+            });
+        }
     }
 
-
-    getCellData(row: any, col: Column): any {
-        const nestedProperties: string[] = col.field.split('.');
-        let value: any = row;
-
-        for (const prop of nestedProperties) {
-            value = value ? value[prop] ?? undefined : undefined;
-        }
+    formatCellData(row: any, col: Column): any {
+        var value = this.getCellValue(row, col);
         if (col.maskType && value != undefined && value.toString().trim() != '') {
             if (col.maskType == MaskType.number) { 
                 value = this.currency.transform(value.toString(), 'BRL', '', col.decimal); 
@@ -114,7 +106,7 @@ export class Table {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
             } 
             else if (col.maskType == MaskType.dateTime) {
-                value = this.datePipe.transform(value, 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
+                value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
             } 
             else if (col.maskType == MaskType.boolean) {
                 value = col.booleanValues[value]
@@ -134,6 +126,15 @@ export class Table {
             this.mask
         }
         return value ?? '-';
+    }
+
+    getCellValue(row: any, col: Column) {
+        const nestedProperties: string[] = col.field.split('.');
+        let value: any = row;
+        for (const prop of nestedProperties) {
+            value = value ? value[prop] ?? undefined : undefined;
+        }
+        return value;
     }
 
     encryptParams(tableLinks: MenuTableLink[]) {

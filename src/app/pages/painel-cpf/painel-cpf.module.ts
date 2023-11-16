@@ -22,6 +22,11 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
+import { SaldoComponent } from './details/saldo/saldo.component';
+import { DeleteSaldoComponent } from './details/saldo/delete-saldo/delete-saldo.component';
+import { TabViewModule } from 'primeng/tabview';
+import { CreateSaldoComponent } from './details/saldo/create-saldo/create-saldo.component';
+import { OperacaoComponent } from './operacao/operacao.component';
 @NgModule({
     declarations: [
         PainelCpfComponent,
@@ -30,7 +35,11 @@ import { DetailsComponent } from './details/details.component';
         RelatorioComponent,
         ImportacaoComponent,
         DeleteComponent,
-        DetailsComponent
+        DetailsComponent,
+        SaldoComponent,
+        DeleteSaldoComponent,
+        CreateSaldoComponent,
+        OperacaoComponent
     ],
     imports: [
         CommonModule,
@@ -44,7 +53,8 @@ import { DetailsComponent } from './details/details.component';
         SharedModule,
         TagModule,
         InputTextModule,
-        CalendarModule
+        CalendarModule,
+        TabViewModule,
     ],
     providers: [
         CurrencyPipe,
