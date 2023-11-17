@@ -22,11 +22,15 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
-import { SaldoComponent } from './details/saldo/saldo.component';
-import { DeleteSaldoComponent } from './details/saldo/delete-saldo/delete-saldo.component';
+import { SaldoComponent } from './saldo/saldo.component';
+import { DeleteSaldoComponent } from './saldo/delete-saldo/delete-saldo.component';
+import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.component';
 import { TabViewModule } from 'primeng/tabview';
-import { CreateSaldoComponent } from './details/saldo/create-saldo/create-saldo.component';
 import { OperacaoComponent } from './operacao/operacao.component';
+import { CreateOperacaoComponent } from './operacao/create-operacao/create-operacao.component';
+import { EditOperacaoComponent } from './operacao/edit-operacao/edit-operacao.component';
+import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
+
 @NgModule({
     declarations: [
         PainelCpfComponent,
@@ -36,10 +40,15 @@ import { OperacaoComponent } from './operacao/operacao.component';
         ImportacaoComponent,
         DeleteComponent,
         DetailsComponent,
+
         SaldoComponent,
-        DeleteSaldoComponent,
         CreateSaldoComponent,
-        OperacaoComponent
+        DeleteSaldoComponent,
+
+        OperacaoComponent,
+        CreateOperacaoComponent,
+        EditOperacaoComponent,
+        DeleteOperacaoComponent,
     ],
     imports: [
         CommonModule,

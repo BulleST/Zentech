@@ -13,8 +13,16 @@
         </div>
     </div>
     <div class="page__body">
+        <ng-template #topActions>
+            <div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12 mb-2 me-md-2 mx-md-1 px-0">
+                <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['cadastrar']">
+                    <span style="margin-top: -1px; margin-bottom: 1px;"> Cadastrar Operação</span>
+                </a>
+            </div>
+        </ng-template>
         <app-list-shared
             [list]="list"
+            [topActions]="topActions"
             [filterLink]="false"
             [filterTable]="true"
             [paginator]="true"

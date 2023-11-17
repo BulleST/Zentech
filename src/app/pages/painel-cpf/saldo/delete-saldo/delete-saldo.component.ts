@@ -1,27 +1,26 @@
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaSaldoRequest } from 'src/app/models/pessoa-saldo.model';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
+import { Subscription, lastValueFrom } from 'rxjs';
+import { getError } from 'src/app/utils/error';
 
 @Component({
-    selector: 'app-create-saldo',
-    templateUrl: './create-saldo.component.html',
-    styleUrls: ['./create-saldo.component.css']
+  selector: 'app-delete-saldo',
+  templateUrl: './delete-saldo.component.html',
+  styleUrls: ['./delete-saldo.component.css']
 })
-export class CreateSaldoComponent implements OnDestroy {
-    faDollarSign = faDollarSign;
-    objeto: PessoaSaldoRequest = new PessoaSaldoRequest;
+export class DeleteSaldoComponent implements OnDestroy {
+    faTrash = faTrash;
+    id: number = 0;
+    pessoa_Id: number = 0;
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
+    routerBack: string[] = ['../../../'];
     routeBackOptions: any;
-
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
@@ -38,19 +37,40 @@ export class CreateSaldoComponent implements OnDestroy {
             this.modal.setOpen(true);
         }, 200);
 
-        this.activatedRoute.parent?.params.subscribe(res => {
-            if (res['pessoa_Id']) {
-                var id = res['pessoa_Id']
-                this.objeto.pessoa_Id = this.crypto.decrypt(id) as number
+        var params = this.activatedRoute.params.subscribe(res => {
+            if (res['saldo_id']) {
+                var id = res['saldo_id'];
+                this.id = this.crypto.decrypt(id) as number
             } else {
                 this.voltar();
             }
         });
+        this.subscription.push(params);
+        
+        var parent = activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
+        var child = activatedRoute.snapshot.paramMap.has('pessoa_id');
+        var paramsSubscriber  = parent ? activatedRoute.parent?.params : child ? activatedRoute.params : this.voltar();
+        
+        if (paramsSubscriber) {
+            var paramsSubscription = paramsSubscriber.subscribe(x => {
+                if (x['pessoa_id']) {
+                    this.pessoa_Id = this.crypto.decrypt(x['pessoa_id']);
+                    setTimeout(() => {
+                        this.modal.setOpen(true);
+                    }, 200);
+                } else {
+                    this.voltar();
+                }
+            });
+            this.subscription.push(paramsSubscription);
+        } else {
+            this.voltar();
+        }
 
 
     }
     ngAfterViewInit(): void {
-        this.modal.title.next('Cadastrar Saldo')
+        this.modal.title.next('Excluir Saldo')
         this.modal.template.next(this.template)
         this.modal.style.next({ 'max-width': '500px' })
         this.modal.routerBack.next(this.routerBack);
@@ -74,10 +94,9 @@ export class CreateSaldoComponent implements OnDestroy {
     send() {
         this.loading = true;
         this.erro = '';
-
-        lastValueFrom(this.pessoaSaldoService.create(this.objeto))
+        lastValueFrom(this.pessoaSaldoService.delete(this.id))
             .then(res => {
-                lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
+                lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
                 this.voltar();
                 this.loading = false;
             })

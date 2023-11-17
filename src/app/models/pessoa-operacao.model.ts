@@ -2,7 +2,7 @@
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 
-export class PessoaOperacao {
+export class PessoaOperacaoList {
     id: number = 0;
     dataOperacao: Date = new Date;
     nomeCliente: string = '';
@@ -31,17 +31,7 @@ export class PessoaOperacaoStatus {
 }
 
 export var pessoaOperacaoColumns: Column[] = [
-    {
-        field: 'id',
-        header: 'Id',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
+ 
     {
         field: 'nomeCliente',
         header: 'Nome',
@@ -74,18 +64,6 @@ export var pessoaOperacaoColumns: Column[] = [
         filterShowMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.DATE_IS,
-    },
-    {
-        field: 'valorOperacao',
-        header: 'Valor',
-        maskType: MaskType.number,
-        filterType: FilterType.numeric,
-        decimal: '1.2',
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'statusOperacao',
@@ -158,7 +136,7 @@ export var pessoaOperacaoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'cadastradoPor',
+        field: 'cadastradaPor',
         header: 'Cadastrado Por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

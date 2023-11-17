@@ -52,6 +52,7 @@ export class SaldoComponent implements OnChanges, OnDestroy  {
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
+    
     getCellData(row: any, col: Column): any {
         return this.table.formatCellData(row, col);
     }

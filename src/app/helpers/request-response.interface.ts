@@ -1,4 +1,4 @@
 export interface Response {
-    sucesso: boolean;
+    successo: boolean;
     mensagem: string;
 }

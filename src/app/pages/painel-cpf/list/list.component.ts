@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
 import { PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
@@ -11,7 +11,7 @@ import { Subscription, lastValueFrom } from 'rxjs';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListComponent {
+export class ListComponent implements OnDestroy {
     faCreditCard = faCreditCard;
     list: PessoaList[] = [];
     tableLinks: MenuTableLink[] = [];
@@ -22,17 +22,15 @@ export class ListComponent {
         private table: Table,
         private pessoaService: PessoaService
     ) { 
-        console.log(' app-list-component construtor')
         var list = this.pessoaService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
         lastValueFrom(this.pessoaService.getList());
         var selected = this.table.selected.subscribe(res => {
-            console.log(' app-list-component selected')
             if (res) {
                 this.tableLinks = [
-                    // { label: 'Relatório', routePath: ['relatorio'], paramsFieldName: ['id'] }, 
-                    { label: 'Cadastrar operação', routePath: ['cadastrar-operacao'], paramsFieldName: ['id'] }, 
+                    { label: 'Cadastrar Saldo', routePath: ['cadastrar-saldo'], paramsFieldName: ['id'] }, 
+                    { label: 'Cadastrar Operação', routePath: ['cadastrar-operacao'], paramsFieldName: ['id'] }, 
                     { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
                     { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];
@@ -46,7 +44,6 @@ export class ListComponent {
     }
 
     ngOnDestroy(): void {
-        console.log(' app-list-component ngOnDestroy')
         this.subscription.forEach(x => x.unsubscribe());
     }
 

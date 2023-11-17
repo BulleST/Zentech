@@ -63,18 +63,19 @@ export class Table {
     exibirMenuTable(target: any) {
         var td = target.tagName == 'TD' ? target : $(target).parents('td')
         let tr = $(td).parent('tr');
-        let tdAcions = $(tr).find('.td-actions')
-
-        if (tr && td && tdAcions) {
-            let top = ($(tr).offset()?.top ?? 0);
-            let left = ($(tdAcions).offset()?.left ?? 0);
-            $('.actions-nav').css({
-                'display': 'flex',
-                'top': top + 'px',
-                'left': left + 'px',
-                'opacity': 1,
-                'visibility': 'visible',
-            });
+        let btnActions: JQuery<HTMLElement> = $(tr).find('.actions__toggle')
+        if (tr && td && btnActions) {
+            let top = ($(tr).offset()?.top ?? 0) + 5;
+            setTimeout(() => {
+                let left = ($(btnActions).offset()?.left ?? 0) - ($('.actions-nav').width() ?? 0) + 10;
+                $('.actions-nav').css({
+                    'display': 'flex',
+                    'top': top + 'px',
+                    'left': left + 'px',
+                    'opacity': 1,
+                    'visibility': 'visible',
+                });
+            }, 10);
         }
     }
 

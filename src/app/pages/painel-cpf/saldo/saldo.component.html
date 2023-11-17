@@ -14,7 +14,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row flex-wrap px-0 py-0 w-100">
             <div class="align-items-center col-12 col-lg-9 col-md-10 col-sm-9 col-xl-6 d-flex flex-column-reverse flex-sm-row flex-wrap justify-content-end mb-sm-0 ms-auto px-0">
                 <div class="mx-1 mb-2 me-md-2 col-md-4 col px-0">
-                    <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['cadastrar-saldo']">
+                    <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['saldo/cadastrar']">
                         Cadastrar Saldo
                     </a>
                 </div>
@@ -52,7 +52,7 @@
                 <p> {{text.value}} </p>
             </td>
             <td class="td-actions">
-                <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['excluir-saldo', item.idEncrypted]">Excluir</a>
+                <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
             </td>
         </tr>
     </ng-template>

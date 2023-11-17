@@ -35,7 +35,7 @@ export class ListComponent {
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-                    { label: 'Editar', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
+                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] }, 
                     { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

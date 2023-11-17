@@ -22,7 +22,7 @@
         <ng-template pTemplate="caption">
             <div class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 p-0 mb-sm-0 mb-2">
-                    <p *ngIf="!loading && formatedList.length > 0">
+                    <p *ngIf="!loading && formatedList.length > 0 && showResultLength">
                         <small> {{ formatedList.length }} resultado(s) </small>
                     </p>
                 </div>
@@ -40,7 +40,7 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr class="grey">
-                <th [pSortableColumn]="item.field" *ngFor="let item of columns">
+                <th [pSortableColumn]="item.field" *ngFor="let item of columns; index as i" [class.ps-4]="i == 0">
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="me-auto" [innerHTML]="item.header"></span>
                         <p-sortIcon [field]="item.field" *ngIf="sortTable"></p-sortIcon>
@@ -69,21 +69,24 @@
                 [class.selectable]="item.canSelect != false && selectable"
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
-                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
+                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
                     <p>
                         {{item[col.field]}}
                     </p>
                 </td>
                 <td class="td-actions">
-                    <div class="actions" *ngIf="item.showMenuOption != false && menuTable">
-                        <button class="actions__toggle" [class.active]="item == selected">
-                            <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
-                                <fa-icon [icon]="faEllipsisV"></fa-icon>
-                            </span>
-                            <span class="icon icon-times" (click)="onRowUnselect(item)">
-                                <fa-icon [icon]="faTimes"></fa-icon>
-                            </span>
-                        </button>
+                    <div class="d-flex align-items-center">
+                        <ng-template #rowActions *ngIf="rowActions" [ngTemplateOutlet]="rowActions"></ng-template>
+                        <div class="actions" *ngIf="item.showMenuOption != false && menuTable">
+                            <button class="actions__toggle" [class.active]="item == selected">
+                                <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
+                                    <fa-icon [icon]="faEllipsisV"></fa-icon>
+                                </span>
+                                <span class="icon icon-times" (click)="onRowUnselect(item)">
+                                    <fa-icon [icon]="faTimes"></fa-icon>
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </td>
             </tr>

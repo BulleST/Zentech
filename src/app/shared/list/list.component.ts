@@ -1,4 +1,4 @@
-import {  AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ColumnFilter } from 'primeng/table';
@@ -25,10 +25,13 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
     @Input() paginator: boolean = true;
     @Input() sortTable = true;
     @Input() menuTable = true;
-    @Input() topActions: TemplateRef<any>;
     @Input() selectable = true;
     @Input() columns: Column[] = [];
     @Input() tableLinks: MenuTableLink[] = [];
+    @Input() showResultLength = true;
+
+    @Input() topActions: TemplateRef<any>;
+    @Input() rowActions: TemplateRef<any>;
 
     selected?: any;
     filters: string[] = [];
@@ -43,6 +46,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
     currentDateFilter: Date;
 
     formatedList: any = [];
+
+    @ViewChild('rowActions') rowActionsTemplate: TemplateRef<any>;
 
     constructor(
         private table: Table,
@@ -90,6 +95,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
             this.tableLinks = changes['tableLinks'].currentValue;
         if (changes['topActions'])
             this.topActions = changes['topActions'].currentValue;
+        if (changes['rowActions'])
+            this.rowActions = changes['rowActions'].currentValue;
+        if (changes['showResultLength'])
+            this.showResultLength = changes['showResultLength'].currentValue;
 
         if (this.list.length > 0 && this.columns.length > 0) {
             this.formata();
@@ -97,17 +106,17 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
     }
     ngAfterViewInit(): void {
     }
-    
+
     ngAfterViewChecked(): void {
         this.table.currentPageChange();
-     
+
     }
 
 
     formata() {
         var newList: any[] = Object.assign([], this.list)
         this.columns.forEach(col => {
-           newList = newList.map((row: any) => {
+            newList = newList.map((row: any) => {
                 try {
                     var a = this.formatCellData(row, col)
                     row[col.field] = a;
@@ -133,11 +142,11 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
         var value = this.table.formatCellData(row, col);
         return value
     }
-    
+
     getCellValue(row: any, col: Column): any {
         return this.table.getCellValue(row, col);
     }
-    
+
     onPageChange(e: any) {
 
     }
@@ -149,5 +158,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
             filter.clearFilter();
         }
     }
+
+    evalRowActions(str: any, item: any) {
+        return eval(str) as boolean
+    }
+
 }
 

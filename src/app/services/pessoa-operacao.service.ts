@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-import { PessoaOperacao, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
+import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
 import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
@@ -12,7 +12,8 @@ import { Response } from '../helpers/request-response.interface';
 })
 export class PessoaOperacaoService {
     url = environment.url;
-    list = new BehaviorSubject<PessoaOperacao[]>([]);
+    list = new BehaviorSubject<PessoaOperacaoList[]>([]);
+    listOperacaoPorPessoa = new BehaviorSubject<PessoaOperacaoList[]>([]);
     status = new BehaviorSubject<PessoaOperacaoStatus[]>([]);
 
     constructor(
@@ -23,7 +24,7 @@ export class PessoaOperacaoService {
 
     getList() {
         this.table.loading.next(true);
-        return this.http.get<PessoaOperacao[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -31,6 +32,22 @@ export class PessoaOperacaoService {
                     return x;
                 })
                 this.list.next(list);
+                return of(list);
+            },
+            error: res => this.toastr.error('Não foi possível carregar listagem de operações.')
+        }));
+    }
+
+    getListById(pessoa_Id: number) {
+        this.table.loading.next(true);
+        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/pessoa/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        .pipe(tap({
+            next: list => {
+                list = list.map(x => {
+                    x.dataOperacao = new Date(x.dataOperacao);
+                    return x;
+                })
+                this.listOperacaoPorPessoa.next(list);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de operações.')
@@ -48,12 +65,16 @@ export class PessoaOperacaoService {
         }));
     }
 
+    get(id: number) {
+        return this.http.get<PessoaOperacaoRequest>(`${this.url}/operacao/${id}`, { headers: new HttpHeaders({ 'loading': 'false' })});
+    }
+
     create(request: PessoaOperacaoRequest) {
         return this.http.post<Response>(`${this.url}/operacao`, request);
     }
 
     edit(request: PessoaOperacaoRequest) {
-        return this.http.put(`${this.url}/operacao`, request);
+        return this.http.put<Response>(`${this.url}/operacao`, request);
     }
 
     delete(id: number) {

@@ -1,7 +1,7 @@
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
+import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus, pessoaOperacaoColumns } from 'src/app/models/pessoa-operacao.model';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -10,6 +10,9 @@ import { getError } from 'src/app/utils/error';
 import { Crypto } from 'src/app/utils/crypto';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { Table } from 'src/app/utils/table';
+import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
+import { Pessoa } from 'src/app/models/pessoa.model';
 
 @Component({
     selector: 'app-operacao',
@@ -17,96 +20,46 @@ import { ToastrService } from 'ngx-toastr';
     styleUrls: ['./operacao.component.css']
 })
 export class OperacaoComponent implements OnDestroy {
-    modalOpen = false;
-    objeto: PessoaOperacaoRequest = new PessoaOperacaoRequest;
-    erro: string = '';
-    loading = false;
+    columns = pessoaOperacaoColumns;
+    tableLinks: MenuTableLink[] = [];
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../../'];
-    routeBackOptions: any;
-    status: PessoaOperacaoStatus[] = [];
-    loadingStatus = true;
-    @ViewChild('template') template: TemplateRef<any>
-    @ViewChild('icon') icon: TemplateRef<any>
+
+    @Input() list: PessoaOperacaoList[] = [];
+    @Input() pessoa: Pessoa = new Pessoa;
+    @Input() pessoaIdEncrypted: Pessoa = new Pessoa;
+    lastIdDelete = 0;
+    @ViewChild('shared') shared: TemplateRef<any>;
 
     constructor(
-        private activatedRoute: ActivatedRoute,
-        private modal: Modal,
-        private pessoaService: PessoaService,
+        private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
-        private crypto: Crypto,
-        private datepipe: DatePipe,
-        private toastr: ToastrService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-
-        lastValueFrom(this.pessoaOperacaoService.getStatus())
-        .then(res => {
-            this.loadingStatus = false;
-            this.status = res;
+        var list = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
+            this.list = res.sort((x, y) => x.id - y.id);
+            this.lastIdDelete = res.length > 0 ? res[res.length - 1].id : 0;
         });
-
-        this.objeto.data = this.datepipe.transform(this.objeto.data,'yyyy-MM-ddThh:mm' ) as unknown as Date;
-        var params = activatedRoute.params.subscribe(p => {
-            if (p['pessoa_id']) {
-                this.objeto.pessoa_Id = this.crypto.decrypt(p['pessoa_id']);
-                lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id))
-                    .then(res => {
-                    })
-                    .catch(res => {
-                        this.voltar();
-                    })
-            } else {
-                this.voltar();
+        this.subscription.push(list); 
+        var selected = this.table.selected.subscribe(res => {
+            if (res) {
+                this.tableLinks = [
+                    { label: 'Editar', routePath: ['operacao', 'editar'], paramsFieldName: ['id'] }, 
+                    { label: 'Excluir', routePath: ['operacao', 'excluir'], paramsFieldName: ['id'] }, 
+                ];
+                this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
-        this.subscription.push(params);
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
+        this.subscription.push(selected);  
 
+        this.table.currentPage.next(1);
 
     }
-    ngAfterViewInit(): void {
-        this.modal.title.next('Cadastrar Operação')
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px', overflow: 'visible' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
 
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['list']) this.list = changes['list'].currentValue;
+        if (changes['pessoa']) this.pessoa = changes['pessoa'].currentValue;
     }
-
+    
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
-    }
-
-    voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
-    }
-
-    send(model: NgForm) {
-        this.loading = true;
-        this.erro = '';
-
-        lastValueFrom(this.pessoaOperacaoService.create(this.objeto))
-            .then(res => {
-                if (res.sucesso) {
-                    lastValueFrom(this.pessoaOperacaoService.getList());
-                    this.voltar();
-                } else {
-                    this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
-                }
-                this.loading = false;
-            })
-            .catch(res => {
-                this.loading = false;
-                this.erro = getError(res);
-            })
-
     }
 }
