@@ -10,7 +10,6 @@ import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { RequestInterceptor } from './helpers/request.interceptor';
-import { AccountService } from './services/account.service';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
@@ -20,6 +19,8 @@ import { AlertComponent } from './parts/alert/alert.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+registerLocaleData(localePt);
 
 @NgModule({
     declarations: [

@@ -6,7 +6,6 @@
              [columns]="columns"
              [value]="formatedList"
              [rows]="50"
-             [lazy]="true"
              [rowHover]="true"
              [rowsPerPageOptions]="[10, 25, 50, 100]"
              responsiveLayout="scroll"
@@ -40,25 +39,36 @@
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr class="grey">
-                <th [pSortableColumn]="item.field" *ngFor="let item of columns; index as i" [class.ps-4]="i == 0">
+                <th [pSortableColumn]="col.field" *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="me-auto" [innerHTML]="item.header"></span>
-                        <p-sortIcon [field]="item.field" *ngIf="sortTable"></p-sortIcon>
-                        <p-columnFilter #filter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [matchMode]="item.filterMatchMode" [showOperator]="item.showOperator" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton">
-                            <ng-template *ngIf="item.booleanValues" pTemplate="filter" let-filter="filterCallback">
+                        <span class="me-3" [innerHTML]="col.header"></span>
+                       <div>
+                        <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
+                        <p-columnFilter #filter [type]="col.filterType" [field]="col.field" [display]="col.filterDisplay" [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator" [showMatchModes]="col.filterShowMatchMode" [showAddButton]="col.filterShowAddButton">
+                            <ng-template *ngIf="col.booleanValues" pTemplate="filter" let-filter="filterCallback">
                                 <p-dropdown [(ngModel)]="currentBooleanFilter" [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'}, {value: false, label: 'Inativo'} ]" (onChange)="filter($event.value); currentBooleanFilter = $event.value" placeholder="Todos" optionLabel="label" optionValue="value"></p-dropdown>
                             </ng-template>
-                            <ng-template *ngIf="item.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
+                            <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
                                 <input type="text" pInputText mask="000.000.000-00" #cpf="ngModel" ngModel (change)="filter(cpf.value); currentCPFFilter = cpf.value;" placeholder="000.000.000-00" />
                             </ng-template>
-                            <ng-template *ngIf="item.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
+                            <ng-template *ngIf="col.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
                                 <p-calendar [(ngModel)]="currentDateFilter"
                                             (onBlur)="primeNgDataFilter(currentDateFilter, filter, filter)"
                                             (onSelect)="primeNgDataFilter(currentDateFilter, filter, filter);"
                                             [showIcon]="true"
                                             dateFormat="dd/mm/yy"></p-calendar>
                             </ng-template>
+                            <ng-template *ngIf="col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
+                                <p-calendar [(ngModel)]="currentDateFilter"
+                                            (onBlur)="primeNgDataFilter(currentDateFilter, filter, filter)"
+                                            (onSelect)="primeNgDataFilter(currentDateFilter, filter, filter);"
+                                            [showIcon]="true"
+                                            dateFormat="dd/mm/yy"
+                                            [showTime]="true"
+                                            hourFormat="24"></p-calendar>
+                            </ng-template>
                         </p-columnFilter>
+                       </div>
                     </div>
                 </th>
                 <th></th>
@@ -70,7 +80,11 @@
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
                 <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
-                    <p>
+                    <p  
+                        [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage') && (col.decimal == '2' || col.decimal == '1.2') 
+                            ? 'text-right pe-5 me-2'
+                            : ''"
+                        [class.text-right]="">
                         {{item[col.field]}}
                     </p>
                 </td>

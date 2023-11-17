@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
+import { PessoaOperacaoImportacao, PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
 import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
@@ -69,8 +69,12 @@ export class PessoaOperacaoService {
         return this.http.get<PessoaOperacaoRequest>(`${this.url}/operacao/${id}`, { headers: new HttpHeaders({ 'loading': 'false' })});
     }
 
-    create(request: PessoaOperacaoRequest) {
+    create(request: PessoaOperacaoRequest ) {
         return this.http.post<Response>(`${this.url}/operacao`, request);
+    }
+
+    importacao(request: PessoaOperacaoImportacao[]) {
+        return this.http.post<PessoaOperacaoImportacao[]>(`${this.url}/operacao/import`, request);
     }
 
     edit(request: PessoaOperacaoRequest) {

@@ -8,12 +8,10 @@ import { PainelCpfRoutingModule } from './painel-cpf.routing';
 import { PainelCpfComponent } from './painel-cpf.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
-import { RelatorioComponent } from './relatorio/relatorio.component';
 import { ImportacaoComponent } from './importacao/importacao.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
-registerLocaleData(localePt);
 
 import { AccordionModule } from 'primeng/accordion';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -31,12 +29,13 @@ import { CreateOperacaoComponent } from './operacao/create-operacao/create-opera
 import { EditOperacaoComponent } from './operacao/edit-operacao/edit-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 
+
+registerLocaleData(localePt);
 @NgModule({
     declarations: [
         PainelCpfComponent,
         ListComponent,
         CreateComponent,
-        RelatorioComponent,
         ImportacaoComponent,
         DeleteComponent,
         DetailsComponent,
@@ -66,11 +65,8 @@ import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-opera
         TabViewModule,
     ],
     providers: [
-        CurrencyPipe,
-        MaskPipe,
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
-        { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     ]
 })
 export class PainelCpfModule { }

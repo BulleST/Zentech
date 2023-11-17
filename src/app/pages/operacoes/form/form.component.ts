@@ -29,7 +29,8 @@ export class FormComponent implements OnDestroy {
     loadingPessoa = true;
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-
+    isEditPage = true;
+    pessoa_id: number = 0;
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
@@ -63,27 +64,31 @@ export class FormComponent implements OnDestroy {
         this.modal.style.next({ 'max-width': '600px', overflow: 'visible' })
         this.modal.activatedRoute.next(this.activatedRoute);
         this.modal.icon.next(this.icon);
-        
+
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['operacao_id']) {
                 this.objeto.id = this.crypto.decrypt(x['operacao_id']);
                 this.modal.title.next('Editar Operação')
                 this.modal.routerBack.next(['../../']);
+                this.isEditPage = true;
+
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
-                .then(res => {
-                    this.objeto = res;
-                    this.objeto.data = this.datepipe.transform(this.objeto.data,'yyyy-MM-ddThh:mm' ) as unknown as Date;
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
-                })
-                .catch(res => {
-                    this.voltar();
-                })
+                    .then(res => {
+                        this.objeto = res;
+                        this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        this.pessoa_id = this.objeto.pessoa_Id;
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    })
+                    .catch(res => {
+                        this.voltar();
+                    })
             } else {
                 this.modal.title.next('Cadastrar Operação');
                 this.modal.routerBack.next(['../']);
-                this.objeto.data = this.datepipe.transform(this.objeto.data,'yyyy-MM-ddThh:mm' ) as unknown as Date;
+                this.isEditPage = false;
+                this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
                     this.modal.setOpen(true);
                 }, 200);
@@ -115,6 +120,7 @@ export class FormComponent implements OnDestroy {
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
                     lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
+                    lastValueFrom(this.pessoaOperacaoService.getList());
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
@@ -131,6 +137,10 @@ export class FormComponent implements OnDestroy {
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.pessoaOperacaoService.create(this.objeto));
+
+        if (this.isEditPage)
+            this.objeto.pessoa_Id = this.pessoa_id;
+        
         return lastValueFrom(this.pessoaOperacaoService.edit(this.objeto));
     }
 }

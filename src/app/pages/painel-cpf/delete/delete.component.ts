@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faChevronLeft, faTimes, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
@@ -30,6 +31,7 @@ export class DeleteComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
         private pessoaService: PessoaService,
+        private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
@@ -82,6 +84,7 @@ export class DeleteComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.delete(this.id))
         .then(res => {
             lastValueFrom(this.pessoaService.getList());
+            lastValueFrom(this.pessoaOperacaoService.getList());
             this.voltar();
             this.loading = false;
         })

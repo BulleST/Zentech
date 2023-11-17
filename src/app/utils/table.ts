@@ -81,12 +81,12 @@ export class Table {
 
     formatCellData(row: any, col: Column): any {
         var value = this.getCellValue(row, col);
-        if (col.maskType && value != undefined && value.toString().trim() != '') {
+        if (col.maskType && value != undefined && value.toString().trim()) {
             if (col.maskType == MaskType.number) { 
-                value = this.currency.transform(value.toString(), 'BRL', '', col.decimal); 
+                value = this.currency.transform(value, 'BRL', '', col.decimal); 
             }
             else if (col.maskType == MaskType.percentage) {
-                value = this.currency.transform(value.toString(), 'BRL', '', col.decimal) + '%';
+                value = this.currency.transform(value, 'BRL', '', col.decimal) + '%';
             } 
             else if (col.maskType == MaskType.money) {
                 value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
@@ -121,12 +121,12 @@ export class Table {
                 }
             } 
             else {
-                return value ?? '-';
+                return value ?? 'N/A';
             }
 
             this.mask
         }
-        return value ?? '-';
+        return value ?? 'N/A';
     }
 
     getCellValue(row: any, col: Column) {

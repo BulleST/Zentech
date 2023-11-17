@@ -118,9 +118,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
         this.columns.forEach(col => {
             newList = newList.map((row: any) => {
                 try {
-                    var a = this.formatCellData(row, col)
+                    var a = this.formatCellData(row, col);
                     row[col.field] = a;
                 } catch (e) {
+                    console.error(e)
                 }
                 return row;
             })
@@ -145,10 +146,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
 
     getCellValue(row: any, col: Column): any {
         return this.table.getCellValue(row, col);
-    }
-
-    onPageChange(e: any) {
-
     }
 
     primeNgDataFilter(value: Date, filterCallback: any, filter: ColumnFilter) {

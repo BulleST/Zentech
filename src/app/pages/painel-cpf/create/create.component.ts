@@ -5,6 +5,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaFormulario } from 'src/app/models/pessoa.model';
+import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -36,7 +37,7 @@ export class CreateComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: Modal,
-        private pessoaService: PessoaService
+        private pessoaService: PessoaService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         

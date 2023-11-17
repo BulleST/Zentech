@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { faEllipsisV, faFilter, faList, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { faCreditCard } from '@fortawesome/free-regular-svg-icons';
-import { Column, MaskType } from 'src/app/helpers/column.interface';
-import { PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
+import { MaskType } from 'src/app/helpers/column.interface';
+import { PessoaList } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { pessoaOperacaoColumns } from 'src/app/models/pessoa-operacao.model';
+import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
 
 @Component({
     selector: 'app-list',
@@ -18,7 +16,7 @@ export class ListComponent {
     maskType = MaskType;
     list: PessoaList[] = [];
     tableLinks: MenuTableLink[] = [];
-    columns = pessoaOperacaoColumns;
+    columns = pessoaOperacaoAllColumns;
     subscription: Subscription[] = [];
     
     constructor(

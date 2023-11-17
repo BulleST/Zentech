@@ -33,19 +33,19 @@
                             <th>#</th>
                             <th> <!-- CPF -->
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span class="me-auto">CPF</span>
+                                    <span class="me-auto" class="me-auto">CPF</span>
                                     <p-sortIcon [field]="'cpf'"></p-sortIcon>
                                     <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                                 </div>
                             </th>
                             <th> <!-- Nome -->
-                                <span>Nome</span>
+                                <span class="me-auto">Nome</span>
                                 <p-sortIcon [field]="'nome'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Data de Nascimento -->
-                                <span>Data de Nascimento</span>
+                                <span class="me-auto">Data de Nascimento</span>
                                 <p-sortIcon [field]="'dataNascimento'"></p-sortIcon>
                                 <p-columnFilter #dataNascimentoFilter [type]="'date'" [field]="'dataNascimento'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -54,13 +54,13 @@
                                 </p-columnFilter>
                             </th>
                             <th> <!-- Situação -->
-                                <span>Situação</span>
+                                <span class="me-auto">Situação</span>
                                 <p-sortIcon [field]="'situacao'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'situacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Data Inscrição -->
-                                <span>Data Inscrição</span>
+                                <span class="me-auto">Data Inscrição</span>
                                 <p-sortIcon [field]="'dataInscricao'"></p-sortIcon>
                                 <p-columnFilter #dataInscricaoFilter [type]="'date'" [field]="'dataInscricao'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -73,31 +73,31 @@
         
                             </th>
                             <th> <!-- Dígito -->
-                                <span>Dígito</span>
+                                <span class="me-auto">Dígito</span>
                                 <p-sortIcon [field]="'digito'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'digito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Controle -->
-                                <span>Controle</span>
+                                <span class="me-auto">Controle</span>
                                 <p-sortIcon [field]="'excel_Controle'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Controle'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Ano Óbito -->
-                                <span>Ano Óbito</span>
+                                <span class="me-auto">Ano Óbito</span>
                                 <p-sortIcon [field]="'anoObito'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'anoObito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Status -->
-                                <span>Status</span>
+                                <span class="me-auto">Status</span>
                                 <p-sortIcon [field]="'excel_Status'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Status'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Data Cap. -->
-                                <span>Data Cap.</span>
+                                <span class="me-auto">Data Cap.</span>
                                 <p-sortIcon [field]="'excel_Data_Cap'"></p-sortIcon>
                                 <p-columnFilter #excel_Data_CapFilter [type]="'date'" [field]="'excel_Data_Cap'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -107,19 +107,19 @@
         
                             </th>
                             <th> <!-- Hora Cap. -->
-                                <span>Hora Cap.</span>
+                                <span class="me-auto">Hora Cap.</span>
                                 <p-sortIcon [field]="'excel_Hora_Cap'"></p-sortIcon>
                                 <p-columnFilter [type]="'time'" [field]="'excel_Hora_Cap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- IdNum -->
-                                <span>IdNum</span>
+                                <span class="me-auto">IdNum</span>
                                 <p-sortIcon [field]="'excel_IdNum'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_IdNum'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
                             <th> <!-- Tipo Erro -->
-                                <span>Tipo Erro</span>
+                                <span class="me-auto">Tipo Erro</span>
                                 <p-sortIcon [field]="'excel_Erro'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Erro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         

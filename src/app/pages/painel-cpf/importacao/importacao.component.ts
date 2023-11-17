@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription, lastValueFrom, throwError } from 'rxjs';
 import { PessoaImportacao, PessoaResponse } from 'src/app/models/pessoa.model';
+import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -48,7 +49,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         private toastr: ToastrService,
         private modal: Modal,
         private activatedRoute: ActivatedRoute,
-        private pessoaService: PessoaService
+        private pessoaService: PessoaService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.modal.title.next('Importar Arquivo')
