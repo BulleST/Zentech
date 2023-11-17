@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { lastValueFrom } from 'rxjs';
 import { Login } from 'src/app/models/account.model';
@@ -15,7 +16,6 @@ export class LoginComponent{
     login = new Login;
     loading: boolean = false;
     err = '';
-    // emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     constructor(
@@ -26,7 +26,7 @@ export class LoginComponent{
         this.loadingHelper.loading.subscribe(res => this.loading = res);
     }
 
-    logar() {
+    send(form: NgForm) {
         this.loadingHelper.loading.next(true);
         lastValueFrom(this.accountService.login(this.login))
         .then(res => { })

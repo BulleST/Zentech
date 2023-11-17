@@ -49,6 +49,7 @@
     width: auto;
     margin: auto 0;
     display: block;
+    max-height: 100%;
 }
 
 .header-navigation {
