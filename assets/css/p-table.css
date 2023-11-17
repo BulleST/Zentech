@@ -292,7 +292,7 @@ tr.selectable {
     padding: 2px 8px;
 }
 
-.p-dropdown:hover {
+.p-column-filter-matchmode-dropdown.p-dropdown:hover {
     border: 1px rgb(var(--grey)) solid;
     box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
 }
@@ -560,6 +560,14 @@ tr.selectable {
 
 .p-datepicker table td {
     padding: 7px;
+}
+
+
+.p-column-filter-matchmode-dropdown.p-dropdown .p-dropdown-panel,
+.p-column-filter-operator-dropdown.p-dropdown .p-dropdown-panel {
+    min-width: calc(100% + 20px) !important;
+    left: -10px !important;
+    border-radius: 0 0 6px 6px;
 }
 
 .p-datepicker td>span {
