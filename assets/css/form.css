@@ -19,7 +19,7 @@ label {
     margin-bottom: 2px;
 }
 
-.form-control {
+.form-control, .p-inputtext.form-control {
     display: block;
     width: 100%;
     padding: .375rem .75rem;
@@ -30,7 +30,6 @@ label {
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
-    -webkit-appearance: none;
     appearance: none;
     border-radius: .25rem;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
