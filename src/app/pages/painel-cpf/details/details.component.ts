@@ -49,7 +49,13 @@ export class DetailsComponent implements OnDestroy {
     ) {
 
         this.activeIndex = parseInt(localStorage.getItem('tabIndex') ?? '0')
-        this.tabChanged(this.activeIndex)
+        this.tabChanged(this.activeIndex);
+
+        var object = this.pessoaService.object.subscribe(res => {
+            this.pessoa = res;
+        })
+        this.subscription.push(object);
+        
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['pessoa_id']) {
                 this.loadingPessoa = true;

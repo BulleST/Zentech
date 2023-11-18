@@ -27,10 +27,6 @@ export class PessoaOperacaoService {
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
-                list = list.map(x => {
-                    x.dataOperacao = new Date(x.dataOperacao);
-                    return x;
-                })
                 this.list.next(list);
                 return of(list);
             },
@@ -43,10 +39,6 @@ export class PessoaOperacaoService {
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/pessoa/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
-                list = list.map(x => {
-                    x.dataOperacao = new Date(x.dataOperacao);
-                    return x;
-                })
                 this.listOperacaoPorPessoa.next(list);
                 return of(list);
             },

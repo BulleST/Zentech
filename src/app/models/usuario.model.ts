@@ -72,9 +72,13 @@ export var userColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-        booleanValues: {
-            'true': 'ativo',
-            'false': 'inativo',
-        }
+        // booleanValues: {
+        //     'true': 'ativo',
+        //     'false': 'inativo',
+        // }
+        values: [
+            { value: true, output: 'Ativo', class: 'flag-green' },
+            { value: false, output: 'Inativo', class: 'flag-red' },
+        ]
     },
 ];

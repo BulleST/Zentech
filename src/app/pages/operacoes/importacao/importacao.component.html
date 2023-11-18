@@ -104,6 +104,12 @@
                                 <p-columnFilter [type]="'text'" [field]="'valorMoedaNacional'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
         
                             </th>
+                            <th> <!-- Status Operação -->
+                                <span class="me-3">Status Operação</span>
+                                <p-sortIcon [field]="'statusOperacao'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'statusOperacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+        
+                            </th>
                             <th class="td-actions"></th>
                         </tr>
                     </ng-template>
@@ -131,6 +137,7 @@
                             <td>{{item.formaPagamento}}</td>
                             <td>{{item.valorMoedaEstrangeira | currency : 'BRL' : '' : '1.2' }}</td>
                             <td>{{item.valorMoedaNacional | currency : 'BRL' : '' : '1.2'}}</td>
+                            <td>{{item.statusOperacao}}</td>
                             <td class="td-actions">
                                 <button type="button" (click)="removeItem(item)" class="btn btn-small btn-dark">excluir</button>
                             </td>

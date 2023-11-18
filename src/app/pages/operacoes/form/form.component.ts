@@ -49,14 +49,11 @@ export class FormComponent implements OnDestroy {
                 this.status = res;
             });
 
-
         lastValueFrom(this.pessoaService.getList())
             .then(res => {
                 this.loadingPessoa = false;
                 this.pessoas = res;
             });
-
-
 
     }
     ngAfterViewInit(): void {
@@ -95,11 +92,6 @@ export class FormComponent implements OnDestroy {
             }
         });
         this.subscription.push(params);
-
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     ngOnDestroy(): void {

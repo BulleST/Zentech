@@ -21,7 +21,7 @@ export class DeleteOperacaoComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../../'];
+    routerBack: string[] = ['../../../'];
     routeBackOptions: any;
 
     @ViewChild('template') template: TemplateRef<any>
@@ -70,10 +70,6 @@ export class DeleteOperacaoComponent implements OnDestroy {
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
         this.modal.icon.next(this.icon);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     ngOnDestroy(): void {

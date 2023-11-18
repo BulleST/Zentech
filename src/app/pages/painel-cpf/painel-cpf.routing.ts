@@ -11,6 +11,7 @@ import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.componen
 import { CreateOperacaoComponent } from './operacao/create-operacao/create-operacao.component';
 import { EditOperacaoComponent } from './operacao/edit-operacao/edit-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
+import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 
 
 const routes: Routes = [
@@ -29,6 +30,7 @@ const routes: Routes = [
                 { path: 'saldo/excluir/:saldo_id', component: DeleteSaldoComponent },
                 { path: 'operacao/cadastrar', component: CreateOperacaoComponent },
                 { path: 'operacao/editar/:operacao_id', component: EditOperacaoComponent},
+                { path: 'operacao/detalhes/:operacao_id', component: DetalhesOperacaoComponent },
                 { path: 'operacao/excluir/:operacao_id', component: DeleteOperacaoComponent },
             ] },
         ]

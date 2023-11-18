@@ -24,7 +24,9 @@ export class ModalComponent implements OnChanges {
         private modal: Modal,
         private router: Router,
     ) {
-        this.modal.getOpen().subscribe(res => this.modalOpen = res);
+        this.modal.getOpen().subscribe(res =>{
+            this.modalOpen = res;
+        });
     }
 
 
@@ -39,7 +41,6 @@ export class ModalComponent implements OnChanges {
     }
 
     voltar() {
-        // this.modal.voltar('modal component');
         this.modal.voltar(this.routerBack, { relativeTo: this.activatedRoute });
         this.onClose?.emit(true);
     }

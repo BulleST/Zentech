@@ -53,14 +53,10 @@ export class Modal {
 
     voltar(where?: string[], options?: any) {
         this.setOpen(false);
-        // this.router.dispose()
-        // setTimeout(() => {
-            console.log(where, options)
-            if (where && where.length > 0) {
-                this.router.navigate(where, options)
-            } else {
-                this.location.back();
-            }
-        // }, 200);
+        if (where && where.length > 0) {
+            this.router.navigate(where, options)
+        } else {
+            this.location.back();
+        }
     }
 }

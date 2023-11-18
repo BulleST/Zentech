@@ -39,7 +39,7 @@ export class PessoaList {
     cpf: string = '';
     saldoAtual: number = 0;
     dataCadastro: Date = '' as unknown as Date;
-    situacao: string = '';
+    situacaoCPF: string = '';
     statusSaldo: string = '';
     filterConcat?: string = '';
 }
@@ -58,7 +58,7 @@ export class PessoaImportacao {
     nome: string = '';
     cpf: string = '';
     dataNascimento: Date = '' as unknown as Date;
-    situacao: string = '';
+    situacaoCPF: string = '';
     dataInscricao:  Date = '' as unknown as Date;
     digito: string = '';
     anoObito: string = '';
@@ -158,7 +158,7 @@ export var pessoaColumns: Column[] = [
         filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
-        field: 'situacao',
+        field: 'situacaoCPF',
         header: 'Situação CPF',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

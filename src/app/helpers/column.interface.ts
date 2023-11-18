@@ -13,9 +13,10 @@ export interface Column {
     showOperator?: boolean;
     filterShowAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
-    booleanValues?: any;
     substringLength?: number; // Masktype.substring
     title?: string;
+    filterValue?: any;
+    values?: any;
 }
 
 export enum FilterType {
@@ -39,9 +40,11 @@ export enum MaskType {
     dateTime = 'dateTime',
     cnpj = 'cnpj',
     cpf = 'cpf',
+    cpfcnpj = 'cpfcnpj',
     rg = 'rg',
     any = 'any',
     boolean = 'boolean',
     telefoneCelular = 'telefoneCelular',
     substring = 'substring',
+    options = 'options',
 }

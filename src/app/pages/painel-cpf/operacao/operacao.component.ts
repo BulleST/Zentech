@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Pessoa } from 'src/app/models/pessoa.model';
+import { ListSharedComponent } from 'src/app/shared/list/list.component';
 
 @Component({
     selector: 'app-operacao',
@@ -28,20 +29,20 @@ export class OperacaoComponent implements OnDestroy {
     @Input() pessoa: Pessoa = new Pessoa;
     @Input() pessoaIdEncrypted: Pessoa = new Pessoa;
     lastIdDelete = 0;
-    @ViewChild('shared') shared: TemplateRef<any>;
+    @ViewChild('shared') shared: ListSharedComponent;
 
     constructor(
         private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
     ) {
         var list = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
-            this.list = res.sort((x, y) => x.id - y.id);
-            this.lastIdDelete = res.length > 0 ? res[res.length - 1].id : 0;
+            this.list = Object.assign([], res);
         });
         this.subscription.push(list); 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
+                    { label: 'Detalhes', routePath: ['operacao', 'detalhes'], paramsFieldName: ['id'] }, 
                     { label: 'Editar', routePath: ['operacao', 'editar'], paramsFieldName: ['id'] }, 
                     { label: 'Excluir', routePath: ['operacao', 'excluir'], paramsFieldName: ['id'] }, 
                 ];

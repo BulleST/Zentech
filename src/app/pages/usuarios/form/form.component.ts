@@ -59,7 +59,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                 lastValueFrom(this.userService.get(this.objeto.id))
                     .then(res => {
                         this.objeto = res;
-
                         setTimeout(() => {
                             this.modal.setOpen(true);
                         }, 200);
@@ -93,10 +92,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
         this.modal.style.next({ 'max-width': '600px' })
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     voltar() {

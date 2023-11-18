@@ -97,6 +97,11 @@ export class Table {
             else if (col.maskType == MaskType.cpf) {
                 value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
             } 
+            else if (col.maskType == MaskType.cpfcnpj) {
+                var pj = row['pj'];
+                value = value.toString().padStart(pj ? 14 : 11);
+                value = this.mask.applyMask(value, pj ? '00.000.000/0000-00' : '000.000.000-00');
+            } 
             else if (col.maskType == MaskType.rg) {
                 value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
             } 
@@ -104,14 +109,15 @@ export class Table {
                 value = this.mask.applyMask(value, col.mask);
             } 
             else if (col.maskType == MaskType.date) {
-                value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC');
+                value = this.datePipe.transform(value, 'dd/MM/yyyy', '', 'pt-BR');
             } 
             else if (col.maskType == MaskType.dateTime) {
-                value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
+                value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', '', 'pt-BR');
+                // value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
             } 
-            else if (col.maskType == MaskType.boolean) {
-                value = col.booleanValues[value]
-            } 
+            // else if (col.maskType == MaskType.boolean) {
+            //     value = col.booleanValues[value]
+            // } 
             else if (col.maskType == MaskType.telefoneCelular) {
                 value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
             } 

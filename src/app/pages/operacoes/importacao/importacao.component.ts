@@ -33,7 +33,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     list: PessoaOperacaoImportacao[] = [];
 
-    filters = ['cpf', 'nome', 'dataNascimento', 'situacao', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
+    filters = ['cpf', 'nome', 'dataNascimento', 'situacaoCPF', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
@@ -97,6 +97,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 var formaPagamento = cells[8];
                 var valorMoedaEstrangeira = cells[9];
                 var valorMoedaNacional = cells[10];
+                var statusOperacao = cells[11];
 
                 if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
                     this.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
@@ -131,6 +132,9 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 else if (!valorMoedaNacional.trim()) {
                     this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
                 } 
+                else if (!statusOperacao.trim()) {
+                    this.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
+                } 
                 else {
                     var pessoa: PessoaOperacaoImportacao = {
                         id: id++,
@@ -145,6 +149,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                         formaPagamento: formaPagamento,
                         valorMoedaEstrangeira: valorMoedaEstrangeira,
                         valorMoedaNacional: valorMoedaNacional,
+                        statusOperacao: statusOperacao,
                     };
                     this.list.push(pessoa);
                 }
@@ -198,6 +203,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                             var formaPagamento = prop[8][1];
                             var valorMoedaEstrangeira = prop[9][1];
                             var valorMoedaNacional = prop[10][1];
+                            var statusOperacao = prop[11][1];
 
                             if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
                                 classe.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
@@ -232,6 +238,9 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                             else if (!valorMoedaNacional.trim()) {
                                 classe.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
                             } 
+                            else if (!statusOperacao.trim()) {
+                                classe.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
+                            } 
                             else {
                                 var pessoa: PessoaOperacaoImportacao = {
                                     id: id++,
@@ -246,6 +255,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                                     formaPagamento: formaPagamento,
                                     valorMoedaEstrangeira: valorMoedaEstrangeira,
                                     valorMoedaNacional: valorMoedaNacional,
+                                    statusOperacao: statusOperacao,
                                 };
                                 classe.list.push(pessoa);
                             }
@@ -253,7 +263,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                             console.error(e);
                             classe.toastr.error('Não foi possível importar uma linha. <br> Ignorando linha e processando próxima.');
                         } 
-                        console.log(classe.list)
                         return content;
                     });
                 }, {});
@@ -331,6 +340,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 lastValueFrom(this.pessoaService.getList());
                 this.loading = false;
                 if (res.find(x => x.statusCadastro != 'OK')) {
+                    this.toastr.clear();
                     this.toastr.error('Alguns registros não puderam ser salvos.');
                     this.erro = 'Alguns registros não puderam ser salvos.';
                     this.list = res;

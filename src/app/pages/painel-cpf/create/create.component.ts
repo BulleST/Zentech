@@ -48,11 +48,6 @@ export class CreateComponent implements OnDestroy {
         dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
         this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
 
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
-
-
     }
     ngAfterViewInit(): void {
         this.modal.title.next('Cadastrar Pessoa')

@@ -6,6 +6,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { Modal } from 'src/app/utils/modal';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-delete-saldo',
@@ -29,18 +30,15 @@ export class DeleteSaldoComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
         private pessoaSaldoService: PessoaSaldoService,
-        private crypto: Crypto
+        private crypto: Crypto,
+        private toastr: ToastrService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
 
         var params = this.activatedRoute.params.subscribe(res => {
             if (res['saldo_id']) {
                 var id = res['saldo_id'];
-                this.id = this.crypto.decrypt(id) as number
+                this.id = this.crypto.decrypt(id) as number;
             } else {
                 this.voltar();
             }
@@ -76,10 +74,6 @@ export class DeleteSaldoComponent implements OnDestroy {
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
         this.modal.icon.next(this.icon);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     ngOnDestroy(): void {
@@ -97,8 +91,13 @@ export class DeleteSaldoComponent implements OnDestroy {
         lastValueFrom(this.pessoaSaldoService.delete(this.id))
             .then(res => {
                 lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
-                this.voltar();
                 this.loading = false;
+                if (res.successo) {
+                    this.voltar();
+                } else {
+                    this.erro = res.mensagem;
+                    this.toastr.error(res.mensagem);
+                }
             })
             .catch(res => {
                 this.loading = false;

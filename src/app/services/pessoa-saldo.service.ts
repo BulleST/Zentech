@@ -5,6 +5,7 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaSaldo, PessoaSaldoRequest } from '../models/pessoa-saldo.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -43,7 +44,7 @@ export class PessoaSaldoService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/pessoaSaldo/${id}`);
+        return this.http.delete<Response>(`${this.url}/pessoaSaldo/${id}`);
     }
 
 }

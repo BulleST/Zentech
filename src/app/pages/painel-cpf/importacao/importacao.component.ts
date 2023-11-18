@@ -33,7 +33,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     list: any[] = [];
 
-    filters = ['cpf', 'nome', 'dataNascimento', 'situacao', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
+    filters = ['cpf', 'nome', 'dataNascimento', 'situacaoCPF', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
@@ -88,7 +88,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 var cpf = cells[0] ? cells[0].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
                 var nome = cells[1];
                 var dataNascimento = this.formataData(cells[2]);
-                var situacao = cells[3];
+                var situacaoCPF = cells[3];
                 var dataInscricao = this.formataData(cells[4]);
                 var digito = cells[5];
                 var excel_Controle = cells[6];
@@ -104,7 +104,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                     this.toastr.error('Não foi possível importar essa linha. <br> Nome não foi preenchido corretamente.');
                 } else if (Number.isNaN(Date.parse(dataNascimento.toString()))) {
                     this.toastr.error('Não foi possível importar essa linha. <br> Data de nascimento inválida.');
-                } else if (!situacao.trim()) {
+                } else if (!situacaoCPF.trim()) {
                     this.toastr.error('Não foi possível importar essa linha. <br> Situação não foi preenchido corretamente.');
                 } else if (Number.isNaN(Date.parse(dataInscricao.toString()))) {
                     this.toastr.error('Não foi possível importar essa linha. <br> Data de inscrição inválida.');
@@ -128,7 +128,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                         cpf: cpf,
                         nome: nome,
                         dataNascimento: dataNascimento,
-                        situacao: situacao,
+                        situacaoCPF: situacaoCPF,
                         dataInscricao: dataInscricao,
                         digito: digito,
                         excel_Controle: excel_Controle,
@@ -216,7 +216,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                                     cpf: cpf,
                                     nome: item.Nome,
                                     dataNascimento: dataNascimento,
-                                    situacao: item.Situacao,
+                                    situacaoCPF: item.Situacao,
                                     dataInscricao: dataInscricao,
                                     digito: item.Digito,
                                     excel_Controle: item.Controle,

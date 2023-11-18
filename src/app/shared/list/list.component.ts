@@ -41,10 +41,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
 
     subscription: Subscription[] = [];
     first = 2;
-    currentBooleanFilter: any;
-    currentCPFFilter: any;
-    currentDateFilter: Date;
-
     formatedList: any = [];
 
     @ViewChild('rowActions') rowActionsTemplate: TemplateRef<any>;
@@ -74,6 +70,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
 
         if (changes['list']) {
             this.list = changes['list'].currentValue;
+            this.formatedList = changes['list'].currentValue
+             if (this.list.length > 0 && this.columns.length > 0) {
+                this.formata();
+            }
         }
         if (changes['selectable'])
             this.selectable = changes['selectable'].currentValue;
@@ -99,10 +99,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
             this.rowActions = changes['rowActions'].currentValue;
         if (changes['showResultLength'])
             this.showResultLength = changes['showResultLength'].currentValue;
-
-        if (this.list.length > 0 && this.columns.length > 0) {
-            this.formata();
-        }
     }
     ngAfterViewInit(): void {
     }
@@ -114,9 +110,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
 
 
     formata() {
-        var newList: any[] = Object.assign([], this.list)
-        this.columns.forEach(col => {
-            newList = newList.map((row: any) => {
+        this.list.forEach((row: any) => {
+            this.columns.forEach(col => {
                 try {
                     var a = this.formatCellData(row, col);
                     row[col.field] = a;
@@ -127,7 +122,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
             })
         })
 
-        this.formatedList = Object.assign([], newList);
+        this.formatedList = Object.assign([], this.list);
     }
 
 

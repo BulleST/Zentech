@@ -13,7 +13,7 @@ import { Pessoa} from '../models/pessoa.model';
 export class PessoaService {
     url = environment.url;
     list = new BehaviorSubject<PessoaList[]>([]);
-
+    object = new BehaviorSubject<Pessoa>(new Pessoa);
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -39,7 +39,13 @@ export class PessoaService {
     }
 
     get(id: number) {
-        return this.http.get<Pessoa>(`${this.url}/pessoa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
+        return this.http.get<Pessoa>(`${this.url}/pessoa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) }).pipe(tap({
+            next: object => {
+                this.object.next(Object.assign({}, object));
+                return of(object);
+            },
+            error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+        }));
     }
     
 

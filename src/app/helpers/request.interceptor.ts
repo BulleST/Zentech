@@ -52,7 +52,7 @@ export class RequestInterceptor implements HttpInterceptor {
                     }
                     else if (data instanceof HttpResponse) {
                         if ([200, 204, 201].includes(data.status)) {
-                            if (data.body.success == false) {
+                            if (data.body.successo == false || data.body == false) {
                                 
                             } else {
                                 if (request.method == 'POST') {

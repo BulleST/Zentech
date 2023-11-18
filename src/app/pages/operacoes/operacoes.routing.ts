@@ -4,6 +4,7 @@ import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { ImportacaoComponent } from './importacao/importacao.component';
+import { DetailsComponent } from './details/details.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
         { path: 'cadastrar', component: FormComponent },
         { path: 'importar', component: ImportacaoComponent },
         { path: 'editar/:operacao_id', component: FormComponent },
+        { path: 'detalhes/:operacao_id', component: DetailsComponent },
         { path: 'excluir/:operacao_id', component: DeleteComponent },
     ] }
 ];

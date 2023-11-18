@@ -18,7 +18,7 @@
                             [styleClass]="'form-control' + (loadingPessoa ? 'form-control-loading' : '')"
                             [showClear]="true" 
                             [filter]="true" 
-                            filterBy="nome, saldoAtual, cpf, situacao" 
+                            filterBy="nome, saldoAtual, cpf, situacaoCPF" 
                             name="pessoa_Id"
                             inputId="pessoa_Id"
                             optionLabel="nome"
@@ -35,7 +35,7 @@
                                 </tr>
                                 <tr>
                                     <td class="pe-2">{{item.cpf}}</td>
-                                    <td class="pe-2">Situação: <strong>{{item.situacao ?? 'N/A'}}</strong></td>
+                                    <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF ?? 'INDEFINIDO'}}</strong></td>
                                 </tr>
                             </tbody>
                         </table>

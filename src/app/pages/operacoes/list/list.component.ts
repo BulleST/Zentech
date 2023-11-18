@@ -33,6 +33,7 @@ export class ListComponent {
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
+                    { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] }, 
                     { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];

@@ -64,10 +64,6 @@ export class CreateSaldoComponent implements OnDestroy {
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
         this.modal.icon.next(this.icon);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     ngOnDestroy(): void {
@@ -88,6 +84,7 @@ export class CreateSaldoComponent implements OnDestroy {
                 lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
                 lastValueFrom(this.pessoaOperacaoService.getList());
                 lastValueFrom(this.pessoaService.getList());
+                lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                 this.voltar();
                 this.loading = false;
             })

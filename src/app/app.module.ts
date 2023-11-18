@@ -19,6 +19,7 @@ import { AlertComponent } from './parts/alert/alert.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ChartModule } from 'primeng/chart';
 
 registerLocaleData(localePt);
 
@@ -40,7 +41,8 @@ registerLocaleData(localePt);
         }),
         NgxMaskModule.forRoot({ validation: true, triggerOnMaskChange: true, }),
         FormsModule,
-        TranslateModule.forRoot()
+        TranslateModule.forRoot(),
+        ChartModule,
     ],
     providers: [
         CurrencyPipe,

@@ -1,15 +1,16 @@
+
 <div class="content">
     <p-table
              class="table table-striped"
-             [class.mt-2]="formatedList.length == 0"
+             [class.mt-2]="list.length == 0"
              #dt
              [columns]="columns"
-             [value]="formatedList"
+             [value]="list"
              [rows]="50"
              [rowHover]="true"
              [rowsPerPageOptions]="[10, 25, 50, 100]"
              responsiveLayout="scroll"
-             [paginator]="paginator && formatedList.length > 0"
+             [paginator]="paginator && list.length > 0"
              [showCurrentPageReport]="true"
              currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
              [globalFilterFields]="filters"
@@ -21,8 +22,8 @@
         <ng-template pTemplate="caption">
             <div class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12 p-0 mb-sm-0 mb-2">
-                    <p *ngIf="!loading && formatedList.length > 0 && showResultLength">
-                        <small> {{ formatedList.length }} resultado(s) </small>
+                    <p *ngIf="!loading && list.length > 0 && showResultLength">
+                        <small> {{ list.length }} resultado(s) </small>
                     </p>
                 </div>
                 <div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
@@ -44,24 +45,41 @@
                         <span class="me-3" [innerHTML]="col.header"></span>
                        <div>
                         <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
-                        <p-columnFilter #filter [type]="col.filterType" [field]="col.field" [display]="col.filterDisplay" [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator" [showMatchModes]="col.filterShowMatchMode" [showAddButton]="col.filterShowAddButton">
+                        {{filter.currency}}
+                        <p-columnFilter #filter  [type]="col.filterType" [field]="col.field" [display]="col.filterDisplay" [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator" [showMatchModes]="col.filterShowMatchMode" [showAddButton]="col.filterShowAddButton">
+                           
                             <ng-template *ngIf="col.booleanValues" pTemplate="filter" let-filter="filterCallback">
-                                <p-dropdown [(ngModel)]="currentBooleanFilter" [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'}, {value: false, label: 'Inativo'} ]" (onChange)="filter($event.value); currentBooleanFilter = $event.value" placeholder="Todos" optionLabel="label" optionValue="value"></p-dropdown>
+                                <p-dropdown 
+                                    [(ngModel)]="col.filterValue" 
+                                    [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'},  {value: false, label: 'Inativo'} ]" 
+                                    (onChange)="filter($event.value); 
+                                    col.filterValue = $event.value" 
+                                    placeholder="Todos" 
+                                    optionLabel="label" 
+                                    optionValue="value"></p-dropdown>
                             </ng-template>
                             <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
-                                <input type="text" pInputText mask="000.000.000-00" #cpf="ngModel" ngModel (change)="filter(cpf.value); currentCPFFilter = cpf.value;" placeholder="000.000.000-00" />
+                                <input type="text" 
+                                    pInputText 
+                                    mask="000.000.000-00" 
+                                    #cpf="ngModel" 
+                                    ngModel 
+                                    (change)="filter(cpf.value);" 
+                                    [(ngModel)]="col.filterValue" 
+                                    placeholder="000.000.000-00" />
                             </ng-template>
                             <ng-template *ngIf="col.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
-                                <p-calendar [(ngModel)]="currentDateFilter"
-                                            (onBlur)="primeNgDataFilter(currentDateFilter, filter, filter)"
-                                            (onSelect)="primeNgDataFilter(currentDateFilter, filter, filter);"
+                                <p-calendar [(ngModel)]="col.filterValue"
+                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filter)"
+                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filter);"
                                             [showIcon]="true"
                                             dateFormat="dd/mm/yy"></p-calendar>
                             </ng-template>
                             <ng-template *ngIf="col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
-                                <p-calendar [(ngModel)]="currentDateFilter"
-                                            (onBlur)="primeNgDataFilter(currentDateFilter, filter, filter)"
-                                            (onSelect)="primeNgDataFilter(currentDateFilter, filter, filter);"
+                                {{col.filterValue}}
+                                <p-calendar [(ngModel)]="col.filterValue"
+                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filter)"
+                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filter);"
                                             [showIcon]="true"
                                             dateFormat="dd/mm/yy"
                                             [showTime]="true"

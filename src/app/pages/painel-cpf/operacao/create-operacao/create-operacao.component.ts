@@ -76,10 +76,6 @@ export class CreateOperacaoComponent implements OnDestroy {
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
         this.modal.icon.next(this.icon);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
     ngOnDestroy(): void {

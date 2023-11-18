@@ -8,7 +8,7 @@
         <p>Ele não poderá ser recuperado.</p>
         
         <div *ngIf="erro" class="m-0  mt-1">
-            <p class="text-red" *ngFor="let err of erro" [innerHTML]="err | json"></p>
+            <p class="text-danger" >{{erro}}</p>
         </div>
         <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

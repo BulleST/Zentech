@@ -13,6 +13,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ImportacaoComponent } from './importacao/importacao.component';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
+import { DetailsComponent } from './details/details.component';
 
 // registerLocaleData(localePt);
 
@@ -22,6 +23,7 @@ import { CalendarModule } from 'primeng/calendar';
         ListComponent,
         DeleteComponent,
         ImportacaoComponent,
+        DetailsComponent,
     ],
     imports: [
         CommonModule,
