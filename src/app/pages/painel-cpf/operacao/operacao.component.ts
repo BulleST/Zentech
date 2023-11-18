@@ -51,7 +51,7 @@ export class OperacaoComponent implements OnDestroy {
         });
         this.subscription.push(selected);  
 
-        this.table.currentPage.next(1);
+        
 
     }
 

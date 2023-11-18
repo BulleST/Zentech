@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { ColumnFilter } from 'primeng/table';
@@ -13,7 +13,7 @@ import { Table } from 'src/app/utils/table';
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.css']
 })
-export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/*, AfterViewChecked*/ {
+export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit, AfterViewChecked /*, AfterViewChecked*/ {
     maskType = MaskType;
     faFilter = faFilter;
     faTimes = faTimes;
@@ -49,6 +49,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
         private table: Table,
         private router: Router
     ) {
+        console.log('oi')
+        this.table.currentPage.next(1);
 
         this.filters = this.columns.map(x => x.field);
 
@@ -100,12 +102,11 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit/
         if (changes['showResultLength'])
             this.showResultLength = changes['showResultLength'].currentValue;
     }
+
     ngAfterViewInit(): void {
     }
-
     ngAfterViewChecked(): void {
         this.table.currentPageChange();
-
     }
 
 

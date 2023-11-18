@@ -1,9 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, AfterViewChecked } from '@angular/core';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Column } from 'src/app/helpers/column.interface';
-import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { PessoaSaldo, pessoaSaldoColumns } from 'src/app/models/pessoa-saldo.model';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -14,7 +13,7 @@ import { Table } from 'src/app/utils/table';
   templateUrl: './saldo.component.html',
   styleUrls: ['./saldo.component.css']
 })
-export class SaldoComponent implements OnChanges, OnDestroy  {
+export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     faDollarSign = faDollarSign;
     columns = pessoaSaldoColumns;
     filters = pessoaSaldoColumns.map(x => x.field);
@@ -34,7 +33,7 @@ export class SaldoComponent implements OnChanges, OnDestroy  {
     ) {
         var list = this.pessoaSaldoService.list.subscribe(res => {
             this.saldos = res.map(x => {
-                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC') as unknown as Date;
+                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
                 x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
                 return x
             }).sort((x, y) => x.id - y.id);
@@ -42,6 +41,9 @@ export class SaldoComponent implements OnChanges, OnDestroy  {
         });
         this.subscription.push(list); 
 
+    }
+    ngAfterViewChecked(): void {
+        this.table.currentPageChange();
     }
 
     ngOnChanges(changes: SimpleChanges): void {

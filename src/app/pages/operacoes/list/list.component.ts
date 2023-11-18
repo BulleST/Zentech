@@ -41,18 +41,11 @@ export class ListComponent {
             }
         });
         this.subscription.push(selected);  
-
-        this.table.currentPage.next(1);
+        
     }
 
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
-    }
-
-    ngAfterViewChecked(): void {
-        setTimeout(() => {
-            this.table.currentPageChange();
-        }, 200);
     }
 
 

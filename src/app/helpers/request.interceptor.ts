@@ -72,6 +72,7 @@ export class RequestInterceptor implements HttpInterceptor {
                                 }
                                 else if (request.method == 'GET') {
                                     setTimeout(() => {
+                                        console.log('request')
                                         this.table.goToCurrentPage();
                                     }, 100);
                                     this.table.loading.next(false)

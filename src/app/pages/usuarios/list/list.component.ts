@@ -33,7 +33,6 @@ export class ListComponent implements OnDestroy {
         lastValueFrom(this.userService.getList()); 
         var account = this.accountService.account.subscribe(res => this.account = res ?? new Account);
         var list = this.userService.list.subscribe(res => this.list = res);
-        this.table.currentPage.next(1);
         
         var selected = this.table.selected.subscribe(res => {
             if (res) { // se tiver linha selecionada

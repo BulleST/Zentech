@@ -17,7 +17,7 @@ export class Table {
     // selectedItems: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
     selected: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefined>(undefined);
 
-    currentPage = new BehaviorSubject<number>(0);
+    currentPage = new BehaviorSubject<number>(1);
 
 
     constructor(
@@ -27,6 +27,9 @@ export class Table {
         private mask: MaskApplierService,
         private datePipe: DatePipe,
     ) {
+        this.currentPage.subscribe(res => {
+            console.log(res);
+        })
     }
 
     initialize() {
@@ -164,15 +167,8 @@ export class Table {
     }
 
     currentPageChange() {
-        var classe = this;
-        $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').unbind('click')
-        $('p-table').find('p-paginator').find('.p-paginator-pages').find('.p-paginator-page').on('click', (e) => {
-            let currentPage = parseInt($(e.target).text()) ?? 1;
-            if (currentPage != this.currentPage.value) {
-                this.onRowUnselect();
-            }
-            classe.currentPage.next(currentPage)
-        })
+        var currentPage = parseInt($(`.p-paginator-page.p-highlight`).text()) ?? 1
+        this.currentPage.next(currentPage);
     }
 
     goToCurrentPage() {
