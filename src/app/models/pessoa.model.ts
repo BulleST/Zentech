@@ -4,11 +4,11 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class Pessoa {
     id: number = 0;
     nome: string = '';
-    cpf: number = 0;
+    cpf: number = '' as unknown as number;
     situacao: string = '';
     dataInscricao: Date = new Date;
     digito: string = '';
-    dataNascimento: Date = new Date;
+    dataNascimento: Date = '' as unknown as Date;
     nomeMae: string = '';
     anoObito: number = 0;
     telefone: string = '';
@@ -46,7 +46,7 @@ export class PessoaList {
 
 export class PessoaFormulario {
     nome: string = '';
-    cpf: string = '';
+    cpf: number = '' as unknown as number;
     dataNascimento: Date = '' as unknown as Date;
     nomeMae: string = '';
     email: string = '';
@@ -54,25 +54,28 @@ export class PessoaFormulario {
 }
 
 export class PessoaImportacao {
-    id: number = 0;
-    nome: string = '';
+    id?: number;
     cpf: string = '';
+    nome: string = '';
     dataNascimento: Date = '' as unknown as Date;
     situacaoCPF: string = '';
     dataInscricao:  Date = '' as unknown as Date;
     digito: string = '';
+    excel_Controle: string = '';
     anoObito: string = '';
+    pep: string = '';
     excel_Status: string = '';
     excel_Data_Cap: Date = '' as unknown as Date;
     excel_Hora_Cap: Date = '' as unknown as Date;
+    lote_id: string = '';
     excel_IdNum: string = '';
-    excel_Controle: string = '';
-    excel_Erro: string = '';
+    excel_Erro?: string;
 
-    isDuplicate? = true;
-    isValid? = true;
-    detalhes? = '';
-    sucesso? = true;
+    isDuplicate?: boolean;
+    isValid?: boolean;
+    detalhes?: string;
+    excel?: string;
+    sucesso?: boolean;
 }
 
 export class PessoaResponse {

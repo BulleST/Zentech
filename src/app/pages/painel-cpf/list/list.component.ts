@@ -20,7 +20,7 @@ export class ListComponent implements OnDestroy {
     
     constructor(
         private table: Table,
-        private pessoaService: PessoaService
+        private pessoaService: PessoaService,
     ) { 
         var list = this.pessoaService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -38,6 +38,7 @@ export class ListComponent implements OnDestroy {
             }
         });
         this.subscription.push(selected);  
+
         
 
     }

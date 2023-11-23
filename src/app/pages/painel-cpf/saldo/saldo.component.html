@@ -1,3 +1,4 @@
+
 <p-table class="table table-striped"
          [class.mt-2]="saldos.length == 0"
          #dt
@@ -54,6 +55,15 @@
             <td class="td-actions">
                 <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
             </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" >
+        <tr>
+            <td></td>
+            <td>
+                <strong>Total: </strong> {{limiteConcedido | currency : 'BRL' : '' : '1.2' }}
+            </td>
+            <td class="td-actions"></td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">

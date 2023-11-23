@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaFormulario } from 'src/app/models/pessoa.model';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
+import { Pessoa } from 'src/app/models/pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
+import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Modal } from 'src/app/utils/modal';
 import { validaCPF } from 'src/app/utils/validate-cpf';
 
@@ -18,35 +18,28 @@ import { validaCPF } from 'src/app/utils/validate-cpf';
 })
 export class CreateComponent implements OnDestroy {
     faUser = faUser;
-    objeto: PessoaFormulario = new PessoaFormulario;
+    objeto: Pessoa = new Pessoa;
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
     routerBack: string[] = ['../'];
     routeBackOptions: any;
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    
-    @ViewChild('dataNascimento') dataNascimento?: NgModel;
-    dataNascimentoMin = '';
-    dataNascimentoMax = '';
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
+    loadingPessoa = false;
 
+    screen: ScreenWidth = ScreenWidth.lg;
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
         private modal: Modal,
         private pessoaService: PessoaService,
+        private mobile: IsMobile,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
-        
-        var data = new Date();
-        this.dataNascimentoMax = data.toJSON().substring(0, 10);
-
-        var dataNascimentoMin = data;
-        dataNascimentoMin.setFullYear(dataNascimentoMin.getFullYear() - 100);
-        this.dataNascimentoMin = dataNascimentoMin.toJSON().substring(0, 10);
+        this.mobile.value.subscribe(res => this.screen = res);
 
     }
     ngAfterViewInit(): void {
@@ -67,30 +60,13 @@ export class CreateComponent implements OnDestroy {
     }
 
     resetForm() {
-        this.objeto = new PessoaFormulario;
+        this.objeto = new Pessoa;
     }
 
     voltar() {
         this.modal.voltar(this.routerBack, this.routeBackOptions);
     }
 
-    validateDataNascimento() {
-        var data = new Date(this.objeto.dataNascimento);
-        var dataNascimentoMin = new Date(this.dataNascimentoMin);
-        var dataNascimentoMax = new Date(this.dataNascimentoMax);
-        if (this.dataNascimento) {
-            if (data > dataNascimentoMax) {
-                this.dataNascimento.control.setErrors({
-                    max: true
-                })
-            }
-            else if (data < dataNascimentoMin) {
-                this.dataNascimento.control.setErrors({
-                    min: true
-                })
-            }
-        }
-    }
     validaCPF(input: NgModel, doc: number) {
         if (!input) {
             return;
@@ -118,20 +94,84 @@ export class CreateComponent implements OnDestroy {
         input.control.setErrors(null);
     }
 
+    procuraPessoa(cpf: NgModel, nasc: NgModel) {
+        if (cpf.invalid || nasc.invalid) {
+            return;
+        }
+
+        this.loadingPessoa = true;
+        this.erro = '';
+
+        lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
+            .then(res => {
+                this.loadingPessoa = false;
+                console.log(res, typeof res);
+                if (typeof res == 'object') {
+                    if (res.ERRO == 'ERRO') {
+                        this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
+                        this.objeto.brConsulta_Erro = res.ERRO as unknown as string;
+                    } else if (!res.ERRO) {
+                        this.objeto.dataNascimento = this.formataData(res.DATA_NASC).substring(0, 10) as unknown as Date;
+                        this.objeto.brConsulta_Data_Cap = this.formataData(res.DATA_CAP) as unknown as Date;
+                        this.objeto.brConsulta_Hora_Cap = this.formataData(res.DATA_CAP, res.HORA_CAP) as unknown as Date;
+                        this.objeto.dataInscricao = this.formataData(res.DATA_INSCRICAO) as unknown as Date;
+                        this.objeto.nome = res.NOME;
+                        this.objeto.digito = res.DIGITO;
+                        this.objeto.brConsulta_Controle = res.CONTROLE;
+                        this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
+                        this.objeto.situacao = res.SITUACAO;
+                        this.objeto.brConsulta_Status = res.STATUS;
+                    }
+                    this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
+                } else {
+                    console.log('oi')
+                    this.objeto.brConsulta_Erro = res as unknown as string;
+                }
+
+
+            })
+            .catch(res => {
+                this.loadingPessoa = false;
+                console.log('oi')
+                this.erro = getError(res);
+            })
+
+    }
+
     send(model: NgForm) {
         this.loading = true;
         this.erro = '';
 
         lastValueFrom(this.pessoaService.create([this.objeto]))
-        .then(res => {
-            lastValueFrom(this.pessoaService.getList());
-            this.voltar();
-            this.loading = false;
-        })
-        .catch(res => {
-            this.loading = false;
-            this.erro = getError(res);
-        })
+            .then(res => {
+                lastValueFrom(this.pessoaService.getList());
+                this.voltar();
+                this.loading = false;
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            })
 
+    }
+
+    formataData(dataString: string, horaString?: string, where?: string) {
+        var hour = 0;
+        var min = 0;
+        var seg = 0;
+        var date = dataString.split('/')
+
+        var year = parseInt(date[2]);
+        var month = parseInt(date[1]) - 1;
+        var day = parseInt(date[0]);
+
+        if (horaString) {
+            var time = horaString.split(':');
+            hour = parseInt(time[0]);
+            min = parseInt(time[1]);
+            seg = parseInt(time[2]);
+        }
+        var fullDate = new Date(year, month, day, hour, min, seg).toISOString();
+        return fullDate;
     }
 }

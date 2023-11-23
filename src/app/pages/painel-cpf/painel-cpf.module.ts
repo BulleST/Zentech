@@ -25,8 +25,7 @@ import { DeleteSaldoComponent } from './saldo/delete-saldo/delete-saldo.componen
 import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.component';
 import { TabViewModule } from 'primeng/tabview';
 import { OperacaoComponent } from './operacao/operacao.component';
-import { CreateOperacaoComponent } from './operacao/create-operacao/create-operacao.component';
-import { EditOperacaoComponent } from './operacao/edit-operacao/edit-operacao.component';
+import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 
@@ -46,8 +45,7 @@ registerLocaleData(localePt);
         DeleteSaldoComponent,
 
         OperacaoComponent,
-        CreateOperacaoComponent,
-        EditOperacaoComponent,
+        FormOperacaoComponent,
         DeleteOperacaoComponent,
         DetalhesOperacaoComponent,
     ],

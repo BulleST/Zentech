@@ -10,22 +10,27 @@
 <ng-template #template>
     <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
       <div class="px-2">
+        <div>
+            <p>{{pessoa_Id.value}}</p>
+        </div>
         <div class="row">
-            <div class="form-group col-12">
+            <div class="form-group col-md-8 col-sm-8 col-12">
                 <label for="pessoa_Id">Pessoa: <span class="text-danger">*</span></label>
                 <p-dropdown [options]="pessoas" 
                             [(ngModel)]="objeto.pessoa_Id" 
-                            [styleClass]="'form-control' + (loadingPessoa ? 'form-control-loading' : '')"
+                            [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
                             [showClear]="true" 
                             [filter]="true" 
                             filterBy="nome, saldoAtual, cpf, situacaoCPF" 
+                            #pessoa_Id="ngModel"
                             name="pessoa_Id"
                             inputId="pessoa_Id"
                             optionLabel="nome"
                             optionValue="id"
                             placeholder="Selecione um pessoa"
                             [disabled]="isEditPage"
-                            [readonly]="isEditPage">
+                            [readonly]="isEditPage"
+                            [required]="true">
                     <ng-template let-item pTemplate="item">
                         <table class="w-100">
                             <tbody>
@@ -41,7 +46,24 @@
                         </table>
                     </ng-template>
                 </p-dropdown>
+                <div *ngIf="pessoa_Id.touched && pessoa_Id.errors">
+                    <p class="text-danger" *ngIf="pessoa_Id.errors['required']">Este campo é obrigatório.</p>
+                </div>
             </div>
+            <div class="form-group col-md-4 col-sm-4 col-sm-12">
+                <label for="num_Op">Nº Operação: <span class="text-danger">*</span></label>
+                <input mask="0000"
+                        class="form-control"
+                        name="num_Op"
+                        id="num_Op"
+                        #num_Op="ngModel"
+                        [(ngModel)]="objeto.num_Op"
+                        required>
+                <div *ngIf="num_Op.touched && num_Op.errors">
+                    <p class="text-danger" *ngIf="num_Op.errors['required']">Este campo é obrigatório.</p>
+                </div>
+            </div>
+            
         </div>
         <div class="row">
             <div class="form-group col-md-4 col-sm-12">

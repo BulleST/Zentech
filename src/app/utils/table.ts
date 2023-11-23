@@ -26,11 +26,7 @@ export class Table {
         private currency: CurrencyPipe,
         private mask: MaskApplierService,
         private datePipe: DatePipe,
-    ) {
-        this.currentPage.subscribe(res => {
-            console.log(res);
-        })
-    }
+    ) { }
 
     initialize() {
         this.resetSelection();
@@ -88,6 +84,11 @@ export class Table {
             if (col.maskType == MaskType.number) { 
                 value = this.currency.transform(value, 'BRL', '', col.decimal); 
             }
+            else if (col.maskType == MaskType.mask && col.mask) {
+                if (parseInt(value))
+                    value = value.padStart(0, col.mask.length);
+                value = this.mask.applyMask(value, col.mask);
+            } 
             else if (col.maskType == MaskType.percentage) {
                 value = this.currency.transform(value, 'BRL', '', col.decimal) + '%';
             } 
@@ -112,15 +113,11 @@ export class Table {
                 value = this.mask.applyMask(value, col.mask);
             } 
             else if (col.maskType == MaskType.date) {
-                value = this.datePipe.transform(value, 'dd/MM/yyyy', '', 'pt-BR');
+                value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC', 'pt-BR');
             } 
             else if (col.maskType == MaskType.dateTime) {
-                value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', '', 'pt-BR');
-                // value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy \'às\' hh\'h\'mm', 'UTC');
+                value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', 'UTC', 'pt-BR');
             } 
-            // else if (col.maskType == MaskType.boolean) {
-            //     value = col.booleanValues[value]
-            // } 
             else if (col.maskType == MaskType.telefoneCelular) {
                 value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
             } 

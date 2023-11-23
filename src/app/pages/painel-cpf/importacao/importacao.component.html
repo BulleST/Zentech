@@ -12,12 +12,10 @@
                 <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
                 <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p>
                 <input type="file"
-                       hidden
                        name="file"
                        id="file"
                        #file="ngModel"
                        [ngModel]
-                       multiple
                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                        (change)="readExcel1($event)">
             </label>
@@ -31,21 +29,21 @@
                     <ng-template pTemplate="header">
                         <tr class="grey" *ngIf="list.length > 0">
                             <th>#</th>
+                            <th></th>
                             <th> <!-- CPF -->
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <span class="me-auto" class="me-auto">CPF</span>
+                                    <span class="me-3">CPF</span>
                                     <p-sortIcon [field]="'cpf'"></p-sortIcon>
                                     <p-columnFilter [type]="'text'" [field]="'cpf'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                                 </div>
                             </th>
                             <th> <!-- Nome -->
-                                <span class="me-auto">Nome</span>
+                                <span class="me-3">Nome</span>
                                 <p-sortIcon [field]="'nome'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'nome'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Data de Nascimento -->
-                                <span class="me-auto">Data de Nascimento</span>
+                                <span class="me-3">Data de Nascimento</span>
                                 <p-sortIcon [field]="'dataNascimento'"></p-sortIcon>
                                 <p-columnFilter #dataNascimentoFilter [type]="'date'" [field]="'dataNascimento'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -54,13 +52,12 @@
                                 </p-columnFilter>
                             </th>
                             <th> <!-- Situação -->
-                                <span class="me-auto">Situação</span>
+                                <span class="me-3">Situação</span>
                                 <p-sortIcon [field]="'situacaoCPF'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'situacaoCPF'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Data Inscrição -->
-                                <span class="me-auto">Data Inscrição</span>
+                                <span class="me-3">Data Inscrição</span>
                                 <p-sortIcon [field]="'dataInscricao'"></p-sortIcon>
                                 <p-columnFilter #dataInscricaoFilter [type]="'date'" [field]="'dataInscricao'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
@@ -70,59 +67,60 @@
                                         </p-calendar>
                                     </ng-template>
                                 </p-columnFilter>
-        
                             </th>
                             <th> <!-- Dígito -->
-                                <span class="me-auto">Dígito</span>
+                                <span class="me-3">Dígito</span>
                                 <p-sortIcon [field]="'digito'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'digito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Controle -->
-                                <span class="me-auto">Controle</span>
+                                <span class="me-3">Controle</span>
                                 <p-sortIcon [field]="'excel_Controle'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Controle'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Ano Óbito -->
-                                <span class="me-auto">Ano Óbito</span>
+                                <span class="me-3">Ano Óbito</span>
                                 <p-sortIcon [field]="'anoObito'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'anoObito'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                            </th>
+                            <th> <!-- PEP -->
+                                <span class="me-3">PEP</span>
+                                <p-sortIcon [field]="'pep'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'pep'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                             </th>
                             <th> <!-- Status -->
-                                <span class="me-auto">Status</span>
+                                <span class="me-3">Status</span>
                                 <p-sortIcon [field]="'excel_Status'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Status'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Data Cap. -->
-                                <span class="me-auto">Data Cap.</span>
+                                <span class="me-3">Data Cap.</span>
                                 <p-sortIcon [field]="'excel_Data_Cap'"></p-sortIcon>
                                 <p-columnFilter #excel_Data_CapFilter [type]="'date'" [field]="'excel_Data_Cap'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
                                         <p-calendar [(ngModel)]="currentDateFilter.excel_Data_Cap" (onClear)="currentDateFilter.excel_Data_Cap = undefined" inputId="excel_Data_Cap" (onBlur)="primeNgDataFilter(currentDateFilter.excel_Data_Cap!, filter, excel_Data_CapFilter)" (onSelect)="primeNgDataFilter(currentDateFilter.excel_Data_Cap!, filter, excel_Data_CapFilter);" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
                                     </ng-template>
                                 </p-columnFilter>
-        
                             </th>
                             <th> <!-- Hora Cap. -->
-                                <span class="me-auto">Hora Cap.</span>
+                                <span class="me-3">Hora Cap.</span>
                                 <p-sortIcon [field]="'excel_Hora_Cap'"></p-sortIcon>
                                 <p-columnFilter [type]="'time'" [field]="'excel_Hora_Cap'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                            </th>
+                            <th> <!-- Lote Id -->
+                                <span class="me-3">Lote Id</span>
+                                <p-sortIcon [field]="'lote_id'"></p-sortIcon>
+                                <p-columnFilter [type]="'text'" [field]="'lote_id'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
                             </th>
                             <th> <!-- IdNum -->
-                                <span class="me-auto">IdNum</span>
+                                <span class="me-3">IdNum</span>
                                 <p-sortIcon [field]="'excel_IdNum'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_IdNum'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th> <!-- Tipo Erro -->
-                                <span class="me-auto">Tipo Erro</span>
+                                <span class="me-3">Tipo Erro</span>
                                 <p-sortIcon [field]="'excel_Erro'"></p-sortIcon>
                                 <p-columnFilter [type]="'text'" [field]="'excel_Erro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
                             </th>
                             <th class="td-actions"></th>
                         </tr>
@@ -131,38 +129,73 @@
                         <tr [title]="item.detalhes ? item.detalhes : ''" >
                             <td>{{item.id}}</td>
                             <td>
-                                <div *ngIf="requestResponse.length > 0">
+                                <div title="{{item.excel}}">
                                     <span *ngIf="!item.sucesso">
-                                        <span  class="me-2 flag flag-text flag-danger" title="CPF inválido">
+                                        <span  class="me-2 flag flag-text flag-danger">
                                             <fa-icon [icon]="faCircleXmark"></fa-icon>
                                         </span>
-                                        <span>{{item.detalhes}}</span>
-
+                                        <span [innerHTML]="item.detalhes"></span>
                                     </span>
-                                    <span *ngIf="item.sucesso" class="me-2 flag flag-text flag-green" title="CPF válido">
-                                        <fa-icon [icon]="faCircleCheck"></fa-icon>
+                                    <span *ngIf="item.sucesso" class="me-2">
+                                        <span class="flag flag-text flag-green"> 
+                                            <fa-icon [icon]="faCircleCheck"></fa-icon>
+                                        </span> 
+                                        <span class="ms-2">OK</span>
+                                       
                                     </span> 
                                 </div>
-                                <!-- <span *ngIf="item.isDuplicate" class="me-2 flag flag-text flag-warning" title="CPF duplicado">
-                                    <fa-icon [icon]="faTriangleExclamation"></fa-icon>
-                                </span>-->
-                                {{item.cpf | mask : '000.000.000-00'}}
                             </td>
-                            <td>{{item.nome}}</td>
-                            <td>{{item.dataNascimento  | date : 'dd/MM/yyyy' }}</td>
-                            <td>{{item.situacaoCPF}}</td>
-                            <td>{{item.dataInscricao  | date : 'dd/MM/yyyy' }}</td>
-                            <td>{{item.digito}}</td>
-                            <td>{{item.excel_Controle}}</td>
-                            <td>{{item.anoObito}}</td>
-                            <td>{{item.excel_Status}}</td>
-                            <td>{{item.excel_Data_Cap | date : 'dd/MM/yyyy' }}</td>
-                            <td>{{item.excel_Hora_Cap  | date : 'HH:mm' }}</td>
-                            <td>{{item.excel_IdNum}}</td>
-                            <td>{{item.excel_Erro}}</td>
+                            <td>
+                                <span *ngIf="item.cpf; else na">{{item.cpf | mask : '000.000.000-00'}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.nome; else na">{{item.nome}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.dataNascimento && item.dataNascimento != 'Invalid Date'; else na">{{item.dataNascimento | date : 'dd/MM/yyyy' }}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.situacaoCPF; else na">{{item.situacaoCPF}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.dataInscricao && item.dataInscricao != 'Invalid Date'; else na">{{item.dataInscricao | date : 'dd/MM/yyyy'}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.digito; else na">{{item.digito}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_Controle; else na">{{item.excel_Controle}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.anoObito; else na">{{item.anoObito}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.pep; else na">{{item.pep}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_Status; else na">{{item.excel_Status}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_Data_Cap && item.excel_Data_Cap != 'Invalid Date'; else na">{{item.excel_Data_Cap | date : 'dd/MM/yyyy'}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_Hora_Cap && item.excel_Hora_Cap != 'Invalid Date'; else na">{{item.excel_Hora_Cap | date : 'HH:mm'}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.lote_id; else na">{{item.lote_id}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_IdNum; else na">{{item.excel_IdNum}}</span>
+                            </td>
+                            <td>
+                                <span *ngIf="item.excel_Erro; else na">{{item.excel_Erro}}</span>
+                            </td>
                             <td class="td-actions">
                                 <button type="button" (click)="removeItem(item)" class="btn btn-small btn-dark">excluir</button>
                             </td>
+                            <ng-template #na>
+                                <span class="text-danger">N\A</span>
+                            </ng-template>
                         </tr>
                     </ng-template>
                 </p-table>

@@ -14,6 +14,7 @@ export class PessoaService {
     url = environment.url;
     list = new BehaviorSubject<PessoaList[]>([]);
     object = new BehaviorSubject<Pessoa>(new Pessoa);
+
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -56,5 +57,29 @@ export class PessoaService {
     delete(id: number) {
         return this.http.delete(`${this.url}/pessoa/${id}`);
     }
+
+
+    getPessoa(cpf: number, dataNasc: Date) {
+        dataNasc = new Date(dataNasc.toString() + 'T00:00:00').toLocaleString().substring(0,10) as unknown as Date;
+        return this.http.post<BRConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
+    }
+
+}
+
+
+export class BRConsultaResponse  {
+    CONTROLE: string = '';
+    CPF: string = '';
+    DATA_CAP: string = '';
+    DATA_INSCRICAO: string = '';
+    DATA_NASC: string = '';
+    DIGITO: string = '';
+    HORA_CAP: string = '';
+    NOME: string = '';
+    SITUACAO: string = '';
+    STATUS: string = '';
+    ID_CONSULTA: string = '';
+    ERRO: string = '';
+    RETORNO: string = '';
 
 }

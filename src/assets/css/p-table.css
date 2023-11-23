@@ -562,7 +562,6 @@ tr.selectable {
     padding: 7px;
 }
 
-
 .p-column-filter-matchmode-dropdown.p-dropdown .p-dropdown-panel,
 .p-column-filter-operator-dropdown.p-dropdown .p-dropdown-panel {
     min-width: calc(100% + 20px) !important;
@@ -733,4 +732,8 @@ tr.selected:nth-child(odd) td.td-actions {
 
 .actions__toggle.active .icon-times {
     transform: scale(1) translate(50%) translateY(0);
+}
+
+tr.selected td {
+    background-color: #abcfdd !important;
 }

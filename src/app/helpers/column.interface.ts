@@ -47,4 +47,5 @@ export enum MaskType {
     telefoneCelular = 'telefoneCelular',
     substring = 'substring',
     options = 'options',
+    mask = 'mask',
 }

@@ -14,9 +14,11 @@ import { getError } from '../utils/error';
 export class RequestInterceptor implements HttpInterceptor {
 
     excludeUrlsToastr = [
+        'pessoa/consulta-pessoa'
     ];
-
+    
     excludeUrlsLoading = [
+        'pessoa/consulta-pessoa'
     ];
 
     constructor(
@@ -32,13 +34,15 @@ export class RequestInterceptor implements HttpInterceptor {
 
         var loadingHeader = request.headers.get('loading');
         if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true') {
-            this.loadingUtils.loading.next(true);
-            this.loadingUtils.addLoadingRequest();
+            if (notLoading.length == 0) {
+                this.loadingUtils.loading.next(true);
+                this.loadingUtils.addLoadingRequest();
+            }
         }
 
-        if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE') {
+        // if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE') {
             this.table.resetSelection();
-        }
+        // }
 
 
         return next.handle(request).pipe(
@@ -55,24 +59,27 @@ export class RequestInterceptor implements HttpInterceptor {
                             if (data.body.successo == false || data.body == false) {
                                 
                             } else {
-                                if (request.method == 'POST') {
-                                    this.toastr.success('Operação concluída com sucesso');
+                                if (notToastr.length == 0) {
+                                    if (request.method == 'POST') {
+                                        this.toastr.success('Operação concluída com sucesso');
+                                    }
+                                    else if (request.method == 'PUT') {
+                                        this.toastr.success('Registro atualizado com sucesso');
+                                        this.table.onRowUnselect();
+                                    }
+                                    else if (request.method == 'PATCH') {
+                                        this.toastr.success('Registro atualizado com sucesso');
+                                        this.table.onRowUnselect();
+                                    }
+                                    else if (request.method == 'DELETE') {
+                                        this.toastr.success('Registro excluído com sucesso')
+                                        this.table.onRowUnselect();
+                                    }
                                 }
-                                else if (request.method == 'PUT') {
-                                    this.toastr.success('Registro atualizado com sucesso');
-                                    this.table.onRowUnselect();
-                                }
-                                else if (request.method == 'PATCH') {
-                                    this.toastr.success('Registro atualizado com sucesso');
-                                    this.table.onRowUnselect();
-                                }
-                                else if (request.method == 'DELETE') {
-                                    this.toastr.success('Registro excluído com sucesso')
-                                    this.table.onRowUnselect();
-                                }
-                                else if (request.method == 'GET') {
+                                
+                                
+                                if (request.method == 'GET') {
                                     setTimeout(() => {
-                                        console.log('request')
                                         this.table.goToCurrentPage();
                                     }, 100);
                                     this.table.loading.next(false)

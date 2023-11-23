@@ -144,12 +144,28 @@
                                            [value]="pessoa.dataInscricao ? (pessoa.dataInscricao | date : 'dd/MM/yyyy') : 'N/A'"
                                            readonly>
                                 </div>
-                                <div class="form-group col-xl-1"><!--Ano Óbito-->
-                                    <label for="saldoAtual" style="white-space: nowrap;">Saldo Atual: </label>
+                                <div class="form-group col-xl-1"><!--Limite Disponível-->
+                                    <label for="saldoAtual" style="white-space: nowrap;">Limite Disponível: </label>
                                     <input class="form-control"
                                            name="saldoAtual"
                                            id="saldoAtual"
-                                           [value]="pessoa.saldoAtual != null && pessoa.saldoAtual != undefined ? (pessoa.saldoAtual | currency : 'BRL' : '') : 'N/A'"
+                                           [value]="(pessoa.saldoAtual | currency : 'BRL' : '' : '1.2') "
+                                           readonly>
+                                </div>
+                                <div class="form-group col-xl-1"><!--Limite Concedido-->
+                                    <label for="limiteConcedido" style="white-space: nowrap;">Limite Concedido: </label>
+                                    <input class="form-control"
+                                           name="limiteConcedido"
+                                           id="limiteConcedido"
+                                           [value]="limiteConcedido | currency : 'BRL' : '' : '1.2'"
+                                           readonly>
+                                </div>
+                                <div class="form-group col-xl-1"><!--Limite Utilizado-->
+                                    <label for="limiteUtilizado" style="white-space: nowrap;">Limite Utilizado: </label>
+                                    <input class="form-control"
+                                           name="limiteUtilizado"
+                                           id="limiteUtilizado"
+                                           [value]="limiteUtilizado | currency : 'BRL' : '' : '1.2'"
                                            readonly>
                                 </div>
                             </div>
@@ -273,7 +289,9 @@
                         </div>
                         <app-saldo *ngIf="!erroSaldo"
                             [saldos]="saldos"
-                            [loading]="loadingSaldo"></app-saldo>
+                            [loading]="loadingSaldo"
+                            [limiteConcedido]="limiteConcedido"
+                            [lastIdDelete]="lastIdDeleteSaldo"></app-saldo>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel>
@@ -286,7 +304,9 @@
                             <p>{{erroOperacoes}}</p>
                         </div>
                         <app-operacao *ngIf="!erroOperacoes"
-                            [list]="operacoes"></app-operacao>
+                            [list]="operacoes"
+                            [loading]="loadingOperacoes"
+                            [limiteUtilizado]="limiteUtilizado"></app-operacao>
                     </div>
                 </p-tabPanel>
             </p-tabView>

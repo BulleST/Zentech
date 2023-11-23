@@ -71,8 +71,10 @@ export class FormComponent implements OnDestroy {
 
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
+                        res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.num_Op = res.num_Op.toString().padStart(4, '0') as unknown as number;
+                        
                         this.objeto = res;
-                        this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         this.pessoa_id = this.objeto.pessoa_Id;
                         setTimeout(() => {
                             this.modal.setOpen(true);
@@ -126,6 +128,7 @@ export class FormComponent implements OnDestroy {
             })
 
     }
+    
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.pessoaOperacaoService.create(this.objeto));

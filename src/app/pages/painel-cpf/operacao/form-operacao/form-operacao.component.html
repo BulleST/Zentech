@@ -11,7 +11,7 @@
     <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
       <div class="px-2">
         <div class="row">
-            <div class="form-group col-md-4 col-sm-12">
+            <div class="form-group col-md-6 col-sm-6 col-12">
                 <label for="data">Data: <span class="text-danger">*</span></label>
                 <input type="datetime-local" 
                         class="form-control"
@@ -24,7 +24,22 @@
                         <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
                     </div>
             </div>
-            <div class="form-group col-md-4 col-sm-12">
+            <div class="form-group col-md-6 col-sm-6 col-12">
+                <label for="num_Op">Nº Operação: <span class="text-danger">*</span></label>
+                <input type="text" 
+                        class="form-control"
+                        name="num_Op"
+                        id="num_Op"
+                        mask="0000"
+                        placeholder="0000"
+                        #num_Op="ngModel"
+                        [(ngModel)]="objeto.num_Op"
+                        required>
+                    <div *ngIf="num_Op.touched && num_Op.errors">
+                        <p class="text-danger" *ngIf="num_Op.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+            </div>
+            <div class="form-group col-md-6 col-sm-6 col-12">
                 <label for="valor">Valor: <span class="text-danger">*</span></label>
                 <app-input-number [valueInput]="objeto.valor"
                     (valueChanges)="objeto.valor = $event;"
@@ -35,7 +50,7 @@
                     [required]="true"
                     [autoReplaceValue]="false"></app-input-number>
             </div>
-            <div class="form-group col-md-4 col-sm-12">
+            <div class="form-group col-md-6 col-sm-6 col-12">
                 <label for="operacao_Status_Id">Status: <span class="text-danger">*</span></label>
                 <select class="form-control"
                         [class.form-control-loading]="loadingStatus"
@@ -52,17 +67,6 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="row">
-            <div class="col-12 d-flex">
-                <input type="checkbox" 
-                        name="chargeBack"
-                        id="chargeBack"
-                        #chargeBack="ngModel"
-                        [(ngModel)]="objeto.chargeback"
-                        [value]="true">
-                <label for="chargeBack" class="mb-0 ms-2">Charge Back:</label>
-            </div>
-        </div> -->
       </div>
         <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
             <div *ngIf="erro || form.invalid" class="m-0">

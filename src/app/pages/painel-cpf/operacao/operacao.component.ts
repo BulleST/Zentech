@@ -28,17 +28,15 @@ export class OperacaoComponent implements OnDestroy {
     @Input() list: PessoaOperacaoList[] = [];
     @Input() pessoa: Pessoa = new Pessoa;
     @Input() pessoaIdEncrypted: Pessoa = new Pessoa;
-    lastIdDelete = 0;
+    @Input() limiteUtilizado: number = 0;
+    @Input() loading: boolean = false;
+
+
     @ViewChild('shared') shared: ListSharedComponent;
 
     constructor(
         private table: Table,
-        private pessoaOperacaoService: PessoaOperacaoService,
     ) {
-        var list = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
-            this.list = Object.assign([], res);
-        });
-        this.subscription.push(list); 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
@@ -58,9 +56,12 @@ export class OperacaoComponent implements OnDestroy {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list']) this.list = changes['list'].currentValue;
         if (changes['pessoa']) this.pessoa = changes['pessoa'].currentValue;
+        if (changes['limiteUtilizado']) this.limiteUtilizado = changes['limiteUtilizado'].currentValue;
+        if (changes['loading']) this.loading = changes['loading'].currentValue;
     }
     
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
+
 }

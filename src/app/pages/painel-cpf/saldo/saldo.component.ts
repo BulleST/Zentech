@@ -1,11 +1,8 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, AfterViewChecked } from '@angular/core';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Column } from 'src/app/helpers/column.interface';
 import { PessoaSaldo, pessoaSaldoColumns } from 'src/app/models/pessoa-saldo.model';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -19,27 +16,16 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     filters = pessoaSaldoColumns.map(x => x.field);
     currentDateFilter: Date;
 
-    @Input() saldos: PessoaSaldo[] = [] 
-    @Input() loading: boolean = false; 
+    @Input() saldos: PessoaSaldo[] = [];
+    @Input() loading: boolean = false;
+    @Input() limiteConcedido: number = 0;
+    @Input() lastIdDelete: number = 0;
     subscription: Subscription[] = [];
 
-    lastIdDelete = 0;
 
     constructor(
         private table: Table,
-        private pessoaSaldoService: PessoaSaldoService,
-        private datepipe: DatePipe,
-        private crypto: Crypto,
     ) {
-        var list = this.pessoaSaldoService.list.subscribe(res => {
-            this.saldos = res.map(x => {
-                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
-                x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
-                return x
-            }).sort((x, y) => x.id - y.id);
-            this.lastIdDelete = res.length > 0 ? res[res.length - 1].id : 0;
-        });
-        this.subscription.push(list); 
 
     }
     ngAfterViewChecked(): void {
@@ -49,6 +35,8 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['saldos']) this.saldos = changes['saldos'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
+        if (changes['limiteConcedido']) this.limiteConcedido = changes['limiteConcedido'].currentValue;
+        if (changes['lastIdDelete']) this.lastIdDelete = changes['lastIdDelete'].currentValue;
     }
     
     ngOnDestroy(): void {

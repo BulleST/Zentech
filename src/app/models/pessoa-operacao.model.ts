@@ -4,6 +4,7 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 
 export class PessoaOperacaoList {
     id: number = 0;
+    num_Op: number = '' as unknown as number;
     dataOperacao: Date = new Date;
     nomeCliente: string = '';
     cpfCliente: string = '';
@@ -18,9 +19,10 @@ export class PessoaOperacaoList {
 
 export class PessoaOperacaoRequest {
     id: number = 0;
-    pessoa_Id: number = 0;
+    pessoa_Id: number = '' as unknown as number;
     data: Date = new Date;
     valor: number = '' as unknown as number;
+    num_Op: number = '' as unknown as number;
     operacao_Status_Id: number = undefined as unknown as number;
     chargeback: boolean = false;
 }
@@ -61,6 +63,18 @@ export var pessoaOperacaoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
+        field: 'num_Op',
+        header: 'Nº Operação',
+        maskType: MaskType.undefined,
+        mask: '0000',
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
         field: 'statusOperacao',
         header: 'Status da Operação',
         maskType: MaskType.undefined,
@@ -71,59 +85,9 @@ export var pessoaOperacaoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS
     },
-    // {
-    //     field: 'chargeback',
-    //     header: 'ChargeBack',
-    //     maskType: MaskType.undefined,
-    //     filterType: FilterType.text,
-    //     filterDisplay: FilterDisplay.menu,
-    //     filterShowAddButton: false,
-    //     filterShowMatchMode: false,
-    //     showOperator: false,
-    //     filterMatchMode: FilterMatchMode.EQUALS,
-    //     values: [
-    //         { value: true, output: 'Sim' }
-    //     ]
-    // },
     {
         field: 'valorOperacao',
         header: 'Valor da Operação',
-        maskType: MaskType.number,
-        filterType: FilterType.numeric,
-        decimal: '1.2',
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
-        field: 'limiteConcedido',
-        header: 'Limite Concedido',
-        maskType: MaskType.number,
-        filterType: FilterType.numeric,
-        decimal: '1.2',
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
-        field: 'limiteUtilizado',
-        header: 'Limite Utilizado',
-        maskType: MaskType.number,
-        filterType: FilterType.numeric,
-        decimal: '1.2',
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
-        field: 'limiteAtual',
-        header: 'Limite Atual',
         maskType: MaskType.number,
         filterType: FilterType.numeric,
         decimal: '1.2',
@@ -171,41 +135,41 @@ pessoaOperacaoAllColumns.unshift(
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
-)
-
-// pessoaOperacaoAllColumns.splice(5, 0, {
-//     field: 'limiteConcedido',
-//     header: 'Limite Concedido',
-//     maskType: MaskType.number,
-//     filterType: FilterType.numeric,
-//     decimal: '1.2',
-//     filterDisplay: FilterDisplay.menu,
-//     filterShowAddButton: false,
-//     filterShowMatchMode: true,
-//     showOperator: false,
-//     filterMatchMode: FilterMatchMode.CONTAINS,
-// },
-// {
-//     field: 'limiteUtilizado',
-//     header: 'Limite Utilizado',
-//     maskType: MaskType.number,
-//     filterType: FilterType.numeric,
-//     decimal: '1.2',
-//     filterDisplay: FilterDisplay.menu,
-//     filterShowAddButton: false,
-//     filterShowMatchMode: true,
-//     showOperator: false,
-//     filterMatchMode: FilterMatchMode.CONTAINS,
-// },
-// {
-//     field: 'limiteAtual',
-//     header: 'Limite Atual',
-//     maskType: MaskType.number,
-//     filterType: FilterType.numeric,
-//     decimal: '1.2',
-//     filterDisplay: FilterDisplay.menu,
-//     filterShowAddButton: false,
-//     filterShowMatchMode: true,
-//     showOperator: false,
-//     filterMatchMode: FilterMatchMode.CONTAINS,
-// },)
+);
+pessoaOperacaoAllColumns.splice(5, 0, 
+    {
+        field: 'limiteConcedido',
+        header: 'Limite Concedido',
+        maskType: MaskType.number,
+        filterType: FilterType.numeric,
+        decimal: '1.2',
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'limiteUtilizado',
+        header: 'Limite Utilizado',
+        maskType: MaskType.number,
+        filterType: FilterType.numeric,
+        decimal: '1.2',
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'limiteAtual',
+        header: 'Limite Disponível',
+        maskType: MaskType.number,
+        filterType: FilterType.numeric,
+        decimal: '1.2',
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    })

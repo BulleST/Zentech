@@ -8,8 +8,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
 import { DeleteSaldoComponent } from './saldo/delete-saldo/delete-saldo.component';
 import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.component';
-import { CreateOperacaoComponent } from './operacao/create-operacao/create-operacao.component';
-import { EditOperacaoComponent } from './operacao/edit-operacao/edit-operacao.component';
+import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 
@@ -18,7 +17,7 @@ const routes: Routes = [
     { path: '', component: PainelCpfComponent, children: [
             { path: '', component: ListComponent, children: [
                     { path: 'cadastrar', component: CreateComponent },
-                    { path: 'cadastrar-operacao/:pessoa_id', component: CreateOperacaoComponent },
+                    { path: 'cadastrar-operacao/:pessoa_id', component: FormOperacaoComponent },
                     { path: 'cadastrar-saldo/:pessoa_id', component: CreateSaldoComponent },
                     { path: 'importar', component: ImportacaoComponent },
                     { path: 'excluir/:pessoa_id', component: DeleteComponent },
@@ -28,8 +27,8 @@ const routes: Routes = [
             { path: 'detalhes/:pessoa_id', component: DetailsComponent, children: [
                 { path: 'saldo/cadastrar', component: CreateSaldoComponent },
                 { path: 'saldo/excluir/:saldo_id', component: DeleteSaldoComponent },
-                { path: 'operacao/cadastrar', component: CreateOperacaoComponent },
-                { path: 'operacao/editar/:operacao_id', component: EditOperacaoComponent},
+                { path: 'operacao/cadastrar', component: FormOperacaoComponent },
+                { path: 'operacao/editar/:operacao_id', component: FormOperacaoComponent},
                 { path: 'operacao/detalhes/:operacao_id', component: DetalhesOperacaoComponent },
                 { path: 'operacao/excluir/:operacao_id', component: DeleteOperacaoComponent },
             ] },

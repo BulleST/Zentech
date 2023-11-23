@@ -15,17 +15,18 @@ export class PessoaSaldoRequest {
 }
 
 export var pessoaSaldoColumns: Column[] = [
-    // {
-    //     field: 'id',
-    //     header: 'Id',
-    //     maskType: MaskType.undefined,
-    //     filterType: FilterType.text,
-    //     filterDisplay: FilterDisplay.menu,
-    //     filterShowAddButton: false,
-    //     filterShowMatchMode: false,
-    //     showOperator: false,
-    //     filterMatchMode: FilterMatchMode.EQUALS,
-    // },
+
+    {
+        field: 'dataConcessao',
+        header: 'Data de Concessão',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.DATE_IS,
+    },
     {
         field: 'valorConcedido',
         header: 'Valor Concedido',
@@ -37,17 +38,6 @@ export var pessoaSaldoColumns: Column[] = [
         filterShowMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
-        field: 'dataConcessao',
-        header: 'Data de Concessão',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
         field: 'cadastradoPor',

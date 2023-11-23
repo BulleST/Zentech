@@ -9,20 +9,31 @@
     border-radius: 27px;
     cursor: pointer;
     transition: .3s;
+    position: relative;
 }
+
 .input-file-container .icon {
     font-size: 60px;
     color: rgb(var(--primary));
     margin-bottom: 15px;
 }
 
-
-
-.input-file-container  h3 {
+.input-file-container h3 {
     font-size: 17px;
     margin-bottom: 5px;
 }
 
-.input-file-container:hover, .input-file-container:active {
+.input-file-container:hover,
+.input-file-container:active {
     background-color: #0000000d;
+}
+
+.input-file-container input[type=file] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
 }

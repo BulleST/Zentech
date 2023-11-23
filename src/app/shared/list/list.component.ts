@@ -31,6 +31,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() showResultLength = true;
 
     @Input() topActions: TemplateRef<any>;
+    @Input() tableFooter: TemplateRef<any>;
     @Input() rowActions: TemplateRef<any>;
 
     selected?: any;
@@ -49,7 +50,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         private table: Table,
         private router: Router
     ) {
-        console.log('oi')
         this.table.currentPage.next(1);
 
         this.filters = this.columns.map(x => x.field);
@@ -77,30 +77,21 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
                 this.formata();
             }
         }
-        if (changes['selectable'])
-            this.selectable = changes['selectable'].currentValue;
-        if (changes['filterLink'])
-            this.filterLink = changes['filterLink'].currentValue;
-        if (changes['filterTable'])
-            this.filterTable = changes['filterTable'].currentValue;
-        if (changes['paginator'])
-            this.paginator = changes['paginator'].currentValue;
-        if (changes['sortTable'])
-            this.sortTable = changes['sortTable'].currentValue;
-        if (changes['menuTable'])
-            this.menuTable = changes['menuTable'].currentValue;
         if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
             this.filters = this.columns.map(x => x.field)
         }
-        if (changes['tableLinks'])
-            this.tableLinks = changes['tableLinks'].currentValue;
-        if (changes['topActions'])
-            this.topActions = changes['topActions'].currentValue;
-        if (changes['rowActions'])
-            this.rowActions = changes['rowActions'].currentValue;
-        if (changes['showResultLength'])
-            this.showResultLength = changes['showResultLength'].currentValue;
+        if (changes['selectable']) this.selectable = changes['selectable'].currentValue;
+        if (changes['filterLink']) this.filterLink = changes['filterLink'].currentValue;
+        if (changes['filterTable']) this.filterTable = changes['filterTable'].currentValue;
+        if (changes['paginator']) this.paginator = changes['paginator'].currentValue;
+        if (changes['sortTable']) this.sortTable = changes['sortTable'].currentValue;
+        if (changes['menuTable']) this.menuTable = changes['menuTable'].currentValue;
+        if (changes['tableLinks']) this.tableLinks = changes['tableLinks'].currentValue;
+        if (changes['topActions']) this.topActions = changes['topActions'].currentValue;
+        if (changes['tableFooter']) this.tableFooter = changes['tableFooter'].currentValue;
+        if (changes['rowActions']) this.rowActions = changes['rowActions'].currentValue;
+        if (changes['showResultLength']) this.showResultLength = changes['showResultLength'].currentValue;
     }
 
     ngAfterViewInit(): void {
