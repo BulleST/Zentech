@@ -16,7 +16,7 @@ export interface Column {
     substringLength?: number; // Masktype.substring
     title?: string;
     filterValue?: any;
-    values?: any;
+    values?: OptionValues[];
 }
 
 export enum FilterType {
@@ -48,4 +48,11 @@ export enum MaskType {
     substring = 'substring',
     options = 'options',
     mask = 'mask',
+}
+
+
+export class OptionValues {
+    output: string = '';
+    value: any;
+    class?: string;
 }

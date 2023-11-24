@@ -45,18 +45,25 @@
                         <span class="me-3" [innerHTML]="col.header"></span>
                        <div>
                         <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
-                        {{filter.currency}}
-                        <p-columnFilter #filter  [type]="col.filterType" [field]="col.field" [display]="col.filterDisplay" [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator" [showMatchModes]="col.filterShowMatchMode" [showAddButton]="col.filterShowAddButton">
-                           
-                            <ng-template *ngIf="col.booleanValues" pTemplate="filter" let-filter="filterCallback">
-                                <p-dropdown 
-                                    [(ngModel)]="col.filterValue" 
-                                    [options]="[ {value: undefined, label: 'Todos'}, {value: true, label: 'Ativo'},  {value: false, label: 'Inativo'} ]" 
-                                    (onChange)="filter($event.value); 
-                                    col.filterValue = $event.value" 
+                        <p-columnFilter #filterEl  
+                                        [type]="col.filterType" 
+                                        [field]="col.field" 
+                                        [display]="col.filterDisplay" 
+                                        [matchMode]="col.filterMatchMode" 
+                                        [showOperator]="col.showOperator" 
+                                        [showMatchModes]="col.filterShowMatchMode" 
+                                        [showAddButton]="col.filterShowAddButton">
+                            <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter" let-filter="filterCallback">
+                                <p-dropdown [(ngModel)]="col.filterValue"
+                                    [options]="col.values"
+                                    (onChange)="filterCol($event.value, filter, filterEl)"
                                     placeholder="Todos" 
-                                    optionLabel="label" 
-                                    optionValue="value"></p-dropdown>
+                                    optionLabel="output" 
+                                    optionValue="output">
+                                    <ng-template let-item pTemplate="item">
+                                        <span [classList]="'flag ' + item.class">{{item.output}}</span>
+                                    </ng-template>
+                                </p-dropdown>
                             </ng-template>
                             <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
                                 <input type="text" 
@@ -64,22 +71,21 @@
                                     mask="000.000.000-00" 
                                     #cpf="ngModel" 
                                     ngModel 
-                                    (change)="filter(cpf.value);" 
+                                    (change)="filterCol(cpf.value, filter, filterEl);"
                                     [(ngModel)]="col.filterValue" 
                                     placeholder="000.000.000-00" />
                             </ng-template>
                             <ng-template *ngIf="col.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
                                 <p-calendar [(ngModel)]="col.filterValue"
-                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filter)"
-                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filter);"
+                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
+                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);"
                                             [showIcon]="true"
                                             dateFormat="dd/mm/yy"></p-calendar>
                             </ng-template>
                             <ng-template *ngIf="col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
-                                {{col.filterValue}}
                                 <p-calendar [(ngModel)]="col.filterValue"
-                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filter)"
-                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filter);"
+                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
+                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);"
                                             [showIcon]="true"
                                             dateFormat="dd/mm/yy"
                                             [showTime]="true"
@@ -97,14 +103,19 @@
                 [class.selectable]="item.canSelect != false && selectable"
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
-                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
-                    <p  
-                        [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage') && (col.decimal == '2' || col.decimal == '1.2') 
-                            ? 'text-right pe-5 me-2'
-                            : ''"
-                        [class.text-right]="">
-                        {{item[col.field]}}
-                    </p>
+                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
+                    <div *ngSwitchCase="maskType.options">
+                        <span [classList]="'flag ' + item.optionValue!.class">{{item.optionValue!.output}}</span>
+                    </div>
+                    <div *ngSwitchDefault>
+                        <p  
+                            [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage') 
+                                ? 'text-right pe-5 me-2'
+                                : ''"
+                            [class.text-right]="">
+                            {{item[col.field]}}
+                        </p>
+                    </div>
                 </td>
                 <td class="td-actions">
                     <div class="d-flex align-items-center">

@@ -75,17 +75,6 @@ export var pessoaOperacaoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'statusOperacao',
-        header: 'Status da Operação',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS
-    },
-    {
         field: 'valorOperacao',
         header: 'Valor da Operação',
         maskType: MaskType.number,
@@ -96,6 +85,22 @@ export var pessoaOperacaoColumns: Column[] = [
         filterShowMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'statusOperacao',
+        header: 'Status da Operação',
+        maskType: MaskType.options,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+        values: [
+            { value: 'Liberado', output: 'Liberado', class: 'flag-green' },
+            { value: 'Bloqueado', output: 'Bloqueado', class: 'flag-danger' },
+            { value: 'Chargeback', output: 'Chargeback', class: 'flag-warning' },
+        ]
     },
     {
         field: 'cadastradaPor',
@@ -136,7 +141,7 @@ pessoaOperacaoAllColumns.unshift(
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
 );
-pessoaOperacaoAllColumns.splice(5, 0, 
+pessoaOperacaoAllColumns.splice(6, 0, 
     {
         field: 'limiteConcedido',
         header: 'Limite Concedido',

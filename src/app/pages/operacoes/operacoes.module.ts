@@ -14,6 +14,7 @@ import { ImportacaoComponent } from './importacao/importacao.component';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DetailsComponent } from './details/details.component';
+import { ExportacaoComponent } from './exportacao/exportacao.component';
 
 // registerLocaleData(localePt);
 
@@ -24,6 +25,7 @@ import { DetailsComponent } from './details/details.component';
         DeleteComponent,
         ImportacaoComponent,
         DetailsComponent,
+        ExportacaoComponent,
     ],
     imports: [
         CommonModule,

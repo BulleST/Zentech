@@ -31,6 +31,7 @@ export class FormComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = true;
     pessoa_id: number = 0;
+    
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: Modal,

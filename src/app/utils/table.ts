@@ -126,6 +126,11 @@ export class Table {
                     value = value.substring(0, col.substringLength) + '...'
                 }
             } 
+            else if (col.maskType == MaskType.options && col.values && col.values.length) {
+                var opt = col.values.find(x => x.value == value);
+                value = opt!.output;
+                row['optionValue'] = opt
+            }
             else {
                 return value ?? 'N/A';
             }

@@ -9,7 +9,6 @@ import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service'
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { Modal } from 'src/app/utils/modal';
-import { jsPDF } from "jspdf";
 
 @Component({
     selector: 'app-details',
@@ -95,21 +94,7 @@ export class DetailsComponent implements OnDestroy {
 
     exportarPDF() {
         this.loading = true;
-        var doc = new jsPDF();
-        doc.setFontSize(22);
-        doc.text("Relatório 21/11/2023", 20, 20);
-
-        doc.setFontSize(16);
-        doc.text("Nome: Noemi Cavalcanti Almeida", 20, 35);
-        doc.text("CPF: 228.106.798-00", 20, 42);
-        doc.text("Data da Operação: 16/03/2015", 20, 49);
-        doc.text("Valor da Operação: 1.500,00", 20, 56);
-        doc.text("Limite Utilizado: 1.500,00", 20, 63);
-        doc.text("Limite Concedido: 1.500,00", 20, 70);
-        doc.text("Limite Atual: 1.500,00", 20, 77);
-        doc.text("Status Operação: Liberado", 20, 84);
-
-        doc.save("a4.pdf");
+      
         this.loading = false;
     }
 

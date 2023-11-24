@@ -48,11 +48,9 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     constructor(
         private table: Table,
-        private router: Router
+        private router: Router,
     ) {
         this.table.currentPage.next(1);
-
-        this.filters = this.columns.map(x => x.field);
 
         var loading = this.table.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
@@ -69,17 +67,17 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-
         if (changes['list']) {
             this.list = changes['list'].currentValue;
             this.formatedList = changes['list'].currentValue
-             if (this.list.length > 0 && this.columns.length > 0) {
+            if (this.list.length > 0 && this.columns.length > 0) {
                 this.formata();
             }
         }
         if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
             this.filters = this.columns.map(x => x.field)
+            console.log(this.filters)
         }
         if (changes['selectable']) this.selectable = changes['selectable'].currentValue;
         if (changes['filterLink']) this.filterLink = changes['filterLink'].currentValue;
@@ -94,8 +92,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['showResultLength']) this.showResultLength = changes['showResultLength'].currentValue;
     }
 
-    ngAfterViewInit(): void {
-    }
+    ngAfterViewInit(): void { }
+
     ngAfterViewChecked(): void {
         this.table.currentPageChange();
     }
@@ -146,6 +144,13 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     evalRowActions(str: any, item: any) {
         return eval(str) as boolean
     }
+    filterCol(value: any, filter: any, filterEl: ColumnFilter) {
+        filter(value);
+        $(filterEl.el.nativeElement).find('.p-column-filter-menu-button').trigger('click');
+        setTimeout(() => {
+            $(filterEl.el.nativeElement).find('.p-column-filter-menu-button').trigger('click');
+        }, 50);
 
+    }
 }
 

@@ -1,4 +1,4 @@
-<div (paste)="paste($event)" >
+<div (paste)="paste($event)">
     <ng-template #icon>
         <img src="assets/img/icon-excel.png">
     </ng-template>
@@ -20,112 +20,143 @@
                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
                        (change)="readExcel1($event)">
             </label>
-     
+
             <div class="table-responsive content">
-                <p-table 
-                    [value]="list"
-                    styleClass="table table-stripped p-datatable-striped"
-                    [globalFilterFields]="filters"
-                    [filterDelay]="100">
+                <p-table
+                         [value]="list"
+                         styleClass="table table-stripped p-datatable-striped"
+                         [globalFilterFields]="filters"
+                         [filterDelay]="100">
                     <ng-template pTemplate="header">
                         <tr class="grey" *ngIf="list.length > 0">
                             <th *ngIf="retornoAPI"> <!-- Linha Sucesso -->
                                 <span class="me-3">Retorno</span>
                                 <p-sortIcon [field]="'statusCadastro'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'statusCadastro'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                <p-columnFilter [type]="'text'" [field]="'statusCadastro'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
                             </th>
                             <th> <!-- Data da Transação -->
                                 <span class="me-3">Data da <br> Transação</span>
                                 <p-sortIcon [field]="'dataTransacao'"></p-sortIcon>
-                                <p-columnFilter #dataTransacaoFilter [type]="'date'" [field]="'dataTransacao'" [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true" [showAddButton]="true" [showOperator]="false">
+                                <p-columnFilter #dataTransacaoFilter [type]="'date'" [field]="'dataTransacao'"
+                                                [display]="'menu'" [matchMode]="'dateIs'" [showMatchModes]="true"
+                                                [showAddButton]="true" [showOperator]="false">
                                     <ng-template pTemplate="filter" let-filter="filterCallback">
-                                        <p-calendar [(ngModel)]="currentDateFilter.dataTransacao" (onClear)="currentDateFilter.dataTransacao = undefined" inputId="dataTransacao" (onBlur)="primeNgDataFilter(currentDateFilter.dataTransacao!, filter, dataTransacaoFilter)" (onSelect)="primeNgDataFilter(currentDateFilter.dataTransacao!, filter, dataTransacaoFilter);" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                                        <p-calendar [(ngModel)]="currentDateFilter.dataTransacao"
+                                                    (onClear)="currentDateFilter.dataTransacao = undefined"
+                                                    inputId="dataTransacao"
+                                                    (onBlur)="primeNgDataFilter(currentDateFilter.dataTransacao!, filter, dataTransacaoFilter)"
+                                                    (onSelect)="primeNgDataFilter(currentDateFilter.dataTransacao!, filter, dataTransacaoFilter);"
+                                                    [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
                                     </ng-template>
                                 </p-columnFilter>
                             </th>
                             <th> <!-- Tipo de Cliente no Brasil -->
                                 <span class="me-3">Tipo de <br> Cliente no <br> Brasil</span>
                                 <p-sortIcon [field]="'tipoCliente'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'tipoCliente'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                <p-columnFilter [type]="'text'" [field]="'tipoCliente'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
                             </th>
                             <th> <!-- CPF/CNPJ do cliente no Brasil -->
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="me-auto">CPF/CNPJ do <br> cliente no <br> Brasil</span>
                                     <p-sortIcon [field]="'docCliente'"></p-sortIcon>
-                                    <p-columnFilter [type]="'text'" [field]="'docCliente'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
+                                    <p-columnFilter [type]="'text'" [field]="'docCliente'" [display]="'menu'"
+                                                    [matchMode]="'contains'" [showMatchModes]="false"
+                                                    [showAddButton]="false"></p-columnFilter>
                                 </div>
                             </th>
                             <th> <!-- Nome do Cliente no Brasil -->
                                 <span class="me-3">Nome do Cliente no Brasil</span>
                                 <p-sortIcon [field]="'nomeCliente'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'nomeCliente'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'nomeCliente'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Nome do Comprador ou Vendedor no Exterior -->
                                 <span class="me-3">Nome do Comprador ou Vendedor no <br> Exterior</span>
                                 <p-sortIcon [field]="'nomeComprador'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'nomeComprador'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'nomeComprador'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- País do Comprador ou Vendedor no Exterior -->
                                 <span class="me-3">País do <br> Comprador <br> ou Vendedor <br> no Exterior</span>
                                 <p-sortIcon [field]="'paisCompradorVendedor'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'paisCompradorVendedor'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'paisCompradorVendedor'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Moeda -->
                                 <span class="me-3">Moeda</span>
                                 <p-sortIcon [field]="'moeda'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'moeda'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'moeda'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Tipo de Transação -->
                                 <span class="me-3">Tipo de <br> Transação</span>
                                 <p-sortIcon [field]="'tipoTransacao'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'tipoTransacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'tipoTransacao'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Forma de Pagamento -->
                                 <span class="me-3">Forma de <br> Pagamento</span>
                                 <p-sortIcon [field]="'formaPagamento'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'formaPagamento'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'formaPagamento'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Valor na Moeda Estrangeira -->
                                 <span class="me-3">Valor na <br> Moeda <br> Estrangeira</span>
                                 <p-sortIcon [field]="'valorMoedaEstrangeira'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'valorMoedaEstrangeira'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'valorMoedaEstrangeira'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Valor na Moeda Nacional -->
                                 <span class="me-3">Valor na <br> Moeda <br> Nacional</span>
                                 <p-sortIcon [field]="'valorMoedaNacional'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'valorMoedaNacional'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'valorMoedaNacional'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th> <!-- Status Operação -->
                                 <span class="me-3">Status Operação</span>
                                 <p-sortIcon [field]="'statusOperacao'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'statusOperacao'" [display]="'menu'" [matchMode]="'contains'" [showMatchModes]="false" [showAddButton]="false"></p-columnFilter>
-        
+                                <p-columnFilter [type]="'text'" [field]="'statusOperacao'" [display]="'menu'"
+                                                [matchMode]="'contains'" [showMatchModes]="false"
+                                                [showAddButton]="false"></p-columnFilter>
+
                             </th>
                             <th class="td-actions"></th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-                        <tr >
+                        <tr>
                             <td *ngIf="retornoAPI">
                                 <div class="d-flex align-items-center">
-                                        <span *ngIf="item.statusCadastro != 'OK'" class="me-2 flag flag-text flag-danger">
-                                            <fa-icon [icon]="faCircleXmark"></fa-icon>
-                                        </span>
-                                        <span *ngIf="item.statusCadastro == 'OK'" class="me-2 flag flag-text flag-green">
-                                            <fa-icon [icon]="faCircleCheck"></fa-icon>
-                                        </span> 
-                                        <span>{{item.statusCadastro}}</span>
+                                    <span *ngIf="item.statusCadastro != 'OK'" class="me-2 flag flag-text flag-danger">
+                                        <fa-icon [icon]="faCircleXmark"></fa-icon>
+                                    </span>
+                                    <span *ngIf="item.statusCadastro == 'OK'" class="me-2 flag flag-text flag-green">
+                                        <fa-icon [icon]="faCircleCheck"></fa-icon>
+                                    </span>
+                                    <span>{{item.statusCadastro}}</span>
                                 </div>
                             </td>
-                            <td>{{item.dataTransacao  | date : 'dd/MM/yyyy' }}</td>
+                            <td>{{item.dataTransacao | date : 'dd/MM/yyyy' }}</td>
                             <td>{{item.tipoCliente}}</td>
                             <td>{{item.docCliente}}</td>
                             <td>{{item.nomeCliente}}</td>
@@ -138,21 +169,23 @@
                             <td>{{item.valorMoedaNacional | currency : 'BRL' : '' : '1.2'}}</td>
                             <td>{{item.statusOperacao}}</td>
                             <td class="td-actions">
-                                <button type="button" (click)="removeItem(item)" class="btn btn-small btn-dark">excluir</button>
+                                <button type="button" (click)="removeItem(item)"
+                                        class="btn btn-small btn-dark">excluir</button>
                             </td>
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
-
-
-            
             <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
-                
-                    <p class="text-info"><a href="assets/modelos/modelo-importacao-operacao.xlsx" download="modelo-importacao-operacao.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a> </p>
-                <div *ngIf="erro || form.invalid" class="m-0">
-                    <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                    <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+                <div>
+                    <p class="text-info"><a href="assets/modelos/modelo-importacao-operacao.xlsx"
+                           download="modelo-importacao-operacao.xlsx">Clique aqui para saber como deve ser o arquivo
+                            XLSX</a> </p>
+                    <div *ngIf="erro || form.invalid" class="m-0">
+                        <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                        <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*)
+                            corretamente para salvar</p>
+                    </div>
                 </div>
                 <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

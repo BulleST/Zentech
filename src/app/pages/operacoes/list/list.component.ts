@@ -6,6 +6,8 @@ import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 
 @Component({
     selector: 'app-list',
@@ -13,20 +15,24 @@ import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
     styleUrls: ['./list.component.css']
 })
 export class ListComponent {
+    faFilePdf = faFilePdf;
     maskType = MaskType;
     list: PessoaList[] = [];
     tableLinks: MenuTableLink[] = [];
     columns = pessoaOperacaoAllColumns;
     subscription: Subscription[] = [];
-    
+    screen: ScreenWidth = ScreenWidth.lg;
     constructor(
         private table: Table,
-        private pessoaOperacaoService: PessoaOperacaoService
+        private pessoaOperacaoService: PessoaOperacaoService,
+        private isMobile: IsMobile
     ) { 
         var list = this.pessoaOperacaoService.list.subscribe(res => {
             this.list = Object.assign([], res)
         });
         this.subscription.push(list);
+        var mob = this.isMobile.value.subscribe(res => this.screen = res);
+        this.subscription.push(mob);
 
         lastValueFrom(this.pessoaOperacaoService.getList());
 
