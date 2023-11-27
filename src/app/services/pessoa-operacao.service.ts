@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaOperacaoImportacao, PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
 import { Response } from '../helpers/request-response.interface';
+import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
 
 @Injectable({
     providedIn: 'root'
@@ -77,4 +78,9 @@ export class PessoaOperacaoService {
         return this.http.delete(`${this.url}/operacao/${id}`);
     }
 
+    exportacao(request: Filtro) {
+        return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'});
+    }
+
 }
+

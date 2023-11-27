@@ -89,9 +89,8 @@
  }
 
  .text-info {
-     color: rgb(var(--secondary-light)) !important;
- }
-
+    color: #0043ff!important;
+}
  @import url('./assets/css/buttons.css');
  @import url('./assets/css/form.css');
  @import url('./assets/css/modal.css');

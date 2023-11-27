@@ -64,6 +64,10 @@ export class PessoaService {
         return this.http.post<BRConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
     }
 
+    exportarExcel() {
+        
+    }
+
 }
 
 

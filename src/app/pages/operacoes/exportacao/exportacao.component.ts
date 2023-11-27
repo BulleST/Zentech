@@ -1,8 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaList } from 'src/app/models/pessoa.model';
+import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Modal } from 'src/app/utils/modal';
 
@@ -23,16 +25,22 @@ export class ExportacaoComponent implements OnDestroy {
     @ViewChild('template') template: TemplateRef<any>;
     @ViewChild('icon') icon: TemplateRef<any>;
 
+    datasFiltro?: boolean;
     constructor(
         private pessoaService: PessoaService,
+        private pessoaOperacaoService: PessoaOperacaoService,
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
         private toastr: ToastrService,
+        private datePipe: DatePipe,
     ) {
         lastValueFrom(this.pessoaService.getList())
             .then(res => {
                 this.loadingPessoa = false;
                 this.pessoas = res;
+                setTimeout(() => {
+                    this.modal.setOpen(true);
+                }, 200);
             });
 
     }
@@ -49,8 +57,47 @@ export class ExportacaoComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
+
     voltar() {
         this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
+    }
+
+    datasChanged() {
+        if (this.datasFiltro) {
+            delete this.filtro.data;
+            
+        } else if (this.datasFiltro == false) {
+            delete this.filtro.de;
+            delete this.filtro.ate;
+        }
+        else if (this.datasFiltro == undefined) {
+             delete this.filtro.data;
+            delete this.filtro.de;
+            delete this.filtro.ate;
+        }
+    }
+
+    exportar() {
+        this.loading = true;
+        lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
+        .then((res: any) => {
+            var blob = new Blob([res], { type: 'application/pdf' })
+            const data = window.URL.createObjectURL(blob);
+            
+            var link = document.createElement('a');
+            link.href = data;
+            link.download = `Relatorio_Operacoes_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+            // this is necessary as link.click() does not work on the latest firefox
+            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+            
+           
+        this.loading = false;
+        
+    })
+    .catch(res => {
+            this.loading = false;
+
+        });
     }
 
 }

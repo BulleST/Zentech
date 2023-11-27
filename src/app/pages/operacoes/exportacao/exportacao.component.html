@@ -3,45 +3,130 @@
         <img src="assets/img/icon-pdf.png">
     </ng-template>
     <ng-template #template>
-<div class="px-2">
-    
-    <h6>Escolha os dados que deseja exportar</h6>
-    <div class="row">
-        <div class="form-group col-12">
-            <label for="pessoa_Id">Pessoa: <span class="text-danger">*</span></label>
-            <p-dropdown [options]="pessoas" 
-                        [(ngModel)]="filtro.pessoa_Id" 
-                        [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
-                        [showClear]="true" 
-                        [filter]="true" 
-                        filterBy="nome, saldoAtual, cpf, situacaoCPF" 
-                        #pessoa_Id="ngModel"
-                        name="pessoa_Id"
-                        inputId="pessoa_Id"
-                        optionLabel="nome"
-                        optionValue="id"
-                        placeholder="Selecione um pessoa"
-                        [required]="true">
-                <ng-template let-item pTemplate="item">
-                    <table class="w-100">
-                        <tbody>
-                            <tr>
-                                <td class="pe-2">{{item.nome}}</td>
-                                <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual | currency : 'BRL' : '' : '1.2'}}</strong></td>
-                            </tr>
-                            <tr>
-                                <td class="pe-2">{{item.cpf}}</td>
-                                <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF ?? 'INDEFINIDO'}}</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </ng-template>
-            </p-dropdown>
-            <div *ngIf="pessoa_Id.touched && pessoa_Id.errors">
-                <p class="text-danger" *ngIf="pessoa_Id.errors['required']">Este campo é obrigatório.</p>
+        <div class="px-2">
+            <div class="row">
+                <h6>Escolha os dados que deseja exportar</h6>
             </div>
+            <form #form="ngForm">
+                
+            <div class="row mt-2">
+               <div class="col-12 my-2">
+                    <div class="bg-light d-flex flex-wrap border py-2">
+                       
+                <div class="form-group col-12">
+                    <label for="pessoa_Id" class="text-info">Pessoa: </label>
+                    <p-dropdown [options]="pessoas"
+                                [(ngModel)]="filtro.pessoa_Id"
+                                [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
+                                [showClear]="true"
+                                [filter]="true"
+                                filterBy="nome, saldoAtual, cpf, situacaoCPF"
+                                #pessoa_Id="ngModel"
+                                name="pessoa_Id"
+                                inputId="pessoa_Id"
+                                optionLabel="nome"
+                                optionValue="id"
+                                placeholder="Todas">
+                        <ng-template let-item pTemplate="item">
+                            <table class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td class="pe-2">{{item.nome}}</td>
+                                        <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual | currency : 'BRL' : '' : '1.2'}}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="pe-2">{{item.cpf}}</td>
+                                        <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF ?? 'INDEFINIDO'}}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ng-template>
+                    </p-dropdown>
+                    <div *ngIf="pessoa_Id.touched && pessoa_Id.errors">
+                        <p class="text-danger" *ngIf="pessoa_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="bg-light d-flex flex-wrap border py-2">
+                        <div class="col-12"> 
+                            <input type="radio" name="datas" id="nao" [value]="undefined" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()"> 
+                            <label for="nao" class="mb-1 ms-2 text-info">Exportar base completa</label> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="bg-light d-flex flex-wrap border py-2">
+                        <div class="col-12"> 
+                            <input type="radio" name="datas" id="intervalo" [value]="true" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()">
+                            <label for="intervalo" class="mb-1 ms-2 text-info">Exportar por Período</label> 
+                        </div>
+                        <div class="form-group col-sm-6 col-12">
+                            <label for="de">De: <span class="text-danger" *ngIf="de.value || ate.value">*</span> </label>
+                            <input type="date"
+                                   class="form-control"
+                                   [(ngModel)]="filtro.de"
+                                   #de="ngModel"
+                                   name="de"
+                                   id="de"
+                                   [required]="datasFiltro == true || ate.value"
+                                   [disabled]="!datasFiltro">
+                            <div *ngIf="de.touched && de.errors">
+                                <p class="text-danger" *ngIf="de.errors['required']">Este campo é obrigatório.</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6 col-12">
+                            <label for="ate">Até: <span class="text-danger" *ngIf="de.value || ate.value">*</span></label>
+                            <input type="date"
+                                   class="form-control"
+                                   [(ngModel)]="filtro.ate"
+                                   #ate="ngModel"
+                                   name="ate"
+                                   id="ate"
+                                   [required]="datasFiltro == true || de.value"
+                                   [disabled]="!datasFiltro">
+                            <div *ngIf="ate.touched && ate.errors">
+                                <p class="text-danger" *ngIf="ate.errors['required']">Este campo é obrigatório.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 my-2">
+                    <div class="bg-light d-flex flex-wrap border py-2">
+                        <div class="col-12"> 
+                            <input type="radio" name="datas" id="ou" [value]="false" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()">
+                            <label for="ou" class="mb-1 ms-2 text-info">Exportar por Data</label> 
+                        </div>
+                        <div class="form-group  col-12">
+                            <label for="data">Data:</label>
+                            <input type="date"
+                                   class="form-control"
+                                   [(ngModel)]="filtro.data"
+                                   #data="ngModel"
+                                   name="data"
+                                   id="data"
+                                   [required]="datasFiltro == false"
+                                   [disabled]="datasFiltro == undefined || datasFiltro">
+                            <div *ngIf="data.touched && data.errors">
+                                <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="px-1 d-flex justify-content-between align-items-start">
+                    <div *ngIf="erro || form.invalid" class="m-0">
+                        <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                    </div>
+                    <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading" (click)="exportar()">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                        <span>Exportar</span>
+                    </button>
+                </div>
+            </div>
+            </form>
         </div>
-    </div>
-</div>
     </ng-template>
 </div>
