@@ -65,7 +65,7 @@ export var pessoaOperacaoColumns: Column[] = [
     {
         field: 'num_Op',
         header: 'Nº Operação',
-        maskType: MaskType.undefined,
+        maskType: MaskType.mask,
         mask: '0000',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

@@ -96,6 +96,8 @@ export class ExportacaoComponent implements OnDestroy {
     })
     .catch(res => {
             this.loading = false;
+            this.toastr.error('Não foi possível extrair relatório.')
+            this.erro = 'Não foi possível extrair relatório.';
 
         });
     }

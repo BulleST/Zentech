@@ -85,8 +85,7 @@ export class Table {
                 value = this.currency.transform(value, 'BRL', '', col.decimal); 
             }
             else if (col.maskType == MaskType.mask && col.mask) {
-                if (parseInt(value))
-                    value = value.padStart(0, col.mask.length);
+                value = value.toString().padStart( col.mask.length, '0');
                 value = this.mask.applyMask(value, col.mask);
             } 
             else if (col.maskType == MaskType.percentage) {
