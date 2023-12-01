@@ -47,6 +47,10 @@ export class PessoaOperacaoImportacao {
     valorMoedaNacional: string = '';
     statusOperacao: string = '';
     statusCadastro?: string;
+
+    detalhes?: string;
+    excel?: string;
+    sucesso?: boolean;
 }
 
 export var pessoaOperacaoColumns: Column[] = [

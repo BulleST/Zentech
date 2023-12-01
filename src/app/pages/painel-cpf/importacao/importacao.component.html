@@ -1,4 +1,5 @@
-<div (paste)="paste($event)" >
+<div > 
+    <!--  (paste)="paste($event)" -->
     <ng-template #icon>
         <img src="assets/img/icon-excel.png">
     </ng-template>
@@ -10,7 +11,7 @@
                 </p>
                 <h3>Clique e arraste para selecionar arquivo</h3>
                 <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
-                <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p>
+                <!-- <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p> -->
                 <input type="file"
                        name="file"
                        id="file"
@@ -23,13 +24,12 @@
             <div class="my-loading" [class.active]="loading" *ngIf="loading">
                 <span class="spinner-border spinner-border-sm me-1"></span>
                 <br>
-                <p>Carregando arquivo ({{index}} linhas processadas)</p>
+                <p>Carregando arquivo.</p>
             </div>
-
-            <div *ngIf="!loading && list.length > 0">
+            <div *ngIf="!loading && list.length > 0" class="mb-3 mx-1 py-2 text-bg-warning text-center">
                 <p>({{index}} Linhas processadas)</p>
                 <p *ngIf="listErros.length == 0">Nenhuma linha incorreta</p>
-                <p *ngIf="listErros.length > 0" class="text-danger">{{listErros.length}}linha(s) incorreta(s)</p>
+                <p *ngIf="listErros.length > 0" class="text-danger">{{listErros.length}} linha(s) incorreta(s)</p>
             </div>
             <div class="table-responsive content" *ngIf="listErros.length > 0">
                 <p-table 
@@ -240,13 +240,13 @@
                     <p class="text-info">
                         <a href="assets/modelos/modelo-importacao-pessoa.xlsx" download="modelo-importacao-pessoa.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a>
                     </p>
-                    <div *ngIf="erro || form.invalid" class="m-0">
+                    <div *ngIf="erro || form.invalid || list.length == 0" class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                        <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+                        <p *ngIf="(form.invalid && !erro ) || list.length == 0" class="text-danger">Insira um arquivo no modelo para carregar.</p>
                     </div>
                 </div>
 
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || list.length == 0">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     <span>Salvar</span>
                 </button>

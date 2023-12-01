@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
-import { NgForm, NgModel } from '@angular/forms';
+import { AfterViewInit, Component, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { ColumnFilter } from 'primeng/table';
-import { Observable, Subscription, lastValueFrom, throwError } from 'rxjs';
+import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaImportacao, PessoaResponse } from 'src/app/models/pessoa.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { PessoaService } from 'src/app/services/pessoa.service';
@@ -33,6 +33,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     listErros: PessoaImportacao[] = [];
     list: PessoaImportacao[] = [];
+    index = 0;
 
     filters = ['cpf', 'nome', 'dataNascimento', 'situacaoCPF', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
 
@@ -47,7 +48,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         excel_Data_Cap: undefined,
     }
 
-    index = 0;
 
     constructor(
         private toastr: ToastrService,
@@ -61,9 +61,9 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.onPaste.subscribe(e => {
-            this.paste(e);
-        });
+        // this.modal.onPaste.subscribe(e => {
+        //     this.paste(e);
+        // });
     }
 
     ngAfterViewInit(): void {
@@ -83,14 +83,14 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    @HostListener('paste', ['$event'])
-    paste(e: ClipboardEvent) {
-        var rows = e.clipboardData?.getData('text/plain').split('\r\n') ?? [];
+    // @HostListener('paste', ['$event'])
+    // paste(e: ClipboardEvent) {
+    //     var rows = e.clipboardData?.getData('text/plain').split('\r\n') ?? [];
 
-        this.readRows(rows, '');
+    //     this.readRows(rows, '');
 
-        this.validarListas();
-    }
+    //     this.validarListas();
+    // }
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
@@ -105,125 +105,131 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     readExcel1(event: any) {
         this.loading = true;
         var file = event.target.files[0] as File;
-        var reader = new FileReader();
-        function readFile(classe: ImportacaoComponent) {
-            reader.onload = function (event) {
-                const data = reader.result;
-                var workBook = xlsx.read(data, { type: 'binary' });
-                var jsonData = workBook.SheetNames.reduce((content: any, name: any) => {
-                    const sheet = workBook.Sheets[name];
-                    var text = xlsx.utils.sheet_to_txt(sheet, { blankrows: false });
-                    var rows = text.split('\n');
-                    rows.splice(0, 1);
-                    classe.readRows(rows, file.name);
-                    return content;
-                }, {});
-                classe.loading = false;
+        if (file) {
+            var reader = new FileReader();
+            this.listErros = [];
+            this.list = [];
+            function readFile(classe: ImportacaoComponent) {
+                reader.onload = function (event) {
+                    const data = reader.result;
+                    var workBook = xlsx.read(data, { type: 'binary' });
+                    var jsonData = workBook.SheetNames.reduce((content: any, name: any) => {
+                        const sheet = workBook.Sheets[name];
+                        var text = xlsx.utils.sheet_to_txt(sheet, { blankrows: false });
+                        var rows = text.split('\n');
+                        rows.splice(0, 1);
+                        classe.readRows(rows, file.name);
+                        return content;
+                    }, {});
+                    classe.loading = false;
+                }
+                reader.readAsBinaryString(file);
             }
-            reader.readAsBinaryString(file);
+            readFile(this);
+
+        } else {
+            this.toastr.info('Nenhum arquivo selecionado')
         }
-        readFile(this);
 
     }
 
-    async readRows(rows: string[], excelName: string) {
+    readRows(rows: string[], excelName: string) {
         var id = (this.setNewId(this.listErros));
-        this.list = [];
-        this.listErros = [];
 
-        return new Observable<PessoaImportacao[]>(subscription => {
-            rows.forEach(async row => {
-                this.index= this.index+1;
-                id=id+1;
-               lastValueFrom(this.readCells(row, id, this.index, excelName))
-               .then(res => {
-                    console.log('then');
-                    this.list.push(res);
-               })
-            });
-            setTimeout(() => {
-                subscription.next(this.list);
-                this.loading = false;
-                subscription.complete();
-            }, 500);
-        })
-
+        rows.forEach(row => {
+            this.index = this.index + 1;
+            id = id + 1;
+            var obj = this.readCells(row, id, this.index, excelName);
+            if (obj) {
+                this.list.push(obj);
+            }
+        });
+        setTimeout(() => {
+            this.loading = false;
+        }, 500);
     }
 
     readCells(row: any, id: number, linhaIndex: number, excelName: string) {
-        return new Observable<PessoaImportacao>(subscription => {
-            var cells = row.split('\t');
-            try {
-                var cpf = cells[0] ? cells[0].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
-                var nome = cells[1];
-                var dataNascimento = this.formataData(cells[2]);
-                var situacaoCPF = cells[3];
-                var dataInscricao = cells[4] ? this.formataData(cells[4]) : '';
-                var digito = cells[5];
-                var excel_Controle = cells[6];
-                var anoObito = cells[7];
-                var pep = cells[8];
-                var excel_Status = cells[9];
-                var excel_Data_Cap = cells[10] ? this.formataData(cells[10]) : '';
-                var excel_Hora_Cap = cells[11] ? this.formataData(cells[10], cells[11]) : '';
-                var lote_id = cells[12];
-                var excel_IdNum = cells[13];
-                var excel_Erro = cells[14];
-                var obj: PessoaImportacao = {
-                    id: id,
-                    cpf: cpf,
-                    nome: nome,
-                    dataNascimento: dataNascimento,
-                    situacaoCPF: situacaoCPF,
-                    dataInscricao: dataInscricao as unknown as Date,
-                    digito: digito,
-                    excel_Controle: excel_Controle,
-                    anoObito: anoObito,
-                    pep: pep,
-                    excel_Status: excel_Status,
-                    excel_Data_Cap: excel_Data_Cap as unknown as Date,
-                    excel_Hora_Cap: excel_Hora_Cap as unknown as Date,
-                    lote_id: lote_id,
-                    excel_IdNum: excel_IdNum,
-                    excel_Erro: excel_Erro ?? undefined,
-                    detalhes: '',
-                    sucesso: false,
-                    excel: 'Linha ' + linhaIndex + ' - ' + excelName,
-                };
-                if (!validaCPF(cpf)) {
-                    obj.detalhes = 'CPF inválido';
-                    this.listErros.push(obj)
-                } else if (!nome.trim()) {
-                    obj.detalhes += 'Nome não foi preenchido corretamente.';
-                    this.listErros.push(obj)
-                } else if (Number.isNaN(Date.parse(dataNascimento.toString()))) {
-                    obj.detalhes += 'Data de Nascimento inválida.';
-                    this.listErros.push(obj)
-                } else if (cells[4] && Number.isNaN(Date.parse(dataInscricao.toString()))) {
-                    obj.detalhes += 'Data de Inscrição inválida.';
-                    this.listErros.push(obj)
-                } else if (cells[10] && Number.isNaN(Date.parse(excel_Data_Cap.toString()))) {
-                    obj.detalhes += 'Data de Captação inválida.';
-                    this.listErros.push(obj)
-                } else if (cells[11] && Number.isNaN(Date.parse(excel_Hora_Cap.toString()))) {
-                    obj.detalhes += 'Hora de Captação inválida.';
-                    this.listErros.push(obj)
-                } else {
-                    obj.detalhes = '';
-                    obj.sucesso = true;
-                }
-                subscription.next(obj);
+        var cells = row.split('\t');
+        try {
+            var cpf: string = cells[0] ? cells[0].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
+            var nome: string = cells[1];
+            var dataNascimento = this.formataData(cells[2]);
+            var situacaoCPF: string = cells[3];
+            var dataInscricao = cells[4] ? this.formataData(cells[4]) : '';
+            var digito: string = cells[5];
+            var excel_Controle: string = cells[6];
+            var anoObito: string = cells[7];
+            var pep: string = cells[8];
+            var excel_Status: string = cells[9];
+            var excel_Data_Cap = cells[10] ? this.formataData(cells[10]) : '';
+            var excel_Hora_Cap = cells[11] ? this.formataData(cells[10], cells[11]) : '';
+            var lote_id: string = cells[12];
+            var excel_IdNum: string = cells[13];
+            var excel_Erro: string = cells[14];
 
-            } catch (e) {
-                console.error(e)
-                this.toastr.error('Não foi possível importar excel. Modelo inválido!');
-                return;
+            var obj: PessoaImportacao = {
+                id: id,
+                cpf: cpf,
+                nome: nome,
+                dataNascimento: dataNascimento,
+                situacaoCPF: situacaoCPF,
+                dataInscricao: dataInscricao as unknown as Date,
+                digito: digito,
+                excel_Controle: excel_Controle,
+                anoObito: anoObito,
+                pep: pep,
+                excel_Status: excel_Status,
+                excel_Data_Cap: excel_Data_Cap as unknown as Date,
+                excel_Hora_Cap: excel_Hora_Cap as unknown as Date,
+                lote_id: lote_id,
+                excel_IdNum: excel_IdNum,
+                excel_Erro: excel_Erro ?? undefined,
+                detalhes: '',
+                sucesso: false,
+                excel: 'Linha ' + linhaIndex + ' - ' + excelName,
+            };
+            if (   pep.toLowerCase() == 'NÃO' 
+                || pep.toLowerCase() == 'NAO' 
+                || pep.toLowerCase() == 'N' 
+                || pep.toLowerCase() == 'Ñ') {
+                   pep = 'NÃO' 
+            } 
+
+            if (!validaCPF(cpf)) {
+                obj.detalhes = 'CPF inválido';
+                this.listErros.push(obj)
+            } else if (!nome.trim()) {
+                obj.detalhes += 'Nome não foi preenchido corretamente.';
+                this.listErros.push(obj)
+            } else if (Number.isNaN(Date.parse(dataNascimento.toString()))) {
+                obj.detalhes += 'Data de Nascimento inválida.';
+                this.listErros.push(obj)
+            } else if (cells[4] && Number.isNaN(Date.parse(dataInscricao.toString()))) {
+                obj.detalhes += 'Data de Inscrição inválida.';
+                this.listErros.push(obj)
+            } else if (cells[10] && Number.isNaN(Date.parse(excel_Data_Cap.toString()))) {
+                obj.detalhes += 'Data de Captação inválida.';
+                this.listErros.push(obj)
+            } else if (cells[11] && Number.isNaN(Date.parse(excel_Hora_Cap.toString()))) {
+                obj.detalhes += 'Hora de Captação inválida.';
+                this.listErros.push(obj)
+            } else if (pep.toLowerCase() != 'NÃO' || pep.toLowerCase() != 'NAO' || pep.toLowerCase() != 'N' || pep.toLowerCase() != 'Ñ') {
+                obj.detalhes += 'PEP inválido. Valor deve ser NÃO ou N.';
+                this.listErros.push(obj)
+            } else {
+                obj.detalhes = '';
+                obj.sucesso = true;
             }
-            subscription.complete();
-        })
+            return obj;
+
+        } catch (e) {
+            console.error(e)
+            this.toastr.error('Não foi possível importar excel. Modelo inválido!');
+            return;
+        }
 
     }
-
 
     setNewId(list: any[]) {
         list = this.sortList(list);
@@ -293,7 +299,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-
     send() {
         this.loading = true;
         this.erro = '';
@@ -333,6 +338,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             })
 
     }
+    
 }
 
 interface pessoa extends Object {

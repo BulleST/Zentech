@@ -13,7 +13,7 @@ import { InputNumberComponent } from './input-number/input-number.component';
 import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
 import { SubModalComponent } from "./sub-modal/sub-modal.component";
-import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
+// import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +21,7 @@ import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actio
         ModalComponent,
         InputNumberComponent,
         SubModalComponent,
-        PDropdownActionsComponent,
+        // PDropdownActionsComponent,
     ],
     imports: [
         CommonModule,

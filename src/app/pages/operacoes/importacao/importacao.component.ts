@@ -31,7 +31,9 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     routerBack: string[] = ['../'];
     routeBackOptions: any;
 
+    listErros: PessoaOperacaoImportacao[] = [];
     list: PessoaOperacaoImportacao[] = [];
+    index = 0;
 
     filters = ['cpf', 'nome', 'dataNascimento', 'situacaoCPF', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
 
@@ -56,9 +58,9 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.onPaste.subscribe(e => {
-            this.paste(e);
-        })
+        // this.modal.onPaste.subscribe(e => {
+        //     this.paste(e);
+        // })
     }
 
     ngAfterViewInit(): void {
@@ -78,87 +80,87 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    @HostListener('paste', ['$event'])
-    paste(e: ClipboardEvent) {
-        var list = e.clipboardData?.getData('text/plain').split('\r\n') ?? [];
-        var id = this.setNewId(this.list);
-        for (var item of list) {
-            var cells = item.split('\t');
-            try {
+    // @HostListener('paste', ['$event'])
+    // paste(e: ClipboardEvent) {
+    //     var list = e.clipboardData?.getData('text/plain').split('\r\n') ?? [];
+    //     var id = this.setNewId(this.list);
+    //     for (var item of list) {
+    //         var cells = item.split('\t');
+    //         try {
                 
-                var dataTransacao = this.formataData(cells[0]);
-                var tipoCliente = cells[1];
-                var docCliente = cells[2] ? cells[2].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
-                var nomeCliente = cells[3];
-                var nomeComprador = cells[4];
-                var paisCompradorVendedor = cells[5];
-                var moeda = cells[6];
-                var tipoTransacao = cells[7];
-                var formaPagamento = cells[8];
-                var valorMoedaEstrangeira = cells[9];
-                var valorMoedaNacional = cells[10];
-                var statusOperacao = cells[11];
+    //             var dataTransacao = this.formataData(cells[0]);
+    //             var tipoCliente = cells[1];
+    //             var docCliente = cells[2] ? cells[2].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
+    //             var nomeCliente = cells[3];
+    //             var nomeComprador = cells[4];
+    //             var paisCompradorVendedor = cells[5];
+    //             var moeda = cells[6];
+    //             var tipoTransacao = cells[7];
+    //             var formaPagamento = cells[8];
+    //             var valorMoedaEstrangeira = cells[9];
+    //             var valorMoedaNacional = cells[10];
+    //             var statusOperacao = cells[11];
 
-                if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
-                } 
-                else if (!tipoCliente.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Tipo de Cliente no Brasil não foi preenchido corretamente.');
-                } 
-                else if (!validaCPF(docCliente)) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> CPF inválido.');
-                } 
-                else if (!nomeCliente.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Nome do Cliente no Brasil não foi preenchido corretamente.');
-                } 
-                else if (!nomeComprador.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Nome do comprador ou vendedor no exterior não foi preenchido corretamente.');
-                } 
-                else if (!paisCompradorVendedor.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> País do comprador ou vendedor no exterior não foi preenchido corretamente.');
-                } 
-                else if (!moeda.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Moeda não foi preenchido corretamente.');
-                } 
-                else if (!tipoTransacao.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Tipo de transação não foi preenchido corretamente.');
-                } 
-                else if (!formaPagamento.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Forma de pagamento não foi preenchido corretamente.');
-                } 
-                else if (!valorMoedaEstrangeira.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda estrangeira não foi preenchido corretamente.');
-                } 
-                else if (!valorMoedaNacional.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
-                } 
-                else if (!statusOperacao.trim()) {
-                    this.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
-                } 
-                else {
-                    var pessoa: PessoaOperacaoImportacao = {
-                        id: id++,
-                        dataTransacao: dataTransacao,
-                        tipoCliente: tipoCliente,
-                        docCliente: docCliente,
-                        nomeCliente: nomeCliente,
-                        nomeComprador: nomeComprador,
-                        paisCompradorVendedor: paisCompradorVendedor,
-                        moeda: moeda,
-                        tipoTransacao: tipoTransacao,
-                        formaPagamento: formaPagamento,
-                        valorMoedaEstrangeira: valorMoedaEstrangeira,
-                        valorMoedaNacional: valorMoedaNacional,
-                        statusOperacao: statusOperacao,
-                    };
-                    this.list.push(pessoa);
-                }
-            } catch (e) {
-                this.toastr.error('Não foi possível importar linha. <br> Ignorando linha e processando próxima.');
-            }
-        }
+    //             if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
+    //             } 
+    //             else if (!tipoCliente.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Tipo de Cliente no Brasil não foi preenchido corretamente.');
+    //             } 
+    //             else if (!validaCPF(docCliente)) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> CPF inválido.');
+    //             } 
+    //             else if (!nomeCliente.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Nome do Cliente no Brasil não foi preenchido corretamente.');
+    //             } 
+    //             else if (!nomeComprador.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Nome do comprador ou vendedor no exterior não foi preenchido corretamente.');
+    //             } 
+    //             else if (!paisCompradorVendedor.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> País do comprador ou vendedor no exterior não foi preenchido corretamente.');
+    //             } 
+    //             else if (!moeda.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Moeda não foi preenchido corretamente.');
+    //             } 
+    //             else if (!tipoTransacao.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Tipo de transação não foi preenchido corretamente.');
+    //             } 
+    //             else if (!formaPagamento.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Forma de pagamento não foi preenchido corretamente.');
+    //             } 
+    //             else if (!valorMoedaEstrangeira.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda estrangeira não foi preenchido corretamente.');
+    //             } 
+    //             else if (!valorMoedaNacional.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
+    //             } 
+    //             else if (!statusOperacao.trim()) {
+    //                 this.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
+    //             } 
+    //             else {
+    //                 var pessoa: PessoaOperacaoImportacao = {
+    //                     id: id++,
+    //                     dataTransacao: dataTransacao,
+    //                     tipoCliente: tipoCliente,
+    //                     docCliente: docCliente,
+    //                     nomeCliente: nomeCliente,
+    //                     nomeComprador: nomeComprador,
+    //                     paisCompradorVendedor: paisCompradorVendedor,
+    //                     moeda: moeda,
+    //                     tipoTransacao: tipoTransacao,
+    //                     formaPagamento: formaPagamento,
+    //                     valorMoedaEstrangeira: valorMoedaEstrangeira,
+    //                     valorMoedaNacional: valorMoedaNacional,
+    //                     statusOperacao: statusOperacao,
+    //                 };
+    //                 this.list.push(pessoa);
+    //             }
+    //         } catch (e) {
+    //             this.toastr.error('Não foi possível importar linha. <br> Ignorando linha e processando próxima.');
+    //         }
+    //     }
 
-    }
+    // }
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
@@ -171,110 +173,132 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     readExcel1(event: any) {
-        var files = event.target.files as FileList;
-        var reader = new FileReader();
-        function readFile(index: number, classe: ImportacaoComponent) {
-            if (index >= files.length) {
-                classe.file.reset();
-                return
-            };
-
-            var file = files[index];
-            reader.onload = function (event) {
-                const data = reader.result;
-                var workBook = xlsx.read(data, { type: 'binary' });
-
-                var jsonData = workBook.SheetNames.reduce((content: any, name: any) => {
-                    const sheet = workBook.Sheets[name];
-                    let id = classe.setNewId(classe.list);
-                    content[name] = xlsx.utils.sheet_to_json(sheet, { rawNumbers: false }) as any[];
-                    content[name].forEach((row: any) => {
-                        try {
-                            var prop = Object.entries(row) as [string, string][];
-
-                            var dataTransacao = classe.formataData(prop[0][1]);
-                            var tipoCliente = prop[1][1];
-                            var docCliente = prop[2][1] ? prop[2][1].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
-                            var nomeCliente = prop[3][1];
-                            var nomeComprador = prop[4][1];
-                            var paisCompradorVendedor = prop[5][1];
-                            var moeda = prop[6][1];
-                            var tipoTransacao = prop[7][1];
-                            var formaPagamento = prop[8][1];
-                            var valorMoedaEstrangeira = prop[9][1];
-                            var valorMoedaNacional = prop[10][1];
-                            var statusOperacao = prop[11][1];
-
-                            if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
-                            } 
-                            else if (!tipoCliente.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Tipo de Cliente no Brasil não foi preenchido corretamente.');
-                            } 
-                            else if (!validaCPF(docCliente)) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> CPF inválido.');
-                            } 
-                            else if (!nomeCliente.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Nome do Cliente no Brasil não foi preenchido corretamente.');
-                            } 
-                            else if (!nomeComprador.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Nome do comprador ou vendedor no exterior não foi preenchido corretamente.');
-                            } 
-                            else if (!paisCompradorVendedor.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> País do comprador ou vendedor no exterior não foi preenchido corretamente.');
-                            } 
-                            else if (!moeda.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Moeda não foi preenchido corretamente.');
-                            } 
-                            else if (!tipoTransacao.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Tipo de transação não foi preenchido corretamente.');
-                            } 
-                            else if (!formaPagamento.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Forma de pagamento não foi preenchido corretamente.');
-                            } 
-                            else if (!valorMoedaEstrangeira.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda estrangeira não foi preenchido corretamente.');
-                            } 
-                            else if (!valorMoedaNacional.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
-                            } 
-                            else if (!statusOperacao.trim()) {
-                                classe.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
-                            } 
-                            else {
-                                var pessoa: PessoaOperacaoImportacao = {
-                                    id: id++,
-                                    dataTransacao: dataTransacao,
-                                    tipoCliente: tipoCliente,
-                                    docCliente: docCliente,
-                                    nomeCliente: nomeCliente,
-                                    nomeComprador: nomeComprador,
-                                    paisCompradorVendedor: paisCompradorVendedor,
-                                    moeda: moeda,
-                                    tipoTransacao: tipoTransacao,
-                                    formaPagamento: formaPagamento,
-                                    valorMoedaEstrangeira: valorMoedaEstrangeira,
-                                    valorMoedaNacional: valorMoedaNacional,
-                                    statusOperacao: statusOperacao,
-                                };
-                                classe.list.push(pessoa);
-                            }
-                        } catch(e) {
-                            console.error(e);
-                            classe.toastr.error('Não foi possível importar uma linha. <br> Ignorando linha e processando próxima.');
-                        } 
+        this.loading = true;
+        var file = event.target.files[0] as File;
+        if (file) {
+            var reader = new FileReader();
+            this.listErros = [];
+            this.list = [];
+            function readFile(classe: ImportacaoComponent) {
+                reader.onload = function (event) {
+                    const data = reader.result;
+                    var workBook = xlsx.read(data, { type: 'binary' });
+                    var jsonData = workBook.SheetNames.reduce((content: any, name: any) => {
+                        const sheet = workBook.Sheets[name];
+                        var text = xlsx.utils.sheet_to_txt(sheet, { blankrows: false, rawNumbers: false });
+                        var rows = text.split('\n');
+                        rows.splice(0, 1);
+                        classe.readRows(rows, file.name);
                         return content;
-                    });
-                }, {});
-
-                readFile(index + 1, classe)
+                    }, {});
+                    classe.loading = false;
+                }
+                reader.readAsBinaryString(file);
             }
-            reader.readAsBinaryString(file);
+            readFile(this);
+
+        } else {
+            this.toastr.info('Nenhum arquivo selecionado')
         }
-        readFile(0, this);
 
     }
 
+    readRows(rows: string[], excelName: string) {
+        var id = (this.setNewId(this.listErros));
+        rows.forEach(row => {
+            this.index = this.index + 1;
+            id = id + 1;
+            var obj = this.readCells(row, id, this.index, excelName);
+            if (obj) {
+                this.list.push(obj);
+            }
+        });
+        setTimeout(() => {
+            this.loading = false;
+        }, 500);
+    }
+
+    readCells(row: any, id: number, linhaIndex: number, excelName: string) {
+        var cells = row.split('\t');
+        try {
+            var dataTransacao = this.formataData(cells[0]);
+            var tipoCliente = cells[1];
+            var docCliente = cells[2] ? cells[2].toString().replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '').padStart(11, '0') : '';
+            var nomeCliente = cells[3];
+            var nomeComprador = cells[4];
+            var paisCompradorVendedor = cells[5];
+            var moeda = cells[6];
+            var tipoTransacao = cells[7];
+            var formaPagamento = cells[8];
+            var valorMoedaEstrangeira = cells[9];
+            var valorMoedaNacional = cells[10];
+            var statusOperacao = cells[11];
+
+            if (Number.isNaN(Date.parse(dataTransacao.toString()))) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Data de transação inválida.');
+            } 
+            else if (!tipoCliente.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Tipo de Cliente no Brasil não foi preenchido corretamente.');
+            } 
+            else if (!validaCPF(docCliente)) {
+                this.toastr.error('Não foi possível importar essa linha. <br> CPF inválido.');
+            } 
+            else if (!nomeCliente.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Nome do Cliente no Brasil não foi preenchido corretamente.');
+            } 
+            else if (!nomeComprador.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Nome do comprador ou vendedor no exterior não foi preenchido corretamente.');
+            } 
+            else if (!paisCompradorVendedor.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> País do comprador ou vendedor no exterior não foi preenchido corretamente.');
+            } 
+            else if (!moeda.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Moeda não foi preenchido corretamente.');
+            } 
+            else if (!tipoTransacao.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Tipo de transação não foi preenchido corretamente.');
+            } 
+            else if (!formaPagamento.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Forma de pagamento não foi preenchido corretamente.');
+            } 
+            else if (!valorMoedaEstrangeira.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda estrangeira não foi preenchido corretamente.');
+            } 
+            else if (!valorMoedaNacional.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Valor na moeda nacional não foi preenchido corretamente.');
+            } 
+            else if (!statusOperacao.trim()) {
+                this.toastr.error('Não foi possível importar essa linha. <br> Status operação não foi preenchido corretamente.');
+            } 
+            else {
+                var obj: PessoaOperacaoImportacao = {
+                    id: id++,
+                    dataTransacao: dataTransacao,
+                    tipoCliente: tipoCliente,
+                    docCliente: docCliente,
+                    nomeCliente: nomeCliente,
+                    nomeComprador: nomeComprador,
+                    paisCompradorVendedor: paisCompradorVendedor,
+                    moeda: moeda,
+                    tipoTransacao: tipoTransacao,
+                    formaPagamento: formaPagamento,
+                    valorMoedaEstrangeira: valorMoedaEstrangeira,
+                    valorMoedaNacional: valorMoedaNacional,
+                    statusOperacao: statusOperacao,
+                    detalhes: '',
+                    sucesso: false,
+                    excel: 'Linha ' + linhaIndex + ' - ' + excelName,
+                };
+                this.list.push(obj);
+                return obj;
+            }
+        } catch(e) {
+            console.error(e);
+            this.toastr.error('Não foi possível importar uma linha. <br> Ignorando linha e processando próxima.');
+        } 
+        return;
+
+    }
 
     setNewId(list: any[]) {
         list = this.sortList(list);
@@ -299,24 +323,29 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     formataData(dataString: string, horaString?: string, where?: string) {
-        var hour = 0;
-        var min = 0;
-        var seg = 0;
-        var date = dataString.split('/')
+        try {
+            var hour = 0;
+            var min = 0;
+            var seg = 0;
+            var date = dataString.split('/')
 
-        var year = parseInt(date[2]);
-        var month = parseInt(date[1]);
-        var day = parseInt(date[0]);
+            var year = parseInt(date[2]);
+            var month = parseInt(date[1]);
+            var day = parseInt(date[0]);
 
-        if (horaString) {
-            var time = horaString.split(':');
-            hour = parseInt(time[0]);
-            min = parseInt(time[1]);
-            seg = parseInt(time[2]);
+            if (horaString) {
+                var time = horaString.split(':');
+                hour = parseInt(time[0]);
+                min = parseInt(time[1]);
+                seg = parseInt(time[2]);
+            }
+            var fullDate = new Date(year, month, day, hour, min, seg);
+            return fullDate;
+        } catch (e) {
+            return undefined as unknown as Date;
         }
-        var fullDate = new Date(year, month, day, hour, min, seg);
-        return fullDate;
     }
+
 
 
     send() {
