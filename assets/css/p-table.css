@@ -737,3 +737,8 @@ tr.selected:nth-child(odd) td.td-actions {
 tr.selected td {
     background-color: #abcfdd !important;
 }
+
+
+.p-scroller {
+    padding: 0px!important;
+}
