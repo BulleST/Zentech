@@ -235,6 +235,12 @@ tr.selectable {
     color: #fff;
 }
 
+.flag.flag-info {
+    background-color: rgb(var(--secondary));
+    color: #fff;
+}
+
+
 .flag.flag-text {
     display: inline-flex;
     align-items: center;
@@ -740,5 +746,5 @@ tr.selected td {
 
 
 .p-scroller {
-    padding: 0px!important;
+    padding: 0px !important;
 }

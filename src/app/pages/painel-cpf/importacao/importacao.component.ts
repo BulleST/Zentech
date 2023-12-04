@@ -32,9 +32,8 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     routeBackOptions: any;
 
     listErros: PessoaImportacao[] = [];
-    list: PessoaImportacao[] = [];
-    index = 0;
-
+    listOkValidation: PessoaImportacao[] = [];
+    listAll: PessoaImportacao[] = [];
     filters = ['cpf', 'nome', 'dataNascimento', 'situacaoCPF', 'dataInscricao', 'digito', 'anoObito', 'excel_Status', 'excel_Data_Cap', 'excel_Hora_Cap', 'excel_IdNum', 'excel_Erro']
 
     @ViewChild('template') template: TemplateRef<any>
@@ -54,16 +53,13 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         private modal: Modal,
         private activatedRoute: ActivatedRoute,
         private pessoaService: PessoaService,
-        private loadingService: LoadingService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.modal.title.next('Importar Arquivo')
         this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
-        // this.modal.onPaste.subscribe(e => {
-        //     this.paste(e);
-        // });
+
     }
 
     ngAfterViewInit(): void {
@@ -83,14 +79,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         }
     }
 
-    // @HostListener('paste', ['$event'])
-    // paste(e: ClipboardEvent) {
-    //     var rows = e.clipboardData?.getData('text/plain').split('\r\n') ?? [];
-
-    //     this.readRows(rows, '');
-
-    //     this.validarListas();
-    // }
 
     ngOnDestroy(): void {
         this.modal.setOpen(false);
@@ -108,7 +96,8 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         if (file) {
             var reader = new FileReader();
             this.listErros = [];
-            this.list = [];
+            this.listOkValidation = [];
+            this.listAll = [];
             function readFile(classe: ImportacaoComponent) {
                 reader.onload = function (event) {
                     const data = reader.result;
@@ -135,14 +124,11 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     readRows(rows: string[], excelName: string) {
         var id = (this.setNewId(this.listErros));
-
+        var index = 1; // primeira linha é o header
         rows.forEach(row => {
-            this.index = this.index + 1;
+            index = index + 1;
             id = id + 1;
-            var obj = this.readCells(row, id, this.index, excelName);
-            if (obj) {
-                this.list.push(obj);
-            }
+            this.readCells(row, id, index, excelName);
         });
         setTimeout(() => {
             this.loading = false;
@@ -188,19 +174,27 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 detalhes: '',
                 sucesso: false,
                 excel: 'Linha ' + linhaIndex + ' - ' + excelName,
+                excelLinha: linhaIndex,
             };
-            if (   pep.toLowerCase() == 'NÃO' 
+
+            if (  pep && ( pep.toLowerCase() == 'NÃO' 
                 || pep.toLowerCase() == 'NAO' 
                 || pep.toLowerCase() == 'N' 
-                || pep.toLowerCase() == 'Ñ') {
+                || pep.toLowerCase() == 'Ñ')) {
                    pep = 'NÃO' 
             } 
 
-            if (!validaCPF(cpf)) {
-                obj.detalhes = 'CPF inválido';
+            if (!cpf || !cpf.trim()) {
+                obj.detalhes = 'CPF é obrigatório';
                 this.listErros.push(obj)
-            } else if (!nome.trim()) {
-                obj.detalhes += 'Nome não foi preenchido corretamente.';
+            } else if (!validaCPF(cpf)) {
+                obj.detalhes += 'CPF inválido';
+                this.listErros.push(obj)
+            } else if (!nome || !nome.trim()) {
+                obj.detalhes += 'Nome é obrigatório.';
+                this.listErros.push(obj)
+            } else if (!cells[2] || !cells[2].trim()) {
+                obj.detalhes += 'Data de Nascimento é obrigatória.';
                 this.listErros.push(obj)
             } else if (Number.isNaN(Date.parse(dataNascimento.toString()))) {
                 obj.detalhes += 'Data de Nascimento inválida.';
@@ -214,13 +208,18 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             } else if (cells[11] && Number.isNaN(Date.parse(excel_Hora_Cap.toString()))) {
                 obj.detalhes += 'Hora de Captação inválida.';
                 this.listErros.push(obj)
-            } else if (pep.toLowerCase() != 'NÃO' || pep.toLowerCase() != 'NAO' || pep.toLowerCase() != 'N' || pep.toLowerCase() != 'Ñ') {
+            } else if (pep && pep != '' && (pep.toLowerCase() != 'NÃO' || pep.toLowerCase() != 'NAO' || pep.toLowerCase() != 'N' || pep.toLowerCase() != 'Ñ')) {
                 obj.detalhes += 'PEP inválido. Valor deve ser NÃO ou N.';
                 this.listErros.push(obj)
             } else {
                 obj.detalhes = '';
                 obj.sucesso = true;
+                this.listOkValidation.push(obj)
             }
+            if (this.listErros.length > 0) {
+                this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
+            }
+            this.listAll.push(obj)
             return obj;
 
         } catch (e) {
@@ -242,26 +241,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         return list
     }
 
-    validarListas() {
-        var lista = this.listErros;
-        var valueArr = lista.map((item: any) => item.cpf);
-        var isDuplicate = valueArr.filter((item, idx) => {
-            var firstIndex = lista.findIndex(x => x.cpf == item)
-
-            if (!validaCPF(item)) lista[idx]['isValid'] = false;
-            else lista[idx]['isValid'] = true;
-
-            if (valueArr.indexOf(item) != idx) {
-                lista[idx]['isDuplicate'] = true;
-                lista[firstIndex]['isDuplicate'] = true;
-            } else {
-                lista[idx]['isDuplicate'] = false;
-                lista[firstIndex]['isDuplicate'] = false;
-            }
-            return valueArr.indexOf(item) != idx
-        });
-    }
-
     removeItem(item: PessoaImportacao) {
         var pessoaIndex = this.listErros.findIndex(x => x.id == item.id && x.cpf == item.cpf);
         if (pessoaIndex != -1) {
@@ -273,6 +252,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     formataData(dataString: string, horaString?: string, where?: string) {
+     
         try {
             var hour = 0;
             var min = 0;
@@ -302,9 +282,12 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     send() {
         this.loading = true;
         this.erro = '';
-        var list: PessoaImportacao[] = Object.assign([], this.listErros);
+        var list: PessoaImportacao[] = Object.assign([], this.listOkValidation);
         list = list.map((x: PessoaImportacao) => {
-            delete x.id; delete x.isValid; delete x.isDuplicate; delete x.detalhes; delete x.sucesso;
+            delete x.id;
+            delete x.detalhes;
+            delete x.sucesso;
+            delete x.excelLinha;
             return x;
         })
 
@@ -322,12 +305,21 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 if (res.find(x => x.sucesso == false)) {
                     this.toastr.error('Alguns registros não puderam ser salvos.');
                     this.erro = 'Alguns registros não puderam ser salvos.';
-                    this.listErros = this.listErros.map(item => {
-                        var response = this.requestResponse.find(x => x.cpf.toString().padStart(11, '0') == item.cpf && x.nome == item.nome);
-                        item.sucesso = response?.sucesso;
-                        item.detalhes = response?.detalhes;
-                        return item;
+
+                    this.requestResponse.forEach(res => {
+                        var items = this.listOkValidation.filter(x => x.cpf == res.cpf.toString() && x.nome == res.nome).map(x => {
+                            x.sucesso = res.sucesso;
+                            x.detalhes = res.detalhes;
+                            return x;
+                        });
+                        this.listErros.concat(items);
+                        console.log('items', items)
                     })
+                    
+                    console.log('listErros', this.listErros)
+                    if (this.listErros.length > 0) {
+                        this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
+                    }
                 } else {
                     this.voltar();
                 }

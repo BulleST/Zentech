@@ -71,10 +71,9 @@ export class PessoaImportacao {
     excel_IdNum: string = '';
     excel_Erro?: string;
 
-    isDuplicate?: boolean;
-    isValid?: boolean;
     detalhes?: string;
     excel?: string;
+    excelLinha?: number;
     sucesso?: boolean;
 }
 

@@ -130,7 +130,7 @@
             </div>
         </div>
         <div class="row mt-1 align-items-start">
-            <div *ngIf="erro || form.invalid" class="col-lg-10 col-md-8 col-12 mb-2">
+            <div *ngIf="erro || form.invalid" class="col-lg-10 col-md-8 col-12 mb-2 me-3">
                 <p class="text-danger" *ngIf="erro">{{erro }}</p>
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>

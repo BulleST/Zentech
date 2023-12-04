@@ -7,6 +7,7 @@ const analise = () => import('./../analise/analise.module').then(x => x.AnaliseM
 const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.PainelCpfModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
+const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 
 const routes: Routes = [
     {
@@ -21,6 +22,7 @@ const routes: Routes = [
             { path: 'painel-cpf', loadChildren: painelCPF},
             { path: 'operacoes', loadChildren: operacoes},
             { path: 'usuarios', loadChildren: usuarios},
+            { path: 'invoice', loadChildren: invoice},
         ]
     }
 ];

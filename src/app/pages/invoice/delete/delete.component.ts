@@ -1,9 +1,8 @@
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
+import { InvoiceService } from 'src/app/services/invoice.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -13,7 +12,7 @@ import { Modal } from 'src/app/utils/modal';
     templateUrl: './delete.component.html',
     styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnDestroy {
+export class DeleteComponent {
     faTrash = faTrash;
     id: number = 0;
     erro: string = '';
@@ -28,28 +27,27 @@ export class DeleteComponent implements OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
-        private pessoaService: PessoaService,
-        private pessoaOperacaoService: PessoaOperacaoService,
+        private invoiceService: InvoiceService,
         private crypto: Crypto,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
-    
-    
+
+
         var params = activatedRoute.params.subscribe(p => {
-          if (p['pessoa_id']) {
-              this.id = this.crypto.decrypt(p['pessoa_id']);
-            lastValueFrom(this.pessoaService.get(this.id))
-            .then(res => {
-                setTimeout(() => {
-                    this.modal.setOpen(true);
-                }, 200);
-            })
-            .catch(res => {
+            if (p['id']) {
+                this.id = this.crypto.decrypt(p['id']);
+                lastValueFrom(this.invoiceService.get(this.id))
+                    .then(res => {
+                        setTimeout(() => {
+                            this.modal.setOpen(true);
+                        }, 200);
+                    })
+                    .catch(res => {
+                        this.voltar();
+                    })
+            } else {
                 this.voltar();
-            })
-          } else {
-            this.voltar();
-          }
+            }
         });
         this.subscription.push(params);
 
@@ -79,17 +77,16 @@ export class DeleteComponent implements OnDestroy {
         this.loading = true;
         this.erro = '';
 
-        lastValueFrom(this.pessoaService.delete(this.id))
-        .then(res => {
-            lastValueFrom(this.pessoaService.getList());
-            lastValueFrom(this.pessoaOperacaoService.getList());
-            this.voltar();
-            this.loading = false;
-        })
-        .catch(res => {
-            this.loading = false;
-            this.erro = getError(res);
-        })
+        lastValueFrom(this.invoiceService.delete(this.id))
+            .then(res => {
+                lastValueFrom(this.invoiceService.getList());
+                this.voltar();
+                this.loading = false;
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            })
 
     }
 }

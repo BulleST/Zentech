@@ -50,6 +50,7 @@ export class PessoaOperacaoImportacao {
 
     detalhes?: string;
     excel?: string;
+    excelLinha?: number;
     sucesso?: boolean;
 }
 

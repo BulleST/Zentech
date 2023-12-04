@@ -67,7 +67,7 @@ export class PessoaOperacaoService {
     }
 
     importacao(request: PessoaOperacaoImportacao[]) {
-        return this.http.post<PessoaOperacaoImportacao[]>(`${this.url}/operacao/import`, request);
+        return this.http.post<Response>(`${this.url}/operacao/import`, request);
     }
 
     edit(request: PessoaOperacaoRequest) {

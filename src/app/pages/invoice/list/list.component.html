@@ -1,0 +1,30 @@
+<section class="page">
+    <div class="page__header">
+        <span class="title-icon">
+            <i class="bi bi-file-earmark-text"></i>
+        </span>
+        <div class="me-auto">
+            <h3 class="page__header-title">Invoice</h3>
+        </div>
+    </div>
+    <div class="page__body">
+            <ng-template #topActions>
+                <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 col-12 mb-2 me-md-2 mx-md-1 px-0 ng-star-inserted">
+                    <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['cadastrar']">
+                        <span style="margin-top: -1px; margin-bottom: 1px;"> Cadastrar Invoice</span>
+                    </a>
+                </div>
+            </ng-template>
+            <app-list-shared [topActions]="topActions"
+                             [list]="list"
+                             [filterLink]="false"
+                             [filterTable]="true"
+                             [paginator]="true"
+                             [sortTable]="true"
+                             [menuTable]="true"
+                             [columns]="columns"
+                             [tableLinks]="tableLinks"
+                             [selectable]="true"></app-list-shared>
+    </div>
+</section>
+<router-outlet></router-outlet>

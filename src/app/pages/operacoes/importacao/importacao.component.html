@@ -26,31 +26,33 @@
                 <br>
                 <p>Carregando arquivo.</p>
             </div>
-            <div *ngIf="!loading && list.length > 0" class="mb-3 mx-1 py-2 text-bg-warning text-center">
-                <p>({{index}} Linhas processadas)</p>
-                <p *ngIf="listErros.length == 0">Nenhuma linha incorreta</p>
-                <p *ngIf="listErros.length > 0" class="text-danger">{{listErros.length}} linha(s) incorreta(s)</p>
+            <div *ngIf="!loading && listAll.length > 0" class="mb-3 mx-1 py-2">
+                <p>{{listOkValidation.length| currency : 'BRL' : '' : '1.0' }} linha(s) processada(s)</p>
+                <h5 *ngIf="listErros.length == 0">Nenhuma linha incorreta</h5>
+                <div *ngIf="listErros.length > 0">
+                    <h6 class="text-danger">{{listErros.length}} linha(s) incorreta(s)</h6>
+                    <p class="text-danger">As linhas incorretas não serão cadastradas.</p>
+                </div>
             </div>
 
             <div class="table-responsive content" *ngIf="listErros.length > 0">
                 <p-table
-                         [value]="list"
+                         [value]="listErros"
                          styleClass="table table-stripped p-datatable-striped"
                          [globalFilterFields]="filters"
                          [filterDelay]="100"
                          [virtualScroll]="true" 
                          [scrollable]="true" 
-                         [scrollHeight]="'400px'"
-                         [loading]="loading"
-                         [virtualScrollItemSize]="46">
+                         [scrollHeight]="listErros.length > 5 ? '300px' : ((listErros.length * 46) + 51) + 'px'"
+                         [virtualScrollItemSize]="46"
+                         [loading]="loading">
                     <ng-template pTemplate="header">
-                        <tr class="grey" *ngIf="list.length > 0">
-                            <th *ngIf="retornoAPI"> <!-- Linha Sucesso -->
-                                <span class="me-3">Retorno</span>
-                                <p-sortIcon [field]="'statusCadastro'"></p-sortIcon>
-                                <p-columnFilter [type]="'text'" [field]="'statusCadastro'" [display]="'menu'"
-                                                [matchMode]="'contains'" [showMatchModes]="false"
-                                                [showAddButton]="false"></p-columnFilter>
+                        <tr class="grey" *ngIf="listErros.length > 0">
+                            <th> <!-- Linha -->
+                                <span class="me-3">Linha</span>
+                            </th>
+                            <th> <!-- Erro -->
+                                <span class="me-3">Erro</span>
                             </th>
                             <th> <!-- Data da Transação -->
                                 <span class="me-3">Data da <br> Transação</span>
@@ -161,50 +163,58 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                         <tr>
-                            <td *ngIf="retornoAPI">
+                            <td>{{item.excelLinha}}</td>
+                            <td>
                                 <div class="d-flex align-items-center">
-                                    <span *ngIf="item.statusCadastro != 'OK'" class="me-2 flag flag-text flag-danger">
+                                    <span class="me-2 flag flag-text flag-danger">
                                         <fa-icon [icon]="faCircleXmark"></fa-icon>
                                     </span>
-                                    <span *ngIf="item.statusCadastro == 'OK'" class="me-2 flag flag-text flag-green">
-                                        <fa-icon [icon]="faCircleCheck"></fa-icon>
-                                    </span>
-                                    <span>{{item.statusCadastro}}</span>
+                                    <!-- 
+                                          <span *ngIf="item.detalhes != 'OK'" class="me-2 flag flag-text flag-danger">
+                                                <fa-icon [icon]="faCircleXmark"></fa-icon>
+                                            </span>
+                                            <span *ngIf="item.detalhes == 'OK'" class="me-2 flag flag-text flag-green">
+                                                <fa-icon [icon]="faCircleCheck"></fa-icon>
+                                            </span> 
+                                    -->
+                                    <span>{{item.detalhes}}</span>
                                 </div>
                             </td>
-                            <td>{{item.dataTransacao | date : 'dd/MM/yyyy' }}</td>
-                            <td>{{item.tipoCliente}}</td>
-                            <td>{{item.docCliente}}</td>
-                            <td>{{item.nomeCliente}}</td>
-                            <td>{{item.nomeComprador}}</td>
-                            <td>{{item.paisCompradorVendedor}}</td>
-                            <td>{{item.moeda}}</td>
-                            <td>{{item.tipoTransacao}}</td>
-                            <td>{{item.formaPagamento}}</td>
-                            <td>{{item.valorMoedaEstrangeira | currency : 'BRL' : '' : '1.2' }}</td>
-                            <td>{{item.valorMoedaNacional | currency : 'BRL' : '' : '1.2'}}</td>
-                            <td>{{item.statusOperacao}}</td>
+                            <td><span *ngIf="item.dataTransacao; else na">{{item.dataTransacao | date : 'dd/MM/yyyy' }}</span></td>
+                            <td><span *ngIf="item.tipoCliente; else na">{{item.tipoCliente}}</span></td>
+                            <td><span *ngIf="item.docCliente; else na">{{item.docCliente}}</span></td>
+                            <td><span *ngIf="item.nomeCliente; else na">{{item.nomeCliente}}</span></td>
+                            <td><span *ngIf="item.nomeComprador; else na">{{item.nomeComprador}}</span></td>
+                            <td><span *ngIf="item.paisCompradorVendedor; else na">{{item.paisCompradorVendedor}}</span></td>
+                            <td><span *ngIf="item.moeda; else na">{{item.moeda}}</span></td>
+                            <td><span *ngIf="item.tipoTransacao; else na">{{item.tipoTransacao}}</span></td>
+                            <td><span *ngIf="item.formaPagamento; else na">{{item.formaPagamento}}</span></td>
+                            <td><span *ngIf="item.valorMoedaEstrangeira; else na">{{item.valorMoedaEstrangeira | currency : 'BRL' : '' : '1.2' }}</span></td>
+                            <td><span *ngIf="item.valorMoedaNacional; else na">{{item.valorMoedaNacional | currency : 'BRL' : '' : '1.2'}}</span></td>
+                            <td><span *ngIf="item.statusOperacao; else na">{{item.statusOperacao}}</span></td>
                             <td class="td-actions">
-                                <button type="button" (click)="removeItem(item)"
-                                        class="btn btn-small btn-dark">excluir</button>
+                                <button type="button" (click)="removeItem(item)" class="btn btn-small btn-dark">excluir</button>
                             </td>
+                            <ng-template #na>
+                                <span class="text-danger">N\A</span>
+                            </ng-template>
                         </tr>
                     </ng-template>
                 </p-table>
             </div>
             
-            <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
-                <div>
+            <div class="d-flex align-items-start flex-wrap p-0 mt-1">
+                <div class="me-3">
                     <p class="text-info">
                         <a href="assets/modelos/modelo-importacao-pessoa.xlsx" download="modelo-importacao-pessoa.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a>
                     </p>
-                    <div *ngIf="erro || form.invalid || list.length == 0" class="m-0">
+                    <div *ngIf="erro || form.invalid || listOkValidation.length == 0" class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                        <p *ngIf="(form.invalid && !erro ) || list.length == 0" class="text-danger">Insira um arquivo no modelo para carregar.</p>
+                        <p *ngIf="(form.valid && !erro ) || listOkValidation.length == 0" class="text-danger">Selecione um arquivo com o padrão definido.</p>
                     </div>
                 </div>
 
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || list.length == 0">
+                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading || listOkValidation.length == 0">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     <span>Salvar</span>
                 </button>
