@@ -99,13 +99,14 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
 
     formata() {
-        this.list.forEach((row: any) => {
-            this.columns.forEach(col => {
+        this.list.every((row: any) => {
+            this.columns.every(col => {
                 try {
                     var a = this.formatCellData(row, col);
                     row[col.field] = a;
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
+                    // return false;
                 }
                 return row;
             })

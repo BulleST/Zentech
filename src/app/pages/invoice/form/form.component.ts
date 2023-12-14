@@ -4,7 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Invoice } from 'src/app/models/invoice.model';
+import { BancoService } from 'src/app/services/banco.service';
+import { BeneficiarioService } from 'src/app/services/beneficiario.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
+import { MoedaService } from 'src/app/services/moeda.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -42,10 +45,15 @@ export class FormComponent implements OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
-        private invoiceService: InvoiceService,
         private crypto: Crypto,
         private datepipe: DatePipe,
         private toastr: ToastrService,
+        private invoiceService: InvoiceService,
+        private beneficiarioService: BeneficiarioService,
+        private bancoService: BancoService,
+        private moedaService: MoedaService,
+        private contratoService: ContratoSe
+
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
 
