@@ -11,7 +11,7 @@ const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceM
 
 const instituicaoFinanceira = () => import('../cliente/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
-const beneficiario = () => import('../banco copy/beneficiario.module').then(x => x.BeneficiarioModule);
+const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [

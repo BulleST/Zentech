@@ -48,6 +48,7 @@ export enum MaskType {
     substring = 'substring',
     options = 'options',
     mask = 'mask',
+    cep = 'cep',
 }
 
 

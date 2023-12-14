@@ -80,6 +80,7 @@ export class Table {
 
     formatCellData(row: any, col: Column): any {
         var value = this.getCellValue(row, col);
+
         if (col.maskType && value != undefined && value.toString().trim()) {
             if (col.maskType == MaskType.number) {
                 value = this.currency.transform(value, 'BRL', '', col.decimal);
@@ -141,6 +142,16 @@ export class Table {
 
     getCellValue(row: any, col: Column) {
         const nestedProperties: string[] = col.field.split('.');
+
+      [
+        { dados: {
+            pessoa: {
+                nome: '',
+                cpf: '',
+            }
+        }}
+    ]
+
         let value: any = row;
         for (const prop of nestedProperties) {
             value = value ? value[prop] ?? undefined : undefined;
