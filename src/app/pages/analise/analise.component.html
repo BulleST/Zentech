@@ -1,0 +1,53 @@
+<section class="page">
+    <div class="page__header">
+        <span class="title-icon">
+        <fa-icon [icon]="faChartLine"></fa-icon>
+        </span>
+        <div class="me-auto">
+            <h3 class="page__header-title">Relatório </h3>
+        </div>
+    </div>
+    <div class="page__body">
+        <div class="row d-flex align-items-start">
+            <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 mb-3">
+                <div class="card card-body bg-light py-2">
+                    <p><small>Total pessoas</small></p>
+                    <div class="d-flex justify-content-between">
+                        <h3>{{pessoasList.length}}</h3>
+                        <div>
+                            <p class="mb-0"><small><span>{{pessoasList.length / 2}}</span> Importados</small></p>
+                            <p class="mb-0"><small><span>{{(pessoasList.length / 3 * 1) | currency : '' : '' : '1.0-0'}}</span> BRConsulta</small></p>
+                            <p class="mb-0"><small><span>{{(pessoasList.length / 3 * 2) | currency : '' : '' : '1.0-0'}}</span> Formulário</small></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 mb-3">
+                <div class="card card-body bg-light py-2">
+                    <p><small>Total operações</small></p>
+                    <h3>{{operacoesList.length}}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-start">
+            <div class="col-12 mb-3">
+                <h5>Operações</h5>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="card card-body bg-light py-2">
+                    <h4>Mês 2023</h4>
+                    <app-chart-data></app-chart-data>
+                </div>
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <div class="card card-body bg-light py-2">
+                    <h4>Ano</h4>
+                    <app-chart-ano></app-chart-ano>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>  

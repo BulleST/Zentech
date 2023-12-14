@@ -1,0 +1,20 @@
+<main class="main" 
+    [ngStyle]="{ 'z-index': modalOpen ? '3' : '0', 'position': 'relative'}"
+    (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
+    <header style="z-index: 1; position: relative;">
+        <app-header></app-header>
+    </header>
+    <div class="main-content">
+        <router-outlet></router-outlet>
+    </div>
+</main>
+
+
+<app-modal 
+    [title]="title" 
+    [template]="template" 
+    [style]="style" 
+    [routerBack]="routerBack" 
+    [activatedRoute]="activatedRoute" 
+    [icon]="icon">
+</app-modal>

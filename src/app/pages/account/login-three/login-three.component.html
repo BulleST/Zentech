@@ -1,0 +1,117 @@
+<div class="account">
+    <div class="account-bg" >
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <!-- style="background-image: url(assets/img/bg.png);" -->
+    <div class="account-box">
+        <div class="account-form">
+            <h3 class="account-title">Login</h3>
+            <p class="account-text">Para acessar, insira seu email e senha cadastrados.</p>
+            <form #form="ngForm" (ngSubmit)="logar()">
+                <div class="row">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                        <label for="email">E-mail <span class="text-danger">*</span></label>
+                        <div class="form-container">
+                            <div class="form-control-icon">
+                                <fa-icon [icon]="faEnvelope"></fa-icon>
+                            </div>
+                            <input type="email"
+                                   email
+                                   class="form-control"
+                                   id="email"
+                                   name="email"
+                                   #email="ngModel"
+                                   [(ngModel)]="login.email"
+                                   placeholder="example@gmail.com"
+                                   required
+                                   [pattern]="emailPattern">
+                        </div>
+                        <div *ngIf="email.errors != null && email.touched" class="p-1 py-0">
+                            <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                        <label for="password">Senha <span class="text-danger">*</span></label>
+                        <div class="form-container">
+                            <div class="form-control-icon">
+                                <fa-icon [icon]="faLock" *ngIf="!_showHide.value"></fa-icon>
+                                <fa-icon [icon]="faUnlock" *ngIf="_showHide.value"></fa-icon>
+                            </div>
+                            <input [type]="_showHide.value ? 'text' : 'password'"
+                                   class="form-control"
+                                   id="password"
+                                   name="password"
+                                   #password="ngModel"
+                                   [(ngModel)]="login.password"
+                                   placeholder="******"
+                                   required
+                                   minlength="6">
+                        </div>
+                        <div *ngIf="password.errors != null && password.touched" class="p-1 py-0">
+                            <p class="text-danger" *ngIf="password.errors['required']">Este campo é obrigatório.</p>
+                            <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter pelo menos {{password.errors['minlength']['requiredLength']}} caracteres.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row  justify-content-between">
+                    <div class="form-group col-lg-7 col-md-7 col-sm-7 col-12">
+                        <div class="d-flex align-items-center">
+                          
+                        <p-checkbox name="showHide" 
+                        id="showHide"
+                        inputId="showHide"
+                        #_showHide="ngModel" 
+                        [(ngModel)]="showHide"
+                        [value]="true"
+                        [trueValue]="true" 
+                        [falseValue]="false" 
+                       ></p-checkbox>
+                        <label for="showHide" class="ml-2">
+                            <span *ngIf="!_showHide.value">Exibir</span>
+                            <span *ngIf="_showHide.value">Esconder</span> senha 
+                        </label>
+
+                            
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-5 col-md-5 col-sm-5 col-12">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <p-checkbox name="rememberMe" 
+                                id="rememberMe"
+                                inputId="rememberMe"
+                                #_rememberMe="ngModel" 
+                                [(ngModel)]="rememberMe"
+                                [value]="true"
+                                [trueValue]="true" 
+                                [falseValue]="false" 
+                               ></p-checkbox>
+                            <label for="rememberMe" class="ml-2">Lembrar </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center text-wrap-balance col-12" style="width: 104%;margin-left: -2%;">
+                    <p class="text-danger mb-2" *ngIf="err">{{err}}</p>
+                    <p class="mt-1 mb-3"> Ao logar você concorda com os <a class="link" routerLink="./termos-de-uso">termos de uso</a>. </p>
+                </div>
+                <div class="row">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                        <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading">Login</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="text-center">
+                        <a class="link" [routerLink]="['..', 'forgot-password']">Esqueci minha senha</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="account-form-image" style="background-image: url(assets/img/bg-2.png);">
+            <img  src="assets/img/login-yellow.svg">
+        </div>
+    </div>
+</div>

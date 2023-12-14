@@ -1,0 +1,67 @@
+.form-control {
+    font-size: 13px;
+    padding: 4px 8px;
+}
+
+.p-tabview {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+::ng-deep .p-tabview-nav-container {
+    flex: 1 0 20%;
+    display: flex;
+}
+
+::ng-deep .p-tabview-panels {
+    flex: 1 0 80%;
+    border: 1px rgb(var(--grey)) solid;
+    padding: 15px 0;
+    background-color: #f7f7f7;
+}
+
+::ng-deep .p-tabview-nav {
+    display: flex;
+    flex-flow: row;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+::ng-deep .p-tabview-nav li {
+    background-color: rgb(var(--secondary));
+    display: flex;
+    align-items: center;
+}
+
+::ng-deep .p-tabview-nav li a {
+    color: #fff;
+    line-height: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 10px 10px;
+    background-color: rgb(var(--grey));
+}
+
+::ng-deep .p-tabview-nav li a>*:not(span) {
+    margin-right: 10px;
+}
+
+::ng-deep .p-tabview-nav li.p-tabview-ink-bar {
+    display: none;
+}
+
+::ng-deep .p-tabview-nav li:nth-child(even) {
+    background: rgb(var(--secondary));
+}
+
+::ng-deep .p-tabview-nav li a:hover {
+    color: #fff;
+    background-color: rgb(var(--grey));
+}
+
+::ng-deep .p-tabview-nav li.p-highlight a {
+    background-color: rgb(var(--secondary));
+}

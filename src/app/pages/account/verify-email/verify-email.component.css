@@ -1,0 +1,23 @@
+.spinner-border {
+    border: .25em solid #fff;
+    border-right-color: transparent;
+}
+
+.content {
+    z-index: 2;
+}
+
+.modal__bg {
+    background: linear-gradient(45deg, #060a32, rgb(var(--primary)));
+    background-color: rgb(var(--primary));
+}
+
+.link.text-white {
+    color: #fff !important;
+}
+
+img.logo {
+    width: 80%;
+    max-width: 250px;
+    margin-bottom: 15px;
+}

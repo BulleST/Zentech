@@ -1,0 +1,31 @@
+
+<ng-template #icon>
+    <fa-icon [icon]="faDollarSign"></fa-icon>
+</ng-template>
+<ng-template #template>
+    <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+        <div class="form-row">
+            <div class="form-group col-12">
+                <label for="valorConcedido">Valor Concedido: <span class="text-danger">*</span></label>
+                <app-input-number [valueInput]="objeto.valorConcedido"
+                    (valueChanges)="objeto.valorConcedido = $event;"
+                    [inputId]="'valorConcedido'"
+                    [mask]="'separator.2'"
+                    [showErrorMessage]="true"
+                    [allowNegativeNumbers]="false"
+                    [required]="true"
+                    [autoReplaceValue]="false"></app-input-number>
+            </div>
+        </div>
+        <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
+            <div *ngIf="erro || form.invalid" class="m-0">
+                <p class="text-danger" *ngIf="erro">{{erro}}</p>
+            </div>
+            <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                <span>Salvar</span>
+            </button>
+        </div>
+    </form>
+</ng-template>
+
