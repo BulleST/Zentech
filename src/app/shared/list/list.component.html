@@ -68,7 +68,8 @@
                             <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
                                 <input type="text" 
                                     pInputText 
-                                    mask="000.000.000-00" 
+                                    [mask]="'000.000.000-00'" 
+                                    [dropSpecialCharacters]="false"
                                     #cpf="ngModel" 
                                     ngModel 
                                     (change)="filterCol(cpf.value, filter, filterEl);"

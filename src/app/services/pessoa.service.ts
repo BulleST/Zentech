@@ -48,6 +48,13 @@ export class PessoaService {
             error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
         }));
     }
+
+
+    importarArquivo(file: File){
+        var data = new FormData();
+        data.append('file', file);
+        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, data);
+    }
     
 
     create(request: any[]) {
@@ -64,9 +71,6 @@ export class PessoaService {
         return this.http.post<BRConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
     }
 
-    exportarExcel() {
-        
-    }
 
 }
 

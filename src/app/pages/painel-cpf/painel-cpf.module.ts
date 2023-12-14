@@ -28,6 +28,7 @@ import { OperacaoComponent } from './operacao/operacao.component';
 import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
+import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
 
 
 registerLocaleData(localePt);
@@ -48,6 +49,7 @@ registerLocaleData(localePt);
         FormOperacaoComponent,
         DeleteOperacaoComponent,
         DetalhesOperacaoComponent,
+        ImportacaoArquivoComponent,
     ],
     imports: [
         CommonModule,

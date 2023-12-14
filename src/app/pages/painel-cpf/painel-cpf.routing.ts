@@ -11,6 +11,7 @@ import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.componen
 import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
+import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
 
 
 const routes: Routes = [
@@ -19,7 +20,7 @@ const routes: Routes = [
                     { path: 'cadastrar', component: CreateComponent },
                     { path: 'cadastrar-operacao/:pessoa_id', component: FormOperacaoComponent },
                     { path: 'cadastrar-saldo/:pessoa_id', component: CreateSaldoComponent },
-                    { path: 'importar', component: ImportacaoComponent },
+                    { path: 'importar', component: ImportacaoArquivoComponent },
                     { path: 'excluir/:pessoa_id', component: DeleteComponent },
                     { path: 'minha-conta', loadComponent: () => import('./../initial/my-account/my-account.component').then(x => x.MyAccountComponent) }
                 ]
