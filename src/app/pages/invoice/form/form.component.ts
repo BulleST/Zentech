@@ -58,9 +58,29 @@ export class FormComponent implements OnDestroy {
         private invoiceService: InvoiceService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
+
+        lastValueFrom(this.moedaService.getList())
+        .then(res => this.moedas = res)
+        .finally(() => this.loadingMoedas = false);
+
+        lastValueFrom(this.contratoService.getList())
+        .then(res => this.contratos = res)
+        .finally(() => this.loadingContratos = false);
+
+        lastValueFrom(this.beneficiarioService.getList())
+        .then(res => this.beneficiarios = res)
+        .finally(() => this.loadingBeneficiarios = false);
+
+        lastValueFrom(this.instituicaoFinanceiraService.getList())
+        .then(res => this.instituicaoFinanceira = res)
+        .finally(() => this.loadingInstituicaoFinanceira = false);
+
+        lastValueFrom(this.bancoService.getList())
+        .then(res => this.bancos = res)
+        .finally(() => this.loadingBancos = false);
     }
 
-    
+
     ngAfterViewInit(): void {
         this.modal.template.next(this.template)
         this.modal.style.next({ 'max-width': '900px', overflow: 'visible' })
