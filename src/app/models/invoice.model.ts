@@ -4,23 +4,23 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class Invoice {
     id: number = 0;
     dataInvoice: Date = new Date;
-    valor: number = 0;
-    beneficiario_Id: number = 0;
-    banco_Id: number = 0;
-    swift: string = '';
+    valor: number = '' as unknown as number;
+    beneficiario_Id: number = undefined as unknown as number;
+    instituicaoFinanceira_Id: number = undefined as unknown as number;
+    banco_Id: number = undefined as unknown as number;
+    codigoSwift: string = '';
     conta: number = 0;
-    instituicaoFinanceira_Id: number = 0;
-    moeda_Id: number = 0;
+    moeda_Id: number = undefined as unknown as number;
+    contrato_Id: number = undefined as unknown as number;
 }
 
 export class Invoice_List {
     id: number = 0;
     dataInvoice: Date = new Date;
+    cnpjBeneficiario: number = 0;
     valor: number = 0;
-    banco: string = '';
-    swift: string = '';
-    conta: number = 0;
-    instituicaoFinanceira: string = '';
+    nomeBeneficiario: string = '';
+    nomeBanco: string = '';
 }
 
 export var invoiceColumns: Column[] = [
@@ -59,7 +59,7 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'banco',
+        field: 'nomeBanco',
         header: 'Banco',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
@@ -70,7 +70,7 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'beneficiario',
+        field: 'nomeBeneficiario',
         header: 'Beneficiario',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
@@ -81,9 +81,9 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'instituicaoFinanceira',
-        header: 'Instituição Financeira',
-        maskType: MaskType.undefined,
+        field: 'cnpjBeneficiario',
+        header: 'CNPJ',
+        maskType: MaskType.cnpj,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,

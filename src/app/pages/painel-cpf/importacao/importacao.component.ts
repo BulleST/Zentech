@@ -288,6 +288,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             delete x.detalhes;
             delete x.sucesso;
             delete x.excelLinha;
+            delete x.excel;
             return x;
         })
 
@@ -297,6 +298,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             this.loading = false;
             return;
         }
+        console.log(list);
         lastValueFrom(this.pessoaService.create(list))
             .then(res => {
                 lastValueFrom(this.pessoaService.getList());

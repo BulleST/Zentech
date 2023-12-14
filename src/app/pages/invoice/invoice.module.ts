@@ -8,6 +8,7 @@ import { DeleteComponent } from './delete/delete.component';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     InvoiceRoutingModule,
     FormsModule,
     FontAwesomeModule,
-    SharedModule
+    SharedModule,
+    DropdownModule
   ]
 })
 export class InvoiceModule { }

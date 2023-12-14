@@ -50,8 +50,12 @@ export class InvoiceService {
     }
     
 
-    create(request: any[]) {
-        return this.http.post<Response[]>(`${this.url}/invoice`, request);
+    create(request: Invoice) {
+        return this.http.post<Response>(`${this.url}/invoice`, request);
+    }
+    
+    edit(request: Invoice) {
+        return this.http.put<Response>(`${this.url}/invoice`, request);
     }
 
     delete(id: number) {
