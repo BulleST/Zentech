@@ -16,7 +16,6 @@ import { CalendarModule } from 'primeng/calendar';
 import { DetailsComponent } from './details/details.component';
 import { ExportacaoComponent } from './exportacao/exportacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
-
 // registerLocaleData(localePt);
 
 @NgModule({

@@ -41,8 +41,8 @@
                          styleClass="table table-stripped p-datatable-striped"
                          [globalFilterFields]="filters"
                          [filterDelay]="100"
-                         [virtualScroll]="true" 
-                         [scrollable]="true" 
+                         [virtualScroll]="true"
+                         [scrollable]="true"
                          [scrollHeight]="listErros.length > 5 ? '300px' : ((listErros.length * 46) + 51) + 'px'"
                          [virtualScrollItemSize]="46"
                          [loading]="loading">
@@ -169,13 +169,13 @@
                                     <span class="me-2 flag flag-text flag-danger">
                                         <fa-icon [icon]="faCircleXmark"></fa-icon>
                                     </span>
-                                    <!-- 
+                                    <!--
                                           <span *ngIf="item.detalhes != 'OK'" class="me-2 flag flag-text flag-danger">
                                                 <fa-icon [icon]="faCircleXmark"></fa-icon>
                                             </span>
                                             <span *ngIf="item.detalhes == 'OK'" class="me-2 flag flag-text flag-green">
                                                 <fa-icon [icon]="faCircleCheck"></fa-icon>
-                                            </span> 
+                                            </span>
                                     -->
                                     <span>{{item.detalhes}}</span>
                                 </div>
@@ -202,7 +202,7 @@
                     </ng-template>
                 </p-table>
             </div>
-            
+
             <div class="d-flex align-items-start flex-wrap p-0 mt-1">
                 <div class="me-3">
                     <p class="text-info">

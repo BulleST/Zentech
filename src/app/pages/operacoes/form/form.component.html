@@ -13,12 +13,12 @@
         <div class="row">
             <div class="form-group col-md-8 col-sm-8 col-12">
                 <label for="pessoa_Id">Pessoa: <span class="text-danger">*</span></label>
-                <p-dropdown [options]="pessoas" 
-                            [(ngModel)]="objeto.pessoa_Id" 
+                <p-dropdown [options]="pessoas"
+                            [(ngModel)]="objeto.pessoa_Id"
                             [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
-                            [showClear]="true" 
-                            [filter]="true" 
-                            filterBy="nome, saldoAtual, cpf, situacaoCPF" 
+                            [showClear]="true"
+                            [filter]="true"
+                            filterBy="nome, saldoAtual, cpf, situacaoCPF"
                             #pessoa_Id="ngModel"
                             name="pessoa_Id"
                             inputId="pessoa_Id"
@@ -60,12 +60,12 @@
                     <p class="text-danger" *ngIf="num_Op.errors['required']">Este campo é obrigatório.</p>
                 </div>
             </div>
-            
+
         </div>
         <div class="row">
             <div class="form-group col-md-4 col-sm-12">
                 <label for="data">Data: <span class="text-danger">*</span></label>
-                <input type="datetime-local" 
+                <input type="datetime-local"
                         class="form-control"
                         name="data"
                         id="data"
@@ -96,8 +96,8 @@
                         #operacao_Status_Id="ngModel"
                         [(ngModel)]="objeto.operacao_Status_Id"
                         required>
-                    <option [ngValue]="undefined">Selecione</option>    
-                    <option [ngValue]="item.id" *ngFor="let item of status">{{item.name}}</option>    
+                    <option [ngValue]="undefined">Selecione</option>
+                    <option [ngValue]="item.id" *ngFor="let item of status">{{item.name}}</option>
                 </select>
                 <div *ngIf="operacao_Status_Id.touched && operacao_Status_Id.errors">
                     <p class="text-danger" *ngIf="operacao_Status_Id.errors['required']">Este campo é obrigatório.</p>
@@ -106,7 +106,7 @@
         </div>
         <!-- <div class="row">
             <div class="col-12 d-flex">
-                <input type="checkbox" 
+                <input type="checkbox"
                         name="chargeBack"
                         id="chargeBack"
                         #chargeBack="ngModel"
@@ -122,7 +122,7 @@
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>
             <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 <span>Salvar</span>
             </button>
         </div>

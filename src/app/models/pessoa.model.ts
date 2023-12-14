@@ -169,7 +169,7 @@ export var pessoaColumns: Column[] = [
         filterShowMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
-    }, 
+    },
     {
         field: 'statusSaldo',
         header: 'Status Saldo',
@@ -180,5 +180,5 @@ export var pessoaColumns: Column[] = [
         filterShowMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
-    }, 
+    },
 ];

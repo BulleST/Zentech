@@ -55,7 +55,7 @@ export class PessoaService {
         data.append('file', file);
         return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, data);
     }
-    
+
 
     create(request: any[]) {
         return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, request);

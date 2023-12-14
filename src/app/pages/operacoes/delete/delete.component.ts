@@ -33,7 +33,7 @@ export class DeleteComponent implements OnDestroy {
         private pessoaOperacaoService: PessoaOperacaoService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
-    
+
         var params = activatedRoute.params.subscribe(p => {
           if (p['operacao_id']) {
               this.id = this.crypto.decrypt(p['operacao_id']);

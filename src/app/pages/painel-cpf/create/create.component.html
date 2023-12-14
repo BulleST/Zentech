@@ -67,12 +67,12 @@
             </div>
             <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
                 <button type="button"
-                        class="btn btn-dark w-100" 
-                        [class.mt-4]="screen == 'lg' || screen == 'xl' || screen == 'md'"  
-                        [class.mt-2]="screen == 'sm'" style="height: 35px;" 
+                        class="btn btn-dark w-100"
+                        [class.mt-4]="screen == 'lg' || screen == 'xl' || screen == 'md'"
+                        [class.mt-2]="screen == 'sm'" style="height: 35px;"
                         (click)="procuraPessoa(cpf, dataNascimento)"
                         [disabled]="cpf.errors || !dataNascimento.value">
-                        <span *ngIf="loadingPessoa" class="spinner-border spinner-border-sm mr-1"></span> 
+                        <span *ngIf="loadingPessoa" class="spinner-border spinner-border-sm mr-1"></span>
                         <span>Consultar API</span>
                 </button>
             </div>
@@ -135,7 +135,7 @@
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>
             <button class="btn btn-primary mr-1 ml-auto col" [disabled]="form.invalid || loading || loadingPessoa">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 <span>Salvar</span>
             </button>
         </div>

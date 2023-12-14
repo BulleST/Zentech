@@ -8,9 +8,9 @@
         <div class="row form-row">
             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <label for="name">Nome: <span class="text-danger">*</span></label>
-                <input type="text" 
-                    class="form-control" 
-                    name="name" 
+                <input type="text"
+                    class="form-control"
+                    name="name"
                     id="name"
                     #name="ngModel"
                     [(ngModel)]="objeto.name"
@@ -23,12 +23,12 @@
                         <span *ngIf="name.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
                     </p>
                 </div>
-            </div>     
+            </div>
             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <label for="telefoneCelular">Telefone/Celular: <span class="text-danger">*</span></label>
-                <input type="text" 
-                    class="form-control" 
-                    name="telefoneCelular" 
+                <input type="text"
+                    class="form-control"
+                    name="telefoneCelular"
                     id="telefoneCelular"
                     #telefoneCelular="ngModel"
                     [(ngModel)]="objeto.telefoneCelular"
@@ -43,10 +43,10 @@
             </div>
             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                 <label for="perfilAcesso_Id">Perfil: <span class="text-danger">*</span></label>
-                <select 
-                    class="form-control" 
+                <select
+                    class="form-control"
                     [class.form-control-loading]="loadingPerfil"
-                    name="perfilAcesso_Id" 
+                    name="perfilAcesso_Id"
                     id="perfilAcesso_Id"
                     #perfilAcesso_Id="ngModel"
                     [(ngModel)]="objeto.perfilAcesso_Id"
@@ -60,10 +60,10 @@
             </div>
             <div class="form-group col-xl-12 col-lg-12 col-md-6 col-sm-6 col-12 email-container">
                 <label for="email">E-mail: <span class="text-danger">*</span></label>
-                <input type="email" 
+                <input type="email"
                     [email]="true"
-                    class="form-control" 
-                    name="email" 
+                    class="form-control"
+                    name="email"
                     id="email"
                     #email="ngModel"
                     placeholder="example@hotmail.com"

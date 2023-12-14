@@ -31,7 +31,7 @@ export class FormComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = true;
     pessoa_id: number = 0;
-    
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
@@ -74,7 +74,7 @@ export class FormComponent implements OnDestroy {
                     .then(res => {
                         res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.num_Op = res.num_Op.toString().padStart(4, '0') as unknown as number;
-                        
+
                         this.objeto = res;
                         this.pessoa_id = this.objeto.pessoa_Id;
                         setTimeout(() => {
@@ -129,14 +129,14 @@ export class FormComponent implements OnDestroy {
             })
 
     }
-    
+
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.pessoaOperacaoService.create(this.objeto));
 
         if (this.isEditPage)
             this.objeto.pessoa_Id = this.pessoa_id;
-        
+
         return lastValueFrom(this.pessoaOperacaoService.edit(this.objeto));
     }
 }

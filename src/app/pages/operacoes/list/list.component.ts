@@ -26,7 +26,7 @@ export class ListComponent {
         private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
         private isMobile: IsMobile
-    ) { 
+    ) {
         var list = this.pessoaOperacaoService.list.subscribe(res => {
             this.list = Object.assign([], res)
         });
@@ -39,15 +39,15 @@ export class ListComponent {
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-                    { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
-                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] }, 
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
+                    { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] },
+                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
+                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
-        this.subscription.push(selected);  
-        
+        this.subscription.push(selected);
+
     }
 
     ngOnDestroy(): void {

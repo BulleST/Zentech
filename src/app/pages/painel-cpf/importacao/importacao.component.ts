@@ -59,7 +59,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
         this.modal.routerBack.next(this.routerBack);
         this.modal.activatedRoute.next(this.activatedRoute);
-
     }
 
     ngAfterViewInit(): void {
@@ -177,12 +176,12 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 excelLinha: linhaIndex,
             };
 
-            if (  pep && ( pep.toLowerCase() == 'NÃO' 
-                || pep.toLowerCase() == 'NAO' 
-                || pep.toLowerCase() == 'N' 
+            if (  pep && ( pep.toLowerCase() == 'NÃO'
+                || pep.toLowerCase() == 'NAO'
+                || pep.toLowerCase() == 'N'
                 || pep.toLowerCase() == 'Ñ')) {
-                   pep = 'NÃO' 
-            } 
+                   pep = 'NÃO'
+            }
 
             if (!cpf || !cpf.trim()) {
                 obj.detalhes = 'CPF é obrigatório';
@@ -252,7 +251,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     formataData(dataString: string, horaString?: string, where?: string) {
-     
+
         try {
             var hour = 0;
             var min = 0;
@@ -317,7 +316,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                         this.listErros.concat(items);
                         console.log('items', items)
                     })
-                    
+
                     console.log('listErros', this.listErros)
                     if (this.listErros.length > 0) {
                         this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
@@ -332,7 +331,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             })
 
     }
-    
+
 }
 
 interface pessoa extends Object {

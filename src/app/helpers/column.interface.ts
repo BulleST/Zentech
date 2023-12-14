@@ -1,14 +1,14 @@
 import { FilterMatchMode } from "primeng/api";
 
 export interface Column {
-    field: string; 
-    header: string, 
+    field: string;
+    header: string;
     maskType: MaskType,
     mask?: string;
     decimal?: string,
     moeda?: string
-    filterType: FilterType, 
-    filterDisplay: FilterDisplay,
+    filterType: FilterType;
+    filterDisplay: FilterDisplay;
     filterShowMatchMode?: boolean;
     showOperator?: boolean;
     filterShowAddButton?: boolean;

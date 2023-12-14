@@ -1,4 +1,4 @@
-<div > 
+<div >
     <!--  (paste)="paste($event)" -->
     <ng-template #icon>
         <img src="assets/img/icon-excel.png">
@@ -35,13 +35,13 @@
                 </div>
             </div>
             <div class="table-responsive content" *ngIf="listErros.length > 0">
-                <p-table 
+                <p-table
                 [value]="listErros"
                 styleClass="table table-stripped p-datatable-striped"
                 [globalFilterFields]="filters"
                 [filterDelay]="100"
-                [virtualScroll]="true" 
-                [scrollable]="true" 
+                [virtualScroll]="true"
+                [scrollable]="true"
                 [scrollHeight]="listErros.length > 5 ? '300px' : ((listErros.length * 46) + 48) + 'px'"
                 [virtualScrollItemSize]="46"
                 [loading]="loading">
@@ -158,12 +158,12 @@
                                     <span [innerHTML]="item.detalhes"></span>
                                 </span>
                                 <span *ngIf="item.sucesso" class="me-2">
-                                    <span class="flag flag-text flag-green"> 
+                                    <span class="flag flag-text flag-green">
                                         <fa-icon [icon]="faCircleCheck"></fa-icon>
-                                    </span> 
+                                    </span>
                                     <span class="ms-2">OK</span>
-                                   
-                                </span> 
+
+                                </span>
                             </div>
                         </td>
                         <td><span *ngIf="item.cpf; else na">{{item.cpf | mask : '000.000.000-00' }}</span> </td>
@@ -191,7 +191,7 @@
                 </ng-template>
             </p-table>
             </div>
-            
+
             <div class="d-flex align-items-start flex-wrap p-0 mt-1">
                 <div class="me-3">
                     <p class="text-info">

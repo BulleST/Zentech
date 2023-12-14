@@ -1,0 +1,83 @@
+<ng-template #icon class="align-items-center">
+  <span class="title-icon ">
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"
+      fill="currentColor"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+      <path
+        d="M243.4 2.6l-224 96c-14 6-21.8 21-18.7 35.8S16.8 160 32 160v8c0 13.3 10.7 24 24 24H456c13.3 0 24-10.7 24-24v-8c15.2 0 28.3-10.7 31.3-25.6s-4.8-29.9-18.7-35.8l-224-96c-8-3.4-17.2-3.4-25.2 0zM128 224H64V420.3c-.6 .3-1.2 .7-1.8 1.1l-48 32c-11.7 7.8-17 22.4-12.9 35.9S17.9 512 32 512H480c14.1 0 26.5-9.2 30.6-22.7s-1.1-28.1-12.9-35.9l-48-32c-.6-.4-1.2-.7-1.8-1.1V224H384V416H344V224H280V416H232V224H168V416H128V224zM256 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+    </svg>
+  </span>
+</ng-template>
+<ng-template #template>
+  <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+    <div class="px-2">
+
+      <div class="row">
+        <div class="form-group col-md-12 col-sm-12">
+          <label for="nome">Nome: <span class="text-danger">*</span></label>
+
+          <input type="text" class="form-control" name="nome" id="nome" #nome="ngModel" [(ngModel)]="objeto.nome"
+            pattern="\S(.*\S)?" (change)="objeto.nome = nome.value.trim();" required>
+          <div *ngIf="nome.touched && nome.errors">
+            <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-3 col-sm-3">
+          <label for="cep">CEP:</label>
+          <input #buscaCEP placeholder="00000-000" mask="00000-000" type="text" class="form-control" name="cep" id="cep"
+            (blur)="blur($event)" [(ngModel)]="objeto.cep" #cep="ngModel" required pattern="\S(.*\S)?"
+            (change)="objeto.cep = cep.value.trim();"  />
+          <div *ngIf="cep.touched && cep.errors">
+            <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+        <div class="form-group col-md-6 col-sm-12">
+          <label for="logradouro">Logradouro: <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="logradouro" id="logradouro" #logradouro="ngModel"
+            [(ngModel)]="objeto.logradouro" required [disabled]="cepPreenchido" pattern="\S(.*\S)?"
+            (change)="objeto.logradouro = logradouro.value.trim();">
+          <div *ngIf="logradouro.touched && logradouro.errors">
+            <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+        <div class="form-group col-md-3 col-sm-12">
+          <label for="cNumero">N°: <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" name="cNumero" id="cNumero" #cNumero="ngModel"
+            [(ngModel)]="objeto.numero" required pattern="\S(.*\S)?" (change)="objeto.numero = cNumero.value.trim();">
+          <div *ngIf="cNumero.touched && cNumero.errors">
+            <p class="text-danger" *ngIf="cNumero.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+      </div>
+
+        <div class="form-group row">
+          <label class="col-md-6 col-sm-4" for="cidade_Id">Cidade: <span class="text-danger">*</span></label>
+          <div class="col-md-12 col-sm-8">
+            <p-dropdown [style]="{ 'width': '558px' }" [options]="cidades" #cidade_Id="ngModel" [(ngModel)]="objeto.cidade_Id"
+              optionLabel="nomeCidade" optionValue="id" [placeholder]="'Selecione'" [disabled]="loadingStatus" name="cidade_Id"
+              id="cidade_Id" [virtualScroll]="true" [virtualScrollItemSize]="10" [required]="true" [filter]="true" filterBy="nomeCidade">
+            </p-dropdown>
+            <div *ngIf="cidade_Id.touched && cidade_Id.errors">
+              <p class="text-danger" *ngIf="cidade_Id.errors['required']">Este campo é obrigatório.</p>
+            </div>
+          </div>
+        </div>
+
+
+
+
+      <div class="d-flex align-items-center">
+        <div *ngIf="erro || form.invalid" class="m-0">
+          <p class="text-danger" *ngIf="erro">{{erro}}</p>
+          <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente
+            para salvar.</p>
+        </div>
+        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          <span>Salvar</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</ng-template>

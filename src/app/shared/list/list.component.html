@@ -1,169 +1,134 @@
-
 <div class="content">
-    <p-table
-             class="table table-striped"
-             [class.mt-2]="list.length == 0"
-             #dt
-             [columns]="columns"
-             [value]="list"
-             [rows]="50"
-             [rowHover]="true"
-             [rowsPerPageOptions]="[10, 25, 50, 100]"
-             responsiveLayout="scroll"
-             [paginator]="paginator && list.length > 0"
-             [showCurrentPageReport]="true"
-             currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
-             [globalFilterFields]="filters"
-             [(selection)]="selected"
-             [selectionMode]="'single'"
-             (onRowSelect)="onRowSelect($event)"
-             (onRowUnselect)="onRowUnselect($event)"
-             [filterDelay]="100"
-             [virtualScrollItemSize]="36"
-             [virtualScroll]="true"
-             [scrollHeight]="'600px'">
-        <ng-template pTemplate="caption">
-            <div class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
-                <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2 col-12 p-0 mb-sm-0 mb-2">
-                    <p *ngIf="!loading && list.length > 0 && showResultLength">
-                        <small> {{ list.length }} resultado(s) </small>
-                    </p>
-                </div>
-                <div class="col-xl-9 col-lg-9 col-md-10 col-sm-10 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
-                    <div class="col d-flex flex-wrap ng-star-inserted px-0 justify-content-end" *ngIf="topActions != undefined">
-                        <ng-template [ngTemplateOutlet]="topActions"></ng-template>
-                    </div>
-                    <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf=" filterTable">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" class="form-control "
-                               (input)="dt.filterGlobal(filter.value , 'contains')" #filter placeholder="Pesquisar" />
-                    </div>
-                </div>
+  <p-table class="table table-striped" [class.mt-2]="list.length == 0" #dt [columns]="columns" [value]="list"
+    [rows]="50" [rowHover]="true" [rowsPerPageOptions]="[10, 25, 50, 100]" responsiveLayout="scroll"
+    [paginator]="paginator && list.length > 0" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)" [globalFilterFields]="filters"
+    [(selection)]="selected" [selectionMode]="'single'" (onRowSelect)="onRowSelect($event)"
+    (onRowUnselect)="onRowUnselect($event)" [filterDelay]="100" [virtualScrollItemSize]="36" [virtualScroll]="true"
+    [scrollHeight]="'600px'">
+
+    <ng-template pTemplate="caption">
+      <div
+        class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
+        <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2 col-12 p-0 mb-sm-0 mb-2">
+          <p *ngIf="!loading && list.length > 0 && showResultLength">
+            <small> {{ list.length }} resultado(s) </small>
+          </p>
+        </div>
+        <div
+          class="col-xl-9 col-lg-9 col-md-10 col-sm-10 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
+          <div class="col d-flex flex-wrap ng-star-inserted px-0 justify-content-end" *ngIf="topActions != undefined">
+            <ng-template [ngTemplateOutlet]="topActions"></ng-template>
+          </div>
+          <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf=" filterTable">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" class="form-control " (input)="dt.filterGlobal(filter.value , 'contains')"
+              #filter placeholder="Pesquisar" />
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr class="grey">
+        <th [pSortableColumn]="col.field" *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="me-3" [innerHTML]="col.header"></span>
+            <div>
+              <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
+              <p-columnFilter #filterEl [type]="col.filterType" [field]="col.field" [display]="col.filterDisplay"
+                [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator"
+                [showMatchModes]="col.filterShowMatchMode" [showAddButton]="col.filterShowAddButton">
+                <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter"
+                  let-filter="filterCallback">
+                  <p-dropdown [(ngModel)]="col.filterValue" [options]="col.values"
+                    (onChange)="filterCol($event.value, filter, filterEl)" placeholder="Todos" optionLabel="output"
+                    optionValue="output">
+                    <ng-template let-item pTemplate="item">
+                      <span [classList]="'flag ' + item.class">{{item.output}}</span>
+                    </ng-template>
+                  </p-dropdown>
+                </ng-template>
+                <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
+                  <input type="text" pInputText [mask]="'000.000.000-00'" [dropSpecialCharacters]="false" #cpf="ngModel"
+                    ngModel (change)="filterCol(cpf.value, filter, filterEl);" [(ngModel)]="col.filterValue"
+                    placeholder="000.000.000-00" />
+                </ng-template>
+                <ng-template *ngIf="col.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
+                  <p-calendar [(ngModel)]="col.filterValue"
+                    (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
+                    (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);" [showIcon]="true"
+                    dateFormat="dd/mm/yy"></p-calendar>
+                </ng-template>
+                <ng-template *ngIf="col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
+                  <p-calendar [(ngModel)]="col.filterValue"
+                    (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
+                    (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);" [showIcon]="true"
+                    dateFormat="dd/mm/yy" [showTime]="true" hourFormat="24"></p-calendar>
+                </ng-template>
+              </p-columnFilter>
             </div>
-        </ng-template>
-        <ng-template pTemplate="header" let-columns>
-            <tr class="grey">
-                <th [pSortableColumn]="col.field" *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <span class="me-3" [innerHTML]="col.header"></span>
-                       <div>
-                        <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
-                        <p-columnFilter #filterEl  
-                                        [type]="col.filterType" 
-                                        [field]="col.field" 
-                                        [display]="col.filterDisplay" 
-                                        [matchMode]="col.filterMatchMode" 
-                                        [showOperator]="col.showOperator" 
-                                        [showMatchModes]="col.filterShowMatchMode" 
-                                        [showAddButton]="col.filterShowAddButton">
-                            <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter" let-filter="filterCallback">
-                                <p-dropdown [(ngModel)]="col.filterValue"
-                                    [options]="col.values"
-                                    (onChange)="filterCol($event.value, filter, filterEl)"
-                                    placeholder="Todos" 
-                                    optionLabel="output" 
-                                    optionValue="output">
-                                    <ng-template let-item pTemplate="item">
-                                        <span [classList]="'flag ' + item.class">{{item.output}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </ng-template>
-                            <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
-                                <input type="text" 
-                                    pInputText 
-                                    [mask]="'000.000.000-00'" 
-                                    [dropSpecialCharacters]="false"
-                                    #cpf="ngModel" 
-                                    ngModel 
-                                    (change)="filterCol(cpf.value, filter, filterEl);"
-                                    [(ngModel)]="col.filterValue" 
-                                    placeholder="000.000.000-00" />
-                            </ng-template>
-                            <ng-template *ngIf="col.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
-                                <p-calendar [(ngModel)]="col.filterValue"
-                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
-                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);"
-                                            [showIcon]="true"
-                                            dateFormat="dd/mm/yy"></p-calendar>
-                            </ng-template>
-                            <ng-template *ngIf="col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
-                                <p-calendar [(ngModel)]="col.filterValue"
-                                            (onBlur)="primeNgDataFilter(col.filterValue, filter, filterEl);"
-                                            (onSelect)="primeNgDataFilter(col.filterValue, filter, filterEl);"
-                                            [showIcon]="true"
-                                            dateFormat="dd/mm/yy"
-                                            [showTime]="true"
-                                            hourFormat="24"></p-calendar>
-                            </ng-template>
-                        </p-columnFilter>
-                       </div>
-                    </div>
-                </th>
-                <th></th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected"
-                [class.selectable]="item.canSelect != false && selectable"
-                [pSelectableRow]="item.canSelect != false && selectable? item : null"
-                [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
-                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
-                    <div *ngSwitchCase="maskType.options">
-                        <span [classList]="'flag ' + item.optionValue!.class">{{item.optionValue!.output}}</span>
-                    </div>
-                    <div *ngSwitchDefault>
-                        <p  
-                            [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage') 
+          </div>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
+      <tr [class.selected]="item == selected" [class.selectable]="item.canSelect != false && selectable"
+        [pSelectableRow]="item.canSelect != false && selectable? item : null"
+        [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
+        <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
+          <div *ngSwitchCase="maskType.options">
+            <span [classList]="'flag ' + item.optionValue!.class">{{item.optionValue!.output}}</span>
+          </div>
+          <div *ngSwitchDefault>
+            <p [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage')
                                 ? 'text-right pe-5 me-2'
-                                : ''"
-                            [class.text-right]="">
-                            {{item[col.field]}}
-                        </p>
-                    </div>
-                </td>
-                <td class="td-actions">
-                    <div class="d-flex align-items-center">
-                        <ng-template #rowActions *ngIf="rowActions" [ngTemplateOutlet]="rowActions"></ng-template>
-                        <div class="actions" *ngIf="item.showMenuOption != false && menuTable">
-                            <button class="actions__toggle" [class.active]="item == selected">
-                                <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
-                                    <fa-icon [icon]="faEllipsisV"></fa-icon>
-                                </span>
-                                <span class="icon icon-times" (click)="onRowUnselect(item)">
-                                    <fa-icon [icon]="faTimes"></fa-icon>
-                                </span>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
+                                : ''" [class.text-right]="">
+              {{item[col.field]}}
+            </p>
+          </div>
+        </td>
+        <td class="td-actions">
+          <div class="d-flex align-items-center">
+            <ng-template #rowActions *ngIf="rowActions" [ngTemplateOutlet]="rowActions"></ng-template>
+            <div class="actions" *ngIf="item.showMenuOption != false && menuTable">
+              <button class="actions__toggle" [class.active]="item == selected">
+                <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
+                  <fa-icon [icon]="faEllipsisV"></fa-icon>
+                </span>
+                <span class="icon icon-times" (click)="onRowUnselect(item)">
+                  <fa-icon [icon]="faTimes"></fa-icon>
+                </span>
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
 
-        <ng-template  pTemplate="footer" *ngIf="tableFooter">
-            <ng-template [ngTemplateOutlet]="tableFooter" ></ng-template>
-        </ng-template>
+    <ng-template pTemplate="footer" *ngIf="tableFooter">
+      <ng-template [ngTemplateOutlet]="tableFooter"></ng-template>
+    </ng-template>
 
-        <ng-template pTemplate="emptymessage">
-            <tr>
-                <td [attr.colspan]="columns.length + 1 " class="py-2 px-3 border-0 border-light">
-                    <p *ngIf="loading" class="py-1 px-1">
-                        <span class="spinner-border spinner-border-sm me-1"></span>
-                        <span>Carregando... </span>
-                    </p>
-                    <p *ngIf="!loading">
-                        <span>Nenhum registro encontrado.</span>
-                    </p>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-    <div class="actions-nav" [ngStyle]="{
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td [attr.colspan]="columns.length + 1 " class="py-2 px-3 border-0 border-light">
+          <p *ngIf="loading" class="py-1 px-1">
+            <span class="spinner-border spinner-border-sm me-1"></span>
+            <span>Carregando... </span>
+          </p>
+          <p *ngIf="!loading">
+            <span>Nenhum registro encontrado.</span>
+          </p>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="actions-nav" [ngStyle]="{
         opacity: tableLinks.length > 0 && menuTable ? 1 : 0
     }">
-        <div class="actions-nav-inner" *ngIf="selected">
-            <a class="actions-nav-link"
-               *ngFor="let item of tableLinks"
-               [routerLink]="item.fullRoute">{{item.label}}</a>
-        </div>
+    <div class="actions-nav-inner" *ngIf="selected">
+      <a class="actions-nav-link" *ngFor="let item of tableLinks" [routerLink]="item.fullRoute">{{item.label}}</a>
     </div>
+  </div>
 </div>

@@ -44,7 +44,7 @@ export class ExportacaoComponent implements OnDestroy {
             });
 
     }
-    
+
     ngAfterViewInit(): void {
         this.modal.template.next(this.template)
         this.modal.style.next({ 'max-width': '400px', overflow: 'visible' })
@@ -65,7 +65,7 @@ export class ExportacaoComponent implements OnDestroy {
     datasChanged() {
         if (this.datasFiltro) {
             delete this.filtro.data;
-            
+
         } else if (this.datasFiltro == false) {
             delete this.filtro.de;
             delete this.filtro.ate;
@@ -83,16 +83,16 @@ export class ExportacaoComponent implements OnDestroy {
         .then((res: any) => {
             var blob = new Blob([res], { type: 'application/pdf' })
             const data = window.URL.createObjectURL(blob);
-            
+
             var link = document.createElement('a');
             link.href = data;
             link.download = `Relatorio_Operacoes_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
             // this is necessary as link.click() does not work on the latest firefox
             link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-            
-           
+
+
         this.loading = false;
-        
+
     })
     .catch(res => {
             this.loading = false;

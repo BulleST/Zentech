@@ -81,50 +81,50 @@ export class Table {
     formatCellData(row: any, col: Column): any {
         var value = this.getCellValue(row, col);
         if (col.maskType && value != undefined && value.toString().trim()) {
-            if (col.maskType == MaskType.number) { 
-                value = this.currency.transform(value, 'BRL', '', col.decimal); 
+            if (col.maskType == MaskType.number) {
+                value = this.currency.transform(value, 'BRL', '', col.decimal);
             }
             else if (col.maskType == MaskType.mask && col.mask) {
                 value = value.toString().padStart( col.mask.length, '0');
                 value = this.mask.applyMask(value, col.mask);
-            } 
+            }
             else if (col.maskType == MaskType.percentage) {
                 value = this.currency.transform(value, 'BRL', '', col.decimal) + '%';
-            } 
+            }
             else if (col.maskType == MaskType.money) {
                 value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
-            } 
+            }
             else if (col.maskType == MaskType.cnpj) {
                 value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
-            } 
+            }
             else if (col.maskType == MaskType.cpf) {
                 value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
-            } 
+            }
             else if (col.maskType == MaskType.cpfcnpj) {
                 var pj = row['pj'];
                 value = value.toString().padStart(pj ? 14 : 11);
                 value = this.mask.applyMask(value, pj ? '00.000.000/0000-00' : '000.000.000-00');
-            } 
+            }
             else if (col.maskType == MaskType.rg) {
                 value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
-            } 
+            }
             else if (col.maskType == MaskType.any && col.mask) {
                 value = this.mask.applyMask(value, col.mask);
-            } 
+            }
             else if (col.maskType == MaskType.date) {
                 value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC', 'pt-BR');
-            } 
+            }
             else if (col.maskType == MaskType.dateTime) {
                 value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', 'UTC', 'pt-BR');
-            } 
+            }
             else if (col.maskType == MaskType.telefoneCelular) {
                 value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
-            } 
+            }
             else if (col.maskType == MaskType.substring) {
                 if (col.substringLength && value.length > col.substringLength) {
                     value = value.substring(0, col.substringLength) + '...'
                 }
-            } 
+            }
             else if (col.maskType == MaskType.options && col.values && col.values.length) {
                 var opt = col.values.find(x => x.value == value);
                 value = opt!.output;

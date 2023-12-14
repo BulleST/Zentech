@@ -146,7 +146,7 @@ pessoaOperacaoAllColumns.unshift(
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
 );
-pessoaOperacaoAllColumns.splice(6, 0, 
+pessoaOperacaoAllColumns.splice(6, 0,
     {
         field: 'limiteConcedido',
         header: 'Limite Concedido',

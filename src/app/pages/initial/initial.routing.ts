@@ -9,6 +9,9 @@ const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.Op
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 
+const instituicaoFinanceira = () => import('../cliente/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
+const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
+const beneficiario = () => import('../banco copy/beneficiario.module').then(x => x.BeneficiarioModule);
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [
@@ -23,6 +26,10 @@ const routes: Routes = [
             { path: 'operacoes', loadChildren: operacoes},
             { path: 'usuarios', loadChildren: usuarios},
             { path: 'invoice', loadChildren: invoice},
+            { path: 'instituicao-financeira', loadChildren: instituicaoFinanceira},
+            { path: 'banco', loadChildren: banco},
+            { path: 'beneficiario', loadChildren: beneficiario},
+            { path: 'usuarios', loadChildren: usuarios},
         ]
     }
 ];

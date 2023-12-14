@@ -177,62 +177,62 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 // this.toastr.error('Data de transação inválida.');
                 obj.detalhes = 'Data de transação inválida.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!tipoCliente || !tipoCliente.trim()) {
                 // this.toastr.error('Tipo de Cliente no Brasil é obrigatório.');
                 obj.detalhes = 'Tipo de Cliente no Brasil é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!docCliente || !validaCPF(docCliente)) {
                 // this.toastr.error('CPF inválido.');
                 obj.detalhes = 'CPF inválido.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!nomeCliente || !nomeCliente.trim()) {
                 // this.toastr.error('Nome do Cliente no Brasil é obrigatório.');
                 obj.detalhes = 'Nome do Cliente no Brasil é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!nomeComprador || !nomeComprador.trim()) {
                 // this.toastr.error('Nome do comprador ou vendedor no exterior é obrigatório.');
                 obj.detalhes = 'Nome do comprador ou vendedor no exterior é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!paisCompradorVendedor || !paisCompradorVendedor.trim()) {
                 // this.toastr.error('País do comprador ou vendedor no exterior é obrigatório.');
                 obj.detalhes = 'País do comprador ou vendedor no exterior é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!moeda || !moeda.trim()) {
                 // this.toastr.error('Moeda é obrigatório.');
                 obj.detalhes = 'Moeda é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!tipoTransacao || !tipoTransacao.trim()) {
                 // this.toastr.error('Tipo de transação é obrigatório.');
                 obj.detalhes = 'Tipo de transação é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!formaPagamento || !formaPagamento.trim()) {
                 // this.toastr.error('Forma de pagamento é obrigatório.');
                 obj.detalhes = 'Forma de pagamento é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!valorMoedaEstrangeira || !valorMoedaEstrangeira.trim()) {
                 // this.toastr.error('Valor na moeda estrangeira é obrigatório.');
                 obj.detalhes = 'Valor na moeda estrangeira é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!valorMoedaNacional || !valorMoedaNacional.trim()) {
                 // this.toastr.error('Valor na moeda nacional é obrigatório.');
                 obj.detalhes = 'Valor na moeda nacional é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else if (!statusOperacao || !statusOperacao.trim()) {
                 // this.toastr.error('Status operação é obrigatório.');
                 obj.detalhes = 'Status operação é obrigatório.';
                 this.listErros.push(obj);
-            } 
+            }
             else {
                 obj.detalhes = '';
                 obj.sucesso = true;
@@ -246,7 +246,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         } catch(e) {
             console.error(e);
             this.toastr.error('Não foi possível importar uma linha. <br> Ignorando linha e processando próxima.');
-        } 
+        }
         return;
 
     }
