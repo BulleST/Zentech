@@ -6,6 +6,8 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Invoice } from 'src/app/models/invoice.model';
 import { BancoService } from 'src/app/services/banco.service';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
+import { ContratoService } from 'src/app/services/contrato.service';
+import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { MoedaService } from 'src/app/services/moeda.service';
 import { Crypto } from 'src/app/utils/crypto';
@@ -48,17 +50,17 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private datepipe: DatePipe,
         private toastr: ToastrService,
-        private invoiceService: InvoiceService,
-        private beneficiarioService: BeneficiarioService,
-        private bancoService: BancoService,
         private moedaService: MoedaService,
-        private contratoService: ContratoSe
-
+        private contratoService: ContratoService,
+        private beneficiarioService: BeneficiarioService,
+        private instituicaoFinanceiraService: InstituicaoFinanceiraService,
+        private bancoService: BancoService,
+        private invoiceService: InvoiceService,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };
-
-
     }
+
+    
     ngAfterViewInit(): void {
         this.modal.template.next(this.template)
         this.modal.style.next({ 'max-width': '900px', overflow: 'visible' })
