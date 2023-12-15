@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { CepService } from 'src/app/services/cep-service.service';
 import { BancoList } from 'src/app/models/banco.model';
 import { BeneficiarioRequest, BeneficiarioList } from 'src/app/models/beneficiario.model';
@@ -18,6 +18,7 @@ import { Paises } from 'src/app/models/pais.model';
 import { NgModel } from '@angular/forms';
 import { validateCnpj } from 'src/app/utils/validate-cnpj';
 import { validateCEP } from 'src/app/utils/validate-cep';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 
 @Component({
     selector: 'app-form',
@@ -32,7 +33,6 @@ export class FormComponent implements OnDestroy {
     loadingCNPJ = false;
 
     subscription: Subscription[] = [];
-    routeBackOptions: any;
     
     loadingBanco = true;
     bancos: BancoList[];
@@ -51,12 +51,13 @@ export class FormComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
 
     isEditPage = true;
+    modal: Modal = new Modal;
     cepCarregado = false;
     
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modalService: ModalService,
         private crypto: Crypto,
         private toastr: ToastrService,
         private cepService: CepService,
@@ -65,7 +66,7 @@ export class FormComponent implements OnDestroy {
         private bancoService: BancoService,
         private paisesService: PaisesService
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
+        
         lastValueFrom(this.bancoService.getList())
             .then(res => {
                 this.loadingBanco = false;
@@ -94,22 +95,26 @@ export class FormComponent implements OnDestroy {
 
     ngAfterViewInit(): void {
 
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px', overflow: 'visible' })
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style =  { 'max-width': '600px', overflow: 'visible' };
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['beneficiario_id']) {
                 this.objeto.id = this.crypto.decrypt(x['beneficiario_id']);
-                this.modal.title.next('Editar Beneficiário')
-                this.modal.routerBack.next(['../../']);
+            
+                this.modal.title = 'Editar Beneficiário';
+                this.modal.routerBack = ['../../'];
+
                 this.isEditPage = true;
                 lastValueFrom(this.beneficiarioService.get(this.objeto.id))
                     .then(res => {
                         this.objeto = res;
                         setTimeout(() => {
-                            this.modal.setOpen(true);
+                            this.modal = this.modalService.addModal(this.modal);
                         }, 200);
                     })
                     .catch(res => {
@@ -118,15 +123,14 @@ export class FormComponent implements OnDestroy {
 
 
             } else {
-                this.modal.title.next('Cadastrar Beneficiário');
-
+                this.modal.title = 'Cadastrar Beneficiário';
+                this.modal.routerBack = ['../'];
+                this.isEditPage = false;
                 this.objeto.pais_Id = 30;
                 this.objeto.cidade_Id = 5270;
 
-                this.modal.routerBack.next(['../']);
-                this.isEditPage = false;
                 setTimeout(() => {
-                    this.modal.setOpen(true);
+                    this.modal = this.modalService.addModal(this.modal);
                 }, 200);
             }
         });
@@ -135,6 +139,9 @@ export class FormComponent implements OnDestroy {
 
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
+    }
+    voltar() {
+        this.modalService.removeModal(this.modal.id);
     }
 
     buscaCEP(input: NgModel) {
@@ -240,15 +247,10 @@ export class FormComponent implements OnDestroy {
 		return;
 	}
 
-    voltar() {
-        this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
-    }
-
     groupCidades() {
         var list = this.groupBy(this.cidades, (cid: any) => cid.estado_Id);
         this.cidadesGrouped = list;
     }
-
 
     groupBy(list: any[], keyGetter: any) {
         const map = new Map();

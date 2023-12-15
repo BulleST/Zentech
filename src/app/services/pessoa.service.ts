@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -62,7 +63,7 @@ export class PessoaService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/pessoa/${id}`);
+        return this.http.delete<Response>(`${this.url}/pessoa/${id}`);
     }
 
 

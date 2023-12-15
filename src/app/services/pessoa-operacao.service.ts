@@ -75,7 +75,7 @@ export class PessoaOperacaoService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/operacao/${id}`);
+        return this.http.delete<Response>(`${this.url}/operacao/${id}`);
     }
 
     exportacao(request: Filtro) {

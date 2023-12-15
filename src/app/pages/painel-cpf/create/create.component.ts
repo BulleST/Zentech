@@ -8,7 +8,7 @@ import { Pessoa } from 'src/app/models/pessoa.model';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { validateCPF } from 'src/app/utils/validate-cpf';
 
 @Component({
@@ -36,7 +36,7 @@ export class CreateComponent implements OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private pessoaService: PessoaService,
         private mobile: IsMobile,
     ) {

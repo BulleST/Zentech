@@ -8,7 +8,7 @@ import { PessoaOperacaoList, PessoaOperacaoRequest } from 'src/app/models/pessoa
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
   selector: 'app-detalhes-operacao',
@@ -31,7 +31,7 @@ export class DetalhesOperacaoComponent implements OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private crypto: Crypto,
         private datepipe: DatePipe,
         private pessoaService: PessoaService,

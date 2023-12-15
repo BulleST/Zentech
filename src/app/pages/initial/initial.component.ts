@@ -2,7 +2,7 @@ import { Component, EventEmitter, HostListener, OnDestroy, TemplateRef } from '@
 import { ActivatedRoute } from '@angular/router';
 import { IconDefinition, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { SwipeService } from 'src/app/utils/swipe';
 import { Table } from 'src/app/utils/table';
 
@@ -26,7 +26,7 @@ export class InitialComponent implements OnDestroy {
     private swipeTime?: number;
 
     constructor(
-        private modal: Modal,
+        private modal: ModalUtils,
         private swipeService: SwipeService,
         private table: Table,
     ) {

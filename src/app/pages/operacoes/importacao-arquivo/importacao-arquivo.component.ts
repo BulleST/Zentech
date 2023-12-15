@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-importacao-arquivo',
@@ -35,7 +35,7 @@ export class ImportacaoArquivoComponent {
 
     constructor(
         private toastr: ToastrService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private activatedRoute: ActivatedRoute,
         private pessoaService: PessoaService,
     ) {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
@@ -29,7 +29,7 @@ export class DeleteOperacaoComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private pessoaOperacaoService: PessoaOperacaoService,
         private pessoaSaldoService: PessoaSaldoService,
         private pessoaService: PessoaService,
@@ -86,11 +86,16 @@ export class DeleteOperacaoComponent implements OnDestroy {
         this.erro = '';
         lastValueFrom(this.pessoaOperacaoService.delete(this.id))
             .then(res => {
-                lastValueFrom(this.pessoaService.getList());
-                lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
-                lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa_Id));
-                this.voltar();
                 this.loading = false;
+                if (res.sucesso) {
+                    lastValueFrom(this.pessoaService.getList());
+                    lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
+                    lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa_Id));
+                    this.voltar();
+                } else {
+                    this.erro = res.mensagem;
+                }
+                
             })
             .catch(res => {
                 this.loading = false;

@@ -13,7 +13,8 @@ import { InputNumberComponent } from './input-number/input-number.component';
 import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
 import { SubModalComponent } from "./sub-modal/sub-modal.component";
-// import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
+import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
+import { BancoFormComponent } from './forms/banco/banco.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { SubModalComponent } from "./sub-modal/sub-modal.component";
         ModalComponent,
         InputNumberComponent,
         SubModalComponent,
-        // PDropdownActionsComponent,
+        PDropdownActionsComponent,
+        BancoFormComponent,
     ],
     imports: [
         CommonModule,
@@ -39,6 +41,8 @@ import { SubModalComponent } from "./sub-modal/sub-modal.component";
         ModalComponent,
         SubModalComponent,
         InputNumberComponent,
+        PDropdownActionsComponent,
+        BancoFormComponent,
     ],
 })
 export class SharedModule {

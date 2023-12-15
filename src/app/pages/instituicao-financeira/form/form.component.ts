@@ -5,23 +5,19 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaList } from 'src/app/models/pessoa.model';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
-import { Response } from 'src/app/helpers/request-response.interface';
+import { ModalUtils } from 'src/app/utils/modal';
 import { CepService } from 'src/app/services/cep-service.service';
 
 import { InstituicaoFinanceiraList } from '../../../models/instituicao-financeira.model';
-import { data } from 'jquery';
 import { Cidades } from 'src/app/models/banco.model';
 import { CidadesService } from 'src/app/services/cidades.service';
 import { SelectItem } from 'primeng/api';
 import { NgModel } from '@angular/forms';
 import { validateCnpj } from 'src/app/utils/validate-cnpj';
+
 @Component({
     selector: 'app-form',
     templateUrl: './form.component.html',
@@ -61,11 +57,9 @@ export class FormComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
-        private pessoaSaldoService: PessoaSaldoService,
+        private modal: ModalUtils,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private crypto: Crypto,
-        private datepipe: DatePipe,
         private toastr: ToastrService,
         private cepService: CepService,
         private cidadesService: CidadesService

@@ -9,7 +9,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-form',
@@ -37,7 +37,7 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private userService: UsuarioService,
         private crypto: Crypto
     ) {

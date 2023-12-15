@@ -117,6 +117,11 @@ export class Table {
                     value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
                     // console.log('5')
                 }
+                else if (col.maskType == MaskType.cep) {
+                    // console.log('5')
+                    value = this.mask.applyMask(value.toString().padStart(8, '0'), '00000-000');
+                    // console.log('5')
+                }
                 else if (col.maskType == MaskType.cpfcnpj) {
                     // console.log('6', value)
                     var pj = row['pj'];

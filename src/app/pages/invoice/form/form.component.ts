@@ -15,9 +15,9 @@ import { ContratoService } from 'src/app/services/contrato.service';
 import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { MoedaService } from 'src/app/services/moeda.service';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-form',
@@ -28,10 +28,13 @@ export class FormComponent implements OnDestroy {
     objeto: Invoice = new Invoice;
     erro: string = '';
     loading = false;
+
     subscription: Subscription[] = [];
-    routeBackOptions: any;
+
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
+
+    modal: Modal = new Modal;
     isEditPage = true;
     
     contratos: Contrato_List[] = [];
@@ -51,7 +54,6 @@ export class FormComponent implements OnDestroy {
     
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
         private crypto: Crypto,
         private datepipe: DatePipe,
         private toastr: ToastrService,
@@ -61,8 +63,8 @@ export class FormComponent implements OnDestroy {
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private bancoService: BancoService,
         private invoiceService: InvoiceService,
+        private modalService: ModalService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
 
         lastValueFrom(this.moedaService.getList())
         .then(res => this.moedas = res)
@@ -87,16 +89,20 @@ export class FormComponent implements OnDestroy {
 
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '900px', overflow: 'visible' })
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
+
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style =  { 'max-width': '900px', overflow: 'visible' };
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['invoice_id']) {
                 this.objeto.id = this.crypto.decrypt(x['invoice_id']);
-                this.modal.title.next('Editar Invoice')
-                this.modal.routerBack.next(['../../']);
+
+                this.modal.title = 'Editar Invoice';
+                this.modal.routerBack = ['../../'];
                 this.isEditPage = true;
 
                 lastValueFrom(this.invoiceService.get(this.objeto.id))
@@ -105,19 +111,21 @@ export class FormComponent implements OnDestroy {
                         this.objeto = res;
 
                         setTimeout(() => {
-                            this.modal.setOpen(true);
+                            this.modal = this.modalService.addModal(this.modal);
                         }, 200);
                     })
                     .catch(res => {
-                        this.voltar();
+                        this.voltar()
                     })
             } else {
-                this.modal.title.next('Cadastrar Invoice');
-                this.modal.routerBack.next(['../']);
+
+                this.modal.title = 'Cadastrar Invoice';
+                this.modal.routerBack = ['../'];
+                
                 this.isEditPage = false;
                 this.objeto.dataInvoice = this.datepipe.transform(this.objeto.dataInvoice, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
-                    this.modal.setOpen(true);
+                    this.modal = this.modalService.addModal(this.modal);
                 }, 200);
             }
         });
@@ -129,7 +137,7 @@ export class FormComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
 
     send() {

@@ -223,6 +223,15 @@
                         <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
+                    <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
+                    <app-p-dropdown-actions [options]="bancos" 
+                                            [value]="objeto.banco_Id"
+                                            (valueChanges)="objeto.banco_Id = $event" 
+                                            [path]="'banco'"
+                                            [required]="true" 
+                                            [loading]="loadingBancos"></app-p-dropdown-actions>
+                </div>
             </div>
 
             <div class="row">

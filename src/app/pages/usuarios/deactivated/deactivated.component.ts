@@ -7,7 +7,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { AccountService } from 'src/app/services/account.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-deactivated',
@@ -34,7 +34,7 @@ export class DeactivatedComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         public userService: UsuarioService,
         private accountService: AccountService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private crypto: Crypto,
     ) {
         this.routeBackOptions = { relativeTo: this.activatedRoute };

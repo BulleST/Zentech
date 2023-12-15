@@ -10,7 +10,7 @@ import { PessoaResponse } from 'src/app/models/pessoa.model';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 
@@ -50,7 +50,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
     constructor(
         private toastr: ToastrService,
-        private modal: Modal,
+        private modal: ModalUtils,
         private activatedRoute: ActivatedRoute,
         private pessoaOperacaoService: PessoaOperacaoService,
         private pessoaService: PessoaService,

@@ -10,7 +10,7 @@ import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-form',
@@ -34,7 +34,7 @@ export class FormComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private pessoaService: PessoaService,
         private pessoaSaldoService: PessoaSaldoService,
         private pessoaOperacaoService: PessoaOperacaoService,

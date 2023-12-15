@@ -1,96 +1,89 @@
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
-  selector: 'app-delete',
-  templateUrl: './delete.component.html',
-  styleUrls: ['./delete.component.css']
+    selector: 'app-delete',
+    templateUrl: './delete.component.html',
+    styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnDestroy {
-  faTrash = faTrash;
-  id: number = 0;
-  erro: string = '';
-  loading = false;
-  subscription: Subscription[] = [];
-  routeBackOptions: any;
+export class DeleteComponent {
+    faTrash = faTrash;
+    id: number = 0;
+    erro: string = '';
+    loading = false;
+    subscription: Subscription[] = [];
+    @ViewChild('template') template: TemplateRef<any>
+    @ViewChild('icon') icon: TemplateRef<any>
+    modal: Modal = new Modal;
 
-  @ViewChild('template') template: TemplateRef<any>
-  @ViewChild('icon') icon: TemplateRef<any>
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private modalService: ModalService,
+        private instituicaoFinanceiraService: InstituicaoFinanceiraService,
+        private crypto: Crypto,
+    ) { }
+    
+    ngAfterViewInit(): void {
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../../'];
+        this.modal.title = 'Excluir registro';
 
-  constructor(
-    private modal: Modal,
-    private crypto: Crypto,
-    private activatedRoute: ActivatedRoute,
-    private instituicaoFinanceiraService: InstituicaoFinanceiraService
-  ) {
-    this.routeBackOptions = { relativeTo: this.activatedRoute };
+        
+        var params = this.activatedRoute.params.subscribe(p => {
+            if (p['instituicaoFinanceira_id']) {
+                try {
+                    this.id = this.crypto.decrypt(p['instituicaoFinanceira_id']);
+                    setTimeout(() => {
+                        this.modal = this.modalService.addModal(this.modal);
+                    }, 200);
+                } catch(e) {
+                    this.voltar();
+                }
+            } else {
+                this.voltar();
+            }
+        });
+        this.subscription.push(params);
+    }
 
-    var params = activatedRoute.params.subscribe(p => {
-      if (p['id']) {
-        this.id = this.crypto.decrypt(p['id']);
-        lastValueFrom(this.instituicaoFinanceiraService.get(this.id))
-          .then(res => {
-            setTimeout(() => {
-              this.modal.setOpen(true);
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
-            }, 200);
-          })
-          .catch(res => {
-            this.voltar();
-          })
-      } else {
-        this.voltar();
-      }
-    });
-    this.subscription.push(params);
-
-
-  }
-  ngAfterViewInit(): void {
-    this.modal.title.next('Excluir registro')
-    this.modal.template.next(this.template)
-    this.modal.style.next({ 'max-width': '400px' })
-    this.modal.routerBack.next(['../../']);
-    this.modal.activatedRoute.next(this.activatedRoute);
-    this.modal.icon.next(this.icon);
-
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.forEach(item => item.unsubscribe());
-  }
-
-
-  voltar() {
-    this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
-  }
+   
+    voltar() {
+        this.modalService.removeModal(this.modal.id);
+    }
 
 
+    send() {
+        this.loading = true;
+        this.erro = '';
 
-  send() {
-    this.loading = true;
-    this.erro = '';
-
-    lastValueFrom(this.instituicaoFinanceiraService.delete(this.id))
-    .then(res => {
-        lastValueFrom(this.instituicaoFinanceiraService.getList());
-        this.voltar();
-        this.loading = false;
-        console.log(   lastValueFrom(this.instituicaoFinanceiraService.getList()))
-    })
-    .catch(res => {
-        this.loading = false;
-        this.erro = getError(res);
-    })
-
-}
+        lastValueFrom(this.instituicaoFinanceiraService.delete(this.id))
+            .then(res => {
+                this.loading = false;
+                if (res.sucesso) {
+                    lastValueFrom(this.instituicaoFinanceiraService.getList());
+                    this.voltar();
+                } else {
+                    this.erro = res.mensagem;
+                }
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            })
+    }
 }

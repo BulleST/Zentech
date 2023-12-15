@@ -8,7 +8,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import { AccountService } from 'src/app/services/account.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
   selector: 'app-reset-password',
@@ -31,7 +31,7 @@ export class ResetPasswordComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private userService: UsuarioService,
         private accountService: AccountService,
         private crypto: Crypto,
