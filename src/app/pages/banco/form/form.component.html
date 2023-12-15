@@ -54,7 +54,7 @@
         <div class="form-group row">
           <label class="col-md-6 col-sm-4" for="cidade_Id">Cidade: <span class="text-danger">*</span></label>
           <div class="col-md-12 col-sm-8">
-            <p-dropdown [style]="{ 'width': '558px' }" [options]="cidades" #cidade_Id="ngModel" [(ngModel)]="objeto.cidade_Id"
+            <p-dropdown [style]="{ 'width': '558px' }" [styleClass]="'form-control '" [options]="cidades" #cidade_Id="ngModel" [(ngModel)]="objeto.cidade_Id"
               optionLabel="nomeCidade" optionValue="id" [placeholder]="'Selecione'" [disabled]="loadingStatus" name="cidade_Id"
               id="cidade_Id" [virtualScroll]="true" [virtualScrollItemSize]="10" [required]="true" [filter]="true" filterBy="nomeCidade">
             </p-dropdown>
