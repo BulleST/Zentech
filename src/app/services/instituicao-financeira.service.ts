@@ -63,7 +63,7 @@ export class InstituicaoFinanceiraService {
 
 
     delete(id: number) {
-      return this.http.delete(`${this.url}/InstituicaoFinanceira/${id}`);
+      return this.http.delete<Response>(`${this.url}/InstituicaoFinanceira/${id}`);
   }
 
 

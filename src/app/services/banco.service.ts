@@ -17,12 +17,12 @@ import { BancoList, BancoStatus, BancoRequest, Cidades } from '../models/banco.m
 export class BancoService {
 
 
-  id: number = 0;
-  nome: string = '';
-  cidade_Id: string =  '';
-  cep: string = '';
-  cNumero:string = '';
-  numero: string = '';
+    id: number = 0;
+    nome: string = '';
+    cidade_Id: string = '';
+    cep: string = '';
+    cNumero: string = '';
+    numero: string = '';
 
     url = environment.url;
     list = new BehaviorSubject<BancoList[]>([
@@ -46,16 +46,16 @@ export class BancoService {
 
 
 
-  //   get(id: number) {
-  //     var objeto = this.list.value.find(x=>x.id == id)
-  //     var lista = this.list
-  //     return  of(objeto ,lista);
-  // }
+    //   get(id: number) {
+    //     var objeto = this.list.value.find(x=>x.id == id)
+    //     var lista = this.list
+    //     return  of(objeto ,lista);
+    // }
 
 
-  get(id: number) {
-    return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' })});
-}
+    get(id: number) {
+        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+    }
 
 
     create(request: BancoRequest) {
@@ -63,19 +63,19 @@ export class BancoService {
     }
 
     getList() {
-      this.table.loading.next(true);
-      return this.http.get<BancoList[]>(`${this.url}/Banco`, { headers: new HttpHeaders({ 'loading': 'false' })})
-      .pipe(tap({
-          next: list => {
-              list = list.map(x => {
-                  return x;
-              })
-              this.list.next(Object.assign([], list));
-              return of(list);
-          },
-          error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+        this.table.loading.next(true);
+        return this.http.get<BancoList[]>(`${this.url}/Banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+            .pipe(tap({
+                next: list => {
+                    list = list.map(x => {
+                        return x;
+                    })
+                    this.list.next(Object.assign([], list));
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
 
-      }));
+            }));
 
 
     }
@@ -85,24 +85,18 @@ export class BancoService {
     }
 
     delete(id: number) {
-      return this.http.delete(`${this.url}/banco/${id}`);
-  }
+        return this.http.delete<Response>(`${this.url}/banco/${id}`);
+    }
 
-
-
-
-
-  getCidade() {
-    return this.http.get<Cidades[]>(`${this.url}/cidade/`, { headers: new HttpHeaders({ 'loading': 'false' })})
-    .pipe(tap({
-        next: list => {
-            this.cidades.next(list);
-            return of(list);
-        },
-        error: res => this.toastr.error('Não foi possível carregar listagem de status da operação.')
-    }));
-}
-
-
+    getCidade() {
+        return this.http.get<Cidades[]>(`${this.url}/cidade/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+            .pipe(tap({
+                next: list => {
+                    this.cidades.next(list);
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de status da operação.')
+            }));
+    }
 }
 

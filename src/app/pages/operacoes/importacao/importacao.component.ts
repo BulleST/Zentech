@@ -11,7 +11,7 @@ import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service'
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
-import { validaCPF } from 'src/app/utils/validate-cpf';
+import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 
 @Component({
@@ -183,7 +183,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 obj.detalhes = 'Tipo de Cliente no Brasil é obrigatório.';
                 this.listErros.push(obj);
             }
-            else if (!docCliente || !validaCPF(docCliente)) {
+            else if (!docCliente || !validateCPF(docCliente)) {
                 // this.toastr.error('CPF inválido.');
                 obj.detalhes = 'CPF inválido.';
                 this.listErros.push(obj);
@@ -321,7 +321,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             .then(res => {
                 this.loading = false;
                 this.toastr.clear();
-                if (res.successo) {
+                if (res.sucesso) {
                     lastValueFrom(this.pessoaOperacaoService.getList());
                     lastValueFrom(this.pessoaService.getList());
                     this.voltar();

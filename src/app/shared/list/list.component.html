@@ -59,7 +59,8 @@
                                     <p-dropdown [(ngModel)]="col.filterValue" [options]="col.values"
                                                 (onChange)="filterCol($event.value, filter, filterEl)"
                                                 placeholder="Todos" optionLabel="output"
-                                                optionValue="output">
+                                                optionValue="output"
+                                                [showClear]="true">
                                         <ng-template let-item pTemplate="item">
                                             <span [classList]="'flag ' + item.class">{{item.output}}</span>
                                         </ng-template>

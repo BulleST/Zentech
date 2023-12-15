@@ -9,7 +9,7 @@ import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Modal } from 'src/app/utils/modal';
-import { validaCPF } from 'src/app/utils/validate-cpf';
+import { validateCPF } from 'src/app/utils/validate-cpf';
 
 @Component({
     selector: 'app-create',
@@ -31,6 +31,8 @@ export class CreateComponent implements OnDestroy {
     loadingPessoa = false;
 
     screen: ScreenWidth = ScreenWidth.lg;
+
+    liberaNome = false;
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
@@ -77,7 +79,7 @@ export class CreateComponent implements OnDestroy {
         }
 
         if (input.name == 'cpf') {
-            var valid = validaCPF(doc)
+            var valid = validateCPF(doc)
             if (!valid) {
                 input.control.setErrors({ invalid: true });
                 return;
@@ -101,15 +103,16 @@ export class CreateComponent implements OnDestroy {
 
         this.loadingPessoa = true;
         this.erro = '';
+        this.liberaNome = false;
 
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingPessoa = false;
-                console.log(res, typeof res);
                 if (typeof res == 'object') {
                     if (res.ERRO == 'ERRO') {
                         this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = res.ERRO as unknown as string;
+                        this.liberaNome = true;
                     } else if (!res.ERRO) {
                         this.objeto.dataNascimento = this.formataData(res.DATA_NASC).substring(0, 10) as unknown as Date;
                         this.objeto.brConsulta_Data_Cap = this.formataData(res.DATA_CAP) as unknown as Date;
@@ -123,8 +126,9 @@ export class CreateComponent implements OnDestroy {
                         this.objeto.brConsulta_Status = res.STATUS;
                     }
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
+                    this.liberaNome = false;
                 } else {
-                    console.log('oi')
+                    this.liberaNome = true;
                     this.objeto.brConsulta_Erro = res as unknown as string;
                 }
 
@@ -132,8 +136,8 @@ export class CreateComponent implements OnDestroy {
             })
             .catch(res => {
                 this.loadingPessoa = false;
-                console.log('oi')
-                this.erro = getError(res);
+                this.liberaNome = true;
+                this.erro = 'Não foi possível carregar os dados da API. Insira o nome manualmente';
             })
 
     }

@@ -138,7 +138,7 @@ export class FormComponent implements OnDestroy {
 
         this.request()
             .then(res => {
-                if (res.successo == true) {
+                if (res.sucesso == true) {
                     lastValueFrom(this.invoiceService.getList());
                     this.voltar();
                 } else {

@@ -43,7 +43,8 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione uma moeda"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div class="d-flex align-items-center">
                                 <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
@@ -86,7 +87,8 @@
                                 optionLabel="numContrato"
                                 optionValue="id"
                                 placeholder="Selecione um contrato"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.numContrato}}</p>
@@ -116,7 +118,8 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um beneficiário"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nome}}</p>
@@ -146,7 +149,8 @@
                                 optionLabel="nomeInstituicao"
                                 optionValue="id"
                                 placeholder="Selecione uma instituição"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nomeInstituicao}}</p>
@@ -176,7 +180,8 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um banco"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nome}}</p>

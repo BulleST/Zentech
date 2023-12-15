@@ -133,7 +133,7 @@ export class FormOperacaoComponent implements OnDestroy {
 
             this.request()
             .then(res => {
-                if (res.successo == true) {
+                if (res.sucesso == true) {
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                     lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));

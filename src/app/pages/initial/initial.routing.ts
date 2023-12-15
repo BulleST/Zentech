@@ -9,7 +9,7 @@ const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.Op
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 
-const instituicaoFinanceira = () => import('../cliente/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
+const instituicaoFinanceira = () => import('../instituicao-financeira/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
 const routes: Routes = [

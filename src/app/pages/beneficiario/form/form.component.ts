@@ -1,24 +1,24 @@
 import { PaisesService } from './../../../services/paises.service';
 import { BeneficiarioService } from './../../../services/beneficiario.service';
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component,  OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
-import { Response } from 'src/app/helpers/request-response.interface';
 import { CepService } from 'src/app/services/cep-service.service';
 import { BancoList } from 'src/app/models/banco.model';
-import { data } from 'jquery';
 import { BeneficiarioRequest, BeneficiarioList } from 'src/app/models/beneficiario.model';
 import { CidadesService } from 'src/app/services/cidades.service';
 import { Cidades } from 'src/app/models/banco.model';
 import { BancoService } from 'src/app/services/banco.service';
 import { Paises } from 'src/app/models/pais.model';
-import { SelectItem } from 'primeng/api';
 import { NgModel } from '@angular/forms';
+import { validateCnpj } from 'src/app/utils/validate-cnpj';
+import { validateCEP } from 'src/app/utils/validate-cep';
+
 @Component({
     selector: 'app-form',
     templateUrl: './form.component.html',
@@ -29,6 +29,8 @@ export class FormComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     loadingCep = false;
+    loadingCNPJ = false;
+
     subscription: Subscription[] = [];
     routeBackOptions: any;
     
@@ -45,10 +47,8 @@ export class FormComponent implements OnDestroy {
     loadingPaises = true;
     paises: Paises[];
 
-
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-    @ViewChild('cep') cepInput: NgModel;
 
     isEditPage = true;
     cepCarregado = false;
@@ -58,7 +58,6 @@ export class FormComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modal: Modal,
         private crypto: Crypto,
-        private datepipe: DatePipe,
         private toastr: ToastrService,
         private cepService: CepService,
         private beneficiarioService: BeneficiarioService,
@@ -101,8 +100,8 @@ export class FormComponent implements OnDestroy {
         this.modal.icon.next(this.icon);
 
         var params = this.activatedRoute.params.subscribe(x => {
-            if (x['id']) {
-                this.objeto.id = this.crypto.decrypt(x['id']);
+            if (x['beneficiario_id']) {
+                this.objeto.id = this.crypto.decrypt(x['beneficiario_id']);
                 this.modal.title.next('Editar Beneficiário')
                 this.modal.routerBack.next(['../../']);
                 this.isEditPage = true;
@@ -138,20 +137,42 @@ export class FormComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    buscaCEP() {
-        if (!this.validaCep()) {
+    buscaCEP(input: NgModel) {
+        this.loadingCep = true;
+        input.control.setErrors(null);
+        if (!this.validaCep(input)) {
             this.toastr.error('CEP inválido.');
-            this.cepInput.control.setErrors({invalid: true})
+            input.control.setErrors({invalid: true})
             this.cepCarregado = false;
             return;
         }
-        this.loadingCep = true;
-        this.cepInput.control.setErrors(null);
 
         lastValueFrom( this.cepService.buscar(this.objeto.cep))
         .then(data => {
-            this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
-            this.cepCarregado = true
+            if (data.erro == true) {
+                this.cepCarregado = false;
+                this.toastr.error('CEP inválido.');
+                input.control.setErrors({invalid: true})
+                this.cepCarregado = false;
+                return;
+
+            } else {
+                this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
+
+                var localidade = data.localidade.toLowerCase();
+
+                var cidade = this.cidades.find(x => {
+                    var cid = x.nomeCidade.toLowerCase()
+                    var uf = x.sigla.toLowerCase();
+                    return (cid == localidade || localidade.includes(cid) || cid.includes(localidade)) && data.uf.toLowerCase() == uf;
+                })
+                if (cidade) {
+                    this.objeto.cidade_Id = cidade.id;
+                }
+                console.log('cidade', cidade)
+
+                this.cepCarregado = true
+            }
         })
         .catch(res => {
             this.toastr.error('Não foi possível carregar CEP')
@@ -161,29 +182,63 @@ export class FormComponent implements OnDestroy {
 
     }
 
-    validaCep() {
+    validaCep(input: NgModel) {
+		this.loadingCep = true;
+
         if (!this.objeto.cep.trim()) {
+            setTimeout(() => {
+                input.control.setErrors({ required: true });
+            }, 300);
+			this.loadingCep = false;
             return false
         }
-        if (this.objeto.cep.trim().length != 8) {
+        else if (this.objeto.cep.trim().length != 8) {
+            setTimeout(() => {
+                input.control.setErrors({ invalid: true });
+            }, 300);
+			this.loadingCep = false;
             return false
-        }
-        return true
-    }
-
-    blur() {
-        if (this.isEditPage == false) {
-            this.buscaCEP();
-            if (this.objeto.cep.length === 9) { }
-            console.log(this.buscaCEP);
-            console.log('res', this.isEditPage)
-        }
-        else {
-            console.log('test')
-            console.log('res', this.isEditPage)
+        } else if (!validateCEP(this.objeto.cep)) {
+            setTimeout(() => {
+                input.control.setErrors({ invalid: true });
+            }, 300);
+			this.loadingCep = false;
+            return false;
+        } else {
+            this.loadingCep = false;
+            setTimeout(() => {
+                input.control.setErrors(null);
+            }, 300);
+            return true;
         }
     }
 
+	validaCNPJ(input: NgModel) {
+		this.loadingCNPJ = true;
+
+		if (!this.objeto.cnpj || this.objeto.cnpj == 0) {
+			setTimeout(() => {
+                input.control.setErrors({ required: true });
+            }, 300);
+			this.loadingCNPJ = false;
+			return;
+		}
+
+		var valid = validateCnpj(this.objeto.cnpj);
+		if (!valid) {
+			setTimeout(() => {
+                input.control.setErrors({ invalid: true });
+            }, 300);
+			this.loadingCNPJ = false;
+			return;
+		} else {
+            this.loadingCNPJ = false;
+            setTimeout(() => {
+                input.control.setErrors(null);
+            }, 300);
+		}
+		return;
+	}
 
     voltar() {
         this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
@@ -192,7 +247,6 @@ export class FormComponent implements OnDestroy {
     groupCidades() {
         var list = this.groupBy(this.cidades, (cid: any) => cid.estado_Id);
         this.cidadesGrouped = list;
-        console.log(list)
     }
 
 
@@ -220,22 +274,16 @@ export class FormComponent implements OnDestroy {
             })
             
         })
-        console.log(a)
-
-
         return a;
     }
 
     send() {
-        const cepSemHifen = this.objeto.cep.replace('-', '');
-        this.objeto.cep = cepSemHifen
-        console.log(this.objeto)
         this.loading = true;
         this.erro = '';
 
         return lastValueFrom(this.beneficiarioService.post(this.objeto))
             .then(res => {
-                if (res.successo != false) {
+                if (res.sucesso != false) {
                     lastValueFrom(this.beneficiarioService.getList());
                     this.voltar();
                 } else {

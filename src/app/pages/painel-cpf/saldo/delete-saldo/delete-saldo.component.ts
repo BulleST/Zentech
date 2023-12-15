@@ -92,7 +92,7 @@ export class DeleteSaldoComponent implements OnDestroy {
             .then(res => {
                 lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
                 this.loading = false;
-                if (res.successo) {
+                if (res.sucesso) {
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons';
@@ -6,11 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaImportacao, PessoaResponse } from 'src/app/models/pessoa.model';
-import { LoadingService } from 'src/app/parts/loading/loading';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
-import { validaCPF } from 'src/app/utils/validate-cpf';
+import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 
 @Component({
@@ -186,7 +185,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             if (!cpf || !cpf.trim()) {
                 obj.detalhes = 'CPF é obrigatório';
                 this.listErros.push(obj)
-            } else if (!validaCPF(cpf)) {
+            } else if (!validateCPF(cpf)) {
                 obj.detalhes += 'CPF inválido';
                 this.listErros.push(obj)
             } else if (!nome || !nome.trim()) {
