@@ -1,14 +1,14 @@
 <div class="content">
     <p-table class="table table-striped"
-             [class.mt-2]="list.length == 0"
+             [class.mt-2]="formatedList.length == 0"
              #dt
              [columns]="columns"
-             [value]="list"
+             [value]="formatedList"
              [rows]="100"
              [rowHover]="true"
              [rowsPerPageOptions]="[10, 25, 50, 100]"
              responsiveLayout="scroll"
-             [paginator]="paginator && list.length > 0"
+             [paginator]="paginator && formatedList.length > 0"
              [showCurrentPageReport]="true"
              currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
              [globalFilterFields]="filters"
@@ -17,17 +17,14 @@
              (onRowSelect)="onRowSelect($event)"
              (onRowUnselect)="onRowUnselect($event)"
              [filterDelay]="200">
-        <!-- 
-     [virtualScrollItemSize]="36" 
-     [virtualScroll]="true"
-    [scrollHeight]="'600px'" -->
+
 
         <ng-template pTemplate="caption">
             <div
                  class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2 col-12 p-0 mb-sm-0 mb-2">
-                    <p *ngIf="!loading && list.length > 0 && showResultLength">
-                        <small> {{ list.length }} resultado(s) </small>
+                    <p *ngIf="!loading && formatedList.length > 0 && showResultLength">
+                        <small> {{ formatedList.length }} resultado(s) </small>
                     </p>
                 </div>
                 <div

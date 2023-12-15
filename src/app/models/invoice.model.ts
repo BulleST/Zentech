@@ -9,7 +9,7 @@ export class Invoice {
     instituicaoFinanceira_Id: number = undefined as unknown as number;
     banco_Id: number = undefined as unknown as number;
     codigoSwift: string = '';
-    conta: number = 0;
+    conta: number = '' as unknown as number;
     moeda_Id: number = undefined as unknown as number;
     contrato_Id: number = undefined as unknown as number;
 }

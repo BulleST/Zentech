@@ -68,10 +68,14 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list']) {
+            console.log('ngOnChanges', changes['list'])
             this.list = changes['list'].currentValue;
-            this.formatedList = changes['list'].currentValue
+            this.formatedList = changes['list'].currentValue;
+
             if (this.list.length > 0 && this.columns.length > 0) {
                 this.formata();
+                console.log('ngOnChanges')
+
             }
         }
         if (changes['columns']) {
@@ -99,7 +103,11 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
 
     formata() {
-        this.list.every((row: any) => {
+        this.table.loading.next(true);
+        console.log('formata')
+        var list = JSON.parse(JSON.stringify(this.formatedList));
+        console.log('oi');
+        list.every((row: any) => {
             this.columns.every(col => {
                 try {
                     var a = this.formatCellData(row, col);
@@ -108,11 +116,13 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
                     console.error(e);
                     // return false;
                 }
-                return row;
+                return col;
             })
+            return row;
         })
-
-        this.formatedList = Object.assign([], this.list);
+        
+        this.formatedList = Object.assign([], list);
+        this.table.loading.next(false);
     }
 
 

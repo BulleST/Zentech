@@ -84,89 +84,95 @@ export class Table {
 
     formatCellData(row: any, col: Column): any {
         var value = this.getCellValue(row, col);
-        try {
+        // try {
             if (col.maskType && value != undefined && value.toString().trim()) {
                 if (col.maskType == MaskType.number) {
-                    console.log(col)
-                    console.log(value)
+                    // console.log('0', value)
                     value = this.currency.transform(value, 'BRL', '', col.decimal);
+                    // console.log('0', value)
                 }
                 else if (col.maskType == MaskType.mask && col.mask) {
-                    console.log('1')
+                    // console.log('1', value)
                     value = value.toString().padStart( col.mask.length, '0');
                     value = this.mask.applyMask(value, col.mask);
+                    // console.log('1', value)
                 }
                 else if (col.maskType == MaskType.percentage) {
-                    console.log('2')
+                    // console.log('2', value)
                     value = this.currency.transform(value, 'BRL', '', col.decimal) + '%';
+                    // console.log('2', value)
                 }
                 else if (col.maskType == MaskType.money) {
-                    console.log('3')
+                    // console.log('3', value)
                     value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
+                    // console.log('3', value)
                 }
                 else if (col.maskType == MaskType.cnpj) {
-                    console.log('4')
+                    // console.log('4', value)
                     value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
+                    // console.log('4', value)
                 }
                 else if (col.maskType == MaskType.cpf) {
-                    console.log('5')
-                    console.log(col)
-                    console.log(value)
+                    // console.log('5')
                     value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
-                    console.log('5')
+                    // console.log('5')
                 }
                 else if (col.maskType == MaskType.cpfcnpj) {
-                    console.log('6')
+                    // console.log('6', value)
                     var pj = row['pj'];
                     value = value.toString().padStart(pj ? 14 : 11);
                     value = this.mask.applyMask(value, pj ? '00.000.000/0000-00' : '000.000.000-00');
+                    // console.log('6', value)
                 }
                 else if (col.maskType == MaskType.rg) {
-                    console.log('7')
+                    // console.log('7', value)
                     value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
+                    // console.log('7', value)
                 }
                 else if (col.maskType == MaskType.any && col.mask) {
-                    console.log('8')
+                    // console.log('8', value)
                     value = this.mask.applyMask(value, col.mask);
+                    // console.log('8', value)
                 }
                 else if (col.maskType == MaskType.date) {
-                    console.log('9')
-                    console.log(col)
-                    console.log(value)
+                    // console.log('9', value)
                     value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC', 'pt-BR');
-                    console.log('9')
+                    // console.log('9', value)
                 }
                 else if (col.maskType == MaskType.dateTime) {
-                    console.log('10')
+                    // console.log('10', value)
                     value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', 'UTC', 'pt-BR');
+                    // console.log('10', value)
                 }
                 else if (col.maskType == MaskType.telefoneCelular) {
-                    console.log('11')
+                    // console.log('11', value)
                     value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
+                    // console.log('11', value)
                 }
                 else if (col.maskType == MaskType.substring) {
-                    console.log('12')
                     if (col.substringLength && value.length > col.substringLength) {
+                        // console.log('12', value)
                         value = value.substring(0, col.substringLength) + '...'
+                        // console.log('12', value)
                     }
                 }
                 else if (col.maskType == MaskType.options && col.values && col.values.length) {
-                    console.log('13')
+                    // console.log('13', value)
                     var opt = col.values.find(x => x.value == value);
                     value = opt!.output;
                     row['optionValue'] = opt
+                    // console.log('13', value)
                 }
                 else {
-                    console.log('14')
+                    // console.log('14', value)
                     return value ?? 'N/A';
                 }
 
-                this.mask
             }
             return value ?? 'N/A';
-        } catch(e) {
-            return value
-        }
+        // } catch(e) {
+        //     return value
+        // }
     }
 
     getCellValue(row: any, col: Column) {

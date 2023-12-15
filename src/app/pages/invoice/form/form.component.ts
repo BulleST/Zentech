@@ -3,7 +3,12 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { BancoList } from 'src/app/models/banco.model';
+import { BeneficiarioList } from 'src/app/models/beneficiario.model';
+import { Contrato_List } from 'src/app/models/contrato.model';
+import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
 import { Invoice } from 'src/app/models/invoice.model';
+import { Moeda } from 'src/app/models/moeda.model';
 import { BancoService } from 'src/app/services/banco.service';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
 import { ContratoService } from 'src/app/services/contrato.service';
@@ -29,19 +34,19 @@ export class FormComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = true;
     
-    contratos: any[] = [];
+    contratos: Contrato_List[] = [];
     loadingContratos = false;
 
-    beneficiarios: any[] = [];
+    beneficiarios: BeneficiarioList[] = [];
     loadingBeneficiarios = false;
 
-    instituicaoFinanceira: any[] = [];
+    instituicaoFinanceira: InstituicaoFinanceiraList[] = [];
     loadingInstituicaoFinanceira = false;
 
-    moedas: any[] = [];
+    moedas: Moeda[] = [];
     loadingMoedas = false;
 
-    bancos: any[] = [];
+    bancos: BancoList[] = [];
     loadingBancos = false;
     
     constructor(

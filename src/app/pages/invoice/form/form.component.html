@@ -30,23 +30,28 @@
                 <!-- Moeda -->
                 <div class="form-group col-xl-2 xol-lg-2 col-md-6 col-sm-6 col-12">
                     <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
-                    <select class="form-control"
-                            [classList]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
-                            [(ngModel)]="objeto.moeda_Id"
-                            #moeda_Id="ngModel"
-                            name="moeda_Id"
-                            id="moeda_Id"
-                            [required]="true"
-                            placeholder="Selecione">
-                        <option *ngIf="moedas && moedas.length > 0">Selecione</option>
-                        <option [ngValue]="item.id" *ngFor="let item of moedas">
-                            {{item.nome}} - <br>
-                            {{item.simbolo}} - <br>
-                            {{item.codigo}} - <br>
-                        </option>
-                        <option [ngValue]="undefined" *ngIf="(!moedas || !moedas.length) && !loadingMoedas">Nenhum item</option>
-                    </select>
-
+                    <p-dropdown
+                                [options]="moedas"
+                                [(ngModel)]="objeto.moeda_Id"
+                                #moeda_Id="ngModel"
+                                name="moeda_Id"
+                                inputId="moeda_Id"
+                                [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
+                                [showClear]="true"
+                                [filter]="true"
+                                filterBy="nome, simbolo, codigo"
+                                optionLabel="nome"
+                                optionValue="id"
+                                placeholder="Selecione uma moeda"
+                                [required]="true">
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex align-items-center">
+                                <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
+                                <span>{{item.nome}}</span>
+                                <span class="ms-auto d-block">{{item.simbolo}}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
                     <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
                     <div *ngIf="moeda_Id.touched && moeda_Id.errors">
                         <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
@@ -78,7 +83,7 @@
                                 [showClear]="true"
                                 [filter]="true"
                                 filterBy="nome, simbolo, codigo"
-                                optionLabel="nome"
+                                optionLabel="numContrato"
                                 optionValue="id"
                                 placeholder="Selecione um contrato"
                                 [required]="true">
@@ -96,7 +101,7 @@
                     </div>
                 </div>
                 <!-- Beneficiário -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="beneficiarios"
@@ -125,7 +130,7 @@
                     </div>
                 </div>
                 <!-- Instituição Financeira -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="instituicaoFinanceira_Id">Instituição Financeira: <span
                               class="text-danger">*</span></label>
                     <p-dropdown
@@ -138,7 +143,7 @@
                                 [showClear]="true"
                                 [filter]="true"
                                 filterBy="nomeInstituicao, cnpj"
-                                optionLabel="nome"
+                                optionLabel="nomeInstituicao"
                                 optionValue="id"
                                 placeholder="Selecione uma instituição"
                                 [required]="true">
@@ -156,7 +161,7 @@
                     </div>
                 </div>
                 <!-- Banco -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="bancos"
@@ -185,7 +190,7 @@
                     </div>
                 </div>
                 <!-- Conta -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="conta">Conta: <span class="text-danger">*</span></label>
                     <input type="text"
                            name="conta"
@@ -200,7 +205,7 @@
                     </div>
                 </div>
                 <!-- Código Swift -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="codigoSwift">Código Swift: <span class="text-danger">*</span></label>
                     <input type="text"
                            name="codigoSwift"

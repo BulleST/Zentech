@@ -3,11 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
-import { ImportacaoComponent } from './importacao/importacao.component';
 import { DetailsComponent } from './details/details.component';
 import { ExportacaoComponent } from './exportacao/exportacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
-
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [

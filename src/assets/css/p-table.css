@@ -483,15 +483,6 @@ tr.selectable {
     border-radius: 50%;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
-
-.p-icon-wrapper {
-    display: inline-flex;
-}
-
-.p-icon {
-    display: inline-block;
-}
-
 .p-ink {
     display: block;
     position: absolute;

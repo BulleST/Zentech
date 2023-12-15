@@ -34,8 +34,8 @@ export class DeleteComponent {
 
 
         var params = activatedRoute.params.subscribe(p => {
-            if (p['id']) {
-                this.id = this.crypto.decrypt(p['id']);
+            if (p['invoice_id']) {
+                this.id = this.crypto.decrypt(p['invoice_id']);
                 lastValueFrom(this.invoiceService.get(this.id))
                     .then(res => {
                         setTimeout(() => {
