@@ -4,7 +4,6 @@ import { InitialComponent } from './initial.component';
 import { HomeComponent } from './home/home.component';
 
 
-
 const analise = () => import('./../analise/analise.module').then(x => x.AnaliseModule);
 const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.PainelCpfModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
@@ -12,6 +11,7 @@ const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.Usuar
 const instituicaoFinanceira = () => import('../cliente/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../banco copy/beneficiario.module').then(x => x.BeneficiarioModule);
+const contrato = () => import('../contrato/contrato.module').then(x => x.ContratoModule);
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [
@@ -27,7 +27,7 @@ const routes: Routes = [
             { path: 'instituicao-financeira', loadChildren: instituicaoFinanceira},
             { path: 'banco', loadChildren: banco},
             { path: 'beneficiario', loadChildren: beneficiario},
-            { path: 'usuarios', loadChildren: usuarios},
+            { path: 'contrato', loadChildren: contrato},
         ]
     }
 ];
