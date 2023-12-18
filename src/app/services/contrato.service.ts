@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-import { Contrato, Contrato_List } from '../models/contrato.model';
+import { Contrato, ContratoList } from '../models/contrato.model';
 import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { Response } from '../helpers/request-response.interface';
 })
 export class ContratoService {
     url = environment.url;
-    list = new BehaviorSubject<Contrato_List[]>([]);
+    list = new BehaviorSubject<ContratoList[]>([]);
     object = new BehaviorSubject<Contrato>(new Contrato);
 
     constructor(
@@ -23,7 +23,7 @@ export class ContratoService {
     ) { }
 
     getList() {
-        return this.http.get<Contrato_List[]>(`${this.url}/contrato/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<ContratoList[]>(`${this.url}/contrato/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
                     this.list.next(list);

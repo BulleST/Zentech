@@ -85,7 +85,7 @@ export class BancoService {
     }
 
     delete(id: number) {
-      return this.http.delete(`${this.url}/banco/${id}`);
+      return this.http.delete<Response>(`${this.url}/banco/${id}`);
   }
 
 

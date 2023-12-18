@@ -9,7 +9,7 @@ import { BancoService } from 'src/app/services/banco.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
-
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
@@ -30,7 +30,8 @@ export class DeleteComponent implements OnDestroy {
     private modal: Modal,
     private crypto: Crypto,
     private activatedRoute: ActivatedRoute,
-    private bancoService: BancoService
+    private bancoService: BancoService,
+    private toastr: ToastrService,
   ) {
     this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -79,38 +80,22 @@ export class DeleteComponent implements OnDestroy {
   send() {
     this.loading = true;
     this.erro = '';
-
     lastValueFrom(this.bancoService.delete(this.id))
     .then(res => {
+      if (res.successo){
         lastValueFrom(this.bancoService.getList());
         this.voltar();
         this.loading = false;
         console.log(   lastValueFrom(this.bancoService.getList()))
+      }
+      else{
+        this.erro = res.mensagem;
+        this.toastr.error(res.mensagem)
+      }
     })
     .catch(res => {
         this.loading = false;
         this.erro = getError(res);
     })
-
 }
-
-
-
-  // send() {
-  //   this.loading = true;
-  //   this.erro = '';
-
-  //   lastValueFrom(this.bancoService.delete(this.id))
-  //     .then(res => {
-  //       lastValueFrom(this.instituicaoFinanceira.getList());
-  //       lastValueFrom(this.pessoaOperacaoService.getList());
-  //       this.voltar();
-  //       this.loading = false;
-  //     })
-  //     .catch(res => {
-  //       this.loading = false;
-  //       this.erro = getError(res);
-  //     })
-
-  // }
 }

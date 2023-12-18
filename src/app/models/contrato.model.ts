@@ -2,17 +2,36 @@
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 
+export class Contrato {
+  id: number = 0;
+  tipo_Id: number = '' as unknown as number;
+  numContrato: string = '';
+  evento_Id: number = '' as unknown as number;
+  data: string = '';
+  instituicaoFinanceira_Id: number = '' as unknown as number;
+  taxa: number = '' as unknown as number;
+  valorNacional: number = '' as unknown as number;
+  dataLiquidacao: string = '';
+  pagRecExterior: string = '';
+  pais_Id: number = '' as unknown as number;
+  percentualAdiantamento: number = '' as unknown as number;
+}
 
 
 
 export class ContratoList {
   id: number = 0;
-  nome: string = '';
-  cnpj: number = 0
-  logradouro: string = '';
-  numero: string = '';
-  cep: string = '';
-  cidade_Id: number = 0;
+  tipo: string = '';
+  numContrato: string = '';
+  evento: string = '';
+  data: string = '';
+  instituicao: string = '';
+  taxa: number = 0;
+  valorNacional: number = 0;
+  dataLiquidacao: string = '';
+  pagRecExterior: string = '';
+  pais: string = '';
+  percentualAdiantamento: number = 0;
 
 }
 
@@ -20,12 +39,17 @@ export class ContratoList {
 
 export class ContratoRequest {
   id: number = 0;
-  nome: string = '';
-  cnpj: number = undefined as unknown as number;
-  cidade_Id: number = undefined as unknown as number;
-  logradouro: string = '';
-  numero: string = '';
-  cep: string = '';
+  tipo_Id: number = '' as unknown as number;
+  numContrato: string = '';
+  evento_Id: number = '' as unknown as number;
+  data: string = '';
+  instituicaoFinanceira_Id: number = '' as unknown as number;
+  taxa: number = '' as unknown as number;
+  valorNacional: number = '' as unknown as number;
+  dataLiquidacao: string = '';
+  pagRecExterior: string = '';
+  pais_Id: number = '' as unknown as number;
+  percentualAdiantamento: number = '' as unknown as number;
 
 
 }
@@ -43,7 +67,7 @@ export class ContratoStatus {
   name: string = '';
 }
 
-export var ContratoColumns: Column[] = [
+export var contratoColumns: Column[] = [
 
   {
 

@@ -9,6 +9,9 @@
 </ng-template>
 <ng-template #template>
   <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+
+
+
     <div class="px-2">
       <div class="row">
         <div class="form-group col-md-6 col-sm-4">
@@ -24,8 +27,6 @@
                       [disabled]="loadingTipo"
                       name="tipo_Id"
                       inputId="tipo_Id"
-                      [virtualScroll]="true"
-                      [virtualScrollItemSize]="10"
                       [required]="true"
                       [filter]="true"
                       filterBy="nome">
@@ -47,8 +48,6 @@
                       [disabled]="loadingEvento"
                       name="evento_Id"
                       inputId="evento_Id"
-                      [virtualScroll]="true"
-                      [virtualScrollItemSize]="10"
                       [required]="true"
                       [filter]="true"
                       filterBy="nome">
@@ -60,7 +59,7 @@
       </div>
       <div class="row">
         <div class="form-group col-md-6 col-sm-4">
-          <label for="instituicaoFinanceira_Id">Tipo: <span class="text-danger">*</span></label>
+          <label for="instituicaoFinanceira_Id">Instituição: <span class="text-danger">*</span></label>
           <p-dropdown [styleClass]="'form-control' + (loadingInstituicao ? 'form-control-loading' : '')"
                       [showClear]="true"
                       [options]="instituicoes"
@@ -72,8 +71,6 @@
                       [disabled]="loadingInstituicao"
                       name="instituicaoFinanceira_Id"
                       inputId="instituicaoFinanceira_Id"
-                      [virtualScroll]="true"
-                      [virtualScrollItemSize]="10"
                       [required]="true"
                       [filter]="true"
                       filterBy="nome">
@@ -155,6 +152,7 @@
         <div class="form-group col-md-3 col-sm-12">
           <label for="percentualAdiantamento">Percentual de Adiantamento: <span class="text-danger">*</span></label>
           <input type="text"
+                 mask="0#"
                  class="form-control"
                  name="percentualAdiantamento"
                  id="percentualAdiantamento"
@@ -171,13 +169,13 @@
         <div class="form-group col-md-3 col-sm-12">
           <label for="valorNacional">Valor Nacional: <span class="text-danger">*</span></label>
           <input type="text"
+                 mask="0#"
                  class="form-control"
                  name="valorNacional"
                  id="valorNacional"
                  #valorNacional="ngModel"
                  [(ngModel)]="objeto.valorNacional"
-                 required pattern="\S(.*\S)?"
-                 (change)="objeto.valorNacional = valorNacional.value.trim();">
+                 required pattern="\S(.*\S)?">
           <div *ngIf="valorNacional.touched && valorNacional.errors">
             <p class="text-danger" *ngIf="valorNacional.errors['required']">Este campo é obrigatório.</p>
           </div>
@@ -188,18 +186,19 @@
                  class="form-control"
                  name="taxa"
                  id="taxa"
+                 mask="0#"
                  #taxa="ngModel"
                  [(ngModel)]="objeto.taxa"
-                 required pattern="\S(.*\S)?"
-                 (change)="objeto.taxa = taxa.value.trim();">
+                 required pattern="\S(.*\S)?">
           <div *ngIf="taxa.touched && taxa.errors">
             <p class="text-danger" *ngIf="taxa.errors['required']">Este campo é obrigatório.</p>
           </div>
         </div>
         <div class="form-group col-md-3 col-sm-12">
-          <label for="pagRecExterior">Pagamento: <span class="text-danger">*</span></label>
+          <label for="pagRecExterior">Pagador ou Recebedor no Exterior: <span class="text-danger">*</span></label>
           <input type="text"
                  class="form-control"
+                 mask="0#"
                  name="pagRecExterior"
                  id="pagRecExterior"
                  #pagRecExterior="ngModel"

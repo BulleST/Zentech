@@ -5,7 +5,7 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-
+import { ToastrService } from 'ngx-toastr';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -30,7 +30,8 @@ export class DeleteComponent implements OnDestroy {
     private modal: Modal,
     private crypto: Crypto,
     private activatedRoute: ActivatedRoute,
-    private instituicaoFinanceiraService: InstituicaoFinanceiraService
+    private instituicaoFinanceiraService: InstituicaoFinanceiraService,
+    private toastr: ToastrService,
   ) {
     this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -79,18 +80,22 @@ export class DeleteComponent implements OnDestroy {
   send() {
     this.loading = true;
     this.erro = '';
-
     lastValueFrom(this.instituicaoFinanceiraService.delete(this.id))
     .then(res => {
+      if (res.successo){
         lastValueFrom(this.instituicaoFinanceiraService.getList());
         this.voltar();
         this.loading = false;
         console.log(   lastValueFrom(this.instituicaoFinanceiraService.getList()))
+      }
+      else{
+        this.erro = res.mensagem;
+        this.toastr.error(res.mensagem)
+      }
     })
     .catch(res => {
         this.loading = false;
         this.erro = getError(res);
     })
-
 }
 }

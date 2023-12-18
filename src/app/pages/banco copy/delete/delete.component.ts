@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { BeneficiarioService } from 'src/app/services/beneficiario.service';
-
+import { ToastrService } from 'ngx-toastr';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { Modal } from 'src/app/utils/modal';
@@ -29,7 +29,8 @@ export class DeleteComponent implements OnDestroy {
     private modal: Modal,
     private crypto: Crypto,
     private activatedRoute: ActivatedRoute,
-    private beneficiarioService: BeneficiarioService
+    private beneficiarioService: BeneficiarioService,
+    private toastr: ToastrService,
   ) {
     this.routeBackOptions = { relativeTo: this.activatedRoute };
 
@@ -61,7 +62,6 @@ export class DeleteComponent implements OnDestroy {
     this.modal.routerBack.next(['../../']);
     this.modal.activatedRoute.next(this.activatedRoute);
     this.modal.icon.next(this.icon);
-
   }
 
   ngOnDestroy(): void {
@@ -74,42 +74,25 @@ export class DeleteComponent implements OnDestroy {
   }
 
 
-
   send() {
     this.loading = true;
     this.erro = '';
-
     lastValueFrom(this.beneficiarioService.delete(this.id))
     .then(res => {
-        lastValueFrom(this.beneficiarioService.getList());
+      if (res.successo){
         lastValueFrom(this.beneficiarioService.getList());
         this.voltar();
         this.loading = false;
+        console.log(   lastValueFrom(this.beneficiarioService.getList()))
+      }
+      else{
+        this.erro = res.mensagem;
+        this.toastr.error(res.mensagem)
+      }
     })
     .catch(res => {
         this.loading = false;
         this.erro = getError(res);
     })
-
 }
-
-
-
-  // send() {
-  //   this.loading = true;
-  //   this.erro = '';
-
-  //   lastValueFrom(this.beneficiarioService.delete(this.id))
-  //     .then(res => {
-  //       lastValueFrom(this.instituicaoFinanceira.getList());
-  //       lastValueFrom(this.pessoaOperacaoService.getList());
-  //       this.voltar();
-  //       this.loading = false;
-  //     })
-  //     .catch(res => {
-  //       this.loading = false;
-  //       this.erro = getError(res);
-  //     })
-
-  // }
 }

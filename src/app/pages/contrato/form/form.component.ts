@@ -2,7 +2,7 @@ import { PaisesService } from './../../../services/paises.service';
 import { InstituicaoFinanceiraService } from './../../../services/instituicao-financeira.service';
 import { ContratoTipoService } from './../../../services/contrato-tipo.service';
 import { ContratoTipo } from './../../../models/contrato-tipo.model';
-import { Contrato, ContratoRequest } from './../../../models/contrato.model';
+import { ContratoRequest } from './../../../models/contrato.model';
 import { ContratoService } from './../../../services/contrato.service';
 import { ContratoList } from './../../../models/contrato.model';
 import { ContratoStatus } from './../../../models/contrato.model';
@@ -36,7 +36,7 @@ import { Paises } from 'src/app/models/pais.model';
 })
 export class FormComponent implements OnDestroy {
   objeto: ContratoRequest = new ContratoRequest;
- teste: Contrato_List []
+ teste: ContratoList []
   erro: string = '';
   loading = false;
   subscription: Subscription[] = [];
@@ -44,7 +44,7 @@ export class FormComponent implements OnDestroy {
   cidade_id: number = 0
   status: ContratoStatus[] = [];
   loadingStatus = true;
-  contratos: Contrato_List[] = [];
+  contratos: ContratoList[] = [];
   loadingPessoa = true;
   @ViewChild('template') template: TemplateRef<any>
   @ViewChild('icon') icon: TemplateRef<any>
