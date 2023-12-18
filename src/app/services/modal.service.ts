@@ -40,19 +40,14 @@ export class ModalService {
         console.log('addModal', where)
         var list = this.modalList.value;
 
-        var a = list.sort((x,y) => x.id - y.id);
-        var lastId = a.length > 0 ? a[a.length - 1].id : 0;
+        var listOrderedById = list.sort((x,y) => x.id - y.id);
+        var lastId = listOrderedById.length > 0 ? listOrderedById[listOrderedById.length - 1].id : 0;
         var newId = lastId + 1;
-        modal.zindex = newId;
         modal.id = newId; 
         list.push(modal);
+        
         if (this.browserRefresh) 
             list = this.modalList.value.sort((x,y) => y.id - x.id);
-        // else 
-        //     list = this.modalList.value.sort((x,y) => x.id - y.id);
-
-
-        console.log(list)
         this.modalList.next(list);
 
         setTimeout(() => {
@@ -92,7 +87,6 @@ export class ModalService {
 
 export class Modal {
     id: number = 0;
-    zindex: number = 0;
     open: boolean = true;
     title: string = '';
     template?: TemplateRef<any>;
