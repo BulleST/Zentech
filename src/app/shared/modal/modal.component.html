@@ -1,5 +1,5 @@
 
-<div class="modal" [attr.modal]="item.id" *ngFor="let item of modalList">
+<div class="modal" [attr.modal]="item.id" *ngFor="let item of modalList" >
     <div class="modal__bg" (click)="voltar(item.id)"></div>
     <div class="modal__inner"
          [ngStyle]="item.style">

@@ -4,34 +4,17 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-
 import { Response } from '../helpers/request-response.interface';
-import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
-
-
-import { BancoList, BancoStatus, BancoRequest, Cidades } from '../models/banco.model';
+import { BancoList, BancoRequest } from '../models/banco.model';
+import { Cidades } from '../models/cidade.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BancoService {
-
-
-    id: number = 0;
-    nome: string = '';
-    cidade_Id: string = '';
-    cep: string = '';
-    cNumero: string = '';
-    numero: string = '';
-
     url = environment.url;
-    list = new BehaviorSubject<BancoList[]>([
-
-    ]);
-    // list = new BehaviorSubject<BancoList[]>([]);
-    listOperacaoPorPessoa = new BehaviorSubject<BancoList[]>([]);
+    list = new BehaviorSubject<BancoList[]>([]);
     cidades = new BehaviorSubject<Cidades[]>([]);
-
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -41,30 +24,9 @@ export class BancoService {
 
 
 
-
-
-
-
-
-    //   get(id: number) {
-    //     var objeto = this.list.value.find(x=>x.id == id)
-    //     var lista = this.list
-    //     return  of(objeto ,lista);
-    // }
-
-
-    get(id: number) {
-        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
-    }
-
-
-    create(request: BancoRequest) {
-        return this.http.post<Response>(`${this.url}/Banco`, request);
-    }
-
     getList() {
         this.table.loading.next(true);
-        return this.http.get<BancoList[]>(`${this.url}/Banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<BancoList[]>(`${this.url}/banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
                     list = list.map(x => {
@@ -73,15 +35,23 @@ export class BancoService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de bancos.')
 
             }));
 
 
     }
+    get(id: number) {
+        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+    }
+
+
+    create(request: BancoRequest) {
+        return this.http.post<Response>(`${this.url}/banco`, request);
+    }
 
     edit(request: BancoRequest) {
-        return this.http.put<Response>(`${this.url}/Banco`, request);
+        return this.http.put<Response>(`${this.url}/banco`, request);
     }
 
     delete(id: number) {
@@ -95,7 +65,7 @@ export class BancoService {
                     this.cidades.next(list);
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de status da operação.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de cidades.')
             }));
     }
 }

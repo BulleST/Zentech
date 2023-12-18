@@ -36,7 +36,7 @@ export class FormComponent implements OnDestroy {
 
     modal: Modal = new Modal;
     isEditPage = true;
-    
+
     contratos: Contrato_List[] = [];
     loadingContratos = false;
 
@@ -51,7 +51,7 @@ export class FormComponent implements OnDestroy {
 
     bancos: BancoList[] = [];
     loadingBancos = false;
-    
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
@@ -67,35 +67,51 @@ export class FormComponent implements OnDestroy {
     ) {
 
         lastValueFrom(this.moedaService.getList())
-        .then(res => this.moedas = res)
-        .finally(() => this.loadingMoedas = false);
+            .then(res => this.moedas = res)
+            .finally(() => this.loadingMoedas = false);
 
+        var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
+        this.subscription.push(moedas);
+        
         lastValueFrom(this.contratoService.getList())
-        .then(res => this.contratos = res)
-        .finally(() => this.loadingContratos = false);
+            .then(res => this.contratos = res)
+            .finally(() => this.loadingContratos = false);
+
+        var contratos = this.contratoService.list.subscribe(res => this.contratos = res);
+        this.subscription.push(contratos);
 
         lastValueFrom(this.beneficiarioService.getList())
-        .then(res => this.beneficiarios = res)
-        .finally(() => this.loadingBeneficiarios = false);
+            .then(res => this.beneficiarios = res)
+            .finally(() => this.loadingBeneficiarios = false);
+
+        var beneficiarios = this.beneficiarioService.list.subscribe(res => this.beneficiarios = res);
+        this.subscription.push(beneficiarios);
 
         lastValueFrom(this.instituicaoFinanceiraService.getList())
-        .then(res => this.instituicaoFinanceira = res)
-        .finally(() => this.loadingInstituicaoFinanceira = false);
+            .then(res => this.instituicaoFinanceira = res)
+            .finally(() => this.loadingInstituicaoFinanceira = false);
+
+        var instituicaoFinanceira = this.instituicaoFinanceiraService.list.subscribe(res => this.instituicaoFinanceira = res);
+        this.subscription.push(instituicaoFinanceira);
 
         lastValueFrom(this.bancoService.getList())
-        .then(res => this.bancos = res)
-        .finally(() => this.loadingBancos = false);
+            .then(res => this.bancos = res)
+            .finally(() => this.loadingBancos = false);
+
+        var bancos = this.bancoService.list.subscribe(res => this.bancos = res);
+        this.subscription.push(bancos);
     }
 
 
     ngAfterViewInit(): void {
 
-        this.modal.id =  0;
-        this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '900px', overflow: 'visible' };
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '900px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        console.log('invoice')
 
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['invoice_id']) {
@@ -111,7 +127,7 @@ export class FormComponent implements OnDestroy {
                         this.objeto = res;
 
                         setTimeout(() => {
-                            this.modal = this.modalService.addModal(this.modal);
+                            this.modal = this.modalService.addModal(this.modal, 'invoice');
                         }, 200);
                     })
                     .catch(res => {
@@ -121,11 +137,11 @@ export class FormComponent implements OnDestroy {
 
                 this.modal.title = 'Cadastrar Invoice';
                 this.modal.routerBack = ['../'];
-                
+
                 this.isEditPage = false;
                 this.objeto.dataInvoice = this.datepipe.transform(this.objeto.dataInvoice, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
-                    this.modal = this.modalService.addModal(this.modal);
+                    this.modal = this.modalService.addModal(this.modal, 'invoice');
                 }, 200);
             }
         });
@@ -161,11 +177,11 @@ export class FormComponent implements OnDestroy {
             })
 
     }
-    
+
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.invoiceService.create(this.objeto));
-        
+
         return lastValueFrom(this.invoiceService.edit(this.objeto));
     }
 }

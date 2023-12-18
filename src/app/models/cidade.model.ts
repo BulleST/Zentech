@@ -6,4 +6,3 @@ export class Cidades {
   estado_Id: string = '';
 }
 
-

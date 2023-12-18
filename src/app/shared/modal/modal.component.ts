@@ -10,8 +10,6 @@ import { Subscription } from 'rxjs';
 })
 export class ModalComponent implements OnDestroy {
     modalList: Modal[] = [];
-
-
     subscription: Subscription[] = [];
 
     constructor(

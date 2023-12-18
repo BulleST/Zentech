@@ -4,18 +4,32 @@ import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 
-const banco = () => import('../banco/banco.module').then(x => x.BancoModule);
+import { FormComponent as FormMoeda } from './../moeda/form/form.component';
+import { FormComponent as FormBanco } from './../banco/form/form.component';
+import { FormComponent as FormInstituicaoFinanceira } from './../instituicao-financeira/form/form.component';
+import { FormComponent as FormBeneficiario } from './../beneficiario/form/form.component';
+
 
 const routes: Routes = [
     {
         path: '', component: ListComponent, children: [
             {
                 path: 'cadastrar', component: FormComponent, children: [
-                    { path: 'banco', loadChildren: banco },
+                    { path: 'banco', component: FormBanco },
+                    { path: 'moeda', component: FormMoeda },
+                    { path: 'instituicao-financeira', component: FormInstituicaoFinanceira },
+                    { path: 'beneficiario', component: FormBeneficiario, children: [
+                        { path: 'banco', component: FormBanco },
+                    ] },
                 ]
             },
             { path: 'editar/:invoice_id', component: FormComponent, children: [
-                { path: 'banco', loadChildren: banco },
+                { path: 'banco', component: FormBanco },
+                { path: 'moeda', component: FormMoeda },
+                { path: 'instituicao-financeira', component: FormInstituicaoFinanceira },
+                { path: 'beneficiario', component: FormBeneficiario, children: [
+                    { path: 'banco', component: FormBanco },
+                ] },
             ] },
             { path: 'excluir/:invoice_id', component: DeleteComponent },
         ]

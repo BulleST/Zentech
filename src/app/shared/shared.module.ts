@@ -14,7 +14,12 @@ import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
 import { SubModalComponent } from "./sub-modal/sub-modal.component";
 import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
-import { BancoFormComponent } from './forms/banco/banco.component';
+
+import { FormComponent as FormMoeda } from './../pages/moeda/form/form.component';
+import { FormComponent as FormBanco } from './../pages/banco/form/form.component';
+import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
+import { FormComponent as FormBeneficiario } from './../pages/beneficiario/form/form.component';
+import { FormComponent as FormSwift } from './../pages/swift/form/form.component';
 
 @NgModule({
     declarations: [
@@ -23,7 +28,11 @@ import { BancoFormComponent } from './forms/banco/banco.component';
         InputNumberComponent,
         SubModalComponent,
         PDropdownActionsComponent,
-        BancoFormComponent,
+        FormMoeda,
+        FormBanco,
+        FormSwift,
+        FormBeneficiario,
+        FormInstituicaoFinanceira,
     ],
     imports: [
         CommonModule,
@@ -42,7 +51,11 @@ import { BancoFormComponent } from './forms/banco/banco.component';
         SubModalComponent,
         InputNumberComponent,
         PDropdownActionsComponent,
-        BancoFormComponent,
+        FormMoeda,
+        FormBanco,
+        FormSwift,
+        FormBeneficiario,
+        FormInstituicaoFinanceira,
     ],
 })
 export class SharedModule {

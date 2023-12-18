@@ -35,11 +35,6 @@ export class InstituicaoFinanceiraResponse {
     detalhes: string = '';
 }
 
-export class InstituicaoFinanceiraStatus {
-    id: number = 0;
-    name: string = '';
-}
-
 export var instituicaoFinanceiraColumns: Column[] = [
 
     {

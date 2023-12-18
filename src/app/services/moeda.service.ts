@@ -5,6 +5,7 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Moeda } from '../models/moeda.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -41,13 +42,8 @@ export class MoedaService {
         }));
     }
 
-
-    create(request: Moeda) {
+    send(request: Moeda) {
         return this.http.post<Response>(`${this.url}/moeda`, request);
-    }
-
-    edit(request: Moeda) {
-        return this.http.put<Response>(`${this.url}/moeda`, request);
     }
 
     delete(id: number) {

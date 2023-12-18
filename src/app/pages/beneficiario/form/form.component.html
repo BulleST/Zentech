@@ -8,7 +8,7 @@
     </span>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+    <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
         <div class="px-2">
             <div class="row">
                 <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
@@ -36,8 +36,8 @@
                            [(ngModel)]="objeto.cnpj"
                            required
                            (change)="validaCNPJ(cnpj)"
-                           mask="00.0000.000/0000-00"
-                           placeholder="00.0000.000/0000-00">
+                           mask="00.000.000/0000-00"
+                           placeholder="00.000.000/0000-00">
                     <div *ngIf="cnpj.touched && cnpj.errors">
                         <p class="text-danger" *ngIf="cnpj.errors['required']">Este campo é obrigatório.</p>
                         <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p>
@@ -47,22 +47,32 @@
             <div class="row">
                 <div class="form-group col-md-6 col-sm-4">
                     <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
-                    <p-dropdown [styleClass]="'form-control' + (loadingBanco ? 'form-control-loading' : '')"
+                        <p-dropdown
                                 [options]="bancos"
-                                #banco_Id="ngModel"
                                 [(ngModel)]="objeto.banco_Id"
-                                optionLabel="nome"
-                                optionValue="id"
-                                [placeholder]="'Selecione'"
-                                [disabled]="loadingBanco"
+                                #banco_Id="ngModel"
                                 name="banco_Id"
                                 inputId="banco_Id"
-                                [virtualScroll]="true"
-                                [virtualScrollItemSize]="10"
-                                [required]="true"
+                                [styleClass]="'form-control ' + (loadingBanco ? 'form-control-loading' : '')"
+                                [showClear]="true"
                                 [filter]="true"
-                                filterBy="nomeCidade"
+                                filterBy="nome, cidade"
+                                optionLabel="nome"
+                                optionValue="id"
+                                placeholder="Selecione um banco"
+                                [required]="true"
                                 [showClear]="true">
+                        <ng-template let-item pTemplate="item">
+                            <div>
+                                <p>{{item.nome}}</p>
+                                <p>{{item.cidade}}</p>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./banco']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
                     <div *ngIf="banco_Id.touched && banco_Id.errors">
                         <p class="text-danger" *ngIf="banco_Id.errors['required']">Este campo é obrigatório.</p>
@@ -122,7 +132,7 @@
                            placeholder="00000-000"
                            mask="00000-000"
                            class="form-control"
-                           name="cep" 
+                           name="cep"
                            id="cep"
                            (blur)="buscaCEP(cep); "
                            [(ngModel)]="objeto.cep"
@@ -231,3 +241,4 @@
         </div>
     </form>
 </ng-template>
+<router-outlet></router-outlet>

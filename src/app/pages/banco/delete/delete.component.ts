@@ -45,7 +45,7 @@ export class DeleteComponent {
                 try {
                     this.id = this.crypto.decrypt(p['banco_id']);
                     setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal);
+                        this.modal = this.modalService.addModal(this.modal, 'delete banco');
                     }, 200);
                 } catch(e) {
                     this.voltar();

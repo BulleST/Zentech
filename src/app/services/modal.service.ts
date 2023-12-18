@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, TemplateRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 
@@ -9,16 +9,26 @@ import { Location } from '@angular/common';
 })
 export class ModalService {
     modalList: BehaviorSubject<Modal[]> = new BehaviorSubject<Modal[]>([]);
-
+    browserRefresh: boolean;
     constructor(
         private router: Router,
         private location: Location,
 
     ) {
+        this.browserRefresh = !router.navigated;
+        this.router.events.subscribe(res => {
+            // console.log('res', res)
+            if (res instanceof NavigationStart) {
+                this.browserRefresh = !router.navigated;
+                console.log('refreshed', this.browserRefresh, router.navigated)
+
+            }
+        })
     }
 
 
     voltar(where?: string[], options?: any) {
+        console.log('voltar')
         if (where && where.length > 0) {
             this.router.navigate(where, options)
         } else {
@@ -26,13 +36,23 @@ export class ModalService {
         }
     }
 
-    addModal(modal: Modal) {
-        var list = this.modalList.value.sort((x, y) => x.id - y.id);
-        var lastId = list.length > 0 ? list[list.length - 1].id : 0;
-        var newId = lastId + 1;
+    addModal(modal: Modal, where: string) {
+        console.log('addModal', where)
+        var list = this.modalList.value;
 
-        modal.id = newId;
+        var a = list.sort((x,y) => x.id - y.id);
+        var lastId = a.length > 0 ? a[a.length - 1].id : 0;
+        var newId = lastId + 1;
+        modal.zindex = newId;
+        modal.id = newId; 
         list.push(modal);
+        if (this.browserRefresh) 
+            list = this.modalList.value.sort((x,y) => y.id - x.id);
+        // else 
+        //     list = this.modalList.value.sort((x,y) => x.id - y.id);
+
+
+        console.log(list)
         this.modalList.next(list);
 
         setTimeout(() => {
@@ -42,9 +62,10 @@ export class ModalService {
         return modal;
     }
 
-
+    
     removeModal(id: number) {
-        var list = this.modalList.value.sort((x, y) => x.id - y.id);
+        console.log('removeModal')
+        var list = this.modalList.value;
         var index = list.findIndex(x => x.id == id);
         if (index != -1) {
             this.removeModalAnimation(id);
@@ -71,6 +92,7 @@ export class ModalService {
 
 export class Modal {
     id: number = 0;
+    zindex: number = 0;
     open: boolean = true;
     title: string = '';
     template?: TemplateRef<any>;

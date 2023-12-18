@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <!-- Moeda -->
-                <div class="form-group col-xl-2 xol-lg-2 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-3 xol-lg-3 col-md-6 col-sm-6 col-12">
                     <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="moedas"
@@ -52,8 +52,12 @@
                                 <span class="ms-auto d-block">{{item.simbolo}}</span>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./moeda']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <!-- <p><small><a class="link text-info"> Cadastrar novo</a></small></p> -->
                     <div *ngIf="moeda_Id.touched && moeda_Id.errors">
                         <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
@@ -72,7 +76,7 @@
 
                 </div>
                 <!-- Contrato -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <!-- <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="contrato_Id">Contrato: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="contratos"
@@ -96,12 +100,16 @@
                                 <p>{{item.codigo}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./contrato']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <!-- <p><small><a class="link text-info"> Cadastrar novo</a></small></p> -->
                     <div *ngIf="contrato_Id.touched && contrato_Id.errors">
                         <p class="text-danger" *ngIf="contrato_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
-                </div>
+                </div> -->
                 <!-- Beneficiário -->
                 <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
@@ -126,8 +134,12 @@
                                 <p>{{item.cnpj}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <!-- <p><small><a class="link text-info"> Cadastrar novo</a></small></p> -->
                     <div *ngIf="beneficiario_Id.touched && beneficiario_Id.errors">
                         <p class="text-danger" *ngIf="beneficiario_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
@@ -157,8 +169,12 @@
                                 <p>{{item.cnpj}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./instituicao-financeira']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <!-- <p><small><a class="link text-info"> Cadastrar novo</a></small></p> -->
                     <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
                         <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é
                             obrigatório.</p>
@@ -188,8 +204,12 @@
                                 <p>{{item.cidade}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./banco']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <!-- <p><small><a class="link text-info"> Cadastrar novo</a></small></p> -->
                     <div *ngIf="banco_Id.touched && banco_Id.errors">
                         <p class="text-danger" *ngIf="banco_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
@@ -223,15 +243,7 @@
                         <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12">
-                    <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
-                    <app-p-dropdown-actions [options]="bancos" 
-                                            [value]="objeto.banco_Id"
-                                            (valueChanges)="objeto.banco_Id = $event" 
-                                            [path]="'banco'"
-                                            [required]="true" 
-                                            [loading]="loadingBancos"></app-p-dropdown-actions>
-                </div>
+              
             </div>
 
             <div class="row">
@@ -250,3 +262,5 @@
         </div>
     </form>
 </ng-template>
+
+<router-outlet></router-outlet>

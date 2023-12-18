@@ -1,22 +1,19 @@
 import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
-import { InstituicaoFinanceiraRequest, InstituicaoFinanceiraStatus } from '../../../models/instituicao-financeira.model';
-import { DatePipe } from '@angular/common';
+import { InstituicaoFinanceiraRequest } from '../../../models/instituicao-financeira.model';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { ModalUtils } from 'src/app/utils/modal';
-import { CepService } from 'src/app/services/cep-service.service';
 
-import { InstituicaoFinanceiraList } from '../../../models/instituicao-financeira.model';
-import { Cidades } from 'src/app/models/banco.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
+import { Cidades } from 'src/app/models/cidade.model';
+import { NgForm, NgModel } from '@angular/forms';
+import { CepService } from 'src/app/services/cep-service.service';
 import { CidadesService } from 'src/app/services/cidades.service';
-import { SelectItem } from 'primeng/api';
-import { NgModel } from '@angular/forms';
-import { validateCnpj } from 'src/app/utils/validate-cnpj';
+import { validateCEP } from 'src/app/utils/validate-cep';
+import { validateCNPJ } from 'src/app/utils/validate-cnpj';
 
 @Component({
     selector: 'app-form',
@@ -25,39 +22,25 @@ import { validateCnpj } from 'src/app/utils/validate-cnpj';
 })
 export class FormComponent implements OnDestroy {
     objeto: InstituicaoFinanceiraRequest = new InstituicaoFinanceiraRequest;
-    teste: InstituicaoFinanceiraList[]
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routeBackOptions: any;
-    cidade_id: number = 0
-    status: InstituicaoFinanceiraStatus[] = [];
-    loadingStatus = true;
-    instituicoes: InstituicaoFinanceiraList[] = [];
-    loadingPessoa = true;
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = true;
-    id: number = 0;
-    numEndereco: any;
-    localidade: any;
-    bairro: any;
-    uf: any;
-    ddd: any;
-    item: any = '';
-    cidades: Cidades[] = []
-    cidadesid = this.cidades
-    selectedCity: any;
-    cidadesDropdown: SelectItem[] = [];
+
+    modal: Modal = new Modal;
+    cidades: Cidades[] = [];
+    loadingCidades = true;
 
     cepPreenchido: boolean = false;
-    larguraResponsiva: number = 50;
     loadingCNPJ = false;
-
+    loadingCep = false;
+    @ViewChild('cep') cep: NgModel;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: ModalUtils,
+        private modalService: ModalService,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private crypto: Crypto,
         private toastr: ToastrService,
@@ -65,144 +48,136 @@ export class FormComponent implements OnDestroy {
         private cidadesService: CidadesService
     ) {
 
-
-
-
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-
         lastValueFrom(this.cidadesService.getCidade())
             .then(res => {
-                this.loadingStatus = false;
+                this.loadingCidades = false;
                 this.cidades = res;
             });
 
-        console.log("linha63", this.instituicaoFinanceiraService.getList())
-        lastValueFrom(this.instituicaoFinanceiraService.getList()) //n
-            .then(res => {
-                this.loadingPessoa = false;
-                this.instituicoes = res;
-            });
-
-
     }
-
-
-
-    buscaCEP() {
-        this.cepService.buscar(this.objeto.cep).subscribe((data) => {
-            this.objeto.cep = data.cep;
-            // this.objeto.bairro = data.bairro
-            var logradouro = data.logradouro + ", " + data.localidade + " - " + data.uf
-            this.objeto.logradouro = logradouro
-            if (this.objeto.cep.length == 9) {
-
-                this.cepPreenchido = true
-            } // Verifica se o CEP possui 8 dígitos
-            // console.log(this.objeto.logradouro);
-        });
-
-        if (this.objeto.cep.length === 8) { // Verifica se o CEP possui 8 dígitos
-            this.cepService.buscar(this.objeto.cep).subscribe((data: any) => {
-
-
-                // Define cepPreenchido como true para desabilitar os outros campos
-                this.cepPreenchido = true;
-            });
-        }
-
-    }
-
-    blur(event: any) {
-        if (this.isEditPage == false) {
-            this.buscaCEP();
-            if (this.objeto.cep.length === 9) { }
-            console.log(this.buscaCEP);
-            console.log('res', this.isEditPage)
-        }
-        else {
-            console.log('test')
-            console.log('res', this.isEditPage)
-        }
-    }
-
-
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px', overflow: 'visible' })
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '600px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+
         var params = this.activatedRoute.params.subscribe(x => {
-            if (x['id']) {
-                this.objeto.id = this.crypto.decrypt(x['id']);
-                var teste = lastValueFrom(this.instituicaoFinanceiraService.get(this.id))
-                this.modal.title.next('Editar Instituição Financeira')
-                this.modal.routerBack.next(['../../']);
+            if (x['instituicaoFinanceira_id']) {
+                this.objeto.id = this.crypto.decrypt(x['instituicaoFinanceira_id']);
+
+                this.modal.title = 'Editar Instituição Financeira';
+                this.modal.routerBack = ['../../'];
+
                 this.isEditPage = true;
-                // this.objeto = this.paraedit
-                console.log('olaa', this.objeto, this.objeto.id)
                 lastValueFrom(this.instituicaoFinanceiraService.get(this.objeto.id))
                     .then(res => {
-
-                        console.log('certo')
-
                         this.objeto = res;
-                        this.cidade_id = this.objeto.cidade_Id;
+                        this.buscaCEP(this.cep)
                         setTimeout(() => {
-                            this.modal.setOpen(true);
+                            this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
                         }, 200);
                     })
                     .catch(res => {
-                        console.log('errado')
                         this.voltar();
                     })
 
             } else {
-                this.modal.title.next('Cadastrar Instituição Financeira');
-                this.modal.routerBack.next(['../']);
+                this.modal.title = 'Cadastrar Instituição Financeira';
+                this.modal.routerBack = ['../'];
                 this.isEditPage = false;
+                this.objeto.cidade_Id = 5270;
+
                 setTimeout(() => {
-                    this.modal.setOpen(true);
+                    this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
                 }, 200);
             }
         });
         this.subscription.push(params);
     }
 
-
-
-
-
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
+
     voltar() {
-        this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
+    buscaCEP(input: NgModel) {
+        this.loadingCep = true;
+        input.control.setErrors(null);
 
-    // send() {
-    //   this.loading = true;
-    //   this.erro = '';
-    //   lastValueFrom(this.instituicaoFinanceiraService.post(this.objeto))
-    //     .then(res => {
-    //       if (res.successo != false) {
-    //         lastValueFrom(this.instituicaoFinanceiraService.getList());
-    //         this.voltar();
-    //       } else {
-    //         this.erro = res.mensagem;
-    //         this.toastr.error(res.mensagem);
-    //         console.log('erro1')
-    //       }
-    //       this.loading = false;
-    //     })
-    //     .catch(res => {
-    //       this.loading = false;
-    //       this.erro = getError(res);
-    //       console.log('erro2')
-    //     })
+        if (!this.validaCep(input)) {
+            this.toastr.error('CEP inválido.');
+            input.control.setErrors({ invalid: true })
+            return;
+        }
+        this.cepPreenchido = false
 
-    // }
+        lastValueFrom(this.cepService.buscar(this.objeto.cep))
+            .then(data => {
+                if (data.erro == true) {
+                    this.toastr.error('CEP inválido.');
+                    input.control.setErrors({ invalid: true })
+                    this.cepPreenchido = false
+                    return;
+
+                } else {
+                    this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
+
+                    var localidade = data.localidade.toLowerCase();
+
+                    var cidade = this.cidades.find(x => {
+                        var cid = x.nomeCidade.toLowerCase()
+                        var uf = x.sigla.toLowerCase();
+                        return (cid == localidade || localidade.includes(cid) || cid.includes(localidade)) && data.uf.toLowerCase() == uf;
+                    })
+                    if (cidade) {
+                        this.objeto.cidade_Id = cidade.id;
+                    }
+                    this.cepPreenchido = false
+
+                }
+            })
+            .catch(res => {
+                this.toastr.error('Não foi possível carregar CEP')
+            })
+            .finally(() => this.loadingCep = false)
+
+    }
+    validaCep(input: NgModel) {
+        this.loadingCep = true;
+
+        if (!this.objeto.cep.trim()) {
+            setTimeout(() => {
+                input.control.setErrors({ required: true });
+            }, 300);
+            this.loadingCep = false;
+            return false
+        }
+        else if (this.objeto.cep.trim().length != 8) {
+            setTimeout(() => {
+                input.control.setErrors({ invalid: true });
+            }, 300);
+            this.loadingCep = false;
+            return false
+        } else if (!validateCEP(this.objeto.cep)) {
+            setTimeout(() => {
+                input.control.setErrors({ invalid: true });
+            }, 300);
+            this.loadingCep = false;
+            return false;
+        } else {
+            this.loadingCep = false;
+            setTimeout(() => {
+                input.control.setErrors(null);
+            }, 300);
+            return true;
+        }
+    }
     validaCNPJ(input: NgModel) {
         this.erro = '';
         this.loadingCNPJ = true;
@@ -215,7 +190,7 @@ export class FormComponent implements OnDestroy {
             return;
         }
 
-        var valid = validateCnpj(this.objeto.cnpj);
+        var valid = validateCNPJ(this.objeto.cnpj);
         if (!valid) {
             setTimeout(() => {
                 input.control.setErrors({ invalid: true });
@@ -232,15 +207,14 @@ export class FormComponent implements OnDestroy {
         return;
     }
 
-    send() {
 
-        const cepSemHifen = this.objeto.cep.replace('-', '');
-        this.objeto.cep = cepSemHifen
-        const cnpj: string = this.objeto.cnpj.toString();
-        const cnpjsemHifen = cnpj.replace(/[./-]/g, '');
-        const numeroCnpj = Number(cnpjsemHifen);
-        this.objeto.cnpj = numeroCnpj
-
+    send(form: NgForm) {
+        if (form.invalid) {
+            this.toastr.error('Campos inválidos');
+            this.erro = 'Campos inválidos';
+            return;
+        }
+        this.erro = '';
         return lastValueFrom(this.instituicaoFinanceiraService.post(this.objeto))
             .then(res => {
                 if (res.sucesso != false) {

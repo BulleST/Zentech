@@ -11,7 +11,7 @@ export class Invoice {
     codigoSwift: string = '';
     conta: number = '' as unknown as number;
     moeda_Id: number = undefined as unknown as number;
-    contrato_Id: number = undefined as unknown as number;
+    // contrato_Id: number = undefined as unknown as number;
 }
 
 export class Invoice_List {

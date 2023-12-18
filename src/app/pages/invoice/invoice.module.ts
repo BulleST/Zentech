@@ -12,18 +12,18 @@ import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
-  declarations: [
-    ListComponent,
-    FormComponent,
-    DeleteComponent
-  ],
-  imports: [
-    CommonModule,
-    InvoiceRoutingModule,
-    FormsModule,
-    FontAwesomeModule,
-    SharedModule,
-    DropdownModule
-  ]
+    declarations: [
+        ListComponent,
+        FormComponent,
+        DeleteComponent
+    ],
+    imports: [
+        CommonModule,
+        InvoiceRoutingModule,
+        FormsModule,
+        FontAwesomeModule,
+        SharedModule,
+        DropdownModule
+    ]
 })
 export class InvoiceModule { }
