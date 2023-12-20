@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -23,6 +24,11 @@ export class PessoaService {
     }
 
 
+    importarArquivo(file: File){
+      var data = new FormData();
+      data.append('file', file);
+      return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, data);
+  }
     getList() {
         this.table.loading.next(true);
         return this.http.get<PessoaList[]>(`${this.url}/cliente`, { headers: new HttpHeaders({ 'loading': 'false' })})
@@ -55,7 +61,7 @@ export class PessoaService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/pessoa/${id}`);
+        return this.http.delete<Response>(`${this.url}/pessoa/${id}`);
     }
 
 

@@ -6,7 +6,7 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaList } from 'src/app/models/pessoa.model';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-exportacao',
@@ -30,7 +30,7 @@ export class ExportacaoComponent implements OnDestroy {
         private pessoaService: PessoaService,
         private pessoaOperacaoService: PessoaOperacaoService,
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private toastr: ToastrService,
         private datePipe: DatePipe,
     ) {

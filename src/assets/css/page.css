@@ -17,7 +17,7 @@
 
 .page__header .title-icon {
     margin-right: 10px;
-    font-size: 36px;
+    /* font-size: 36px; */
     color: rgb(var(--primary-light));
     line-height: 1;
 }

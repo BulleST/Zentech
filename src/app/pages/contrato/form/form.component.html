@@ -8,58 +8,112 @@
   </span>
 </ng-template>
 <ng-template #template>
-  <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+  <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
 
 
 
     <div class="px-2">
       <div class="row">
         <div class="form-group col-md-6 col-sm-4">
-          <label for="tipo_Id">Tipo: <span class="text-danger">*</span></label>
-          <p-dropdown [styleClass]="'form-control' + (loadingTipo ? 'form-control-loading' : '')"
-                      [options]="tipos"
-                      [showClear]="true"
-                      #tipo_Id="ngModel"
-                      [(ngModel)]="objeto.tipo_Id"
-                      optionLabel="nome"
-                      optionValue="id"
-                      [placeholder]="'Selecione'"
-                      [disabled]="loadingTipo"
-                      name="tipo_Id"
-                      inputId="tipo_Id"
-                      [required]="true"
-                      [filter]="true"
-                      filterBy="nome">
-          </p-dropdown>
-          <div *ngIf="tipo_Id.touched && tipo_Id.errors">
-            <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
-          </div>
-        </div>
-        <div class="form-group col-md-6 col-sm-4">
-          <label for="evento_Id">Evento: <span class="text-danger">*</span></label>
-          <p-dropdown [styleClass]="'form-control' + (loadingEvento ? 'form-control-loading' : '')"
-                      [showClear]="true"
+          <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
+          <p-dropdown
                       [options]="eventos"
-                      #evento_Id="ngModel"
                       [(ngModel)]="objeto.evento_Id"
-                      optionLabel="nome"
-                      optionValue="id"
-                      [placeholder]="'Selecione'"
-                      [disabled]="loadingEvento"
+                      #evento_Id="ngModel"
                       name="evento_Id"
                       inputId="evento_Id"
-                      [required]="true"
+                      [styleClass]="'form-control ' + (loadingEvento ? 'form-control-loading' : '')"
+                      [showClear]="true"
                       [filter]="true"
-                      filterBy="nome">
+                      filterBy="nome, cnpj"
+                      optionLabel="nome"
+                      optionValue="id"
+                      placeholder="Selecione um evento"
+                      [required]="true"
+                      [showClear]="true">
+            <ng-template let-item pTemplate="item">
+              <div class="d-flex align-items-center">
+                <span>{{item.nome}} </span>
+
+                <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/evento/', encryptId(item.id)]">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512"  fill="#555" style="margin-right: 4px;">
+                    <path
+                          d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                  </svg>
+                </a>
+
+                <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
+                <a [routerLink]="['./excluir/evento/', encryptId(item.id)]" class="link text-info">
+                  <svg  xmlns="http://www.w3.org/2000/svg" height="11"
+                       width="14" viewBox="0 0 448 512" fill="#555">
+                    <path
+                          d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                  </svg>
+                </a>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <div class="py-2 px-3 border-top bg-light">
+                Não encontrou? Clique para <a class="link text-info" [routerLink]="['./evento']">adicionar</a>
+              </div>
+            </ng-template>
           </p-dropdown>
           <div *ngIf="evento_Id.touched && evento_Id.errors">
             <p class="text-danger" *ngIf="evento_Id.errors['required']">Este campo é obrigatório.</p>
           </div>
         </div>
+        <div class="form-group col-md-6 col-sm-4">
+          <label for="tipo_Id">Tipo: <span class="text-danger">*</span></label>
+
+          <p-dropdown
+                      [options]="tipos"
+                      [(ngModel)]="objeto.tipo_Id"
+                      #tipo_Id="ngModel"
+                      name="tipo_Id"
+                      inputId="tipo_Id"
+                      [styleClass]="'form-control ' + (loadingTipo ? 'form-control-loading' : '')"
+                      [showClear]="true"
+                      [filter]="true"
+                      optionLabel="nome"
+                      optionValue="id"
+                      placeholder="Selecione um tipo"
+                      [required]="true"
+                      [showClear]="true">
+                      <ng-template let-item pTemplate="item">
+                        <div class="d-flex align-items-center">
+                          <span>{{item.nome}} </span>
+
+                          <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/tipo/', encryptId(item.id)]">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512"  fill="#555" style="margin-right: 4px;">
+                              <path
+                                    d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
+                            </svg>
+                          </a>
+
+                          <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
+                          <a [routerLink]="['./excluir/tipo/', encryptId(item.id)]" class="link text-info">
+                            <svg  xmlns="http://www.w3.org/2000/svg" height="11"
+                                 width="14" viewBox="0 0 448 512" fill="#555">
+                              <path
+                                    d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+                            </svg>
+                          </a>
+                        </div>
+                      </ng-template>
+            <ng-template pTemplate="footer">
+              <div class="py-2 px-3 border-top bg-light">
+                Não encontrou? Clique para <a class="link text-info" [routerLink]="['./tipo']">adicionar</a>
+              </div>
+            </ng-template>
+          </p-dropdown>
+          <div *ngIf="tipo_Id.touched && tipo_Id.errors">
+            <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="form-group col-md-6 col-sm-4">
-          <label for="instituicaoFinanceira_Id">Instituição: <span class="text-danger">*</span></label>
+          <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
           <p-dropdown [styleClass]="'form-control' + (loadingInstituicao ? 'form-control-loading' : '')"
                       [showClear]="true"
                       [options]="instituicoes"
@@ -105,6 +159,28 @@
         </div>
       </div>
       <div class="row">
+        <div class="form-group col-md-4 col-sm-12">
+          <label for="valorNacional">Valor Nacional: <span class="text-danger">*</span></label>
+          <app-input-number [valueInput]="objeto.valorNacional"
+          (valueChanges)="objeto.valorNacional = $event;"
+          [inputId]="'valorNacional'"
+          [mask]="'separator.2'"
+          [showErrorMessage]="true"
+          [allowNegativeNumbers]="false"
+          [required]="true"
+          [autoReplaceValue]="false"></app-input-number>
+          <!-- <input type="text"
+
+                 class="form-control"
+                 name="valorNacional"
+                 id="valorNacional"
+                 #valorNacional="ngModel"
+                 [(ngModel)]="objeto.valorNacional"
+                 required pattern="\S(.*\S)?">
+          <div *ngIf="valorNacional.touched && valorNacional.errors">
+            <p class="text-danger" *ngIf="valorNacional.errors['required']">Este campo é obrigatório.</p>
+          </div> -->
+        </div>
         <div class="form-group col-md-3 col-sm-12">
           <label for="numContrato">Número do contrato: <span class="text-danger">*</span></label>
           <input type="text"
@@ -119,6 +195,32 @@
             <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigatório.</p>
           </div>
         </div>
+        <div class="form-group col-md-5 col-sm-12">
+          <label for="percentualAdiantamento">Percentual de Adiantamento: <span class="text-danger">*</span></label>
+          <app-input-number [valueInput]="objeto.percentualAdiantamento"
+          (valueChanges)="objeto.percentualAdiantamento = $event;"
+          [inputId]="'percentualAdiantamento'"
+          [mask]="'separator.2'"
+          [showErrorMessage]="true"
+          [allowNegativeNumbers]="false"
+          [required]="true"
+          [autoReplaceValue]="false"
+          [suffix]="'%'"
+          ></app-input-number>
+          <!-- <input type="text"
+
+                 class="form-control"
+                 name="percentualAdiantamento"
+                 id="percentualAdiantamento"
+                 #percentualAdiantamento="ngModel"
+                 [(ngModel)]="objeto.percentualAdiantamento"
+                 required pattern="\S(.*\S)?"
+                 (change)="objeto.percentualAdiantamento = percentualAdiantamento.value.trim();">
+          <div *ngIf="percentualAdiantamento.touched && percentualAdiantamento.errors">
+            <p class="text-danger" *ngIf="percentualAdiantamento.errors['required']">Este campo é obrigatório.</p>
+          </div> -->
+        </div>
+
       </div>
       <div class="row">
         <div class="form-group col-md-3 col-sm-12">
@@ -149,56 +251,84 @@
             <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
           </div>
         </div>
-        <div class="form-group col-md-3 col-sm-12">
-          <label for="percentualAdiantamento">Percentual de Adiantamento: <span class="text-danger">*</span></label>
-          <input type="text"
-                 mask="0#"
-                 class="form-control"
-                 name="percentualAdiantamento"
-                 id="percentualAdiantamento"
-                 #percentualAdiantamento="ngModel"
-                 [(ngModel)]="objeto.percentualAdiantamento"
-                 required pattern="\S(.*\S)?"
-                 (change)="objeto.percentualAdiantamento = percentualAdiantamento.value.trim();">
-          <div *ngIf="percentualAdiantamento.touched && percentualAdiantamento.errors">
-            <p class="text-danger" *ngIf="percentualAdiantamento.errors['required']">Este campo é obrigatório.</p>
-          </div>
-        </div>
+
       </div>
       <div class="row">
-        <div class="form-group col-md-3 col-sm-12">
-          <label for="valorNacional">Valor Nacional: <span class="text-danger">*</span></label>
-          <input type="text"
-                 mask="0#"
-                 class="form-control"
-                 name="valorNacional"
-                 id="valorNacional"
-                 #valorNacional="ngModel"
-                 [(ngModel)]="objeto.valorNacional"
-                 required pattern="\S(.*\S)?">
-          <div *ngIf="valorNacional.touched && valorNacional.errors">
-            <p class="text-danger" *ngIf="valorNacional.errors['required']">Este campo é obrigatório.</p>
+        <div class="form-group col-xl-12 xol-lg-4 col-md-6 col-sm-6 col-12">
+          <label for="invoice_Id">Invoice: <span class="text-danger">*</span></label>
+          <p-dropdown
+                      [options]="invoices"
+                      [(ngModel)]="selectedInvoice"
+                      (ngModelChange)="invoiceChange()"
+                      #invoice_Id="ngModel"
+                      name="invoice_Id"
+                      inputId="invoice_Id"
+                      [styleClass]="'form-control ' + (loadingInvoice ? 'form-control-loading' : '')"
+                      [showClear]="true"
+                      [filter]="true"
+                      filterBy='filter'
+                      optionLabel="dataInvoice"
+                      placeholder="Selecione um invoice"
+                      [required]="true"
+                      [showClear]="true">
+                      <ng-template pTemplate="selectedItem">
+                        <div class="flex align-items-center gap-2" *ngIf="selectedInvoice">
+                           <p>
+                            <strong>Id: </strong>{{selectedInvoice.id}}
+                            <strong>Data : </strong>{{selectedInvoice.dataInvoice | date:'dd/MM/yyyy'}}</p>
+                        </div>
+                    </ng-template>
+              <ng-template let-item pTemplate="item">
+                  <div>
+                    <p><strong>Id: </strong>{{item.id}}</p>
+                    <div class="d-flex justify-content-between">
+                      <p><strong>Data: </strong>{{item.dataInvoice| date:'dd/MM/yyyy'}}</p>
+                      <p><strong>Valor: </strong>{{item.valor | currency: 'BRL': '': '1.2'}}</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <p><strong>Beneficiário: </strong>{{item.nomeBeneficiario}}</p>
+                      <p><strong>CNPJ: </strong>{{item.cnpj | mask: '00.000.000/0000-00'}}</p>
+                    </div>
+                      <p><strong>Banco: </strong>{{item.nomeBanco}}</p>
+                  </div>
+              </ng-template>
+              <ng-template pTemplate="footer">
+                  <div class="py-2 px-3 border-top bg-light">
+                      Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./invoice']">adicionar</a>
+                  </div>
+              </ng-template>
+          </p-dropdown>
+          <div *ngIf="invoice_Id.touched && invoice_Id.errors">
+              <p class="text-danger" *ngIf="invoice_Id.errors['required']">Este campo é obrigatório.</p>
           </div>
-        </div>
+      </div>
         <div class="form-group col-md-3 col-sm-12">
           <label for="taxa">Taxa: <span class="text-danger">*</span></label>
-          <input type="text"
+          <app-input-number [valueInput]="objeto.taxa"
+          (valueChanges)="objeto.taxa = $event;"
+          [inputId]="'taxa'"
+          [mask]="'separator.2'"
+          [showErrorMessage]="true"
+          [allowNegativeNumbers]="false"
+          [required]="true"
+          [autoReplaceValue]="false"></app-input-number>
+          <!-- <input type="text"
                  class="form-control"
                  name="taxa"
                  id="taxa"
-                 mask="0#"
+
                  #taxa="ngModel"
                  [(ngModel)]="objeto.taxa"
                  required pattern="\S(.*\S)?">
           <div *ngIf="taxa.touched && taxa.errors">
             <p class="text-danger" *ngIf="taxa.errors['required']">Este campo é obrigatório.</p>
-          </div>
+          </div> -->
         </div>
-        <div class="form-group col-md-3 col-sm-12">
+        <div class="form-group col-md-5 col-sm-12">
           <label for="pagRecExterior">Pagador ou Recebedor no Exterior: <span class="text-danger">*</span></label>
           <input type="text"
                  class="form-control"
-                 mask="0#"
+
                  name="pagRecExterior"
                  id="pagRecExterior"
                  #pagRecExterior="ngModel"
@@ -210,17 +340,65 @@
           </div>
         </div>
       </div>
-      <div class="d-flex align-items-center">
-        <div *ngIf="erro || form.invalid" class="m-0">
-          <p class="text-danger" *ngIf="erro">{{erro}}</p>
-          <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente
-            para salvar.</p>
+      <div class="row">
+        <div class="form-group col-md-4 col-sm-12">
+          <label for="especificacoes">Especificações: <span class="text-danger">*</span></label>
+          <input type="text"
+
+                 class="form-control"
+                 name="especificacoes"
+                 id="especificacoes"
+                 #especificacoes="ngModel"
+                 [(ngModel)]="objeto.especificacoes"
+                 required pattern="\S(.*\S)?">
+          <div *ngIf="especificacoes.touched && especificacoes.errors">
+            <p class="text-danger" *ngIf="especificacoes.errors['required']">Este campo é obrigatório.</p>
+          </div>
         </div>
-        <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          <span>Salvar</span>
-        </button>
+        <div class="form-group col-md-2 col-sm-12">
+          <label for="clausulas">Cláusulas: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="clausulas"
+                 id="clausulas"
+                 #clausulas="ngModel"
+                 [(ngModel)]="objeto.clausulas"
+                 required pattern="\S(.*\S)?"
+                 (change)="objeto.clausulas = clausulas.value.trim();">
+          <div *ngIf="clausulas.touched && clausulas.errors">
+            <p class="text-danger" *ngIf="clausulas.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+        <div class="form-group col-md-6 col-sm-12">
+          <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: <span class="text-danger">*</span></label>
+          <input type="text"
+
+                 class="form-control"
+                 name="instrucoesRecebimentoPagamento"
+                 id="instrucoesRecebimentoPagamento"
+                 #instrucoesRecebimentoPagamento="ngModel"
+                 [(ngModel)]="objeto.instrucoesRecebimentoPagamento"
+                 required pattern="\S(.*\S)?"
+                 (change)="objeto.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
+          <div *ngIf="instrucoesRecebimentoPagamento.touched && instrucoesRecebimentoPagamento.errors">
+            <p class="text-danger" *ngIf="instrucoesRecebimentoPagamento.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+
       </div>
+      <div class="row">
+        <div class="d-flex align-items-center ">
+            <div *ngIf="erro || form.invalid" class="m-0">
+                <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+            </div>
+            <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                <span>Salvar</span>
+            </button>
+        </div>
+    </div>
     </div>
   </form>
 </ng-template>
+<router-outlet></router-outlet>

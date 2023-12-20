@@ -4,7 +4,7 @@ import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pess
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { getError } from 'src/app/utils/error';
 import { Crypto } from 'src/app/utils/crypto';
 import { DatePipe } from '@angular/common';
@@ -30,7 +30,7 @@ export class FormOperacaoComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private pessoaService: PessoaService,
         private pessoaSaldoService: PessoaSaldoService,
         private pessoaOperacaoService: PessoaOperacaoService,
@@ -133,7 +133,7 @@ export class FormOperacaoComponent implements OnDestroy {
 
             this.request()
             .then(res => {
-                if (res.successo == true) {
+                if (res.sucesso == true) {
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                     lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));

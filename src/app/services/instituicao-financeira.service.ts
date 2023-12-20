@@ -5,10 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-import { PessoaOperacaoImportacao, PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
 import { Response } from '../helpers/request-response.interface';
-import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
-import { InstituicaoFinanceiraList, InstituicaoFinanceiraStatus, InstituicaoFinanceiraRequest } from '../models/instituicao-financeira.model';
+import { InstituicaoFinanceiraList, InstituicaoFinanceiraRequest } from '../models/instituicao-financeira.model';
 @Injectable({
     providedIn: 'root'
 })

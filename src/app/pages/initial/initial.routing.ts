@@ -2,16 +2,19 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { InitialComponent } from './initial.component';
 import { HomeComponent } from './home/home.component';
+import { DocumentoSwiftModule } from '../documento-swift/documento-swift.module';
 
 
 const analise = () => import('./../analise/analise.module').then(x => x.AnaliseModule);
 const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.PainelCpfModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
-const instituicaoFinanceira = () => import('../cliente/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
-const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
-const beneficiario = () => import('../banco copy/beneficiario.module').then(x => x.BeneficiarioModule);
+const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 const contrato = () => import('../contrato/contrato.module').then(x => x.ContratoModule);
+const instituicaoFinanceira = () => import('../instituicao-financeira/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
+const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
+const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
+const documentoSwift = () => import('../documento-swift/documento-swift.module').then(x => x.DocumentoSwiftModule);
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [
@@ -26,8 +29,10 @@ const routes: Routes = [
             { path: 'operacoes', loadChildren: operacoes},
             { path: 'instituicao-financeira', loadChildren: instituicaoFinanceira},
             { path: 'banco', loadChildren: banco},
+            { path: 'invoice', loadChildren: invoice},
             { path: 'beneficiario', loadChildren: beneficiario},
             { path: 'contrato', loadChildren: contrato},
+            { path: 'documento-swift', loadChildren: documentoSwift},
         ]
     }
 ];

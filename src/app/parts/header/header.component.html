@@ -25,14 +25,17 @@
             </div>
         </div>
     </div>
+
     <nav class="header-navigation" [class.header-navigation-mobile]="isMobile" [class.mobile-open]="menuMobileOpen">
         <a class="header-navigation-link" routerLink="/" [class.router-active]="homeActive">Home</a>
         <a class="header-navigation-link" [routerLink]="['painel-cpf']" routerLinkActive="router-active">New Clickk Buyers</a>
         <a class="header-navigation-link" [routerLink]="['operacoes']" routerLinkActive="router-active">Pró Câmbio</a>
+        <a class="header-navigation-link" [routerLink]="['invoice']" routerLinkActive="router-active">Invoice</a>
         <a class="header-navigation-link" [routerLink]="['instituicao-financeira']" routerLinkActive="router-active">Instituições Financeiras</a>
         <a class="header-navigation-link" [routerLink]="['banco']" routerLinkActive="router-active">Bancos</a>
         <a class="header-navigation-link" [routerLink]="['beneficiario']" routerLinkActive="router-active">Beneficiários</a>
         <a class="header-navigation-link" [routerLink]="['contrato']" routerLinkActive="router-active">Contratos</a>
+        <a class="header-navigation-link" [routerLink]="['documento-swift']" routerLinkActive="router-active">Documento Swift</a>
         <!-- <a class="header-navigation-link" [routerLink]="['usuarios']" routerLinkActive="router-active">Gerenciar usuários</a> -->
         <!-- <a class="header-navigation-link" [routerLink]="['analise']" routerLinkActive="router-active">Relatório</a> -->
     </nav>

@@ -24,9 +24,7 @@ import { DetailsComponent } from '../painel-cpf/details/details.component';
     declarations: [
         ListComponent,
         FormComponent,
-DeleteComponent
-
-
+        DeleteComponent
     ],
     imports: [
         CommonModule,

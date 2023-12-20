@@ -1,0 +1,40 @@
+<p-dropdown [styleClass]="'form-control p-dropdown-actions' + loading ? 'form-control-loading' : ''"
+            inputId="id"
+            name="ngModel"
+            #property="ngModel"
+            [(ngModel)]="value"
+            [options]="options"
+            optionLabel="name"
+            optionValue="id"
+            [showClear]="true"
+            [filter]="true"
+            filterBy="name"
+            [showClear]="true"
+            placeholder="Selecione"
+            (ngModelChange)="valueChange(property.value)"
+            [required]="required">
+    <ng-template pTemplate="header">
+        <div class="p-dropdown-header">
+            <button type="button" class="btn-dropdown-action" title="Adicionar" (click)="formPath(path)">
+                <span class="me-2">Adicionar</span>
+                <fa-icon [icon]="faPlus"></fa-icon>
+            </button>
+        </div>
+    </ng-template>
+    <ng-template let-item pTemplate="item">
+        <div class="d-flex align-items-center justify-content-between">
+            <p>{{item.name}}</p>
+            <div class="ms-auto ps-2">
+                <button type="button" class="btn-dropdown-action" title="Editar" (click)="formPath(path, item.id)">
+                    <fa-icon [icon]="faEdit"></fa-icon>
+                </button>
+                <button type="button" class="btn-dropdown-action" title="Excluir" (click)="delete(item.id, path)">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dropdown>
+<div *ngIf="property.touched && property.errors">
+    <p class="text-danger" *ngIf="property.errors['required']">This field is required.</p>
+</div>

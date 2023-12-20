@@ -33,20 +33,25 @@ export class PessoaOperacaoStatus {
 }
 
 export class PessoaOperacaoImportacao {
-    id?: number;
-    dataTransacao: Date = new Date;
-    tipoCliente: string = '';
-    nomeCliente: string = '';
-    docCliente: string = '';
-    nomeComprador: string = '';
-    paisCompradorVendedor: string = '';
-    moeda: string = '';
-    tipoTransacao: string = '';
-    formaPagamento: string = '';
-    valorMoedaEstrangeira: string = '';
-    valorMoedaNacional: string = '';
-    statusOperacao: string = '';
-    statusCadastro?: string;
+  id?: number;
+  dataTransacao: Date = new Date;
+  tipoCliente: string = '';
+  nomeCliente: string = '';
+  docCliente: string = '';
+  nomeComprador: string = '';
+  paisCompradorVendedor: string = '';
+  moeda: string = '';
+  tipoTransacao: string = '';
+  formaPagamento: string = '';
+  valorMoedaEstrangeira: string = '';
+  valorMoedaNacional: string = '';
+  statusOperacao: string = '';
+  statusCadastro?: string;
+
+  detalhes?: string;
+  excel?: string;
+  excelLinha?: number;
+  sucesso?: boolean;
 }
 
 export var pessoaOperacaoColumns: Column[] = [
@@ -141,7 +146,7 @@ pessoaOperacaoAllColumns.unshift(
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
 );
-pessoaOperacaoAllColumns.splice(6, 0, 
+pessoaOperacaoAllColumns.splice(6, 0,
     {
         field: 'limiteConcedido',
         header: 'Limite Concedido',

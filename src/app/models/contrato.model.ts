@@ -15,11 +15,14 @@ export class Contrato {
   pagRecExterior: string = '';
   pais_Id: number = '' as unknown as number;
   percentualAdiantamento: number = '' as unknown as number;
+  especificacoes: string = '';
+  clausulas: string = '';
+  instrucoesRecebimentoPagamento: string = '';
 }
 
 
 
-export class ContratoList {
+export class Contrato_List {
   id: number = 0;
   tipo: string = '';
   numContrato: string = '';
@@ -32,6 +35,10 @@ export class ContratoList {
   pagRecExterior: string = '';
   pais: string = '';
   percentualAdiantamento: number = 0;
+  invoice_Id: number = 0;
+  especificacoes: string = '';
+  clausulas: string = '';
+  instrucoesRecebimentoPagamento: string = '';
 
 }
 
@@ -50,7 +57,10 @@ export class ContratoRequest {
   pagRecExterior: string = '';
   pais_Id: number = '' as unknown as number;
   percentualAdiantamento: number = '' as unknown as number;
-
+  invoice_Id:  number = '' as unknown as number;
+  especificacoes: string = '';
+  clausulas: string = '';
+  instrucoesRecebimentoPagamento: string = '';
 
 }
 
@@ -71,8 +81,8 @@ export var contratoColumns: Column[] = [
 
   {
 
-    field: 'nomeInstituicao',
-    header: 'Nome',
+    field: 'tipo',
+    header: 'Tipo',
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
@@ -83,10 +93,10 @@ export var contratoColumns: Column[] = [
 
   },
   {
-    field: 'cnpj',
-    header: 'CNPJ',
-    maskType: MaskType.cnpj,
-    mask: '0000',
+    field: 'numContrato',
+    header: 'Número do contrato',
+    maskType: MaskType.undefined,
+    mask: '0#',
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
     filterShowAddButton: false,
@@ -95,8 +105,8 @@ export var contratoColumns: Column[] = [
     filterMatchMode: FilterMatchMode.EQUALS,
   },
   {
-    field: 'nomeCidade',
-    header: 'Cidade',
+    field: 'evento',
+    header: 'Evento',
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
@@ -106,8 +116,19 @@ export var contratoColumns: Column[] = [
     filterMatchMode: FilterMatchMode.EQUALS,
   },
   {
-    field: 'uf',
-    header: 'UF',
+    field: 'data',
+    header: 'Data',
+    maskType: MaskType.dateTime,
+    filterType: FilterType.text,
+    filterDisplay: FilterDisplay.menu,
+    filterShowAddButton: false,
+    filterShowMatchMode: false,
+    showOperator: false,
+    filterMatchMode: FilterMatchMode.EQUALS,
+  },
+  {
+    field: 'instituicao',
+    header: 'Instituição',
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
@@ -117,8 +138,20 @@ export var contratoColumns: Column[] = [
     filterMatchMode: FilterMatchMode.EQUALS,
   },
   {
-    field: 'logradouro',
-    header: 'Logradouro',
+    field: 'taxa',
+    header: 'Taxa',
+    maskType: MaskType.undefined,
+    mask: '0#',
+    filterType: FilterType.text,
+    filterDisplay: FilterDisplay.menu,
+    filterShowAddButton: false,
+    filterShowMatchMode: false,
+    showOperator: false,
+    filterMatchMode: FilterMatchMode.EQUALS,
+  },
+  {
+    field: 'valorNacional',
+    header: 'Valor Nacional',
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
@@ -128,8 +161,8 @@ export var contratoColumns: Column[] = [
     filterMatchMode: FilterMatchMode.EQUALS,
   },
   {
-    field: 'numero',
-    header: 'Número',
+    field: 'dataLiquidacao',
+    header: 'Data de Liquidação',
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
@@ -139,9 +172,9 @@ export var contratoColumns: Column[] = [
     filterMatchMode: FilterMatchMode.EQUALS,
   },
   {
-    field: 'cep',
-    header: 'CEP',
-    maskType: MaskType.cep,
+    field: 'pagRecExterior',
+    header: 'Pagador/Recebedor no Exterior',
+    maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
     filterShowAddButton: false,
@@ -149,7 +182,28 @@ export var contratoColumns: Column[] = [
     showOperator: false,
     filterMatchMode: FilterMatchMode.EQUALS,
   },
-
+  {
+    field: 'pais',
+    header: 'País',
+    maskType: MaskType.undefined,
+    filterType: FilterType.text,
+    filterDisplay: FilterDisplay.menu,
+    filterShowAddButton: false,
+    filterShowMatchMode: false,
+    showOperator: false,
+    filterMatchMode: FilterMatchMode.EQUALS,
+  },
+  {
+    field: 'percentualAdiantamento',
+    header: 'Percentual de Adiantamento',
+    maskType: MaskType.undefined,
+    filterType: FilterType.text,
+    filterDisplay: FilterDisplay.menu,
+    filterShowAddButton: false,
+    filterShowMatchMode: false,
+    showOperator: false,
+    filterMatchMode: FilterMatchMode.EQUALS,
+  },
 
 
 

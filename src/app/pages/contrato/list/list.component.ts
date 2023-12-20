@@ -11,7 +11,7 @@ import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 
 import { ContratoService } from './../../../services/contrato.service';
 import { contratoColumns } from './../../../models/contrato.model';
-import { ContratoList } from 'src/app/models/contrato.model';
+import { Contrato_List } from 'src/app/models/contrato.model';
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -20,7 +20,7 @@ import { ContratoList } from 'src/app/models/contrato.model';
 export class ListComponent {
     faFilePdf = faFilePdf;
     maskType = MaskType;
-    list: ContratoList[] = []
+    list: Contrato_List[] = []
     tableLinks: MenuTableLink[] = [];
 
     columns = contratoColumns;

@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContratoEvento } from '../models/contrato-evento.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +41,7 @@ export class ContratoEventoService {
     }
 
 
-    create(request: ContratoEvento) {
+    post(request: ContratoEvento) {
         return this.http.post<Response>(`${this.url}/contrato_Evento`, request);
     }
 
@@ -51,5 +52,11 @@ export class ContratoEventoService {
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/contrato_Evento/${id}`);
     }
+
+
+
+    send(request: ContratoEvento) {
+      return this.http.post<Response>(`${this.url}/contrato_Evento`, request);
+  }
 }
 

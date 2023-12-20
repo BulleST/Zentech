@@ -6,7 +6,7 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="px-2">
         <div class="row">
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                <label for="nome">Nome Completo: <span class="text-danger">*</span> <small>(automático)</small>  </label>
+                <label for="nome">Nome Completo: <span class="text-danger">*</span> <small *ngIf="!liberaNome">(automático)</small> <small *ngIf="liberaNome">(manual)</small>  </label>
                 <input type="text"
                         class="form-control"
                         name="nome"
@@ -16,7 +16,8 @@
                         required
                         pattern="\S(.*\S)?"
                         (change)="objeto.nome = nome.value.trim(); "
-                        [readonly]="true">
+                        [disabled]="!liberaNome">
+                        {{liberaNome}}
                 <div *ngIf="nome.touched && nome.errors">
                     <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="nome.errors['pattern']">

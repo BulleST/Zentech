@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { ToastrService } from 'ngx-toastr';
@@ -28,7 +28,7 @@ export class DeleteSaldoComponent implements OnDestroy {
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private pessoaSaldoService: PessoaSaldoService,
         private crypto: Crypto,
         private toastr: ToastrService,
@@ -90,13 +90,12 @@ export class DeleteSaldoComponent implements OnDestroy {
         this.erro = '';
         lastValueFrom(this.pessoaSaldoService.delete(this.id))
             .then(res => {
-                lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
                 this.loading = false;
-                if (res.successo) {
+                if (res.sucesso) {
+                    lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
             })
             .catch(res => {

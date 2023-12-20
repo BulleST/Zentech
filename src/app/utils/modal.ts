@@ -7,7 +7,7 @@ import { BehaviorSubject } from "rxjs";
 @Injectable({
 	providedIn: 'root'
 })
-export class Modal {
+export class ModalUtils {
     openSubject = new BehaviorSubject<boolean>(false);
 
     title = new BehaviorSubject<string>('');

@@ -8,7 +8,7 @@ import { Account, ChangePassword } from 'src/app/models/account.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { AccountService } from 'src/app/services/account.service';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
+import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-change-password',
@@ -31,7 +31,7 @@ faKey= faKey;
     constructor(
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modal: ModalUtils,
         private toastr: ToastrService,
         private loadingUtils: LoadingService,
         private accountService: AccountService,
