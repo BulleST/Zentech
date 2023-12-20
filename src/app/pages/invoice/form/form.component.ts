@@ -111,7 +111,6 @@ export class FormComponent implements OnDestroy {
         this.modal.style = { 'max-width': '900px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        console.log('invoice')
 
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['invoice_id']) {

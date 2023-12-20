@@ -7,7 +7,7 @@ const initial = () => import('./pages/initial/initial.module').then(res => res.I
 
 const routes: Routes = [
     { path: 'account', loadChildren: account },
-    { path: '', loadChildren: initial, canActivate: [/*AuthGuard*/] },
+    { path: '', loadChildren: initial, canActivate: [AuthGuard/*AuthGuard*/] },
     // { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

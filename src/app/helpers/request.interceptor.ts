@@ -14,11 +14,22 @@ import { getError } from '../utils/error';
 export class RequestInterceptor implements HttpInterceptor {
 
     excludeUrlsToastr = [
-        'pessoa/consulta-pessoa'
+        'pessoa/consulta-pessoa',
+        'accounts/register',
+        'accounts/verify-email',
+        'accounts/authenticate',
+        'accounts/revoke-token',
+        'accounts/refresh-token',
+        'accounts/reset-password',
+        'accounts/forgot-password',
+        'accounts/verify-email',
+        'accounts/change-password', 
+        'accounts/update-account',
     ];
     
     excludeUrlsLoading = [
-        'pessoa/consulta-pessoa'
+        'pessoa/consulta-pessoa',
+        'accounts/verify-email',
     ];
 
     constructor(
@@ -33,7 +44,7 @@ export class RequestInterceptor implements HttpInterceptor {
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
 
         var loadingHeader = request.headers.get('loading');
-        if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true') {
+        if (notLoading.length == 0 && (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true')) {
             if (notLoading.length == 0) {
                 this.loadingUtils.loading.next(true);
                 this.loadingUtils.addLoadingRequest();

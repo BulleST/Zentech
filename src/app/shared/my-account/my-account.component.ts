@@ -7,8 +7,8 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Account } from 'src/app/models/account.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { AccountService } from 'src/app/services/account.service';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { getError } from 'src/app/utils/error';
-import { ModalUtils } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-my-account',
@@ -18,34 +18,40 @@ import { ModalUtils } from 'src/app/utils/modal';
 export class MyAccountComponent implements OnDestroy {
     faCreditCard = faCreditCard;
     faKey = faKey;
-    modalOpen = false;
-    objeto: any;
+
+    objeto: Account = new Account;
     subscription: Subscription[] = [];
     loading = false;
     mensagemErro = '';
     erro: string = '';
+
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     routerBack: string[] = ['..'];
-    routeBackOptions: any;
+    modal: Modal = new Modal;
+
 
     constructor(
-        private router: Router,
-        private modal: ModalUtils,
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
         private loadingUtils: LoadingService,
+        private modalService: ModalService,
+        private accountService: AccountService
 
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
-        this.objeto = {
-            name: 'User teste',
-            email: 'teste@gmail.com',
-            telefoneCelular: 11111111111
-        }
 
+        console.log(this.activatedRoute.snapshot.data)
+        var account =  this.accountService.accountSubject.subscribe(res => {
+            if (!res)
+                this.voltar()
+            else {
+                this.objeto = res;
+                setTimeout(() => {
+                    this.modal = this.modalService.addModal(this.modal, 'minha-conta');
+                }, 200);
+            }
+        });
+        this.subscription.push(account);
     }
 
     ngOnDestroy(): void {
@@ -53,23 +59,21 @@ export class MyAccountComponent implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.modal.title.next('Minha conta')
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '800px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
+        
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '800px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../'];
+        this.modal.title = 'Minha conta'
+
 
     }
 
     voltar() {
-        this.modal.setOpen(false);
-        setTimeout(() => {
-            this.router.navigate(['..']);
-        }, 200);
+        this.modalService.removeModal(this.modal.id);
     }
 
     send(form: NgForm) {
@@ -81,16 +85,15 @@ export class MyAccountComponent implements OnDestroy {
             this.toastr.error('Formulário inválido');
             return;
         }
-
-        var obj = {
-            name: this.objeto?.name ?? '',
-            telefoneCelular: this.objeto?.telefoneCelular ?? 0,
-            email: this.objeto?.email ?? '',
-        };
-
-        setTimeout(() => {
+        lastValueFrom(this.accountService.updateAccount(this.objeto))
+        .then(res => {
+            this.voltar();
+            console.log(res);
             this.loading = false;
-            this.loadingUtils.loading.next(false);
-        }, 300);
+        })
+        .catch(res => {
+            this.erro = getError(res);
+            this.loading = false;
+        })
     }
 }

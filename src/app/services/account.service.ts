@@ -6,7 +6,7 @@ import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount 
 import { Crypto } from '../utils/crypto';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Role } from '../models/account-perfil.model';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -63,7 +63,7 @@ export class AccountService {
     }
 
     logout() {
-        this.http.post<any>(`${this.url}/accounts/revoke-token`, {}, { withCredentials: true } /**/)
+        this.http.post<any>(`${this.url}/accounts/revoke-token`, {token: this.accountValue?.refreshToken}, { withCredentials: true } /**/)
             .subscribe({
                 next: res => {
                 },

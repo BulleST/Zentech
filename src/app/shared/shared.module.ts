@@ -20,6 +20,8 @@ import { FormComponent as FormBanco } from './../pages/banco/form/form.component
 import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
 import { FormComponent as FormBeneficiario } from './../pages/beneficiario/form/form.component';
 import { FormComponent as FormSwift } from './../pages/swift/form/form.component';
+import { MyAccountComponent } from "./my-account/my-account.component";
+import { ChangePasswordComponent } from "./change-password/change-password.component";
 
 @NgModule({
     declarations: [
@@ -33,6 +35,8 @@ import { FormComponent as FormSwift } from './../pages/swift/form/form.component
         FormSwift,
         FormBeneficiario,
         FormInstituicaoFinanceira,
+        MyAccountComponent,
+        ChangePasswordComponent
     ],
     imports: [
         CommonModule,
@@ -56,6 +60,8 @@ import { FormComponent as FormSwift } from './../pages/swift/form/form.component
         FormSwift,
         FormBeneficiario,
         FormInstituicaoFinanceira,
+        MyAccountComponent,
+        ChangePasswordComponent
     ],
 })
 export class SharedModule {

@@ -1,8 +1,5 @@
 import { Component, EventEmitter, HostListener, OnDestroy, TemplateRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IconDefinition, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
-import { ModalUtils } from 'src/app/utils/modal';
 import { SwipeService } from 'src/app/utils/swipe';
 import { Table } from 'src/app/utils/table';
 
@@ -13,34 +10,15 @@ import { Table } from 'src/app/utils/table';
 })
 export class InitialComponent implements OnDestroy {
 
-    title = '';
-    template: TemplateRef<any> | undefined = undefined;
-    style: object = { 'max-width': '1000px' };
-    routerBack: string[] = [];
-    activatedRoute: ActivatedRoute | undefined = undefined;
-    onClose = new EventEmitter();
-    icon: TemplateRef<any> | undefined = undefined;
-    modalOpen = false;
     subscription: Subscription[] = [];
     private swipeCoord?: [number, number];
     private swipeTime?: number;
 
     constructor(
-        private modal: ModalUtils,
         private swipeService: SwipeService,
         private table: Table,
     ) {
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
-        this.modal.setOpen(false);
 
-        this.modal.title.subscribe(res => this.title = res);
-        this.modal.template.subscribe(res => this.template = res);
-        this.modal.style.subscribe(res => this.style = res);
-        this.modal.routerBack.subscribe(res => this.routerBack = res);
-        this.modal.activatedRoute.subscribe(res => this.activatedRoute = res);
-        this.modal.onClose.subscribe(res => this.onClose = res);
-        this.modal.icon.subscribe(res => this.icon = res);
 
     }
     ngOnDestroy(): void {
@@ -52,7 +30,7 @@ export class InitialComponent implements OnDestroy {
 
     @HostListener('paste', ['$event'])
     paste(e: ClipboardEvent) {
-        this.modal.onPaste.emit(e);
+        // this.modal.onPaste.emit(e);
     }
 
     swipe(e: TouchEvent, when: string): void {

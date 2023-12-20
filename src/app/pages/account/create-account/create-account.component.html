@@ -33,9 +33,7 @@
                        name="telefoneCelular"
                        #telefoneCelular="ngModel"
                        [(ngModel)]="objeto.telefoneCelular"
-                       mask="(00) 0000-0000||(00) 0.0000-0000"
                        placeholder="(11) x.0000-0000"
-                       pattern="^\(?[1-9]{2}\)? ?(?:[0-9]|9[0-9])[0-9]{3}\-?[0-9]{4}$"
                        required>
                 <label for="telefoneCelular">
                     <span class="form-control-icon"><fa-icon [icon]="faPhone"></fa-icon></span>
@@ -142,9 +140,11 @@
     </div>
     <div class="row">
         <p class="text-danger text-center col-12 mt-3" *ngIf="erro">{{erro}}</p>
-        <p class="text-center col-12 mb-3">Ao clicar em "cadastrar" você concorda com os <a class="link" routerLink="./termos-de-uso">termos de uso</a> do planner.</p>
+        <p class="text-center col-12 mb-3">Ao clicar em "cadastrar" você concorda com os <a class="link" routerLink="./termos-de-uso">termos de uso</a> do zentech.</p>
         <div class="form-group form-floating col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading || (password.value != confirmPassword.value)">Cadastrar</button>
+            <button type="submit" class="btn btn-primary w-100 py-2" [disabled]="form.invalid || loading || (password.value != confirmPassword.value)">
+                Cadastrar
+            </button>
         </div>
     </div>
 </form>

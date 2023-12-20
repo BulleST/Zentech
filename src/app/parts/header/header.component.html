@@ -15,16 +15,12 @@
         <fa-icon [icon]="faUser"></fa-icon>
       </div>
       <div class="header__userLogado-text" *ngIf="!userLogado">
-
         <p>teste@gmail.com</p>
-
         <p>Teste</p>
       </div>
       <div class="header__userLogado-text" *ngIf="userLogado">
         <p>{{userLogado.email}}</p>
-
         <p>{{perfil}}</p>
-
       </div>
     </div>
   </div>

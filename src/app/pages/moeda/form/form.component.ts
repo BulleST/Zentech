@@ -32,6 +32,7 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private toastr: ToastrService,
         private moedaService: MoedaService,
+
     ) {
     }
 
@@ -39,12 +40,12 @@ export class FormComponent implements OnDestroy {
     ngAfterViewInit(): void {
         this.modal.id =  0;
         this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '600px', overflow: 'visible' };
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '600px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        
 
-        console.log('moeda')
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['moeda_id']) {
                 this.objeto.id = this.crypto.decrypt(x['moeda_id']);
@@ -61,9 +62,7 @@ export class FormComponent implements OnDestroy {
                     .catch(res => {
                         this.voltar();
                     })
-
             } else {
-
                 this.modal.title = 'Cadastrar Moeda';
                 this.modal.routerBack = ['../'];
                 this.isEditPage = false;

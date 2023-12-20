@@ -20,7 +20,7 @@ export class ModalService {
             // console.log('res', res)
             if (res instanceof NavigationStart) {
                 this.browserRefresh = !router.navigated;
-                console.log('refreshed', this.browserRefresh, router.navigated)
+                // console.log('refreshed', this.browserRefresh, router.navigated)
 
             }
         })
@@ -37,17 +37,27 @@ export class ModalService {
     }
 
     addModal(modal: Modal, where: string) {
-        console.log('addModal', where)
+        console.log('addModal', where, 'Refreshed', this.browserRefresh)
         var list = this.modalList.value;
 
         var listOrderedById = list.sort((x,y) => x.id - y.id);
         var lastId = listOrderedById.length > 0 ? listOrderedById[listOrderedById.length - 1].id : 0;
         var newId = lastId + 1;
         modal.id = newId; 
+        
+        if (modal.activatedRoute?.snapshot.data['modalOrder']) {
+            modal.modalOrder = modal.activatedRoute?.snapshot.data['modalOrder'] ?? 1;
+        }
+        
         list.push(modal);
         
-        if (this.browserRefresh) 
-            list = this.modalList.value.sort((x,y) => y.id - x.id);
+
+
+        // if (this.browserRefresh) {
+        //     list = this.modalList.value.sort((x,y) => y.id - x.id);
+        // }
+            list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
+        console.log(list)
         this.modalList.next(list);
 
         setTimeout(() => {
@@ -94,7 +104,7 @@ export class Modal {
     style?: object = { 'max-width': '1000px' };
     routerBack?: string[] = [];
     routerBackOptions?: any;
+    modalOrder: number;
     activatedRoute?: ActivatedRoute;
     onClose?: EventEmitter<boolean> = new EventEmitter<boolean>();
 }
-
