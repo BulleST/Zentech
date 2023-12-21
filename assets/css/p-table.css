@@ -230,6 +230,11 @@ tr.selectable {
     color: #fff;
 }
 
+.flag.flag-yellow {
+    background-color: rgb(var(--primary-dark));
+    color: #fff;
+}
+
 .flag-green {
     background-color: #1a9d24;
     color: #fff;
@@ -483,6 +488,7 @@ tr.selectable {
     border-radius: 50%;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
+
 .p-ink {
     display: block;
     position: absolute;
@@ -738,4 +744,19 @@ tr.selected td {
 
 .p-scroller {
     padding: 0px !important;
+}
+
+.p-column-filter-constraint .p-dropdown {
+    display: flex;
+    align-items: center;
+}
+
+.p-column-filter-constraint .p-dropdown .p-dropdown-clear-icon {
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 60px;
+    color: #6d7277;
 }
