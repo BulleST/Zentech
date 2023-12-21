@@ -8,7 +8,6 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 
-
 @Component({
     selector: 'app-exportacao',
     templateUrl: './exportacao.component.html',

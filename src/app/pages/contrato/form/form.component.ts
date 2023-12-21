@@ -2,7 +2,7 @@ import { PaisesService } from './../../../services/paises.service';
 import { InstituicaoFinanceiraService } from './../../../services/instituicao-financeira.service';
 import { ContratoTipoService } from './../../../services/contrato-tipo.service';
 import { ContratoTipo } from './../../../models/contrato-tipo.model';
-import { ContratoRequest } from './../../../models/contrato.model';
+import { Contrato } from './../../../models/contrato.model';
 import { ContratoService } from './../../../services/contrato.service';
 import { Contrato_List } from './../../../models/contrato.model';
 import { ContratoStatus } from './../../../models/contrato.model';
@@ -11,15 +11,11 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaList } from 'src/app/models/pessoa.model';
 import { ModalService } from 'src/app/services/modal.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Response } from 'src/app/helpers/request-response.interface';
 import { CepService } from 'src/app/services/cep-service.service';
-import { data } from 'jquery';
 import { Cidades } from 'src/app/models/cidade.model';
 import { CidadesService } from 'src/app/services/cidades.service';
 import { SelectItem } from 'primeng/api';
@@ -31,7 +27,7 @@ import { Modal } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee, fas } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { Invoice_List } from 'src/app/models/invoice.model';
 
@@ -43,7 +39,7 @@ import { Invoice_List } from 'src/app/models/invoice.model';
 })
 export class FormComponent implements OnDestroy {
 
-    objeto: ContratoRequest = new ContratoRequest;
+    objeto: Contrato = new Contrato;
     teste: Contrato_List[]
     erro: string = '';
     loading = false;
@@ -208,8 +204,6 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.contratoService.get(this.objeto.id))
                     .then(res => {
-
-
                         this.objeto = res;
                         this.selectedInvoice = this.invoices.find(x => x.id == this.objeto.invoice_Id)
                         console.log(this.objeto, 'this.selectedInvoice', this.selectedInvoice)

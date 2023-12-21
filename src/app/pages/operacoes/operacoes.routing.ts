@@ -1,3 +1,4 @@
+import { ImportacaoComponent } from './../painel-cpf/importacao/importacao.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './list/list.component';

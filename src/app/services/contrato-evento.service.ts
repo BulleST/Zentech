@@ -5,6 +5,8 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContratoEvento } from '../models/contrato-evento.model';
 
+import { Response } from '../helpers/request-response.interface';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -39,14 +41,6 @@ export class ContratoEventoService {
         }));
     }
 
-
-    create(request: ContratoEvento) {
-        return this.http.post<Response>(`${this.url}/contrato_Evento`, request);
-    }
-
-    edit(request: ContratoEvento) {
-        return this.http.put<Response>(`${this.url}/contrato_Evento`, request);
-    }
 
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/contrato_Evento/${id}`);

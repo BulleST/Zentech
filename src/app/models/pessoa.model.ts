@@ -54,22 +54,22 @@ export class PessoaFormulario {
 }
 
 export class PessoaImportacao {
-    id?: number;
-    cpf: string = '';
-    nome: string = '';
-    dataNascimento: Date = '' as unknown as Date;
-    situacaoCPF: string = '';
-    dataInscricao:  Date = '' as unknown as Date;
-    digito: string = '';
-    excel_Controle: string = '';
-    anoObito: string = '';
-    pep: string = '';
-    excel_Status: string = '';
-    excel_Data_Cap: Date = '' as unknown as Date;
-    excel_Hora_Cap: Date = '' as unknown as Date;
-    lote_id: string = '';
-    excel_IdNum: string = '';
-    excel_Erro?: string;
+  id?: number;
+  cpf: string = '';
+  nome: string = '';
+  dataNascimento: Date = '' as unknown as Date;
+  situacaoCPF: string = '';
+  dataInscricao:  Date = '' as unknown as Date;
+  digito: string = '';
+  excel_Controle: string = '';
+  anoObito: string = '';
+  pep: string = '';
+  excel_Status: string = '';
+  excel_Data_Cap: Date = '' as unknown as Date;
+  excel_Hora_Cap: Date = '' as unknown as Date;
+  lote_id: string = '';
+  excel_IdNum: string = '';
+  excel_Erro?: string;
 
     detalhes?: string;
     excel?: string;

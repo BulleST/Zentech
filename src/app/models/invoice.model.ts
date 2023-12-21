@@ -21,6 +21,7 @@ export class Invoice_List {
     valor: number = 0;
     nomeBeneficiario: string = '';
     nomeBanco: string = '';
+    filter: string = ''
 }
 
 export var invoiceColumns: Column[] = [

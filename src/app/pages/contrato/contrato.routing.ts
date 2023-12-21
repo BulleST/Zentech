@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FormComponent as FormEvento } from '../contrato-evento/form/form.component';
@@ -8,7 +7,7 @@ import { FormComponent as FormTipo } from '../contrato-tipo/form/form.component'
 import { DeleteComponent as DeleteEvento } from '../contrato-evento/delete/delete.component';
 import { DeleteComponent as DeleteTipo } from '../contrato-tipo/delete/delete.component';
 import { FormComponent as FormInvoice } from '../invoice/form/form.component';
-
+import { ListComponent } from './list/list.component';
 const routes: Routes = [
   {
     path: '', component: ListComponent, children: [

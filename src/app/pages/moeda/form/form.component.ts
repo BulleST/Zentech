@@ -32,7 +32,6 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private toastr: ToastrService,
         private moedaService: MoedaService,
-
     ) {
     }
 

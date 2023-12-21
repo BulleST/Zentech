@@ -10,7 +10,6 @@ import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 
-
 @Component({
     selector: 'app-create-saldo',
     templateUrl: './create-saldo.component.html',

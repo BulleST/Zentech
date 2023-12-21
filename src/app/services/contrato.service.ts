@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Table } from '../utils/table';
 import { Contrato, Contrato_List } from '../models/contrato.model';
 import { Response } from '../helpers/request-response.interface';
 import { DatePipe } from '@angular/common';
@@ -17,7 +16,6 @@ export class ContratoService {
     object = new BehaviorSubject<Contrato>(new Contrato);
 
     constructor(
-        private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
         private datePipe: DatePipe,
@@ -36,10 +34,10 @@ export class ContratoService {
     }
 
     get(id: number) {
-        return this.http.get<ContratoRequest>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<Contrato>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
     }
 
-    post(request: ContratoRequest) {
+    post(request: Contrato) {
         return this.http.post<Response>(`${this.url}/contrato`, request);
     }
 
@@ -67,8 +65,5 @@ export class ContratoService {
             }));
     }
 
-    delete(id: number) {
-        return this.http.delete<Response>(`${this.url}/contrato/${id}`);
-    }
 }
 

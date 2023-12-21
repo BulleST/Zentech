@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
-
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';

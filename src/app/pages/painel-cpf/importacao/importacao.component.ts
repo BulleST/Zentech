@@ -9,7 +9,6 @@ import { PessoaImportacao, PessoaResponse } from 'src/app/models/pessoa.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-
 import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 

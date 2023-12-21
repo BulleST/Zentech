@@ -14,6 +14,7 @@ export class Contrato {
     pagRecExterior: string = '';
     pais_Id: number = '' as unknown as number;
     percentualAdiantamento: number = '' as unknown as number;
+    invoice_Id: number = '' as unknown as number;
     especificacoes: string = '';
     clausulas: string = '';
     instrucoesRecebimentoPagamento: string = '';
@@ -40,29 +41,6 @@ export class Contrato_List {
     instrucoesRecebimentoPagamento: string = '';
 
 }
-
-
-
-export class ContratoRequest {
-    id: number = 0;
-    tipo_Id: number = '' as unknown as number;
-    numContrato: string = '';
-    evento_Id: number = '' as unknown as number;
-    data: string = '';
-    instituicaoFinanceira_Id: number = '' as unknown as number;
-    taxa: number = '' as unknown as number;
-    valorNacional: number = '' as unknown as number;
-    dataLiquidacao: string = '';
-    pagRecExterior: string = '';
-    pais_Id: number = '' as unknown as number;
-    percentualAdiantamento: number = '' as unknown as number;
-    invoice_Id: number = '' as unknown as number;
-    especificacoes: string = '';
-    clausulas: string = '';
-    instrucoesRecebimentoPagamento: string = '';
-
-}
-
 
 export class ContratoResponse {
     nome: string = '';

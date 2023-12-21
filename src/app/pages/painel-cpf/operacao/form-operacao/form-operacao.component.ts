@@ -4,7 +4,6 @@ import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pess
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Subscription, lastValueFrom } from 'rxjs';
-
 import { getError } from 'src/app/utils/error';
 import { Crypto } from 'src/app/utils/crypto';
 import { DatePipe } from '@angular/common';

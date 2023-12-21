@@ -182,6 +182,16 @@ export class Table {
 
     getCellValue(row: any, col: Column) {
         const nestedProperties: string[] = col.field.split('.');
+
+      [
+        { dados: {
+            pessoa: {
+                nome: '',
+                cpf: '',
+            }
+        }}
+    ]
+
         let value: any = row;
         for (const prop of nestedProperties) {
             value = value ? value[prop] ?? undefined : undefined;

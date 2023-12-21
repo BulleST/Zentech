@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContratoTipo } from '../models/contrato-tipo.model';
-
+import { Response } from '../helpers/request-response.interface';
 @Injectable({
     providedIn: 'root'
 })
@@ -39,6 +39,9 @@ export class ContratoTipoService {
         }));
     }
 
+    send(request: ContratoTipo) {
+      return this.http.post<Response>(`${this.url}/Contrato_Tipo`, request);
+  }
 
     create(request: ContratoTipo) {
         return this.http.post<Response>(`${this.url}/contrato_Tipo`, request);

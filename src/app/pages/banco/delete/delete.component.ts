@@ -6,7 +6,6 @@ import { BancoService } from 'src/app/services/banco.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-
 @Component({
     selector: 'app-delete',
     templateUrl: './delete.component.html',

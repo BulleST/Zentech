@@ -10,7 +10,6 @@ import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service'
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 
-
 @Component({
     selector: 'app-details',
     templateUrl: './details.component.html',

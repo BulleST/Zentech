@@ -151,7 +151,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
             .finally(() => this.loadingCep = false)
 
     }
-
     validaCep(input: NgModel) {
         this.loadingCep = true;
 

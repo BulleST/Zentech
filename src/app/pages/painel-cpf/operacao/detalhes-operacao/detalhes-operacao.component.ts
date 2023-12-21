@@ -8,7 +8,6 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { Crypto } from 'src/app/utils/crypto';
 
-
 @Component({
     selector: 'app-detalhes-operacao',
     templateUrl: './detalhes-operacao.component.html',
