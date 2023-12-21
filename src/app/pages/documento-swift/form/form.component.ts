@@ -83,7 +83,7 @@ export class FormComponent implements OnDestroy {
             if (x['documento-swift_id']) {
                 this.objeto.id = this.crypto.decrypt(x['documento-swift_id']);
 
-                this.modal.title = 'Editar Documento Swifti';
+                this.modal.title = 'Editar Documento Swift';
                 this.modal.routerBack = ['../../'];
 
                 this.isEditPage = true;

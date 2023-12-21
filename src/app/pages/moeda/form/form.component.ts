@@ -25,7 +25,7 @@ export class FormComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = false;
     modal: Modal = new Modal;
-    
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
@@ -49,7 +49,7 @@ export class FormComponent implements OnDestroy {
             if (x['moeda_id']) {
                 this.objeto.id = this.crypto.decrypt(x['moeda_id']);
                 this.modal.title = 'Editar Moeda';
-                this.modal.routerBack = ['../../'];
+                this.modal.routerBack = ['../../..'];
                 this.isEditPage = true;
                 lastValueFrom(this.moedaService.get(this.objeto.id))
                     .then(res => {
@@ -79,8 +79,8 @@ export class FormComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    
-    
+
+
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }

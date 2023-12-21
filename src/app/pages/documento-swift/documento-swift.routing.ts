@@ -7,8 +7,12 @@ import { FormComponent as FormInvoice } from '../invoice/form/form.component';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
-        { path: 'cadastrar', component: FormComponent,  children: [ { path: 'invoice', component: FormInvoice }] },
-        { path: 'editar/:documento-swift_id', component: FormComponent },
+        { path: 'cadastrar', component: FormComponent,  children: [
+          { path: 'invoice', component: FormInvoice }
+        ] },
+        { path: 'editar/:documento-swift_id', component: FormComponent , children: [
+          { path: 'invoice', component: FormInvoice }
+        ] },
         { path: 'excluir/:documento-swift_id', component: DeleteComponent },
 
     ] }

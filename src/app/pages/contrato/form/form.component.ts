@@ -129,7 +129,6 @@ export class FormComponent implements OnDestroy {
 
 
 
-
     lastValueFrom(this.invoiceService.getList())
       .then(res => this.invoices = res)
       .finally(() => console.log('ok'));
@@ -138,12 +137,14 @@ export class FormComponent implements OnDestroy {
       res => {this.invoices =  res.map(x=>{
         x.filter = x.id + '-' + x.nomeBanco + '-' +  x.nomeBeneficiario + '-' + x.cnpjBeneficiario + '-'+ x.valor + '-' + x.dataInvoice
         console.log('teste',x.filter)
+
         return x
       })
 
       }
       );
     this.subscription.push(invoices);
+
 
 
     lastValueFrom(this.contratoEventoService.getList())
