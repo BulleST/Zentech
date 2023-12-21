@@ -21,16 +21,18 @@ export class NavigationComponent implements OnDestroy {
     faLink = faLink;
     menuOpen: boolean = false;
     subscription: Subscription[] = [];
-    gfg: any[] = [];
+    items: any[] = [];
     homeActive = true;
+
+    padding = 0;
 
 
     constructor(
         private header: Header,
         private router: Router,
     ) {
-       var events = this.router.events.subscribe(res => {
-            if(res instanceof NavigationEnd)
+        var events = this.router.events.subscribe(res => {
+            if (res instanceof NavigationEnd)
                 this.homeActive = res.url == '/' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
         })
         this.subscription.push(events);
@@ -48,65 +50,88 @@ export class NavigationComponent implements OnDestroy {
     toggleAside() {
         this.header.toggleMenuAside();
     }
-  
+
     setMenu() {
         var i = 1;
-        this.gfg = [
+        this.items = [
             {
                 id: i++,
-                label: 'Bancos',
-                routerLink: "/banco",
-                visible: true,
+                label: 'Painel CPF',
+                paddingLeft: 0,
+                items: [
+                    {
+                        id: i++,
+                        label: 'New Clickk Buyers',
+                        routerLink: "/painel-cpf",
+                        paddingLeft: 10,
+                    },
+                    {
+                        id: i++,
+                        label: 'Pró Câmbio',
+                        routerLink: "/operacoes",
+                        paddingLeft: 10,
+                    },
+                ]
             },
             {
                 id: i++,
-                label: 'Beneficiários',
-                routerLink: "/beneficiario",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'Contratos',
-                routerLink: "/contrato",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'Instituições Financeiras',
-                routerLink: "/instituicao-financeira",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'Invoice',
-                routerLink: "/invoice",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'New Clickk Buyers',
-                routerLink: "/painel-cpf",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'Pró Câmbio',
-                routerLink: "/operacoes",
-                visible: true,
-            },
-            {
-                id: i++,
-                label: 'Swift',
-                routerLink: "/swift",
-                visible: true,
+                label: 'Painel de Documentos',
+                paddingLeft: 0,
+                items: [
+                    {
+                        id: i++,
+                        label: 'Bancos',
+                        routerLink: "/banco",
+                        paddingLeft: 10,
+                    },
+                    {
+                        id: i++,
+                        label: 'Beneficiários',
+                        routerLink: "/beneficiario",
+                        paddingLeft: 10,
+                    },
+                    {
+                        id: i++,
+                        label: 'Instituições Financeiras',
+                        routerLink: "/instituicao-financeira",
+                        paddingLeft: 10,
+                    },
+                    {
+                        id: i++,
+                        label: 'Invoice',
+                        routerLink: "/invoice",
+                        paddingLeft: 10,
+                        items: [
+                            {
+                                id: i++,
+                                label: 'Swift',
+                                routerLink: "/swift",
+                                paddingLeft: 25,
+                            },
+
+                            {
+                                id: i++,
+                                label: 'Contratos',
+                                routerLink: "/contrato",
+                                paddingLeft: 25,
+                            },
+                        ]
+                    },
+                ]
             },
             {
                 id: i++,
                 label: 'Usuários',
                 routerLink: "/usuarios",
-                visible: true,
+                paddingLeft: 0,
             },
         ];
     }
-    
+
+    addPadding() {
+        this.padding = parseInt(this.padding.toString()) + 5
+        console.log('padding', this.padding)
+        return this.padding;
+    }
+
 }

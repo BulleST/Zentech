@@ -53,7 +53,7 @@ export class PessoaService {
     importarArquivo(file: File){
         var data = new FormData();
         data.append('file', file);
-        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa/importa-excel`, data);
+        return this.http.post<Response>(`${this.url}/pessoa/importa-excel`, data);
     }
 
 

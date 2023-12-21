@@ -112,6 +112,7 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     buscaCEP(input: NgModel) {
         this.loadingCep = true;
         input.control.setErrors(null);
+        this.cepPreenchido = false
 
         if (!this.validaCep(input)) {
             this.toastr.error('CEP inválido.');
@@ -125,14 +126,11 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                 if (data.erro == true) {
                     this.toastr.error('CEP inválido.');
                     input.control.setErrors({ invalid: true })
-                    this.cepPreenchido = false
                     return;
 
                 } else {
                     this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
-
                     var localidade = data.localidade.toLowerCase();
-
                     var cidade = this.cidades.find(x => {
                         var cid = x.nomeCidade.toLowerCase()
                         var uf = x.sigla.toLowerCase();
@@ -141,7 +139,7 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                     if (cidade) {
                         this.objeto.cidade_Id = cidade.id;
                     }
-                    this.cepPreenchido = false
+                    this.cepPreenchido = true
 
                 }
             })
@@ -153,31 +151,23 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     }
     validaCep(input: NgModel) {
         this.loadingCep = true;
-
+        console.log('1')
         if (!this.objeto.cep.trim()) {
-            setTimeout(() => {
-                input.control.setErrors({ required: true });
-            }, 300);
+            input.control.setErrors({ required: true });
             this.loadingCep = false;
             return false
         }
         else if (this.objeto.cep.trim().length != 8) {
-            setTimeout(() => {
-                input.control.setErrors({ invalid: true });
-            }, 300);
+            input.control.setErrors({ invalid: true });
             this.loadingCep = false;
             return false
         } else if (!validateCEP(this.objeto.cep)) {
-            setTimeout(() => {
                 input.control.setErrors({ invalid: true });
-            }, 300);
             this.loadingCep = false;
             return false;
         } else {
             this.loadingCep = false;
-            setTimeout(() => {
                 input.control.setErrors(null);
-            }, 300);
             return true;
         }
     }

@@ -71,12 +71,12 @@ export class FormComponent implements OnDestroy {
                     .then(res => {
                         this.objeto = res;
                         this.objeto.cep = this.objeto.cep.toString().padStart(8, '0');
-                        this.buscaCEP(this.cep)
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'banco');
                         }, 200);
                     })
                     .catch(res => {
+                        console.log(res)
                         this.voltar();
                     })
 

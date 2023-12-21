@@ -60,9 +60,11 @@
                        (blur)="buscaCEP(cep)"
                        required
                        pattern="\S(.*\S)?"
+                       [disabled]="loadingCep"
                        (change)="objeto.cep = cep.value.trim();" />
                 <div *ngIf="cep.touched && cep.errors">
                     <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="cep.errors['invalid']">CEP inválido.</p>
                 </div>
             </div>
             <div class="form-group col-md-6 col-sm-12">
@@ -74,7 +76,7 @@
                        #logradouro="ngModel"
                        [(ngModel)]="objeto.logradouro"
                        required
-                       [disabled]="cepPreenchido"
+                       [disabled]="loadingCep || cepPreenchido"
                        pattern="\S(.*\S)?"
                        (change)="objeto.logradouro = logradouro.value.trim();">
                 <div *ngIf="logradouro.touched && logradouro.errors">
@@ -91,6 +93,7 @@
                        [(ngModel)]="objeto.numero"
                        required
                        pattern="\S(.*\S)?"
+                       [disabled]="loadingCep "
                        (change)="objeto.numero = cNumero.value.trim();">
                 <div *ngIf="cNumero.touched && cNumero.errors">
                     <p class="text-danger" *ngIf="cNumero.errors['required']">Este campo é obrigatório.</p>
@@ -115,7 +118,8 @@
                             [required]="true"
                             [filter]="true"
                             filterBy="nomeCidade"
-                            [showClear]="true">
+                            [showClear]="true"
+                            [disabled]="loadingCep ">
                 </p-dropdown>
                 <div *ngIf="cidade_Id.touched && cidade_Id.errors">
                     <p class="text-danger" *ngIf="cidade_Id.errors['required']">Este campo é obrigatório.</p>

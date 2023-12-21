@@ -82,5 +82,11 @@ export class PessoaOperacaoService {
         return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'});
     }
 
+    importarArquivo(file: File){
+        var data = new FormData();
+        data.append('file', file);
+        return this.http.post<Response>(`${this.url}/operacao/importa-excel`, data);
+    }
+
 }
 

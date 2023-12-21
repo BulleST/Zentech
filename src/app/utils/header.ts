@@ -53,7 +53,7 @@ export class Header {
         });
 
      
-        $('.navigation__toggle').on('click', (e: any) => {
+        $('.navigation-toggle').on('click', (e: any) => {
             e.stopPropagation();
         });
 
