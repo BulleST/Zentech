@@ -51,5 +51,9 @@ export class ContratoEventoService {
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/contrato_Evento/${id}`);
     }
+
+    send(request: ContratoEvento) {
+      return this.http.post<Response>(`${this.url}/contrato_Evento`, request);
+  }
 }
 

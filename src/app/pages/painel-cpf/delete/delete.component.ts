@@ -35,7 +35,7 @@ export class DeleteComponent {
         this.modal.id =  0;
         this.modal.template =  this.template;
         this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
+        this.modal.style =  { 'max-width': '400px' };
         this.modal.activatedRoute =  this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         this.modal.routerBack = ['../../'];
@@ -47,7 +47,7 @@ export class DeleteComponent {
                 try {
                     this.id = this.crypto.decrypt(p['pessoa_Id']);
                     setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'delete cpf');
+                        this.modal = this.modalService.addModal(this.modal, 'delete pessoa');
                     }, 200);
                 } catch(e) {
                     this.voltar();
@@ -83,7 +83,6 @@ export class DeleteComponent {
                 } else {
                     this.erro = res.mensagem;
                 }
-                
             })
             .catch(res => {
                 this.loading = false;

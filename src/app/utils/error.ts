@@ -9,20 +9,17 @@ export function getError(res: HttpErrorResponse) {
     if (res) {
         if (res.error && res.error.errors)
         {
-            
-            msg = '';
-            
             for (const [key, value] of Object.entries(res.error.errors)) {
                 if (value instanceof Array) {
                     value.forEach(item => {
                         msg += ((item as string) + '\n');
                     });
-                    console.log(value);
                 }
-            
             }
-  
         }
+
+        else if (res.error && res.error.error && res.error.error.text)
+            msg = res.error.error.text;
 
         else if (res.error && res.error.message)
             msg = res.error.message;

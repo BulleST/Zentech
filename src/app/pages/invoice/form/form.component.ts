@@ -18,6 +18,7 @@ import { MoedaService } from 'src/app/services/moeda.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { NgForm } from '@angular/forms';
 
 @Component({
     selector: 'app-form',
@@ -72,7 +73,7 @@ export class FormComponent implements OnDestroy {
 
         var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
         this.subscription.push(moedas);
-        
+
         lastValueFrom(this.contratoService.getList())
             .then(res => this.contratos = res)
             .finally(() => this.loadingContratos = false);
@@ -155,15 +156,31 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal.id);
     }
 
-    send() {
+    send(form: NgForm, salvarEBaixar: boolean) {
         this.loading = false;
         this.erro = '';
+        if (form.invalid) {
+            this.toastr.error('Campos inválidos');
+            this.erro = 'Campos inválidos';
+            return;
+        }
 
         this.request()
-            .then(res => {
+            .then(async res => {
                 if (res.sucesso == true) {
                     lastValueFrom(this.invoiceService.getList());
-                    this.voltar();
+                    if (salvarEBaixar && this.isEditPage) {
+                        this.loading = true;
+                        lastValueFrom(this.invoiceService.file(this.objeto.id))
+                        .then(res => {
+                            this.loading = false;
+                        })
+                        .catch(res => {
+                            this.loading = false;
+                        })
+                    } else {
+                        this.voltar();
+                    }
                 } else {
                     this.erro = res.mensagem;
                     this.toastr.error(res.mensagem);
@@ -173,6 +190,18 @@ export class FormComponent implements OnDestroy {
             .catch(res => {
                 this.loading = false;
                 this.erro = getError(res);
+            })
+
+    }
+
+    fileDownload() {
+        this.loading = true;
+        lastValueFrom(this.invoiceService.file(this.objeto.id))
+            .then(res => {
+                this.loading = false;
+            })
+            .catch(res => {
+                this.loading = false;
             })
 
     }

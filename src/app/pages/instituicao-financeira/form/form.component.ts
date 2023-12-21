@@ -1,6 +1,6 @@
 import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
 import { InstituicaoFinanceiraRequest } from '../../../models/instituicao-financeira.model';
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -20,7 +20,7 @@ import { validateCNPJ } from 'src/app/utils/validate-cnpj';
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.css']
 })
-export class FormComponent implements OnDestroy {
+export class FormComponent implements OnDestroy, AfterViewInit {
     objeto: InstituicaoFinanceiraRequest = new InstituicaoFinanceiraRequest;
     erro: string = '';
     loading = false;
@@ -67,21 +67,24 @@ export class FormComponent implements OnDestroy {
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['instituicaoFinanceira_id']) {
                 this.objeto.id = this.crypto.decrypt(x['instituicaoFinanceira_id']);
-
+                
                 this.modal.title = 'Editar Instituição Financeira';
                 this.modal.routerBack = ['../../'];
 
                 this.isEditPage = true;
+                console.log(1)
                 lastValueFrom(this.instituicaoFinanceiraService.get(this.objeto.id))
-                    .then(res => {
-                        this.objeto = res;
-                        this.buscaCEP(this.cep)
-                        setTimeout(() => {
-                            this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
-                        }, 200);
-                    })
-                    .catch(res => {
-                        this.voltar();
+                .then(res => {
+                    res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
+                    res.cep = res.cep.padStart(8, '0');
+                    this.objeto = res;
+                    setTimeout(() => {
+                        this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
+                    }, 200);
+                })
+                .catch(res => {
+                    console.log(2, res)
+                    this.voltar();
                     })
 
             } else {
@@ -148,6 +151,7 @@ export class FormComponent implements OnDestroy {
             .finally(() => this.loadingCep = false)
 
     }
+
     validaCep(input: NgModel) {
         this.loadingCep = true;
 

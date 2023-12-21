@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-import { ModalUtils } from 'src/app/utils/modal';
+
 
 @Component({
     selector: 'app-importacao-arquivo',
@@ -23,47 +24,43 @@ export class ImportacaoArquivoComponent {
     modalOpen = false;
     erro = '';
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
-    routeBackOptions: any;
     fileUpload?: File;
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     @ViewChild('file') file: NgModel;
-
-
+    modal: Modal = new Modal;
 
     constructor(
         private toastr: ToastrService,
-        private modal: ModalUtils,
+        private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
         private pessoaService: PessoaService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.title.next('Importar Arquivo')
-        this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
 
     }
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.icon.next(this.icon);
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'width': 'max-content', 'max-width': '95vw' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../']
+        this.modal.title = 'Importar Arquivo';
 
         setTimeout(() => {
-            this.modal.setOpen(true);
+            this.modal = this.modalService.addModal(this.modal, 'moeda');
         }, 200);
     }
 
     ngOnDestroy(): void {
-        this.modal.setOpen(false);
         this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
-        this.modal.resetModal();
+        this.modalService.removeModal(this.modal.id);
     }
     send() {
         this.loading = true;

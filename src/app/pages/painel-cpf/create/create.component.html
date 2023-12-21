@@ -17,7 +17,6 @@
                         pattern="\S(.*\S)?"
                         (change)="objeto.nome = nome.value.trim(); "
                         [disabled]="!liberaNome">
-                        {{liberaNome}}
                 <div *ngIf="nome.touched && nome.errors">
                     <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="nome.errors['pattern']">
@@ -31,7 +30,7 @@
                 <label for="cpf">CPF: <span class="text-danger">*</span></label>
                 <input type="text"
                         class="form-control"
-                        [class.form-control-loading]="loadingPessoa"
+                        [class.form-control-loading]="loadingConsultaApi"
                         name="cpf"
                         id="cpf"
                         #cpf="ngModel"
@@ -41,7 +40,7 @@
                         required
                         pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
                         (change)="validaCPF(cpf, cpf.value);"
-                        [readonly]="loadingPessoa">
+                        [readonly]="loadingConsultaApi">
                 <div *ngIf="cpf.touched && cpf.errors" >
                     <p class="text-danger" *ngIf="cpf.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="cpf.errors['mask'] || cpf.errors['invalid']">CPF inválido.</p>
@@ -56,7 +55,7 @@
                         id="dataNascimento"
                         #dataNascimento="ngModel"
                         [(ngModel)]="objeto.dataNascimento"
-                        [readonly]="cpf.errors || loadingPessoa"
+                        [readonly]="cpf.errors || loadingConsultaApi"
                         required>
                 <div *ngIf="dataNascimento.touched && dataNascimento.errors; else erroCPF" >
                     <p class="text-danger" *ngIf="dataNascimento.errors['required']">Este campo é obrigatório.</p>
@@ -73,12 +72,12 @@
                         [class.mt-2]="screen == 'sm'" style="height: 35px;"
                         (click)="procuraPessoa(cpf, dataNascimento)"
                         [disabled]="cpf.errors || !dataNascimento.value">
-                        <span *ngIf="loadingPessoa" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm mr-1"></span>
                         <span>Consultar API</span>
                 </button>
             </div>
         </div>
-        <div class="row" *ngIf="loadingPessoa">
+        <div class="row" *ngIf="loadingConsultaApi">
             <p>Consultando BR API</p>
         </div>
         <div class="row">
@@ -135,7 +134,7 @@
                 <p class="text-danger" *ngIf="erro">{{erro }}</p>
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>
-            <button class="btn btn-primary mr-1 ml-auto col" [disabled]="form.invalid || loading || loadingPessoa">
+            <button class="btn btn-primary mr-1 ms-auto col" [disabled]="form.invalid || loading || loadingConsultaApi">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                 <span>Salvar</span>
             </button>

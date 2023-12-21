@@ -5,6 +5,8 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Contrato, Contrato_List } from '../models/contrato.model';
+import { Response } from '../helpers/request-response.interface';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +20,7 @@ export class ContratoService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private datePipe: DatePipe,
 
     ) { }
 
@@ -31,23 +34,37 @@ export class ContratoService {
                 error: res => this.toastr.error('Não foi possível carregar listagem de contratos.')
             }));
     }
+
     get(id: number) {
-        return this.http.get<Contrato>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) }).pipe(tap({
-            next: object => {
-                this.object.next(Object.assign({}, object));
-                return of(object);
-            },
-            error: res => this.toastr.error('Não foi possível carregar listagem de contratos.')
-        }));
+        return this.http.get<ContratoRequest>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
     }
 
-
-    create(request: Contrato) {
+    post(request: ContratoRequest) {
         return this.http.post<Response>(`${this.url}/contrato`, request);
     }
 
-    edit(request: Contrato) {
-        return this.http.put<Response>(`${this.url}/contrato`, request);
+    delete(id: number) {
+        return this.http.delete<Response>(`${this.url}/contrato/${id}`);
+    }
+
+    file(id: number) {
+        return this.http.post<Blob>(`${this.url}/contrato/exportar-pdf/${id}`, {})
+            .pipe(tap({
+                next: res => {
+                    var blob = new Blob([res], { type: 'application/pdf' })
+                    const data = window.URL.createObjectURL(blob);
+
+                    var link = document.createElement('a');
+                    link.href = data;
+                    link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                    // this is necessary as link.click() does not work on the latest firefox
+                    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+                    var url = URL.createObjectURL(res);
+                    window.open(url, '_blank');
+                    URL.revokeObjectURL(url);
+                }
+            }));
     }
 
     delete(id: number) {

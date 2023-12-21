@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, OnDestroy, TemplateRef } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Header } from 'src/app/utils/header';
 import { SwipeService } from 'src/app/utils/swipe';
 import { Table } from 'src/app/utils/table';
 
@@ -13,24 +14,22 @@ export class InitialComponent implements OnDestroy {
     subscription: Subscription[] = [];
     private swipeCoord?: [number, number];
     private swipeTime?: number;
+    navigationOpen = false;
 
     constructor(
         private swipeService: SwipeService,
         private table: Table,
+        private header: Header,
     ) {
-
-
+        var open = this.header.menuAsideOpen.subscribe(res => this.navigationOpen = res);
+        this.subscription.push(open);
     }
+
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
     ngAfterViewInit(): void {
-    }
-
-    @HostListener('paste', ['$event'])
-    paste(e: ClipboardEvent) {
-        // this.modal.onPaste.emit(e);
     }
 
     swipe(e: TouchEvent, when: string): void {
@@ -56,6 +55,5 @@ export class InitialComponent implements OnDestroy {
             }
         }
     }
-
 
 }

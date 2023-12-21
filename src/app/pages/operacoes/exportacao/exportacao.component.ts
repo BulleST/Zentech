@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaList } from 'src/app/models/pessoa.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
-import { ModalUtils } from 'src/app/utils/modal';
+
 
 @Component({
     selector: 'app-exportacao',
@@ -18,7 +19,6 @@ export class ExportacaoComponent implements OnDestroy {
     loadingPessoa = true;
     filtro: Filtro = new Filtro;
     subscription: Subscription[] = [];
-    routeBackOptions: any;
     erro: string = '';
     loading = false;
 
@@ -26,32 +26,40 @@ export class ExportacaoComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>;
 
     datasFiltro?: boolean;
+    modal: Modal = new Modal;
+
     constructor(
         private pessoaService: PessoaService,
         private pessoaOperacaoService: PessoaOperacaoService,
         private activatedRoute: ActivatedRoute,
-        private modal: ModalUtils,
         private toastr: ToastrService,
         private datePipe: DatePipe,
+        private modalService: ModalService,
     ) {
+        var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
+       this.subscription.push(list)
+
         lastValueFrom(this.pessoaService.getList())
             .then(res => {
                 this.loadingPessoa = false;
                 this.pessoas = res;
-                setTimeout(() => {
-                    this.modal.setOpen(true);
-                }, 200);
             });
 
+            setTimeout(() => {
+                this.modal = this.modalService.addModal(this.modal, 'exportar operacao');
+            }, 200);
     }
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '400px', overflow: 'visible' })
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
-        this.modal.title.next('Exportar Operações')
-        this.modal.routerBack.next(['../']);
+        this.modal.id =  0;
+        this.modal.template = this.template;
+        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.icon = this.icon;
+        this.modal.title = 'Exportar Operações';
+        this.modal.routerBack = ['../'];
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+
     }
 
     ngOnDestroy(): void {
@@ -59,7 +67,7 @@ export class ExportacaoComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
 
     datasChanged() {

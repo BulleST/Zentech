@@ -80,7 +80,7 @@ export class HeaderComponent implements AfterViewInit {
         var mobileSubs = this.mobile.value.subscribe(res => this.isMobile = res == 'sm' || res == 'md')
         this.subscription.push(mobileSubs);
         
-        var menuMobileOpen = this.header.menuMobileOpen.subscribe(res => this.menuMobileOpen = res);
+        var menuMobileOpen = this.header.menuAsideOpen.subscribe(res => this.menuMobileOpen = res);
         this.subscription.push(menuMobileOpen);
 
     }
@@ -102,7 +102,7 @@ export class HeaderComponent implements AfterViewInit {
     }
 
     toggleMenuMobile() {
-        this.header.toggleMenuMobile()
+        this.header.toggleMenuAside()
     }
 
     sair() {

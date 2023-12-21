@@ -10,7 +10,7 @@
     </svg>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+    <form #form="ngForm" class="needs-validation">
         <div class="px-2">
             <div class="row">
                 <!-- Data Invoice -->
@@ -75,41 +75,7 @@
                                       [autoReplaceValue]="false"></app-input-number>
 
                 </div>
-                <!-- Contrato -->
-                <!-- <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="contrato_Id">Contrato: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="contratos"
-                                [(ngModel)]="objeto.contrato_Id"
-                                #contrato_Id="ngModel"
-                                name="contrato_Id"
-                                inputId="contrato_Id"
-                                [styleClass]="'form-control ' + (loadingContratos ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nome, simbolo, codigo"
-                                optionLabel="numContrato"
-                                optionValue="id"
-                                placeholder="Selecione um contrato"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p>{{item.numContrato}}</p>
-                                <p>{{item.simbolo}}</p>
-                                <p>{{item.codigo}}</p>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light">
-                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./contrato']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="contrato_Id.touched && contrato_Id.errors">
-                        <p class="text-danger" *ngIf="contrato_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div> -->
+            
                 <!-- Beneficiário -->
                 <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
@@ -221,7 +187,6 @@
                            name="conta"
                            id="conta"
                            class="form-control"
-                           mask="0#"
                            [(ngModel)]="objeto.conta"
                            #conta="ngModel"
                            required>
@@ -253,7 +218,15 @@
                         <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*)
                             corretamente para salvar.</p>
                     </div>
-                    <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                    <button *ngIf="isEditPage" type="button" (click)="fileDownload()" class="btn btn-dark mr-1 ms-auto" [disabled]="loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span>Baixar</span>
+                    </button>
+                    <button *ngIf="isEditPage" (click)="send(form, true)" class="btn btn-dark mr-1 " [disabled]="form.invalid || loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span>Salvar e Baixar</span>
+                    </button>
+                    <button (click)="send(form, false)" class="btn btn-primary mr-0 " [class.ms-auto]="!isEditPage" [disabled]="form.invalid || loading">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         <span>Salvar</span>
                     </button>

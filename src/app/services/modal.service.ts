@@ -3,7 +3,6 @@ import { BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-
 @Injectable({
     providedIn: 'root'
 })
@@ -69,7 +68,7 @@ export class ModalService {
 
     
     removeModal(id: number) {
-        console.log('removeModal')
+        console.log('removeModal', this.modalList.value)
         var list = this.modalList.value;
         var index = list.findIndex(x => x.id == id);
         if (index != -1) {

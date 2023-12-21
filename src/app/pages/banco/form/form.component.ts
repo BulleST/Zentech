@@ -6,12 +6,12 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { BancoRequest } from 'src/app/models/banco.model';
-import { Modal, ModalService } from 'src/app/services/modal.service';
 import { NgForm, NgModel } from '@angular/forms';
 import { CepService } from 'src/app/services/cep-service.service';
 import { CidadesService } from 'src/app/services/cidades.service';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { Cidades } from 'src/app/models/cidade.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 
 
 @Component({

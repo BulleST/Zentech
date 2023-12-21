@@ -16,11 +16,11 @@ export class SwipeService {
         this.messageSource.next(message);
     }
     public swipePrevious() {
-        this.header.setMenuMobile(false)
+        this.header.setMenuAside(false)
         this.setDirection('previous');
     }
     public swipeNext() {
-        this.header.setMenuMobile(true)
+        this.header.setMenuAside(true)
         this.setDirection('next');
     }
 }

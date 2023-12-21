@@ -5,10 +5,10 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Pessoa } from 'src/app/models/pessoa.model';
-import { PessoaService } from 'src/app/services/pessoa.service';
+import { BRConsultaResponse, PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
-import { ModalUtils } from 'src/app/utils/modal';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { validateCPF } from 'src/app/utils/validate-cpf';
 
 @Component({
@@ -22,38 +22,38 @@ export class CreateComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
-    routeBackOptions: any;
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-    loadingPessoa = false;
+    loadingConsultaApi = false;
 
     screen: ScreenWidth = ScreenWidth.lg;
-
     liberaNome = false;
+    modal: Modal = new Modal;
+
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private modal: ModalUtils,
+        private modalService: ModalService,
         private pessoaService: PessoaService,
         private mobile: IsMobile,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
         this.mobile.value.subscribe(res => this.screen = res);
 
     }
     ngAfterViewInit(): void {
-        this.modal.title.next('Cadastrar Pessoa')
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
+        this.modal.title = 'Cadastrar Pessoa';
+        this.modal.template = this.template;
+        this.modal.style = { 'max-width': '600px' };
+        this.modal.routerBack = ['../'];
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.icon = this.icon;
 
         setTimeout(() => {
-            this.modal.setOpen(true);
+            this.modal = this.modalService.addModal(this.modal, 'create pessoa');
         }, 200);
     }
 
@@ -61,12 +61,8 @@ export class CreateComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    resetForm() {
-        this.objeto = new Pessoa;
-    }
-
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
 
     validaCPF(input: NgModel, doc: number) {
@@ -101,18 +97,20 @@ export class CreateComponent implements OnDestroy {
             return;
         }
 
-        this.loadingPessoa = true;
+        this.loadingConsultaApi = true;
         this.erro = '';
         this.liberaNome = false;
 
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
-                this.loadingPessoa = false;
-                if (typeof res == 'object') {
+                this.loadingConsultaApi = false;
+                if (res instanceof BRConsultaResponse) {
                     if (res.ERRO == 'ERRO') {
                         this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = res.ERRO as unknown as string;
                         this.liberaNome = true;
+                        this.erro = res.ERRO;
+                        this.toastr.error(res.ERRO)
                     } else if (!res.ERRO) {
                         this.objeto.dataNascimento = this.formataData(res.DATA_NASC).substring(0, 10) as unknown as Date;
                         this.objeto.brConsulta_Data_Cap = this.formataData(res.DATA_CAP) as unknown as Date;
@@ -129,15 +127,15 @@ export class CreateComponent implements OnDestroy {
                     this.liberaNome = false;
                 } else {
                     this.liberaNome = true;
-                    this.objeto.brConsulta_Erro = res as unknown as string;
+                    this.objeto.brConsulta_Erro = res as string;
+                    this.erro = res as string;
+                    this.toastr.error(res as string)
                 }
-
-
             })
             .catch(res => {
-                this.loadingPessoa = false;
+                this.loadingConsultaApi = false;
                 this.liberaNome = true;
-                this.erro = 'Não foi possível carregar os dados da API. Insira o nome manualmente';
+                this.erro = getError(res);
             })
 
     }

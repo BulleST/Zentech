@@ -23,10 +23,10 @@ export class RequestInterceptor implements HttpInterceptor {
         'accounts/reset-password',
         'accounts/forgot-password',
         'accounts/verify-email',
-        'accounts/change-password', 
+        'accounts/change-password',
         'accounts/update-account',
     ];
-    
+
     excludeUrlsLoading = [
         'pessoa/consulta-pessoa',
         'accounts/verify-email',
@@ -52,7 +52,7 @@ export class RequestInterceptor implements HttpInterceptor {
         }
 
         // if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE') {
-            this.table.resetSelection();
+        this.table.resetSelection();
         // }
 
 
@@ -63,12 +63,30 @@ export class RequestInterceptor implements HttpInterceptor {
                         // request in progress
                         if (request.method == 'POST' || request.method == 'PUT' || request.method == 'PATCH' || request.method == 'DELETE') {
                             this.table.onRowUnselect();
-                        } 
+                        }
                     }
                     else if (data instanceof HttpResponse) {
                         if ([200, 204, 201].includes(data.status)) {
-                            if (data.body.successo == false || data.body == false) {
-                                
+                            console.log(data.body)
+                            if (data.body.sucesso == false || data.body == false) {
+                                if (notToastr.length == 0) {
+                                    if (data.body.message)
+                                        this.toastr.error(data.body.message)
+                                    else {
+                                        if (request.method == 'POST') {
+                                            this.toastr.error('Não foi possível concluir essa operação.');
+                                        }
+                                        else if (request.method == 'PUT') {
+                                            this.toastr.error('Não foi possível atualizar esse registro.');
+                                        }
+                                        else if (request.method == 'PATCH') {
+                                            this.toastr.error('Não foi possível concluir essa operação');
+                                        }
+                                        else if (request.method == 'DELETE') {
+                                            this.toastr.error('Não foi possível excluir esse registro')
+                                        }
+                                    }
+                                }
                             } else {
                                 if (notToastr.length == 0) {
                                     if (request.method == 'POST') {
@@ -87,8 +105,8 @@ export class RequestInterceptor implements HttpInterceptor {
                                         this.table.onRowUnselect();
                                     }
                                 }
-                                
-                                
+
+
                                 if (request.method == 'GET') {
                                     setTimeout(() => {
                                         this.table.goToCurrentPage();
@@ -104,7 +122,7 @@ export class RequestInterceptor implements HttpInterceptor {
                 },
                 error: res => {
                     console.error('error', res);
-                    var msg  = getError(res);
+                    var msg = getError(res);
 
                     if (res.status == 401) {
                         var returnUrl = window.location.pathname;

@@ -9,12 +9,16 @@ import { MenubarModule } from 'primeng/menubar';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HomeComponent } from './home/home.component';
 import { FormsModule } from '@angular/forms';
+import { NavigationComponent } from 'src/app/parts/navigation/navigation.component';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
     declarations: [
         InitialComponent,
         HeaderComponent,
         HomeComponent,
+        NavigationComponent,
     ],
     imports: [
         CommonModule,
@@ -22,7 +26,9 @@ import { FormsModule } from '@angular/forms';
         FontAwesomeModule,
         MenubarModule,
         SharedModule,
-        FormsModule
+        FormsModule,
+        PanelMenuModule,
+        PanelModule,
     ]
 })
 export class InitialModule { }
