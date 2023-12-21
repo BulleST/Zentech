@@ -110,6 +110,7 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }
+    
     buscaCEP(input: NgModel) {
         this.loadingCep = true;
         input.control.setErrors(null);
@@ -202,7 +203,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
         }
         return;
     }
-
 
     send(form: NgForm) {
         this.erro = '';
