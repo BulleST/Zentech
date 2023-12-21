@@ -6,8 +6,8 @@
         <div class="modal__content">
             <div class="modal__header pb-2">
                 <h3>
-                    <span class="icon">
-                        <ng-template *ngIf="item.icon != undefined" [ngTemplateOutlet]="item.icon"></ng-template>
+                    <span class="icon" *ngIf="item.icon != undefined">
+                        <ng-template [ngTemplateOutlet]="item.icon"></ng-template>
                     </span>
                     <span>{{item.title}}</span>
                 </h3>

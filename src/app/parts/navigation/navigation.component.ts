@@ -100,6 +100,12 @@ export class NavigationComponent implements OnDestroy {
                 routerLink: "/swift",
                 visible: true,
             },
+            {
+                id: i++,
+                label: 'Usuários',
+                routerLink: "/usuarios",
+                visible: true,
+            },
         ];
     }
     

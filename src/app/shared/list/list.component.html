@@ -54,13 +54,29 @@
                                             [matchMode]="col.filterMatchMode" [showOperator]="col.showOperator"
                                             [showMatchModes]="col.filterShowMatchMode"
                                             [showAddButton]="col.filterShowAddButton">
-                                <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter"
+                                <!-- <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter"
                                              let-filter="filterCallback">
                                     <p-dropdown [(ngModel)]="col.filterValue" [options]="col.values"
                                                 (onChange)="filterCol($event.value, filter, filterEl)"
                                                 placeholder="Todos" optionLabel="output"
                                                 optionValue="output"
                                                 [showClear]="true">
+                                        <ng-template let-item pTemplate="item">
+                                            <span [classList]="'flag ' + item.class">{{item.output}}</span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </ng-template> -->
+                                <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter" let-filter="filterCallback">
+                                    <p-dropdown [(ngModel)]="col.filterValue"
+                                                [options]="col.values"
+                                                placeholder="Todos" 
+                                                optionLabel="output" 
+                                                optionDisabled="Todos"
+                                                [showClear]="true"
+                                                (onChange)="filterColOption($event.value, filter);">
+                                        <ng-template pTemplate="selectedItem">
+                                            <p *ngIf="col.filterValue != undefined">{{col.filterValue.output}}</p>
+                                        </ng-template>
                                         <ng-template let-item pTemplate="item">
                                             <span [classList]="'flag ' + item.class">{{item.output}}</span>
                                         </ng-template>
@@ -102,8 +118,8 @@
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
                 <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
-                    <div *ngSwitchCase="maskType.options">
-                        <span [classList]="'flag ' + item.optionValue!.class">{{item.optionValue!.output}}</span>
+                    <div *ngSwitchCase="maskType.options" style="max-width: 70px;">
+                        <span [classList]="'flag ' + getOptionValue(item, col, 'class')">{{getOptionValue(item, col, 'output')}}</span>
                     </div>
                     <div *ngSwitchDefault>
                         <p [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage')

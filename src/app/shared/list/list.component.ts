@@ -104,11 +104,9 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         list.every((row: any) => {
             this.columns.every(col => {
                 try {
-                    var a = this.formatCellData(row, col);
-                    row[col.field] = a;
+                    row[col.field] = this.formatCellData(row, col);
                 } catch (e) {
                     console.error(e);
-                    // return false;
                 }
                 return col;
             })
@@ -156,5 +154,20 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         }, 50);
 
     }
+    
+    getOptionValue(row: any, col: Column, field: string) {
+        if (col.values) {
+            var value = this.table.getCellValue(row, col);
+            var opt = col.values.find(x => x.value == value) as any;
+            return opt[field];
+        }
+        return null;
+    }
+    
+    filterColOption(value: any, filter: any) {
+        value = value != undefined && value != null ? value.value : undefined;
+        filter(value);
+    }
+
 }
 

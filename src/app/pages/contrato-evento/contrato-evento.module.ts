@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FormComponent } from './form/form.component';
+// import { FormComponent } from './form/form.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 
@@ -24,8 +24,8 @@ import { DropdownModule } from 'primeng/dropdown';
 
 
     ],
-    exports: [
-        FormComponent
-    ]
+    // exports: [
+    //     FormComponent
+    // ]
 })
 export class ContratoEventoModule { }

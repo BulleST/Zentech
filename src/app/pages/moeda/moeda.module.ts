@@ -5,8 +5,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { MoedaRoutingModule } from './moeda.routing';
 import { ListComponent } from './list/list.component';
-import { FormComponent } from './form/form.component';
-import { DeleteComponent } from './delete/delete.component';
+// import { FormComponent } from './form/form.component';
+// import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 
@@ -15,7 +15,7 @@ import { DropdownModule } from 'primeng/dropdown';
     declarations: [
         ListComponent,
         // FormComponent,
-        DeleteComponent,
+        // DeleteComponent,
     ],
     imports: [
         CommonModule,
@@ -25,8 +25,8 @@ import { DropdownModule } from 'primeng/dropdown';
         SharedModule,
         DropdownModule
     ],
-    exports: [
-        FormComponent
-    ]
+    // exports: [
+    //     FormComponent
+    // ]
 })
 export class MoedaModule { }

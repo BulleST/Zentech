@@ -46,7 +46,7 @@ export class UsuarioService {
 
     getList() {
         this.table.loading.next(true);
-        return this.http.get<Usuario[]>(`${this.url}/usuario/all/`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<Usuario[]>(`${this.url}/usuario`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
