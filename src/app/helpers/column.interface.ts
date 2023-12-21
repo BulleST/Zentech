@@ -2,13 +2,13 @@ import { FilterMatchMode } from "primeng/api";
 
 export interface Column {
     field: string;
-    header: string,
+    header: string;
     maskType: MaskType,
     mask?: string;
     decimal?: string,
     moeda?: string
-    filterType: FilterType,
-    filterDisplay: FilterDisplay,
+    filterType: FilterType;
+    filterDisplay: FilterDisplay;
     filterShowMatchMode?: boolean;
     showOperator?: boolean;
     filterShowAddButton?: boolean;
@@ -40,8 +40,6 @@ export enum MaskType {
     dateTime = 'dateTime',
     cnpj = 'cnpj',
     cpf = 'cpf',
-    codigoSwift = 'codigoSwift',
-    cep ='cep',
     cpfcnpj = 'cpfcnpj',
     rg = 'rg',
     any = 'any',
@@ -50,6 +48,7 @@ export enum MaskType {
     substring = 'substring',
     options = 'options',
     mask = 'mask',
+    cep = 'cep',
 }
 
 

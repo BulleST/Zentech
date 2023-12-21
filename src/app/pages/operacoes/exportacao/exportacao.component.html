@@ -8,11 +8,11 @@
                 <h6>Escolha os dados que deseja exportar</h6>
             </div>
             <form #form="ngForm">
-                
+
             <div class="row mt-2">
                <div class="col-12 my-2">
                     <div class="bg-light d-flex flex-wrap border py-2">
-                       
+
                 <div class="form-group col-12">
                     <label for="pessoa_Id" class="text-info">Pessoa: </label>
                     <p-dropdown [options]="pessoas"
@@ -27,7 +27,10 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Todas"
-                                [showClear]="true">
+                                [showClear]="true"
+                                [virtualScroll]="true"
+                                [virtualScrollItemSize]="50 "
+                                [scrollHeight]="'500px'">
                         <ng-template let-item pTemplate="item">
                             <table class="w-100">
                                 <tbody>
@@ -51,17 +54,17 @@
                 </div>
                 <div class="col-12 my-2">
                     <div class="bg-light d-flex flex-wrap border py-2">
-                        <div class="col-12"> 
-                            <input type="radio" name="datas" id="nao" [value]="undefined" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()"> 
-                            <label for="nao" class="mb-1 ms-2 text-info">Exportar base completa</label> 
+                        <div class="col-12">
+                            <input type="radio" name="datas" id="nao" [value]="undefined" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()">
+                            <label for="nao" class="mb-1 ms-2 text-info">Exportar base completa</label>
                         </div>
                     </div>
                 </div>
                 <div class="col-12 my-2">
                     <div class="bg-light d-flex flex-wrap border py-2">
-                        <div class="col-12"> 
+                        <div class="col-12">
                             <input type="radio" name="datas" id="intervalo" [value]="true" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()">
-                            <label for="intervalo" class="mb-1 ms-2 text-info">Exportar por Período</label> 
+                            <label for="intervalo" class="mb-1 ms-2 text-info">Exportar por Período</label>
                         </div>
                         <div class="form-group col-sm-6 col-12">
                             <label for="de">De: <span class="text-danger" *ngIf="de.value || ate.value">*</span> </label>
@@ -95,9 +98,9 @@
                 </div>
                 <div class="col-12 my-2">
                     <div class="bg-light d-flex flex-wrap border py-2">
-                        <div class="col-12"> 
+                        <div class="col-12">
                             <input type="radio" name="datas" id="ou" [value]="false" #datas="ngModel" [(ngModel)]="datasFiltro" (ngModelChange)="datasChanged()">
-                            <label for="ou" class="mb-1 ms-2 text-info">Exportar por Data</label> 
+                            <label for="ou" class="mb-1 ms-2 text-info">Exportar por Data</label>
                         </div>
                         <div class="form-group  col-12">
                             <label for="data">Data:</label>
@@ -118,11 +121,11 @@
             </div>
             <div class="row">
                 <div class="px-1 d-flex justify-content-between align-items-start">
-                    <div *ngIf="erro || form.invalid" class="m-0">
+                    <div *ngIf="erro || form.invalid" class="m-0 me-3">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
                     </div>
-                    <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading" (click)="exportar()">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> 
+                    <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading" (click)="exportar()">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         <span>Exportar</span>
                     </button>
                 </div>

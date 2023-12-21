@@ -33,7 +33,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() topActions: TemplateRef<any>;
     @Input() tableFooter: TemplateRef<any>;
     @Input() rowActions: TemplateRef<any>;
-    @Input() data: any[] = [];
+
     selected?: any;
     filters: string[] = [];
     routeRow: string[] = [];
@@ -77,7 +77,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
             this.filters = this.columns.map(x => x.field)
-            console.log(this.filters)
         }
         if (changes['selectable']) this.selectable = changes['selectable'].currentValue;
         if (changes['filterLink']) this.filterLink = changes['filterLink'].currentValue;

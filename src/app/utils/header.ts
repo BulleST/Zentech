@@ -8,7 +8,7 @@ import { Table } from "./table";
     providedIn: 'root'
 })
 export class Header {
-    menuMobileOpen = new BehaviorSubject<boolean>(false);
+    menuAsideOpen = new BehaviorSubject<boolean>(false);
     minhaContaOpen = new BehaviorSubject<boolean>(false);
 
     constructor(
@@ -18,14 +18,14 @@ export class Header {
 
     }
 
-    toggleMenuMobile(): void {
-        this.setMenuMobile(!this.menuMobileOpen.value);
+    toggleMenuAside(): void {
+        this.setMenuAside(!this.menuAsideOpen.value);
     }
 
-    setMenuMobile(value: boolean) {
+    setMenuAside(value: boolean) {
         var encryted = this.crypto.encrypt(value) ?? '';
         localStorage.setItem('navigation', encryted);
-        this.menuMobileOpen.next(value);
+        this.menuAsideOpen.next(value);
     }
 
 
@@ -45,18 +45,19 @@ export class Header {
         var classe = this;
         $('body').on('click', function (e) {
             classe.closeMenuMinhaConta();
-            classe.setMenuMobile(false);
+            classe.setMenuAside(false);
         });
         
         $('.header__userLogado').on('click', function (e) {
             e.stopPropagation();
         });
 
-        $('.btn-mobile').on('click', function (e) {
+     
+        $('.navigation__toggle').on('click', (e: any) => {
             e.stopPropagation();
         });
 
-        $('.header').on('click', function (e) {
+        $('.navigation').on('click', function (e) {
             e.stopPropagation();
         });
     }

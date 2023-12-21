@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { ModalUtils } from 'src/app/utils/modal';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { ToastrService } from 'ngx-toastr';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-delete-saldo',
@@ -20,21 +20,31 @@ export class DeleteSaldoComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../../../'];
-    routeBackOptions: any;
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
+    modal: Modal = new Modal;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: ModalUtils,
+        private modalService: ModalService,
         private pessoaSaldoService: PessoaSaldoService,
         private crypto: Crypto,
         private toastr: ToastrService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
 
+
+
+    }
+    ngAfterViewInit(): void {
+        this.modal.title = 'Excluir Saldo';
+        this.modal.template = this.template;
+        this.modal.style = { 'max-width': '500px' };
+        this.modal.routerBack = ['../../../'];
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.icon = this.icon;
+        
         var params = this.activatedRoute.params.subscribe(res => {
             if (res['saldo_id']) {
                 var id = res['saldo_id'];
@@ -45,16 +55,16 @@ export class DeleteSaldoComponent implements OnDestroy {
         });
         this.subscription.push(params);
         
-        var parent = activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
-        var child = activatedRoute.snapshot.paramMap.has('pessoa_id');
-        var paramsSubscriber  = parent ? activatedRoute.parent?.params : child ? activatedRoute.params : this.voltar();
+        var parent = this.activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
+        var child = this.activatedRoute.snapshot.paramMap.has('pessoa_id');
+        var paramsSubscriber  = parent ? this.activatedRoute.parent?.params : child ? this.activatedRoute.params : this.voltar();
         
         if (paramsSubscriber) {
             var paramsSubscription = paramsSubscriber.subscribe(x => {
                 if (x['pessoa_id']) {
                     this.pessoa_Id = this.crypto.decrypt(x['pessoa_id']);
                     setTimeout(() => {
-                        this.modal.setOpen(true);
+                        this.modal = this.modalService.addModal(this.modal, 'moeda');
                     }, 200);
                 } else {
                     this.voltar();
@@ -64,16 +74,6 @@ export class DeleteSaldoComponent implements OnDestroy {
         } else {
             this.voltar();
         }
-
-
-    }
-    ngAfterViewInit(): void {
-        this.modal.title.next('Excluir Saldo')
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '500px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
     }
 
     ngOnDestroy(): void {
@@ -81,9 +81,8 @@ export class DeleteSaldoComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
-
 
     send() {
         this.loading = true;

@@ -33,25 +33,25 @@ export class PessoaOperacaoStatus {
 }
 
 export class PessoaOperacaoImportacao {
-  id?: number;
-  dataTransacao: Date = new Date;
-  tipoCliente: string = '';
-  nomeCliente: string = '';
-  docCliente: string = '';
-  nomeComprador: string = '';
-  paisCompradorVendedor: string = '';
-  moeda: string = '';
-  tipoTransacao: string = '';
-  formaPagamento: string = '';
-  valorMoedaEstrangeira: string = '';
-  valorMoedaNacional: string = '';
-  statusOperacao: string = '';
-  statusCadastro?: string;
+    id?: number;
+    dataTransacao: Date = new Date;
+    tipoCliente: string = '';
+    nomeCliente: string = '';
+    docCliente: string = '';
+    nomeComprador: string = '';
+    paisCompradorVendedor: string = '';
+    moeda: string = '';
+    tipoTransacao: string = '';
+    formaPagamento: string = '';
+    valorMoedaEstrangeira: string = '';
+    valorMoedaNacional: string = '';
+    statusOperacao: string = '';
+    statusCadastro?: string;
 
-  detalhes?: string;
-  excel?: string;
-  excelLinha?: number;
-  sucesso?: boolean;
+    detalhes?: string;
+    excel?: string;
+    excelLinha?: number;
+    sucesso?: boolean;
 }
 
 export var pessoaOperacaoColumns: Column[] = [
@@ -70,7 +70,7 @@ export var pessoaOperacaoColumns: Column[] = [
     {
         field: 'num_Op',
         header: 'Nº Operação',
-        maskType: MaskType.undefined,
+        maskType: MaskType.mask,
         mask: '0000',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

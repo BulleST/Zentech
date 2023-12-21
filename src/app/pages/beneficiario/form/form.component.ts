@@ -113,9 +113,9 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.beneficiarioService.get(this.objeto.id))
                     .then(res => {
+                        res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
+                        res.cep = res.cep.toString().padStart(8, '0');
                         this.objeto = res;
-                        this.objeto.cnpj = this.objeto.cnpj.toString().padStart(14, '0') as unknown as number;
-                        this.objeto.cep = this.objeto.cep.toString().padStart(8, '0');
                         setTimeout(() => {
                             this.buscaCEP(this.cep)
                         }, 500);

@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Invoice, Invoice_List } from '../models/invoice.model';
 import { Response } from '../helpers/request-response.interface';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +20,7 @@ export class InvoiceService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private datePipe: DatePipe,
     ) {
     }
 
@@ -60,5 +62,26 @@ export class InvoiceService {
 
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/invoice/${id}`);
+    }
+
+
+    file(id: number) {
+        return this.http.post<Blob>(`${this.url}/invoice/${id}`, {})
+        .pipe(tap({
+            next: res => {
+                var blob = new Blob([res], { type: 'application/pdf' })
+                const data = window.URL.createObjectURL(blob);
+    
+                var link = document.createElement('a');
+                link.href = data;
+                link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                // this is necessary as link.click() does not work on the latest firefox
+                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+                var url = URL.createObjectURL(res);
+                window.open(url, '_blank');
+                URL.revokeObjectURL(url);
+            }
+        }));
     }
 }

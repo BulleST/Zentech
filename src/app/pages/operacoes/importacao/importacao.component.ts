@@ -7,10 +7,11 @@ import { ColumnFilter } from 'primeng/table';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoImportacao } from 'src/app/models/pessoa-operacao.model';
 import { PessoaResponse } from 'src/app/models/pessoa.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-import { ModalUtils } from 'src/app/utils/modal';
+
 import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 
@@ -29,8 +30,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     modalOpen = false;
     erro = '';
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
-    routeBackOptions: any;
 
     listErros: PessoaOperacaoImportacao[] = [];
     listAll: PessoaOperacaoImportacao[] = [];
@@ -47,30 +46,29 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         dataTransacao: undefined,
     }
     retornoAPI = false;
+    modal: Modal = new Modal;
 
     constructor(
         private toastr: ToastrService,
-        private modal: ModalUtils,
+        private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
         private pessoaOperacaoService: PessoaOperacaoService,
         private pessoaService: PessoaService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.title.next('Importar Arquivo')
-        this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        // this.modal.onPaste.subscribe(e => {
-        //     this.paste(e);
-        // })
     }
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.icon.next(this.icon);
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style =  { 'width': 'max-content', 'max-width': '95vw' };
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.title = 'Importar Arquivo';
+
 
         setTimeout(() => {
-            this.modal.setOpen(true);
+            this.modal = this.modalService.addModal(this.modal, 'moeda');
         }, 200);
     }
 
@@ -83,13 +81,11 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     ngOnDestroy(): void {
-        this.modal.setOpen(false);
         this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
-        this.modal.resetModal();
+        this.modalService.removeModal(this.modal.id);
     }
 
     readExcel1(event: any) {
@@ -239,7 +235,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 this.listOkValidation.push(obj)
             }
             if (this.listErros.length > 0) {
-                this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
+                this.modal.style =  { 'width': 'max-content', 'max-width': '95vw' };
             }
             this.listAll.push(obj);
             return obj;

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { InvoiceRoutingModule } from './invoice.routing';
 import { ListComponent } from './list/list.component';
-import { FormComponent } from './form/form.component';
+// import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -15,7 +15,7 @@ import { DropdownModule } from 'primeng/dropdown';
     declarations: [
         ListComponent,
         // FormComponent,
-        DeleteComponent
+        DeleteComponent,
     ],
     imports: [
         CommonModule,
@@ -24,11 +24,6 @@ import { DropdownModule } from 'primeng/dropdown';
         FontAwesomeModule,
         SharedModule,
         DropdownModule
-
-
-    ],
-    exports: [
-      FormComponent
-  ]
+    ]
 })
 export class InvoiceModule { }

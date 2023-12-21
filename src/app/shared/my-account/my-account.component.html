@@ -1,0 +1,84 @@
+<ng-template #icon>
+    <fa-icon [icon]="faCreditCard"></fa-icon>
+</ng-template>
+<ng-template #template>
+    <form #form="ngForm" (ngSubmit)="send(form)">
+        <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                <div class="form-floating">
+                    <input type="name"
+                           class="form-control"
+                           id="name"
+                           name="name"
+                           #name="ngModel"
+                           [(ngModel)]="objeto.name"
+                           placeholder="   "
+                           required>
+                    <label for="name">
+                        <span>Nome completo <span class="text-danger">*</span></span>
+                    </label>
+                </div>
+                <div *ngIf="name.errors != null && name.touched" class="pl-2 pt-2 pb-0">
+                    <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                <div class="form-floating">
+                    <input type="text"
+                           class="form-control"
+                           id="telefoneCelular"
+                           name="telefoneCelular"
+                           #telefoneCelular="ngModel"
+                           [(ngModel)]="objeto.telefoneCelular"
+                           placeholder="(11) x.0000-0000"
+                           required>
+                    <label for="telefoneCelular">
+                        <span>Telefone/celular <span class="text-danger">*</span></span>
+                    </label>
+                </div>
+                <div *ngIf="telefoneCelular.errors != null && telefoneCelular.touched" class="pl-2 pt-2 pb-0">
+                    <p class="text-danger" *ngIf="telefoneCelular.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="telefoneCelular.errors['mask']">Telefone/celular inválido</p>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
+                <div class="form-floating">
+                    <input type="email"
+                           email
+                           class="form-control"
+                           id="email"
+                           name="email"
+                           #email="ngModel"
+                           [(ngModel)]="objeto!.email"
+                           placeholder="example@gmail.com"
+                           required
+                           readonly>
+                    <label for="email">
+                        <span>E-mail <span class="text-danger">*</span></span>
+                    </label>
+                </div>
+                <div *ngIf="email.errors != null && email.touched" class="pl-2 pt-2 pb-0">
+                    <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-start flex-wrap p-0 mt-1 px-2">
+            <div *ngIf="erro" class="mb-2">
+                <p class="text-danger" [innerHTML]="erro"></p>
+            </div>
+            <div class="d-flex col-sm-12 ms-auto mt-3 mr-0 px-0">
+                <a class="btn btn-grey ms-auto mr-1" [routerLink]="['change-password']"> Alterar senha <fa-icon [icon]="faKey" class="ml-1"></fa-icon>
+                </a>
+                <button type="submit" class="btn btn-primary mr-0"
+                        [disabled]="form.invalid || loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar </button>
+            </div>
+        </div>
+    </form>
+</ng-template>
+<router-outlet></router-outlet>

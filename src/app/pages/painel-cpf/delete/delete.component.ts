@@ -1,7 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faChevronLeft, faTimes, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
@@ -31,24 +30,24 @@ export class DeleteComponent {
         private pessoaService: PessoaService,
         private pessoaOperacaoService: PessoaOperacaoService,
     ) { }
-
+    
     ngAfterViewInit(): void {
         this.modal.id =  0;
         this.modal.template =  this.template;
         this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
+        this.modal.style =  { 'max-width': '400px' };
         this.modal.activatedRoute =  this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         this.modal.routerBack = ['../../'];
         this.modal.title = 'Excluir registro';
 
-
+        
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['pessoa_Id']) {
                 try {
                     this.id = this.crypto.decrypt(p['pessoa_Id']);
                     setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'delete cpf');
+                        this.modal = this.modalService.addModal(this.modal, 'delete pessoa');
                     }, 200);
                 } catch(e) {
                     this.voltar();
@@ -64,7 +63,7 @@ export class DeleteComponent {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-
+   
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }
@@ -84,7 +83,6 @@ export class DeleteComponent {
                 } else {
                     this.erro = res.mensagem;
                 }
-
             })
             .catch(res => {
                 this.loading = false;

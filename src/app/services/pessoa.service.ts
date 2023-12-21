@@ -23,15 +23,9 @@ export class PessoaService {
     ) {
     }
 
-
-    importarArquivo(file: File){
-      var data = new FormData();
-      data.append('file', file);
-      return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, data);
-  }
     getList() {
         this.table.loading.next(true);
-        return this.http.get<PessoaList[]>(`${this.url}/cliente`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaList[]>(`${this.url}/pessoa`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -56,6 +50,13 @@ export class PessoaService {
     }
 
 
+    importarArquivo(file: File){
+        var data = new FormData();
+        data.append('file', file);
+        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa/importa-excel`, data);
+    }
+
+
     create(request: any[]) {
         return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, request);
     }
@@ -67,12 +68,9 @@ export class PessoaService {
 
     getPessoa(cpf: number, dataNasc: Date) {
         dataNasc = new Date(dataNasc.toString() + 'T00:00:00').toLocaleString().substring(0,10) as unknown as Date;
-        return this.http.post<BRConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
+        return this.http.post(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
     }
 
-    exportarExcel() {
-
-    }
 
 }
 

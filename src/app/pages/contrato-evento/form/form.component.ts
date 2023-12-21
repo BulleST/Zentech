@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Moeda } from 'src/app/models/moeda.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { ContratoEvento } from 'src/app/models/contrato-evento.model';

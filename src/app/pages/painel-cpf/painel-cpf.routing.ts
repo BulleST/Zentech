@@ -11,27 +11,31 @@ import { CreateSaldoComponent } from './saldo/create-saldo/create-saldo.componen
 import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.component';
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
+import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
+import { MyAccountRouter } from 'src/app/utils/my-account-router';
 
 
 const routes: Routes = [
     { path: '', component: PainelCpfComponent, children: [
             { path: '', component: ListComponent, children: [
-                    { path: 'cadastrar', component: CreateComponent },
-                    { path: 'cadastrar-operacao/:pessoa_id', component: FormOperacaoComponent },
-                    { path: 'cadastrar-saldo/:pessoa_id', component: CreateSaldoComponent },
-                    { path: 'importar', component: ImportacaoComponent },
-                    { path: 'excluir/:pessoa_id', component: DeleteComponent },
-                    { path: 'minha-conta', loadComponent: () => import('./../initial/my-account/my-account.component').then(x => x.MyAccountComponent) }
+                    { path: 'cadastrar', component: CreateComponent, data: { modalOrder: 1 } },
+                    { path: 'cadastrar-operacao/:pessoa_id', component: FormOperacaoComponent, data: { modalOrder: 1 } },
+                    { path: 'cadastrar-saldo/:pessoa_id', component: CreateSaldoComponent, data: { modalOrder: 1 } },
+                    { path: 'importar', component: ImportacaoArquivoComponent, data: { modalOrder: 1 } },
+                    { path: 'excluir/:pessoa_id', component: DeleteComponent, data: { modalOrder: 1 } },
+                    MyAccountRouter
                 ]
             },
             { path: 'detalhes/:pessoa_id', component: DetailsComponent, children: [
-                { path: 'saldo/cadastrar', component: CreateSaldoComponent },
-                { path: 'saldo/excluir/:saldo_id', component: DeleteSaldoComponent },
-                { path: 'operacao/cadastrar', component: FormOperacaoComponent },
+                { path: 'saldo/cadastrar', component: CreateSaldoComponent, data: { modalOrder: 1 } },
+                { path: 'saldo/excluir/:saldo_id', component: DeleteSaldoComponent, data: { modalOrder: 1 } },
+                { path: 'operacao/cadastrar', component: FormOperacaoComponent, data: { modalOrder: 1 } },
                 { path: 'operacao/editar/:operacao_id', component: FormOperacaoComponent},
-                { path: 'operacao/detalhes/:operacao_id', component: DetalhesOperacaoComponent },
-                { path: 'operacao/excluir/:operacao_id', component: DeleteOperacaoComponent },
+                { path: 'operacao/detalhes/:operacao_id', component: DetalhesOperacaoComponent, data: { modalOrder: 1 } },
+                { path: 'operacao/excluir/:operacao_id', component: DeleteOperacaoComponent, data: { modalOrder: 1 } },
+                MyAccountRouter
             ] },
+            MyAccountRouter,
         ]
     },
 

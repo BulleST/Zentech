@@ -1,0 +1,22 @@
+<aside class="navigation" [class.open]="menuOpen" [class.navigation-home]="homeActive">
+    <div class="navigation__toggle-content">
+        <button class="navigation__toggle" (click)="toggleAside()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+    <div class="navigation__content">
+        <div class="navigation__logo">
+            <img src="assets/img/logo-icon-colorful.png" alt="Logo ToComply">
+        </div>
+        <div class="navigation__links">
+            <p class="text-thin text-light" >Navegação</p>
+            <div class="navigation__links-item" *ngFor="let item of gfg">
+                <p *ngIf="!item.routerLink" class="label-link">{{item.label}}</p>
+                <a *ngIf="item.routerLink" class="label-link" [routerLink]="item.routerLink" routerLinkActive="label-link-active">
+                    <span>{{item.label}}</span>
+                    <span><fa-icon [icon]="faLink"></fa-icon></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>

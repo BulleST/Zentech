@@ -6,11 +6,6 @@ export class ContratoEvento {
     nome: string = '';
 }
 
-export class ContratoEventoRequest {
-  id: number = 0;
-  nome: string = '';
-}
-
 export var contratoEventoColumns: Column[] = [
     {
         field: 'id',

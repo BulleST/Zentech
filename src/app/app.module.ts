@@ -50,8 +50,8 @@ registerLocaleData(localePt);
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
-          { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-        //   { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
 
     ],
     bootstrap: [AppComponent]

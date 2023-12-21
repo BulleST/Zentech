@@ -27,7 +27,7 @@ export class DeleteComponent {
         private bancoService: BancoService,
         private crypto: Crypto,
     ) { }
-
+    
     ngAfterViewInit(): void {
         this.modal.id =  0;
         this.modal.template =  this.template;
@@ -38,7 +38,7 @@ export class DeleteComponent {
         this.modal.routerBack = ['../../'];
         this.modal.title = 'Excluir registro';
 
-
+        
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['banco_id']) {
                 try {

@@ -71,10 +71,10 @@ export class PessoaImportacao {
   excel_IdNum: string = '';
   excel_Erro?: string;
 
-  detalhes?: string;
-  excel?: string;
-  excelLinha?: number;
-  sucesso?: boolean;
+    detalhes?: string;
+    excel?: string;
+    excelLinha?: number;
+    sucesso?: boolean;
 }
 
 export class PessoaResponse {

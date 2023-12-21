@@ -10,32 +10,34 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
     selector: 'app-verify-email',
     templateUrl: './verify-email.component.html',
-    styleUrls: ['./verify-email.component.css']
+    styleUrls: ['./../account.component.css', './verify-email.component.css']
 })
 export class VerifyEmailComponent {
 
-    loading = false;
+    loading = true;
     erro = '';
     mensagemSucesso = '';
     faChevronCircleLeft = faChevronCircleLeft;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private toastrService: ToastrService,
-        private table: Table
     ) {
+
         const token = this.activatedRoute.snapshot.queryParams['token'];
         this.router.navigate([], { relativeTo: this.activatedRoute, replaceUrl: true });
+        
         lastValueFrom(this.accountService.verifyEmail(token))
-            .then((res) => {
+        .then((res) => {
                 this.erro = '';
                 this.mensagemSucesso = res.message;
+                this.loading = false;
             })
             .catch((res) => {
-                console.error(res)
                 this.erro = getError(res)
                 this.mensagemSucesso = '';
+                this.loading = false;
             })
             .finally(() => this.loading = false)
     }

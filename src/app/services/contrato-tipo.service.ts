@@ -5,7 +5,6 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContratoTipo } from '../models/contrato-tipo.model';
 import { Response } from '../helpers/request-response.interface';
-
 @Injectable({
     providedIn: 'root'
 })
@@ -21,15 +20,15 @@ export class ContratoTipoService {
     ) { }
 
     getList() {
-      return this.http.get<ContratoTipo[]>(`${this.url}/contrato_Tipo/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
-          .pipe(tap({
-              next: list => {
-                  this.list.next(list);
-                  return of(list);
-              },
-              error: res => this.toastr.error('Não foi possível carregar listagem de eventos.')
-          }));
-  }
+        return this.http.get<ContratoTipo[]>(`${this.url}/contrato_Tipo/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+            .pipe(tap({
+                next: list => {
+                    this.list.next(list);
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de tipos.')
+            }));
+    }
     get(id: number) {
         return this.http.get<ContratoTipo>(`${this.url}/contrato_Tipo/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) }).pipe(tap({
             next: object => {

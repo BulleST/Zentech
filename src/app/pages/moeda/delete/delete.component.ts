@@ -1,6 +1,4 @@
 import { MoedaService } from 'src/app/services/moeda.service';
-import { ContratoTipoService } from './../../../services/contrato-tipo.service';
-import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -8,7 +6,6 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { ContratoTipo } from 'src/app/models/contrato-tipo.model';
 import { Moeda } from 'src/app/models/moeda.model';
 
 @Component({
@@ -60,7 +57,7 @@ export class DeleteComponent {
                 try {
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'tipo');
-                        this.moedaService.get(this.id).subscribe((moeda: ContratoTipo) => {
+                        this.moedaService.get(this.id).subscribe((moeda: Moeda) => {
                           if (moeda.id == this.tipoId) {
                               this.nome = moeda.nome;
                               console.log('tste',this.nome)

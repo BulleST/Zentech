@@ -26,8 +26,7 @@ import { DropdownModule } from 'primeng/dropdown';
         DropdownModule
     ],
     exports: [
-        FormComponent,
-        DeleteComponent
+        FormComponent
     ]
 })
 export class MoedaModule { }

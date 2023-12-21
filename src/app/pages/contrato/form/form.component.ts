@@ -2,7 +2,7 @@ import { PaisesService } from './../../../services/paises.service';
 import { InstituicaoFinanceiraService } from './../../../services/instituicao-financeira.service';
 import { ContratoTipoService } from './../../../services/contrato-tipo.service';
 import { ContratoTipo } from './../../../models/contrato-tipo.model';
-import { ContratoRequest } from './../../../models/contrato.model';
+import { Contrato } from './../../../models/contrato.model';
 import { ContratoService } from './../../../services/contrato.service';
 import { Contrato_List } from './../../../models/contrato.model';
 import { ContratoStatus } from './../../../models/contrato.model';
@@ -11,15 +11,11 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaList } from 'src/app/models/pessoa.model';
 import { ModalService } from 'src/app/services/modal.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Response } from 'src/app/helpers/request-response.interface';
 import { CepService } from 'src/app/services/cep-service.service';
-import { data } from 'jquery';
 import { Cidades } from 'src/app/models/cidade.model';
 import { CidadesService } from 'src/app/services/cidades.service';
 import { SelectItem } from 'primeng/api';
@@ -31,9 +27,11 @@ import { Modal } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee, fas } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { Invoice_List } from 'src/app/models/invoice.model';
+
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -41,7 +39,7 @@ import { Invoice_List } from 'src/app/models/invoice.model';
 })
 export class FormComponent implements OnDestroy {
 
-  objeto: ContratoRequest = new ContratoRequest;
+  objeto: Contrato = new Contrato;
   teste: Contrato_List[]
   erro: string = '';
   loading = false;
@@ -129,27 +127,32 @@ export class FormComponent implements OnDestroy {
 
 
 
+
     lastValueFrom(this.invoiceService.getList())
       .then(res => this.invoices = res)
       .finally(() => console.log('ok'));
 
     var invoices = this.invoiceService.list.subscribe(
-      res => {this.invoices =  res.map(x=>{
-        x.filter = x.id + '-' + x.nomeBanco + '-' +  x.nomeBeneficiario + '-' + x.cnpjBeneficiario + '-'+ x.valor + '-' + x.dataInvoice
-        console.log('teste',x.filter)
+      res => {
+        this.invoices = res.map(x => {
+          x.filter = x.id + '-' + x.nomeBanco + '-' + x.nomeBeneficiario + '-' + x.cnpjBeneficiario + '-' + x.valor + '-' + x.dataInvoice
+          console.log('teste', x.filter)
 
-        return x
-      })
+          return x
+        })
+
 
       }
-      );
+    );
     this.subscription.push(invoices);
+
 
 
 
     lastValueFrom(this.contratoEventoService.getList())
       .then(res => this.eventos = res)
       .finally(() => this.loadingEvento = false);
+
 
     var eventos = this.contratoEventoService.list.subscribe(res => this.eventos = res);
     this.subscription.push(eventos);
@@ -206,10 +209,8 @@ export class FormComponent implements OnDestroy {
         this.isEditPage = true;
         lastValueFrom(this.contratoService.get(this.objeto.id))
           .then(res => {
-
-
             this.objeto = res;
-            this.selectedInvoice = this.invoices.find(x=> x.id == this.objeto.invoice_Id)
+            this.selectedInvoice = this.invoices.find(x => x.id == this.objeto.invoice_Id)
             console.log(this.objeto, 'this.selectedInvoice', this.selectedInvoice)
             setTimeout(() => {
               this.modal = this.modalService.addModal(this.modal, 'contrato');
@@ -236,7 +237,7 @@ export class FormComponent implements OnDestroy {
   }
 
 
-  invoiceChange(){
+  invoiceChange() {
     this.objeto.invoice_Id = this.selectedInvoice?.id ?? undefined as unknown as number
     console.log(this.selectedInvoice, this.selectedInvoice?.id)
   }
@@ -251,30 +252,20 @@ export class FormComponent implements OnDestroy {
     this.modalService.removeModal(this.modal.id);
   }
 
-  // send() {
-  //   this.loading = true;
-  //   this.erro = '';
-  //   lastValueFrom(this.contratoService.post(this.objeto))
-  //     .then(res => {
-  //       if (res.successo != false) {
-  //         lastValueFrom(this.contratoService.getList());
-  //         this.voltar();
-  //       } else {
-  //         this.erro = res.mensagem;
-  //         this.toastr.error(res.mensagem);
-  //         console.log('erro1')
-  //       }
-  //       this.loading = false;
-  //     })
-  //     .catch(res => {
-  //       this.loading = false;
-  //       this.erro = getError(res);
-  //       console.log('erro2')
-  //     })
 
-  // }
+  fileDownload() {
+    this.loading = true;
+    lastValueFrom(this.contratoService.file(this.objeto.id))
+      .then(res => {
+        this.loading = false;
+      })
+      .catch(res => {
+        this.loading = false;
+      })
 
-  send(form: NgForm) {
+  }
+
+  send(form: NgForm, salvarEBaixar: boolean) {
     if (form.invalid) {
       this.toastr.error('Campos inválidos');
       this.erro = 'Campos inválidos';
@@ -287,9 +278,17 @@ export class FormComponent implements OnDestroy {
     return lastValueFrom(this.contratoService.post(this.objeto))
       .then(res => {
         if (res.sucesso != false) {
-          lastValueFrom(this.contratoService.getList());
-          console.log(this.objeto)
-          this.voltar();
+          if (salvarEBaixar && this.isEditPage) {
+            lastValueFrom(this.contratoService.file(this.objeto.id))
+              .then(res => {
+                this.loading = false;
+              })
+              .catch(res => {
+                this.loading = false;
+              })
+          } else {
+            this.voltar();
+          }
         } else {
           this.erro = res.mensagem;
           this.toastr.error(res.mensagem);

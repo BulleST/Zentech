@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faFileInvoice } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Invoice_List, invoiceColumns } from 'src/app/models/invoice.model';
@@ -11,15 +12,16 @@ import { Table } from 'src/app/utils/table';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent {
+    faFileInvoice = faFileInvoice;
     list: Invoice_List[] = [];
     tableLinks: MenuTableLink[] = [];
     columns = invoiceColumns;
     subscription: Subscription[] = [];
-
+    
     constructor(
         private table: Table,
         private invoiceService: InvoiceService,
-    ) {
+    ) { 
         var list = this.invoiceService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
@@ -27,13 +29,13 @@ export class ListComponent {
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
+                    { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] }, 
+                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
-        this.subscription.push(selected);
+        this.subscription.push(selected);  
     }
 
     ngOnDestroy(): void {
