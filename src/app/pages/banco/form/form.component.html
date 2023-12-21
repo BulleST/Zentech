@@ -35,14 +35,14 @@
                            mask="00000-000"
                            name="cep"
                            id="cep"
-                           (blur)="buscaCEP(cep)"
+                           (ngModelChange)="buscaCEP(cep)"
                            [(ngModel)]="objeto.cep"
                            #cep="ngModel"
-                           required />
+                           required 
+                           [disabled]="loadingCep"/>
                     <div *ngIf="cep.touched && cep.errors">
                         <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
-                        <p class="text-danger" *ngIf="cep.errors['mask']">CEP inválido.</p>
-                        <p class="text-danger" *ngIf="cep.errors['invalid']">CEP inválido.</p>
+                        <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
                     </div>
                 </div>
                 <div class="form-group col-md-6 col-sm-12">

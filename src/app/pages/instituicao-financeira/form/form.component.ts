@@ -37,6 +37,7 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     loadingCNPJ = false;
     loadingCep = false;
     @ViewChild('cep') cep: NgModel;
+    @ViewChild('cnpj') cnpj: NgModel;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -67,24 +68,24 @@ export class FormComponent implements OnDestroy, AfterViewInit {
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['instituicaoFinanceira_id']) {
                 this.objeto.id = this.crypto.decrypt(x['instituicaoFinanceira_id']);
-                
+
                 this.modal.title = 'Editar Instituição Financeira';
                 this.modal.routerBack = ['../../'];
 
                 this.isEditPage = true;
                 console.log(1)
                 lastValueFrom(this.instituicaoFinanceiraService.get(this.objeto.id))
-                .then(res => {
-                    res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
-                    res.cep = res.cep.padStart(8, '0');
-                    this.objeto = res;
-                    setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
-                    }, 200);
-                })
-                .catch(res => {
-                    console.log(2, res)
-                    this.voltar();
+                    .then(res => {
+                        res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
+                        res.cep = res.cep.padStart(8, '0');
+                        this.objeto = res;
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
+                        }, 200);
+                    })
+                    .catch(res => {
+                        console.log(2, res)
+                        this.voltar();
                     })
 
             } else {
@@ -114,12 +115,11 @@ export class FormComponent implements OnDestroy, AfterViewInit {
         input.control.setErrors(null);
         this.cepPreenchido = false
 
-        if (!this.validaCep(input)) {
+        if (!this.validaCEP(input)) {
             this.toastr.error('CEP inválido.');
             input.control.setErrors({ invalid: true })
             return;
         }
-        this.cepPreenchido = false
 
         lastValueFrom(this.cepService.buscar(this.objeto.cep))
             .then(data => {
@@ -149,65 +149,80 @@ export class FormComponent implements OnDestroy, AfterViewInit {
             .finally(() => this.loadingCep = false)
 
     }
-    validaCep(input: NgModel) {
+
+    validaCEP(input: NgModel) {
         this.loadingCep = true;
-        console.log('1')
         if (!this.objeto.cep.trim()) {
             input.control.setErrors({ required: true });
             this.loadingCep = false;
             return false
-        }
-        else if (this.objeto.cep.trim().length != 8) {
+        } 
+        else if (this.objeto.cep.toString().length < 8) {
             input.control.setErrors({ invalid: true });
             this.loadingCep = false;
-            return false
+            return false;
         } else if (!validateCEP(this.objeto.cep)) {
-                input.control.setErrors({ invalid: true });
+            input.control.setErrors({ invalid: true });
             this.loadingCep = false;
             return false;
         } else {
             this.loadingCep = false;
-                input.control.setErrors(null);
+            input.control.setErrors(null);
             return true;
         }
     }
+    
     validaCNPJ(input: NgModel) {
         this.erro = '';
         this.loadingCNPJ = true;
 
-        if (!this.objeto.cnpj || this.objeto.cnpj == 0) {
-            setTimeout(() => {
-                input.control.setErrors({ required: true });
-            }, 300);
+        if (this.objeto.cnpj.toString().length < 14) {
+            input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
-            return;
+            return false;
+        }
+
+        if (!this.objeto.cnpj || this.objeto.cnpj == 0) {
+            input.control.setErrors({ required: true });
+            this.loadingCNPJ = false;
+            return false;
         }
 
         var valid = validateCNPJ(this.objeto.cnpj);
         if (!valid) {
-            setTimeout(() => {
-                input.control.setErrors({ invalid: true });
-            }, 300);
+            input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
+            return false;
+
             return;
         } else {
             this.loadingCNPJ = false;
-            setTimeout(() => {
-                input.control.setErrors(null);
-            }, 300);
-            this.erro = '';
+            input.control.setErrors(null);
+            return true;
         }
         return;
     }
 
 
     send(form: NgForm) {
+        this.erro = '';
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
             this.erro = 'Campos inválidos';
             return;
         }
-        this.erro = '';
+
+        if (!this.validaCNPJ(this.cnpj)) {
+            this.toastr.error('CNPJ inválido');
+            this.erro = 'CNPJ inválido';
+            return;
+        }
+        if (!this.validaCEP(this.cnpj)) {
+            this.toastr.error('CEP inválido');
+            this.erro = 'CEP inválido';
+            return;
+        }
+
         return lastValueFrom(this.instituicaoFinanceiraService.post(this.objeto))
             .then(res => {
                 if (res.sucesso != false) {
