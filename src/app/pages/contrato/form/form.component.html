@@ -31,14 +31,14 @@
               <ng-template let-item pTemplate="item">
                 <div class="d-flex align-items-center">
                   <span>{{item.nome}} </span>
-  
+
                   <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/evento/', encryptId(item.id)]">
                     <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512"  fill="#555" style="margin-right: 4px;">
                       <path
                             d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
                     </svg>
                   </a>
-  
+
                   <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
                   <a [routerLink]="['./excluir/evento/', encryptId(item.id)]" class="link text-info">
                     <svg  xmlns="http://www.w3.org/2000/svg" height="11"
@@ -61,7 +61,7 @@
           </div>
           <div class="form-group col-md-6 col-sm-4">
             <label for="tipo_Id">Tipo: <span class="text-danger">*</span></label>
-  
+
             <p-dropdown
                         [options]="tipos"
                         [(ngModel)]="objeto.tipo_Id"
@@ -79,14 +79,14 @@
                         <ng-template let-item pTemplate="item">
                           <div class="d-flex align-items-center">
                             <span>{{item.nome}} </span>
-  
+
                             <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/tipo/', encryptId(item.id)]">
                               <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512"  fill="#555" style="margin-right: 4px;">
                                 <path
                                       d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
                               </svg>
                             </a>
-  
+
                             <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
                             <a [routerLink]="['./excluir/tipo/', encryptId(item.id)]" class="link text-info">
                               <svg  xmlns="http://www.w3.org/2000/svg" height="11"
@@ -167,7 +167,7 @@
             [required]="true"
             [autoReplaceValue]="false"></app-input-number>
             <!-- <input type="text"
-  
+
                    class="form-control"
                    name="valorNacional"
                    id="valorNacional"
@@ -186,7 +186,7 @@
                    id="numContrato"
                    #numContrato="ngModel"
                    [(ngModel)]="objeto.numContrato"
-                   required 
+                   required
                    pattern="\S(.*\S)?"
                    (change)="objeto.numContrato = numContrato.value.trim();">
             <div *ngIf="numContrato.touched && numContrato.errors">
@@ -206,7 +206,7 @@
             [suffix]="'%'"
             ></app-input-number>
             <!-- <input type="text"
-  
+
                    class="form-control"
                    name="percentualAdiantamento"
                    id="percentualAdiantamento"
@@ -218,7 +218,7 @@
               <p class="text-danger" *ngIf="percentualAdiantamento.errors['required']">Este campo é obrigatório.</p>
             </div> -->
           </div>
-  
+
         </div>
         <div class="row">
           <div class="form-group col-md-3 col-sm-12">
@@ -249,7 +249,7 @@
               <p class="text-danger" *ngIf="dataLiquidacao.errors['required']">Este campo é obrigatório.</p>
             </div>
           </div>
-  
+
         </div>
         <div class="row">
           <div class="form-group col-xl-12 xol-lg-4 col-md-6 col-sm-6 col-12">
@@ -314,7 +314,7 @@
                    class="form-control"
                    name="taxa"
                    id="taxa"
-  
+
                    #taxa="ngModel"
                    [(ngModel)]="objeto.taxa"
                    required pattern="\S(.*\S)?">
@@ -326,7 +326,7 @@
             <label for="pagRecExterior">Pagador ou Recebedor no Exterior: <span class="text-danger">*</span></label>
             <input type="text"
                    class="form-control"
-  
+
                    name="pagRecExterior"
                    id="pagRecExterior"
                    #pagRecExterior="ngModel"
@@ -342,7 +342,7 @@
           <div class="form-group col-md-4 col-sm-12">
             <label for="especificacoes">Especificações: <span class="text-danger">*</span></label>
             <input type="text"
-  
+
                    class="form-control"
                    name="especificacoes"
                    id="especificacoes"
@@ -370,7 +370,7 @@
           <div class="form-group col-md-6 col-sm-12">
             <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: <span class="text-danger">*</span></label>
             <input type="text"
-  
+
                    class="form-control"
                    name="instrucoesRecebimentoPagamento"
                    id="instrucoesRecebimentoPagamento"
@@ -382,7 +382,7 @@
               <p class="text-danger" *ngIf="instrucoesRecebimentoPagamento.errors['required']">Este campo é obrigatório.</p>
             </div>
           </div>
-  
+
         </div>
         <div class="row">
           <div class="d-flex align-items-center ">
@@ -408,4 +408,3 @@
     </form>
   </ng-template>
   <router-outlet></router-outlet>
-  

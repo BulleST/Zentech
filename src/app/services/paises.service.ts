@@ -11,8 +11,6 @@ import { Paises } from '../models/pais.model';
 })
 export class PaisesService {
     url = environment.url;
-
-
     paises = new BehaviorSubject<Paises[]>([]);
 
     constructor(

@@ -28,7 +28,7 @@ export class DeleteComponent {
         private beneficiarioService: BeneficiarioService,
         private crypto: Crypto,
     ) { }
-    
+
     ngAfterViewInit(): void {
         this.modal.id =  0;
         this.modal.template =  this.template;
@@ -38,8 +38,6 @@ export class DeleteComponent {
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         this.modal.routerBack = ['../../'];
         this.modal.title = 'Excluir registro';
-
-        
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['beneficiario_id']) {
                 try {
@@ -60,12 +58,9 @@ export class DeleteComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
-
-   
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }
-
 
     send() {
         this.loading = true;

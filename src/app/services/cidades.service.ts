@@ -11,8 +11,6 @@ import { Cidades } from '../models/cidade.model';
 })
 export class CidadesService {
     url = environment.url;
-
-
     cidades = new BehaviorSubject<Cidades[]>([]);
 
     constructor(

@@ -1,4 +1,5 @@
 import { MoedaService } from 'src/app/services/moeda.service';
+import { Moeda } from 'src/app/models/moeda.model';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -6,7 +7,7 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Moeda } from 'src/app/models/moeda.model';
+
 
 @Component({
     selector: 'app-delete',
@@ -22,15 +23,15 @@ export class DeleteComponent {
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     modal: Modal = new Modal;
-    tipoId: number = 0
+    eventoId: number = 0
     objeto: Moeda[]
     nome: string = ''
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
-        private moedaService: MoedaService,
         private crypto: Crypto,
+        private moedaService: MoedaService,
     ) { }
 
 
@@ -42,7 +43,7 @@ export class DeleteComponent {
         this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
         this.modal.activatedRoute =  this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.routerBack = ['../../..'];
+
         this.modal.title = 'Excluir registro';
 
         this.activatedRoute.params.subscribe(params => {
@@ -51,21 +52,21 @@ export class DeleteComponent {
             const decryptedId = this.crypto.decrypt(encryptedId);
             this.id = decryptedId
             console.log('ID do tipo Descriptografado:', decryptedId);}
-
+            this.modal.routerBack = ['../../..'];
           var obj = this.activatedRoute.params.subscribe(p => {
             if (p['moeda_id']) {
                 try {
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'tipo');
                         this.moedaService.get(this.id).subscribe((moeda: Moeda) => {
-                          if (moeda.id == this.tipoId) {
+                          if (moeda.id == this.eventoId) {
                               this.nome = moeda.nome;
                               console.log('tste',this.nome)
-                              this.modal.title = `Excluir registro: ${this.nome}` , this.tipoId;
+                              this.modal.title = `Excluir registro: ${this.nome}` , this.eventoId;
                           }
                           else {
                             this.nome = moeda.nome;
-                            console.log('tste', this.tipoId, moeda.id)
+                            console.log('tste', this.eventoId, moeda.id)
                             this.modal.title = `Excluir registro - ${this.nome}`
 
                         }
@@ -81,8 +82,8 @@ export class DeleteComponent {
             }
         });
         this.subscription.push(obj);
-          // Faça o que precisar com o tipoId recuperado aqui
-          console.log('ID do Evento:', this.tipoId);
+          // Faça o que precisar com o eventoId recuperado aqui
+          console.log('ID do Evento:', this.eventoId);
         });
     }
 

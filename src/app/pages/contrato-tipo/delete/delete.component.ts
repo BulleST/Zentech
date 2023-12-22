@@ -1,5 +1,4 @@
 import { ContratoTipoService } from './../../../services/contrato-tipo.service';
-import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -31,7 +30,6 @@ export class DeleteComponent {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
-        private bancoService: BancoService,
         private crypto: Crypto,
         private contratoTipoService: ContratoTipoService,
     ) { }

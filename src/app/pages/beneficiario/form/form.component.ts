@@ -1,6 +1,5 @@
 import { PaisesService } from './../../../services/paises.service';
 import { BeneficiarioService } from './../../../services/beneficiario.service';
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -28,7 +27,6 @@ export class FormComponent implements OnDestroy {
     objeto: BeneficiarioRequest = new BeneficiarioRequest;
     erro: string = '';
     loading = false;
-
     subscription: Subscription[] = [];
 
     @ViewChild('template') template: TemplateRef<any>
@@ -36,11 +34,11 @@ export class FormComponent implements OnDestroy {
 
     isEditPage = true;
     modal: Modal = new Modal;
-    
+
     cepCarregado = false;
     loadingCep = false;
     loadingCNPJ = false;
-    
+
     loadingBanco = true;
     bancos: BancoList[];
 
@@ -89,7 +87,7 @@ export class FormComponent implements OnDestroy {
                 this.paises = res;
             });
 
-        lastValueFrom(this.beneficiarioService.getList()) 
+        lastValueFrom(this.beneficiarioService.getList())
             .then(res => {
                 this.loadingBeneficiario = false;
                 this.beneficiarios = res;
@@ -102,7 +100,6 @@ export class FormComponent implements OnDestroy {
         this.modal.style = { 'max-width': '600px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['beneficiario_id']) {
                 this.objeto.id = this.crypto.decrypt(x['beneficiario_id']);
@@ -126,8 +123,6 @@ export class FormComponent implements OnDestroy {
                     .catch(res => {
                         this.voltar();
                     })
-
-
             } else {
                 this.modal.title = 'Cadastrar Beneficiário';
                 this.modal.routerBack = ['../'];
@@ -192,7 +187,6 @@ export class FormComponent implements OnDestroy {
                 this.cepCarregado = false;
             })
             .finally(() => this.loadingCep = false)
-
     }
 
     validaCep(input: NgModel) {

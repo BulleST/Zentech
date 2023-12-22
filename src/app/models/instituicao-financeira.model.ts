@@ -3,8 +3,6 @@ import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 
 
-
-
 export class InstituicaoFinanceiraList {
     id: number = 0;
     nome: string = '';
@@ -13,7 +11,6 @@ export class InstituicaoFinanceiraList {
     numero: string = '';
     cep: string = '';
     cidade_Id: number = 0;
-
 }
 
 export class InstituicaoFinanceiraRequest {
@@ -24,15 +21,6 @@ export class InstituicaoFinanceiraRequest {
     logradouro: string = '';
     numero: string = '';
     cep: string = '';
-
-
-}
-
-export class InstituicaoFinanceiraResponse {
-    nome: string = '';
-    cpf: number = '' as unknown as number;
-    sucesso: boolean = true;
-    detalhes: string = '';
 }
 
 export var instituicaoFinanceiraColumns: Column[] = [
@@ -84,6 +72,6 @@ export var instituicaoFinanceiraColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
-    
+
 ];
 

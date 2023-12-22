@@ -1,20 +1,12 @@
 import { BeneficiarioList, beneficiarioColumns } from './../../../models/beneficiario.model';
 import { BeneficiarioService } from './../../../services/beneficiario.service';
-
-
 import { Component } from '@angular/core';
 import { MaskType } from 'src/app/helpers/column.interface';
-import { PessoaList } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
-import { instituicaoFinanceiraColumns } from 'src/app/models/instituicao-financeira.model';
-import * as dados from 'dados.json'
-
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -25,13 +17,9 @@ export class ListComponent {
     maskType = MaskType;
     list: BeneficiarioList[] = []
     tableLinks: MenuTableLink[] = [];
-
     columns = beneficiarioColumns;
     subscription: Subscription[] = [];
     screen: ScreenWidth = ScreenWidth.lg;
-
-
-
 
     constructor(
         private table: Table,

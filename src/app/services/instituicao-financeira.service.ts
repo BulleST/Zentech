@@ -11,10 +11,6 @@ import { InstituicaoFinanceiraList, InstituicaoFinanceiraRequest } from '../mode
     providedIn: 'root'
 })
 export class InstituicaoFinanceiraService {
-
-
-
-
     url = environment.url;
     list = new BehaviorSubject<InstituicaoFinanceiraList[]>([
     ]);
@@ -40,10 +36,7 @@ export class InstituicaoFinanceiraService {
           error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
 
       }));
-
-
     }
-
 
 
     get(id: number) {
@@ -55,8 +48,6 @@ export class InstituicaoFinanceiraService {
     post(request: InstituicaoFinanceiraRequest) {
         return this.http.post<Response>(`${this.url}/instituicaoFinanceira`, request);
     }
-
-
 
 
 

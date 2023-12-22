@@ -1,14 +1,10 @@
 import { Component } from '@angular/core';
 import { MaskType } from 'src/app/helpers/column.interface';
-import { PessoaList } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
-
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
-
-
 import { ContratoService } from './../../../services/contrato.service';
 import { contratoColumns } from './../../../models/contrato.model';
 import { Contrato_List } from 'src/app/models/contrato.model';
@@ -22,16 +18,9 @@ export class ListComponent {
     maskType = MaskType;
     list: Contrato_List[] = []
     tableLinks: MenuTableLink[] = [];
-
     columns = contratoColumns;
     subscription: Subscription[] = [];
     screen: ScreenWidth = ScreenWidth.lg;
-    dados: [
-      {
-      razaoSocial: "oi",
-     }
-
-    ]
 
 
     constructor(

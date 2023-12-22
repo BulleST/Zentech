@@ -16,10 +16,8 @@ export class ModalService {
     ) {
         this.browserRefresh = !router.navigated;
         this.router.events.subscribe(res => {
-            // console.log('res', res)
             if (res instanceof NavigationStart) {
                 this.browserRefresh = !router.navigated;
-                // console.log('refreshed', this.browserRefresh, router.navigated)
 
             }
         })
@@ -42,19 +40,14 @@ export class ModalService {
         var listOrderedById = list.sort((x,y) => x.id - y.id);
         var lastId = listOrderedById.length > 0 ? listOrderedById[listOrderedById.length - 1].id : 0;
         var newId = lastId + 1;
-        modal.id = newId; 
-        
+        modal.id = newId;
+
         if (modal.activatedRoute?.snapshot.data['modalOrder']) {
             modal.modalOrder = modal.activatedRoute?.snapshot.data['modalOrder'] ?? 1;
         }
-        
+
         list.push(modal);
-        
 
-
-        // if (this.browserRefresh) {
-        //     list = this.modalList.value.sort((x,y) => y.id - x.id);
-        // }
             list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
         console.log(list)
         this.modalList.next(list);
@@ -66,7 +59,7 @@ export class ModalService {
         return modal;
     }
 
-    
+
     removeModal(id: number) {
         console.log('removeModal', this.modalList.value)
         var list = this.modalList.value;

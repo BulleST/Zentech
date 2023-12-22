@@ -16,19 +16,8 @@ import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
   providedIn: 'root'
 })
 export class DocumentoSwiftService {
-
-
-  id: number = 0;
-  nome: string = '';
-  cidade_Id: string = '';
-  cep: string = '';
-  cNumero: string = '';
-  numero: string = '';
   list = new BehaviorSubject<DocumentoSwift_List[]>([]);
   url = environment.url;
-
-
-
 
 
   constructor(

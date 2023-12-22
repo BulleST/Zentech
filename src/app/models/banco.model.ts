@@ -24,26 +24,6 @@ export class BancoRequest {
 }
 
 
-
-
-export class BancoResponse {
-    id: number = 0;
-    nome: string = '';
-    cidade_Id: string = '';
-    cep: string = '';
-    bairro: string = '';
-    logradouro: string = '';
-    cNumero: string = '';
-    numero: string = '';
-    sucesso: boolean = true;
-    detalhes: string = '';
-}
-
-export class BancoStatus {
-    id: number = 0;
-    name: string = '';
-}
-
 export var bancoColumns: Column[] = [
     {
         field: 'nome',
@@ -68,6 +48,6 @@ export var bancoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
-   
+
 ];
 

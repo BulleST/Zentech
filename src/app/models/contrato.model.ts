@@ -42,17 +42,6 @@ export class Contrato_List {
 
 }
 
-export class ContratoResponse {
-    nome: string = '';
-    cpf: number = '' as unknown as number;
-    sucesso: boolean = true;
-    detalhes: string = '';
-}
-
-export class ContratoStatus {
-    id: number = 0;
-    name: string = '';
-}
 
 export var contratoColumns: Column[] = [
 

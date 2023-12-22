@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ContratoEvento } from '../models/contrato-evento.model';
-
 import { Response } from '../helpers/request-response.interface';
 
 @Injectable({

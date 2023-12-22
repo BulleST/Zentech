@@ -5,20 +5,13 @@ import { ContratoTipo } from './../../../models/contrato-tipo.model';
 import { Contrato } from './../../../models/contrato.model';
 import { ContratoService } from './../../../services/contrato.service';
 import { Contrato_List } from './../../../models/contrato.model';
-import { ContratoStatus } from './../../../models/contrato.model';
-import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { ModalService } from 'src/app/services/modal.service';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { CepService } from 'src/app/services/cep-service.service';
-import { Cidades } from 'src/app/models/cidade.model';
-import { CidadesService } from 'src/app/services/cidades.service';
-import { SelectItem } from 'primeng/api';
 import { ContratoEvento } from 'src/app/models/contrato-evento.model';
 import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
@@ -26,8 +19,6 @@ import { Paises } from 'src/app/models/pais.model';
 import { Modal } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { Invoice_List } from 'src/app/models/invoice.model';
 
@@ -38,44 +29,24 @@ import { Invoice_List } from 'src/app/models/invoice.model';
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
-
   objeto: Contrato = new Contrato;
-  teste: Contrato_List[]
   erro: string = '';
   loading = false;
   subscription: Subscription[] = [];
   routeBackOptions: any;
-  cidade_id: number = 0
-  status: ContratoStatus[] = [];
-  loadingStatus = true;
   contratos: Contrato_List[] = [];
-  loadingPessoa = true;
   @ViewChild('template') template: TemplateRef<any>
   @ViewChild('icon') icon: TemplateRef<any>
   isEditPage = true;
   id: number = 0;
-  numEndereco: any;
-  localidade: any;
-  bairro: any;
-  uf: any;
-  ddd: any;
   item: any = '';
   modal: Modal = new Modal;
-
-  coffeeIcon = faCoffee;
-  selectedCity: any;
-  cidadesDropdown: SelectItem[] = [];
-
-  cepPreenchido: boolean = false;
-  larguraResponsiva: number = 50;
 
   tipos: ContratoTipo[] = []
   loadingTipo = true;
 
-
   eventos: ContratoEvento[] = []
   loadingEvento = true;
-
 
   instituicoes: InstituicaoFinanceiraList[] = []
   loadingInstituicao = true;
@@ -83,39 +54,24 @@ export class FormComponent implements OnDestroy {
   paises: Paises[] = []
   loadingPais = true;
 
-
-  cidades: Cidades[] = []
-  loadingCidade = true;
-
   invoices: Invoice_List[] = []
   loadingInvoice = true;
 
   selectedInvoice?: Invoice_List
 
-
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private modalService: ModalService,
-    private pessoaSaldoService: PessoaSaldoService,
     private contratoService: ContratoService,
     private contratoTipoService: ContratoTipoService,
     private crypto: Crypto,
-    private datepipe: DatePipe,
     private toastr: ToastrService,
-    private cepService: CepService,
-    private cidadesService: CidadesService,
     private instituicaoFinanceiraService: InstituicaoFinanceiraService,
     private contratoEventoService: ContratoEventoService,
     private paisesService: PaisesService,
-    private router: Router,
     private invoiceService: InvoiceService
 
   ) {
-    library.add(faCoffee);
-
-
-
     this.routeBackOptions = { relativeTo: this.activatedRoute };
 
     lastValueFrom(this.contratoService.getList())
@@ -124,8 +80,6 @@ export class FormComponent implements OnDestroy {
 
     var contratos = this.contratoService.list.subscribe(res => this.contratos = res);
     this.subscription.push(contratos);
-
-
 
 
     lastValueFrom(this.invoiceService.getList())
@@ -140,13 +94,9 @@ export class FormComponent implements OnDestroy {
 
           return x
         })
-
-
       }
     );
     this.subscription.push(invoices);
-
-
 
 
     lastValueFrom(this.contratoEventoService.getList())
@@ -156,7 +106,6 @@ export class FormComponent implements OnDestroy {
 
     var eventos = this.contratoEventoService.list.subscribe(res => this.eventos = res);
     this.subscription.push(eventos);
-
 
 
     lastValueFrom(this.contratoTipoService.getList())
@@ -178,11 +127,7 @@ export class FormComponent implements OnDestroy {
         this.paises = res;
 
       });
-
-
-
   }
-
 
 
   encryptId(id: any): string {
@@ -200,8 +145,6 @@ export class FormComponent implements OnDestroy {
     var params = this.activatedRoute.params.subscribe(x => {
 
       if (x['contrato_id']) {
-
-
         this.objeto.id = this.crypto.decrypt(x['contrato_id']);
         this.modal.title = 'Editar Contrato';
         console.log('testeee')
@@ -221,12 +164,10 @@ export class FormComponent implements OnDestroy {
           })
 
       } else {
-
         this.modal.title = 'Cadastrar Contrato';
         this.modal.routerBack = ['../'];
 
         this.isEditPage = false;
-        // this.objeto.cidade_Id = 5270;
         setTimeout(() => {
           console.log('oiiiiieiei')
           this.modal = this.modalService.addModal(this.modal, 'contrato');
@@ -243,7 +184,6 @@ export class FormComponent implements OnDestroy {
   }
 
 
-
   ngOnDestroy(): void {
     this.subscription.forEach(item => item.unsubscribe());
   }
@@ -251,7 +191,6 @@ export class FormComponent implements OnDestroy {
   voltar() {
     this.modalService.removeModal(this.modal.id);
   }
-
 
   fileDownload() {
     this.loading = true;
@@ -262,7 +201,6 @@ export class FormComponent implements OnDestroy {
       .catch(res => {
         this.loading = false;
       })
-
   }
 
   send(form: NgForm, salvarEBaixar: boolean) {
@@ -274,7 +212,6 @@ export class FormComponent implements OnDestroy {
     this.erro = '';
     this.loading = true;
     this.erro = '';
-
     return lastValueFrom(this.contratoService.post(this.objeto))
       .then(res => {
         if (res.sucesso != false) {
@@ -303,9 +240,4 @@ export class FormComponent implements OnDestroy {
       })
 
   }
-
-  // No seu arquivo .ts correspondente
-
-
-
 }

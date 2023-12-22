@@ -22,8 +22,6 @@ export class BancoService {
 
     ) { }
 
-
-
     getList() {
         this.table.loading.next(true);
         return this.http.get<BancoList[]>(`${this.url}/banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })

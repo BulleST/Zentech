@@ -31,7 +31,6 @@ export class DeleteComponent {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
-        private bancoService: BancoService,
         private crypto: Crypto,
         private contratoEventoService: ContratoEventoService,
     ) { }

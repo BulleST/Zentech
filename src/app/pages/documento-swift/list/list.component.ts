@@ -1,14 +1,9 @@
 import { DocumentoSwiftService } from './../../../services/documento-swift.service';
-
-
 import { Component } from '@angular/core';
 import { MaskType } from 'src/app/helpers/column.interface';
-import { PessoaList } from 'src/app/models/pessoa.model';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { DocumentoSwift_List } from 'src/app/models/documento-swift';
@@ -27,13 +22,6 @@ export class ListComponent {
     columns = documentoSwiftColumns;
     subscription: Subscription[] = [];
     screen: ScreenWidth = ScreenWidth.lg;
-    dados: [
-      {
-      razaoSocial: "oi",
-     }
-
-    ]
-
 
     constructor(
         private table: Table,

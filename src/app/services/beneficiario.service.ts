@@ -15,36 +15,8 @@ import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
   providedIn: 'root'
 })
 export class BeneficiarioService {
-
-
-  id: number = 0;
-  nome: string = '';
-  cidade_Id: string = '';
-  cep: string = '';
-  cNumero: string = '';
-  numero: string = '';
-
   url = environment.url;
-  list = new BehaviorSubject<BeneficiarioList[]>([
-    {
-      id: 10,
-      nome: 'teste',
-      cep: 'teste',
-      uf: 'teste',
-      cidade: 'teste',
-      logradouro: 'teste',
-      numero: 'teste',
-      codigoSwift: 'teste',
-      conta: 'teste',
-      representante: 'teste',
-      cnpj: 11111111111111,
-      nomeBanco: 'teste',
-      nomePais: 'teste',
-    }
-  ]);
-
-
-
+  list = new BehaviorSubject<BeneficiarioList[]>([])
 
   constructor(
     private table: Table,
@@ -70,8 +42,6 @@ export class BeneficiarioService {
         error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
 
       }));
-
-
   }
 
 
