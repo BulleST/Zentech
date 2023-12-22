@@ -1,90 +1,103 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { faKey } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
 import { Usuario } from 'src/app/models/usuario.model';
+import { AlertService } from 'src/app/parts/alert/alert.service';
 import { AccountService } from 'src/app/services/account.service';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrls: ['./reset-password.component.css']
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrls: ['./reset-password.component.css']
 })
-export class ResetPasswordComponent implements OnDestroy {
-
-    faTimes = faTimes;
-    modalOpen = false;
-    erro: string = '';
-    loading = false;
-    objeto: Usuario = new Usuario;
-    subscription: Subscription[] = [];
-
+export class ResetPasswordComponent {
+    faKey = faKey;
     userLogado?: Account;
-    
-    routerBack: string[] = ['../../'];
-    routeBackOptions: any;
+    objeto: Usuario = new Usuario;
+    loading = false;
+    erro: string = '';
+    subscription: Subscription[] = [];
+    modal: Modal = new Modal;
+    @ViewChild('template') template: TemplateRef<any>;
+    @ViewChild('icon') icon: TemplateRef<any>;
+    podeResetar = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
-        private userService: UsuarioService,
+        private usuarioService: UsuarioService,
         private accountService: AccountService,
         private crypto: Crypto,
-    ) {
+        private toastr: ToastrService,
+        private modalService: ModalService,
+        private alertService: AlertService,
+    ) {  }
 
-        this.userLogado = this.accountService.accountValue;
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
+    
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
-        var params = this.activatedRoute.params.subscribe(res => {
-            if (res['usuario_id']) {
-                this.objeto.id = this.crypto.decrypt(res['usuario_id']);
-                lastValueFrom(this.userService.get(this.objeto.id))
-                .then(res => {
-                    this.objeto = res;
-                    setTimeout(() => {
-                        this.modal.setOpen(true);
-                    }, 200);
-                })
-                .catch(res => {
-                    this.voltar();
-                })
+    ngAfterViewInit(): void {
+
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '500px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.title = 'Resetar Senha';
+        this.modal.routerBack = ['../../'];
+
+        var params = this.activatedRoute.params.subscribe(x => {
+            if (x['usuario_id']) {
+                this.objeto.id = this.crypto.decrypt(x['usuario_id']);
+
+                lastValueFrom(this.usuarioService.get(this.objeto.id))
+                    .then(res => {
+                        this.objeto = res;
+                        var account = this.accountService.accountValue;
+                        if (account?.perfilAcesso_Id == Role.Master && res.perfilAcesso_Id == Role.Admin) {
+                            this.toastr.info('Você não tem permissão para resetar a senha de uma conta administradora.');
+                            this.erro = 'Você não tem permissão para resetar a senha de uma conta administradora.';
+                            this.podeResetar = false;
+                        }
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'usuario');
+                        }, 200);
+                    })
+                    .catch(res => {
+                        this.voltar();
+                    })
             } else {
                 this.voltar();
             }
         });
         this.subscription.push(params);
-
-        
-       
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.forEach(item => item.unsubscribe());
     }
 
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
-
     send() {
+        
         this.loading = true;
-        lastValueFrom(this.userService.resetPassword(this.objeto.id))
-        .then(res => {
-            this.voltar();
-            if (this.objeto.email == this.userLogado?.email) {
-                this.accountService.logout();
-            }
-        })
-        .catch()
-        .finally(() => this.loading = false);
+        lastValueFrom(this.accountService.forgotPassword(this.objeto.email))
+            .then(res => {
+                this.voltar();
+                this.toastr.success('Operação concluída com sucesso')
+                this.alertService.success(res['message']);
+                if (this.objeto.email == this.userLogado?.email) {
+                    this.accountService.logout();
+                }
+            })
+            .catch()
+            .finally(() => this.loading = false);
     }
-
 }

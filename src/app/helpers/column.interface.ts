@@ -49,7 +49,7 @@ export enum MaskType {
     options = 'options',
     mask = 'mask',
     cep = 'cep',
-    codigoSwift = 'codigoSwift',
+
 }
 
 

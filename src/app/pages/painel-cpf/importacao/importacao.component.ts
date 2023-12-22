@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons';
@@ -6,11 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaImportacao, PessoaResponse } from 'src/app/models/pessoa.model';
-import { LoadingService } from 'src/app/parts/loading/loading';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
-import { validaCPF } from 'src/app/utils/validate-cpf';
+import { validateCPF } from 'src/app/utils/validate-cpf';
 import * as xlsx from 'xlsx';
 
 @Component({
@@ -28,8 +27,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     modalOpen = false;
     erro = '';
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../'];
-    routeBackOptions: any;
 
     listErros: PessoaImportacao[] = [];
     listOkValidation: PessoaImportacao[] = [];
@@ -46,27 +43,28 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
         dataInscricao: undefined,
         excel_Data_Cap: undefined,
     }
+    modal: Modal = new Modal;
 
 
     constructor(
         private toastr: ToastrService,
-        private modal: Modal,
+        private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
         private pessoaService: PessoaService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.title.next('Importar Arquivo')
-        this.modal.style.next({ 'width': 'max-content', 'max-width': '95vw' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
     }
 
     ngAfterViewInit(): void {
-        this.modal.template.next(this.template)
-        this.modal.icon.next(this.icon);
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style = { 'width': 'max-content', 'max-width': '95vw' };
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.title = 'Importar Arquivo';
 
         setTimeout(() => {
-            this.modal.setOpen(true);
+            this.modal = this.modalService.addModal(this.modal, 'moeda');
         }, 200);
     }
 
@@ -80,14 +78,14 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
 
     ngOnDestroy(): void {
-        this.modal.setOpen(false);
         this.subscription.forEach(item => item.unsubscribe());
     }
 
+  
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
-        this.modal.resetModal();
+        this.modalService.removeModal(this.modal.id);
     }
+
 
     readExcel1(event: any) {
         this.loading = true;
@@ -186,7 +184,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             if (!cpf || !cpf.trim()) {
                 obj.detalhes = 'CPF é obrigatório';
                 this.listErros.push(obj)
-            } else if (!validaCPF(cpf)) {
+            } else if (!validateCPF(cpf)) {
                 obj.detalhes += 'CPF inválido';
                 this.listErros.push(obj)
             } else if (!nome || !nome.trim()) {
@@ -216,7 +214,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                 this.listOkValidation.push(obj)
             }
             if (this.listErros.length > 0) {
-                this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
+                this.modal.style = { 'width': '95vw', 'max-width': '95vw' };
             }
             this.listAll.push(obj)
             return obj;
@@ -319,7 +317,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
 
                     console.log('listErros', this.listErros)
                     if (this.listErros.length > 0) {
-                        this.modal.style.next({ 'width': '95vw', 'max-width': '95vw' })
+                        this.modal.style = { 'width': '95vw', 'max-width': '95vw' };
                     }
                 } else {
                     this.voltar();

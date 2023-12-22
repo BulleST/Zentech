@@ -4,12 +4,12 @@ import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pess
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { Modal } from 'src/app/utils/modal';
 import { getError } from 'src/app/utils/error';
 import { Crypto } from 'src/app/utils/crypto';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 
 @Component({
   selector: 'app-form-operacao',
@@ -21,16 +21,16 @@ export class FormOperacaoComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
-    routeBackOptions: any;
     status: PessoaOperacaoStatus[] = [];
     loadingStatus = true;
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
 
+    modal: Modal = new Modal;
     constructor(
         private activatedRoute: ActivatedRoute,
-        private modal: Modal,
+        private modalService: ModalService,
         private pessoaService: PessoaService,
         private pessoaSaldoService: PessoaSaldoService,
         private pessoaOperacaoService: PessoaOperacaoService,
@@ -38,18 +38,25 @@ export class FormOperacaoComponent implements OnDestroy {
         private datepipe: DatePipe,
         private toastr: ToastrService,
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-
         lastValueFrom(this.pessoaOperacaoService.getStatus())
         .then(res => {
             this.loadingStatus = false;
             this.status = res;
         });
-
-        var parent = activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
-        var child = activatedRoute.snapshot.paramMap.has('pessoa_id');
+    }
+    ngAfterViewInit(): void {
+        this.modal.id =  0;
+        this.modal.template =  this.template;
+        this.modal.icon =  this.icon;
+        this.modal.style =  { 'max-width': '600px'};
+        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../../'];
+        
+        var parent = this.activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
+        var child = this.activatedRoute.snapshot.paramMap.has('pessoa_id');
         if (parent || child) {
-            var paramsSubscriber = parent ? activatedRoute.parent?.params : child ? activatedRoute.params : undefined;
+            var paramsSubscriber = parent ? this.activatedRoute.parent?.params : child ? this.activatedRoute.params : undefined;
 
         } else {
             this.voltar();
@@ -67,16 +74,12 @@ export class FormOperacaoComponent implements OnDestroy {
             });
             this.subscription.push(params);
         }
-        console.log('oi')
-
-
-
-    }
-    ngAfterViewInit(): void {
         var params = this.activatedRoute.params.subscribe(res => {
             if (res['operacao_id']) {
                 var id = res['operacao_id'];
                 this.objeto.id = this.crypto.decrypt(id) as number;
+                this.modal.title = 'Editar Operação';
+                this.modal.routerBack = ['../../../'];
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                 .then(res => {
                     this.loading = false;
@@ -85,31 +88,24 @@ export class FormOperacaoComponent implements OnDestroy {
                     this.objeto = res;
                     
                     setTimeout(() => {
-                        this.modal.setOpen(true);
+                        this.modal = this.modalService.addModal(this.modal, 'moeda');
                     }, 200);
                 }) 
                 .catch(res => {
-                    console.log('f', res)
                     this.loading = false;
                     this.voltar()
                 }) 
-                this.modal.title.next('Editar Operação');
-                this.modal.routerBack.next(['../../../']);
-                
             } else {
-                this.modal.title.next('Cadastrar Operação');
-                this.modal.routerBack.next(['../../']);
+                this.modal.title = 'Cadastrar Operação';
+                this.modal.routerBack = ['../../'];
+                this.objeto.data = this.datepipe.transform(new Date(), 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
-                    this.modal.setOpen(true);
+                    this.modal = this.modalService.addModal(this.modal, 'moeda');
                 }, 200);
 
             }
         });
         this.subscription.push(params);
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px', overflow: 'visible' })
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
     }
 
     ngOnDestroy(): void {
@@ -117,7 +113,7 @@ export class FormOperacaoComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modal.voltar(this.modal.routerBack.value, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
     
     request() {
@@ -133,7 +129,7 @@ export class FormOperacaoComponent implements OnDestroy {
 
             this.request()
             .then(res => {
-                if (res.successo == true) {
+                if (res.sucesso == true) {
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                     lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));

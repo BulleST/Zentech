@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
+import { Response } from '../helpers/request-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -21,7 +22,6 @@ export class PessoaService {
         private toastr: ToastrService,
     ) {
     }
-
 
     getList() {
         this.table.loading.next(true);
@@ -53,7 +53,7 @@ export class PessoaService {
     importarArquivo(file: File){
         var data = new FormData();
         data.append('file', file);
-        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, data);
+        return this.http.post<Response>(`${this.url}/pessoa/importa-excel`, data);
     }
 
 
@@ -62,13 +62,13 @@ export class PessoaService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/pessoa/${id}`);
+        return this.http.delete<Response>(`${this.url}/pessoa/${id}`);
     }
 
 
     getPessoa(cpf: number, dataNasc: Date) {
         dataNasc = new Date(dataNasc.toString() + 'T00:00:00').toLocaleString().substring(0,10) as unknown as Date;
-        return this.http.post<BRConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
+        return this.http.post(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
     }
 
 

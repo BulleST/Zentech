@@ -1,74 +1,84 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { Usuario } from 'src/app/models/usuario.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
-    selector: 'app-delete',
-    templateUrl: './delete.component.html',
-    styleUrls: ['./delete.component.css']
+  selector: 'app-delete',
+  templateUrl: './delete.component.html',
+  styleUrls: ['./delete.component.css']
 })
-export class DeleteComponent implements OnDestroy {
-
-    faTimes = faTimes;
-    modalOpen = false;
-    erro: string = '';
-    loading = false;
-    objeto: Usuario = new Usuario;
-    subscription: Subscription[] = [];
-    routerBack: string[] = ['../../'];
-    routeBackOptions: any;
-
-    constructor(
-        private activatedRoute: ActivatedRoute,
-        private toastr: ToastrService,
-        private modal: Modal,
-        private userService: UsuarioService,
-        private crypto: Crypto,
-    ) {
-
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
-
-        var params = this.activatedRoute.params.subscribe(res => {
-            if (res['usuario_id']) {
-                this.objeto.id = this.crypto.decrypt(res['usuario_id']);
-            } else {
-                this.voltar();
-            }
-        });
-        this.subscription.push(params);
-
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.forEach(item => item.unsubscribe());
-    }
-
-    voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
-    }
-
-    send() {
-        this.loading = true;
-            lastValueFrom(this.userService.delete(this.objeto.id))
-                .then(async res => {
-                    var users = await lastValueFrom(this.userService.getList());
+export class DeleteComponent {
+        faTrash = faTrash;
+        id: number = 0;
+        erro: string = '';
+        loading = false;
+        subscription: Subscription[] = [];
+        @ViewChild('template') template: TemplateRef<any>
+        @ViewChild('icon') icon: TemplateRef<any>
+        modal: Modal = new Modal;
+    
+        constructor(
+            private activatedRoute: ActivatedRoute,
+            private modalService: ModalService,
+            private usuarioService: UsuarioService,
+            private crypto: Crypto,
+        ) { }
+        
+        ngAfterViewInit(): void {
+            this.modal.id =  0;
+            this.modal.template =  this.template;
+            this.modal.icon =  this.icon;
+            this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
+            this.modal.activatedRoute =  this.activatedRoute;
+            this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+            this.modal.routerBack = ['../../'];
+            this.modal.title = 'Excluir registro';
+    
+            
+            var params = this.activatedRoute.params.subscribe(p => {
+                if (p['usuario_id']) {
+                    try {
+                        this.id = this.crypto.decrypt(p['usuario_id']);
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'delete usuario');
+                        }, 200);
+                    } catch(e) {
+                        this.voltar();
+                    }
+                } else {
                     this.voltar();
-                    this.userService.setObject(new Usuario);
+                }
+            });
+            this.subscription.push(params);
+        }
+    
+        ngOnDestroy(): void {
+            this.subscription.forEach(item => item.unsubscribe());
+        }
+    
+        voltar() {
+            this.modalService.removeModal(this.modal.id);
+        }
+    
+    
+        send() {
+            this.loading = true;
+            this.erro = '';
+    
+            lastValueFrom(this.usuarioService.delete(this.id))
+                .then(res => {
+                    this.loading = false;
+                    lastValueFrom(this.usuarioService.getList());
+                    this.voltar();
                 })
-                .catch(res => this.erro = getError(res))
-                .finally(() => this.loading = false);
+                .catch(res => {
+                    this.loading = false;
+                    this.erro = getError(res);
+                })
+        }
     }
-
-}

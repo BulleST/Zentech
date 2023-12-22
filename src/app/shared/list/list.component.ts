@@ -69,7 +69,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list']) {
             this.list = changes['list'].currentValue;
-            this.formatedList = changes['list'].currentValue
+            this.formatedList = changes['list'].currentValue;
             if (this.list.length > 0 && this.columns.length > 0) {
                 this.formata();
             }
@@ -99,19 +99,22 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
 
     formata() {
-        this.list.forEach((row: any) => {
-            this.columns.forEach(col => {
+        this.table.loading.next(true);
+        var list = JSON.parse(JSON.stringify(this.formatedList));
+        list.every((row: any) => {
+            this.columns.every(col => {
                 try {
-                    var a = this.formatCellData(row, col);
-                    row[col.field] = a;
+                    row[col.field] = this.formatCellData(row, col);
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
                 }
-                return row;
+                return col;
             })
+            return row;
         })
-
-        this.formatedList = Object.assign([], this.list);
+        
+        this.formatedList = Object.assign([], list);
+        this.table.loading.next(false);
     }
 
 
@@ -151,5 +154,20 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         }, 50);
 
     }
+    
+    getOptionValue(row: any, col: Column, field: string) {
+        if (col.values) {
+            var value = this.table.getCellValue(row, col);
+            var opt = col.values.find(x => x.value == value) as any;
+            return opt[field];
+        }
+        return null;
+    }
+    
+    filterColOption(value: any, filter: any) {
+        value = value != undefined && value != null ? value.value : undefined;
+        filter(value);
+    }
+
 }
 

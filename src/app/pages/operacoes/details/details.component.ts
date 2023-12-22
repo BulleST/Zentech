@@ -5,10 +5,10 @@ import { faFile } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoList, PessoaOperacaoRequest } from 'src/app/models/pessoa-operacao.model';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-details',
@@ -23,31 +23,22 @@ export class DetailsComponent implements OnDestroy {
     objetoList: PessoaOperacaoList = new PessoaOperacaoList;
     loading = false;
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../../'];
-    routeBackOptions: any;
 
-    @ViewChild('template') template: TemplateRef<any>
-    @ViewChild('icon') icon: TemplateRef<any>
+    @ViewChild('template') template: TemplateRef<any>;
+    @ViewChild('icon') icon: TemplateRef<any>;
+    modal: Modal = new Modal;
 
     constructor(
         private activatedRoute: ActivatedRoute,
         private toastr: ToastrService,
-        private modal: Modal,
+        private modalService: ModalService,
         private crypto: Crypto,
         private datepipe: DatePipe,
         private pessoaService: PessoaService,
         private pessoaOperacaoService: PessoaOperacaoService
 
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
 
-        var getOpen = this.modal.getOpen().subscribe(res => this.modalOpen = res);
-        this.subscription.push(getOpen);
-
-        this.modal.title.next('Detalhes')
-        this.modal.style.next({ 'max-width': '600px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
 
     }
 
@@ -56,6 +47,16 @@ export class DetailsComponent implements OnDestroy {
     }
     
   ngAfterViewInit() {
+    this.modal.id =  0;
+    this.modal.template =  this.template;
+    this.modal.icon =  this.icon;
+    this.modal.style =  { 'max-width': '600px', overflow: 'visible' };
+    this.modal.activatedRoute =  this.activatedRoute;
+    this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+    this.modal.title = 'Detalhes';
+    this.modal.routerBack = ['../../'];
+
+
         var params = this.activatedRoute.params.subscribe(async p => {
             if (p['operacao_id']) {
                 this.objeto.id = this.crypto.decrypt(p['operacao_id']);
@@ -71,6 +72,9 @@ export class DetailsComponent implements OnDestroy {
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(operacao => {
                         this.objeto = operacao;
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'moeda');
+                        }, 200);
                     })
                     .catch(res => {
                         this.voltar();
@@ -80,17 +84,14 @@ export class DetailsComponent implements OnDestroy {
             }
         });
         this.subscription.push(params);
-        this.modal.template.next(this.template)
-        this.modal.icon.next(this.icon);
 
-        setTimeout(() => {
-            this.modal.setOpen(true);
-        }, 200);
     }
 
+    
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
+
 
     exportarPDF() {
         this.loading = true;

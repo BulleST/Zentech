@@ -1,4 +1,4 @@
-.spinner-border {
+/* .spinner-border {
     border: .25em solid #fff;
     border-right-color: transparent;
 }
@@ -20,4 +20,9 @@ img.logo {
     width: 80%;
     max-width: 250px;
     margin-bottom: 15px;
+} */
+
+.erro.text-danger {
+    max-height: 50vh;
+    overflow: auto;
 }

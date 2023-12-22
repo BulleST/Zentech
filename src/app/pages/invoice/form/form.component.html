@@ -10,7 +10,7 @@
     </svg>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
+    <form #form="ngForm" class="needs-validation">
         <div class="px-2">
             <div class="row">
                 <!-- Data Invoice -->
@@ -28,26 +28,36 @@
                     </div>
                 </div>
                 <!-- Moeda -->
-                <div class="form-group col-xl-2 xol-lg-2 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-3 xol-lg-3 col-md-6 col-sm-6 col-12">
                     <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
-                    <select class="form-control"
-                            [classList]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
-                            [(ngModel)]="objeto.moeda_Id"
-                            #moeda_Id="ngModel"
-                            name="moeda_Id"
-                            id="moeda_Id"
-                            [required]="true"
-                            placeholder="Selecione">
-                        <option *ngIf="moedas && moedas.length > 0">Selecione</option>
-                        <option [ngValue]="item.id" *ngFor="let item of moedas">
-                            {{item.nome}} - <br>
-                            {{item.simbolo}} - <br>
-                            {{item.codigo}} - <br>
-                        </option>
-                        <option [ngValue]="undefined" *ngIf="(!moedas || !moedas.length) && !loadingMoedas">Nenhum item</option>
-                    </select>
-
-                    <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
+                    <p-dropdown
+                                [options]="moedas"
+                                [(ngModel)]="objeto.moeda_Id"
+                                #moeda_Id="ngModel"
+                                name="moeda_Id"
+                                inputId="moeda_Id"
+                                [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
+                                [showClear]="true"
+                                [filter]="true"
+                                filterBy="nome, simbolo, codigo"
+                                optionLabel="nome"
+                                optionValue="id"
+                                placeholder="Selecione uma moeda"
+                                [required]="true"
+                                [showClear]="true">
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex align-items-center">
+                                <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
+                                <span>{{item.nome}}</span>
+                                <span class="ms-auto d-block">{{item.simbolo}}</span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./moeda']">adicionar</a>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
                     <div *ngIf="moeda_Id.touched && moeda_Id.errors">
                         <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
@@ -65,38 +75,9 @@
                                       [autoReplaceValue]="false"></app-input-number>
 
                 </div>
-                <!-- Contrato -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="contrato_Id">Contrato: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="contratos"
-                                [(ngModel)]="objeto.contrato_Id"
-                                #contrato_Id="ngModel"
-                                name="contrato_Id"
-                                inputId="contrato_Id"
-                                [styleClass]="'form-control ' + (loadingContratos ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nome, simbolo, codigo"
-                                optionLabel="nome"
-                                optionValue="id"
-                                placeholder="Selecione um contrato"
-                                [required]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p>{{item.numContrato}}</p>
-                                <p>{{item.simbolo}}</p>
-                                <p>{{item.codigo}}</p>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
-                    <div *ngIf="contrato_Id.touched && contrato_Id.errors">
-                        <p class="text-danger" *ngIf="contrato_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
+            
                 <!-- Beneficiário -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="beneficiarios"
@@ -111,21 +92,26 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um beneficiário"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nome}}</p>
                                 <p>{{item.cnpj}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
                     <div *ngIf="beneficiario_Id.touched && beneficiario_Id.errors">
                         <p class="text-danger" *ngIf="beneficiario_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
                 <!-- Instituição Financeira -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="instituicaoFinanceira_Id">Instituição Financeira: <span
                               class="text-danger">*</span></label>
                     <p-dropdown
@@ -138,25 +124,30 @@
                                 [showClear]="true"
                                 [filter]="true"
                                 filterBy="nomeInstituicao, cnpj"
-                                optionLabel="nome"
+                                optionLabel="nomeInstituicao"
                                 optionValue="id"
                                 placeholder="Selecione uma instituição"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nomeInstituicao}}</p>
                                 <p>{{item.cnpj}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./instituicao-financeira']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
                     <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
                         <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é
                             obrigatório.</p>
                     </div>
                 </div>
                 <!-- Banco -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="bancos"
@@ -171,27 +162,31 @@
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um banco"
-                                [required]="true">
+                                [required]="true"
+                                [showClear]="true">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nome}}</p>
                                 <p>{{item.cidade}}</p>
                             </div>
                         </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light">
+                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./banco']">adicionar</a>
+                            </div>
+                        </ng-template>
                     </p-dropdown>
-                    <p><small><a class="link text-info"> Cadastrar novo</a></small></p>
                     <div *ngIf="banco_Id.touched && banco_Id.errors">
                         <p class="text-danger" *ngIf="banco_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
                 <!-- Conta -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="conta">Conta: <span class="text-danger">*</span></label>
                     <input type="text"
                            name="conta"
                            id="conta"
                            class="form-control"
-                           mask="0#"
                            [(ngModel)]="objeto.conta"
                            #conta="ngModel"
                            required>
@@ -200,7 +195,7 @@
                     </div>
                 </div>
                 <!-- Código Swift -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
+                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="codigoSwift">Código Swift: <span class="text-danger">*</span></label>
                     <input type="text"
                            name="codigoSwift"
@@ -213,6 +208,7 @@
                         <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
+              
             </div>
 
             <div class="row">
@@ -222,7 +218,15 @@
                         <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*)
                             corretamente para salvar.</p>
                     </div>
-                    <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                    <button *ngIf="isEditPage" type="button" (click)="fileDownload()" class="btn btn-dark mr-1 ms-auto" [disabled]="loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span>Baixar</span>
+                    </button>
+                    <button *ngIf="isEditPage" (click)="send(form, true)" class="btn btn-dark mr-1 " [disabled]="form.invalid || loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span>Salvar e Baixar</span>
+                    </button>
+                    <button (click)="send(form, false)" class="btn btn-primary mr-0 " [class.ms-auto]="!isEditPage" [disabled]="form.invalid || loading">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                         <span>Salvar</span>
                     </button>
@@ -231,3 +235,5 @@
         </div>
     </form>
 </ng-template>
+
+<router-outlet></router-outlet>

@@ -9,9 +9,9 @@ export class Invoice {
     instituicaoFinanceira_Id: number = undefined as unknown as number;
     banco_Id: number = undefined as unknown as number;
     codigoSwift: string = '';
-    conta: number = 0;
+    conta: number = '' as unknown as number;
     moeda_Id: number = undefined as unknown as number;
-    contrato_Id: number = undefined as unknown as number;
+    // contrato_Id: number = undefined as unknown as number;
 }
 
 export class Invoice_List {
@@ -21,6 +21,7 @@ export class Invoice_List {
     valor: number = 0;
     nomeBeneficiario: string = '';
     nomeBanco: string = '';
+    filter: string = ''
 }
 
 export var invoiceColumns: Column[] = [

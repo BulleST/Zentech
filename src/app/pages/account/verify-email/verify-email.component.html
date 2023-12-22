@@ -1,22 +1,26 @@
-<div class="modal active d-flex align-items-center justify-content-center flex-column" >
-    <div class="modal__bg"></div>
-    <div class="content d-flex align-items-center justify-content-center flex-column">
 
-        <img class="logo" src="assets/img/logo-planner.png" alt="Planner">
-        <h4 class="text-white">VERIFICAÇÃO DE CONTA</h4>
-        <div *ngIf="loading">
-            <br>
-            <p class="text-white">Verificando...</p>
-            <span class="spinner-border my-2 mb-4"></span>
+<div class="mb-3">
+    <h3 class="account-title mb-0">Verificação de Conta</h3>
+    <p class="account-text mb-0">Estamos validando os dados da sua conta.</p>
+    <p class="account-text mb-0">Aguarde a conclusão para continuar.</p>
+</div>
+<div>
+    <div *ngIf="loading">
+        <p >Verificando...</p>
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+    </div>
+    
+    <div *ngIf="!loading">
+        <div  *ngIf="erro">
+            <h6>Erro</h6>
+            <p *ngIf="erro" class="text-danger erro">{{erro}}</p>
         </div>
-        <div  *ngIf="!loading && erro">
-            <br>
-            <h5 class="text-white">Erro</h5>
-            <p class="text-white" *ngIf="!loading && erro">{{erro}}</p>
+        <div *ngIf="!erro">
+            <h6>Concluída</h6>
+            <p *ngIf="!mensagemSucesso" >Verificação  concluída, faça o login.</p>
+            <p *ngIf="mensagemSucesso">{{mensagemSucesso}}</p>
         </div>
-        <p class="text-white mt-2" *ngIf="!loading && !mensagemSucesso && !erro">Verificação já concluída, acesse o login.</p>
-        <p class="text-white mt-2" *ngIf="!loading && mensagemSucesso">{{mensagemSucesso}}</p>
-        <a class="link text-white mt-4" routerLink="/account/login" >
+        <a class="link mt-2 d-flex" routerLink="/account/login" >
             <span class="me-2"><fa-icon [icon]="faChevronCircleLeft"></fa-icon></span>
             Ir para login
         </a>

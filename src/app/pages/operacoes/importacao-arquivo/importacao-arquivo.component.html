@@ -12,12 +12,12 @@
                 <h3>Clique e arraste para selecionar arquivo</h3>
                 <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
                 <!-- <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p> -->
+                <p *ngIf="fileUpload"><strong>Nome do arquivo:</strong> {{fileUpload.name}}</p>
                 <input type="file"
                        name="file"
                        id="file"
-                       #file="ngModel"
-                       [(ngModel)]="fileUpload"
                        required
+                       (input)="fileChange($event)"
                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
             </label>
 
@@ -28,11 +28,11 @@
                     </p>
                     <div *ngIf="erro || form.invalid " class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                        <p *ngIf="!file" class="text-danger">Selecione um arquivo para enviar.</p>
                     </div>
+                    <p *ngIf="!fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
                 </div>
 
-                <button class="btn btn-primary mr-0 ml-auto" [disabled]="form.invalid || loading">
+                <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     <span>Salvar</span>
                 </button>

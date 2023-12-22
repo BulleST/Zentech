@@ -10,26 +10,16 @@ interface Endereco {
     bairro: string;
     uf: string;
     ddd: string;
+    erro?: boolean;
 
 }
-
-
-
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CepService {
+    constructor(private http: HttpClient) { }
 
-
-
-  constructor(private http: HttpClient) { }
-
-  buscar(cep: string):Observable<Endereco>{
-    return this.http.get<Endereco>(`https://viacep.com.br/ws/${cep}/json/` );
-  }
-
-
-
-
-
+    buscar(cep: string): Observable<Endereco> {
+        return this.http.get<Endereco>(`https://viacep.com.br/ws/${cep}/json/`);
+    }
 }

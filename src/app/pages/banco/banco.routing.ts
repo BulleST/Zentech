@@ -3,18 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
-// import { ImportacaoComponent } from './importacao/importacao.component';
-// import { DetailsComponent } from './details/details.component';
-
-
+import { MyAccountRouter } from 'src/app/utils/my-account-router';
 
 const routes: Routes = [
     { path: '', component: ListComponent, children: [
-        { path: 'cadastrar', component: FormComponent },
-        // { path: 'importar', component: ImportacaoComponent },
-        { path: 'editar/:id', component: FormComponent },
-        // { path: 'detalhes/:operacao_id', component: DetailsComponent },
-        { path: 'excluir/:id', component: DeleteComponent },
+        { path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 } },
+        { path: 'editar/:banco_id', component: FormComponent, data: { modalOrder: 1 } },
+        { path: 'excluir/:banco_id', component: DeleteComponent, data: { modalOrder: 1 } },
+        MyAccountRouter,
     ] }
 ];
 

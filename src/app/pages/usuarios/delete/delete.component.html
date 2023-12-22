@@ -1,27 +1,21 @@
-<div class="modal" [class.active]="modalOpen">
-    <div class="modal__bg" (click)="voltar()"></div>
-    <div class="modal__inner" style="max-width: 600px;">
-        <div class="modal__content">
-            <div class="modal__header pb-2">
-                <h3 class="text-orange">Excluir registro</h3>
-                <a (click)="voltar()" class="modal__header-close btn-close">
-                    <span></span>
-                    <span></span>
-                </a>
-            </div>
-            <div class="modal__body mt-0">
-                <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
-                <p>O usuário não terá acesso mais ao planner.</p>
-                <p class="text-info">Obs.: Se esse usuário estiver relacionado a um planner, não poderá ser excluído.</p>
-          
-                <div *ngIf="erro" class="m-0  mt-1" >
-                    <p class="text-danger" *ngFor="let err of erro" [innerHTML]="err | json"></p>
-                </div>
-                <button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    <span>Excluir</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<ng-template #icon>
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </ng-template>
+  <ng-template #template>
+      <div>
+          <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
+          <p>O usuário não terá acesso mais à plataforma.</p>
+          <p class="text-info">Obs.: Se esse usuário estiver relacionado a um outro registro, não poderá ser excluído.</p>
+
+          <div *ngIf="erro" class="m-0  mt-1">
+              <p class="text-danger" >{{erro}}</p>
+          </div>
+  
+          <button class="btn btn-grey ms-auto d-flex mt-2" (click)="send()">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              <span>Excluir</span>
+          </button>
+      </div>
+  </ng-template>
+  
+  

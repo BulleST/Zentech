@@ -1,5 +1,5 @@
 
-export function validaCPF(doc: number | string) {
+export function validateCPF(doc: number | string) {
     var cpf: string = doc.toString();
 
     var tryparse = parseInt(cpf)

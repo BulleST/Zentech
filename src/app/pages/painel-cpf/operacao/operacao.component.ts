@@ -1,15 +1,7 @@
 import { Component, Input, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus, pessoaOperacaoColumns } from 'src/app/models/pessoa-operacao.model';
-import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
-import { Subscription, lastValueFrom } from 'rxjs';
-import { Modal } from 'src/app/utils/modal';
-import { getError } from 'src/app/utils/error';
-import { Crypto } from 'src/app/utils/crypto';
-import { DatePipe } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
+import { PessoaOperacaoList, pessoaOperacaoColumns } from 'src/app/models/pessoa-operacao.model';
+import { Subscription } from 'rxjs';
+
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Pessoa } from 'src/app/models/pessoa.model';

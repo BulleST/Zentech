@@ -75,11 +75,17 @@ export class PessoaOperacaoService {
     }
 
     delete(id: number) {
-        return this.http.delete(`${this.url}/operacao/${id}`);
+        return this.http.delete<Response>(`${this.url}/operacao/${id}`);
     }
 
     exportacao(request: Filtro) {
         return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'});
+    }
+
+    importarArquivo(file: File){
+        var data = new FormData();
+        data.append('file', file);
+        return this.http.post<Response>(`${this.url}/operacao/importa-excel`, data);
     }
 
 }

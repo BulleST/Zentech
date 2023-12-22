@@ -1,59 +1,88 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AccountService } from 'src/app/services/account.service';
+import { Modal, ModalService } from 'src/app/services/modal.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
-import { Modal } from 'src/app/utils/modal';
 
 @Component({
     selector: 'app-deactivated',
     templateUrl: './deactivated.component.html',
     styleUrls: ['./deactivated.component.css']
 })
-export class DeactivatedComponent implements OnDestroy {
-
-    erro: string = '';
-    loading = false;
+export class DeactivatedComponent {
     objeto: Usuario = new Usuario;
+    loading = false;
+    erro: string = '';
     subscription: Subscription[] = [];
-    routerBack: string[] = ['../../'];
-    routeBackOptions: any;
-    title = '';
-
-    isUser: boolean = false;
+    modal: Modal = new Modal;
+    @ViewChild('template') template: TemplateRef<any>;
+    // @ViewChild('icon') icon: TemplateRef<any>;
+    podeAtivar = true;
+    habilitar = false;
     account?: Account;
-
-    @ViewChild('template') template: TemplateRef<any>
-    @ViewChild('icon') icon: TemplateRef<any>
+    isUser = false;
 
     constructor(
+        private usuarioService: UsuarioService,
+        private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
-        public userService: UsuarioService,
-        private accountService: AccountService,
-        private modal: Modal,
         private crypto: Crypto,
+        private accountService: AccountService,
+        private toastr: ToastrService
     ) {
-        this.routeBackOptions = { relativeTo: this.activatedRoute };
+        this.account = this.accountService.accountValue;
+    }
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
-        var params = activatedRoute.params.subscribe(p => {
-            if (p['usuario_id']) {
-                this.objeto.id = this.crypto.decrypt(p['usuario_id']);
+    ngAfterViewInit(): void {
 
-                lastValueFrom(this.userService.get(this.objeto.id))
-                    .then(res => {
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        // this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+
+        var params = this.activatedRoute.params.subscribe(x => {
+            if (x['usuario_id']) {
+                this.objeto.id = this.crypto.decrypt(x['usuario_id']);
+
+                this.isUser = this.account?.id == this.objeto.id
+                this.modal.routerBack = ['../../'];
+                
+                lastValueFrom(this.usuarioService.get(this.objeto.id))
+                .then(res => {
                         this.objeto = res;
-                        this.title = (this.objeto.ativo ? 'Desabilitar' : 'Habilitar') + 'usuário';
+                        this.habilitar = !(this.objeto.dataDesativado == null || this.objeto.dataDesativado == undefined);
+                        this.objeto.ativo = !this.habilitar;
+                        var account = this.accountService.accountValue;
+                        if (this.habilitar) {
+                            this.modal.title = 'Habilitar Usuário';
+                        } else {
+                            this.modal.title = 'Desabilitar Usuário';
+                        }
+
+                        if (account?.perfilAcesso_Id == Role.Master && res.perfilAcesso_Id == Role.Admin) {
+                            this.podeAtivar = false;
+                            var a = this.habilitar ? 'habilitar' : 'desabilitar';
+                            this.toastr.info(`Você não tem permissão para ${a} uma conta administradora.`);
+                            this.erro = `Você não tem permissão para ${a} uma conta administradora.`;
+                        }
                         setTimeout(() => {
-                            this.modal.setOpen(true);
+                            this.modal = this.modalService.addModal(this.modal, 'usuario');
                         }, 200);
                     })
-                    .catch(res => this.voltar())
-                    .finally(() => { });
-
+                    .catch(res => {
+                        this.voltar();
+                    })
             } else {
                 this.voltar();
             }
@@ -61,34 +90,20 @@ export class DeactivatedComponent implements OnDestroy {
         this.subscription.push(params);
     }
 
-    ngOnDestroy(): void {
-        this.subscription.forEach(item => item.unsubscribe());
-    }
-
-    ngAfterViewInit(): void {
-        this.modal.title.next(this.title)
-        this.modal.template.next(this.template)
-        this.modal.style.next({ 'max-width': '600px' })
-        this.modal.routerBack.next(this.routerBack);
-        this.modal.activatedRoute.next(this.activatedRoute);
-        this.modal.icon.next(this.icon);
-
-    }
-
     voltar() {
-        this.modal.voltar(this.routerBack, this.routeBackOptions);
+        this.modalService.removeModal(this.modal.id);
     }
     send() {
         this.loading = true;
         this.erro = '';
-        var enabled = !!this.objeto.dataDesativado;
         // Enviar para a API
-        lastValueFrom(this.userService.deactivated(this.objeto.id, enabled))
+        lastValueFrom(this.usuarioService.deactivated(this.objeto.id, this.habilitar))
             .then(async res => {
-                if (this.isUser && (res as Usuario).dataDesativado && (res as Usuario).email == this.account?.email) {
+                if (this.habilitar && this.isUser) {
                     this.accountService.logout();
                 }
-                await lastValueFrom(this.userService.getList());
+                var list = await lastValueFrom(this.usuarioService.getList());
+
                 this.voltar();
             })
             .finally(() => this.loading = false)

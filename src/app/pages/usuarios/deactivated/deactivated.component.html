@@ -1,14 +1,22 @@
 
-<ng-template #content> <p>Tem certeza que deseja 
-    <span *ngIf="objeto.ativo" class="font-weight-bold">desabilitar</span>
-    <span *ngIf="!objeto.ativo" class="font-weight-bold">habilitar</span> esse registro?
-</p>
-<p class="text-danger" *ngIf="isUser && objeto.ativo && objeto.email == account?.email">Você automaticamente será  deslogado e não poderá acessar o Planner.</p>
-<p class="text-danger" *ngIf="isUser && objeto.ativo && objeto.email != account?.email">Após isso, o usuário não poderá acessar o Planner.</p>
-
-<button class="btn btn-grey ml-auto d-flex mt-2" (click)="send()">
-    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-    <span *ngIf="objeto.ativo">Desabilitar</span>
-    <span *ngIf="!objeto.ativo">Habilitar</span>
-</button>
+<ng-template #template>
+    <div *ngIf="podeAtivar">
+        <p>Tem certeza que deseja <span *ngIf="habilitar" class="font-weight-bold">habilitar</span>
+            <span *ngIf="!habilitar" class="font-weight-bold">desabilitar</span> esse registro?
+        </p>
+        <p class="text-danger" *ngIf="isUser && habilitar && objeto.email == account?.email">Você automaticamente será  deslogado e não poderá acessar o Planner.</p>
+        <p class="text-danger" *ngIf="isUser && habilitar && objeto.email != account?.email">Após isso, o usuário não poderá acessar o Planner.</p>
+        
+        <p class="text-danger" *ngIf="erro">{{erro}}</p>
+        <button class="btn btn-grey ms-auto d-flex mt-2" (click)="send()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            <span *ngIf="!habilitar">Desabilitar</span>
+            <span *ngIf="habilitar">Habilitar</span>
+        </button>
+    </div>
+    <div *ngIf="!podeAtivar" class="mb-2">
+        <p class="text-danger">{{erro}}</p>
+    </div>
 </ng-template>
+
+<router-outlet></router-outlet>
