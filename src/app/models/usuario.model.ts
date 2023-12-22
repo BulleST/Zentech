@@ -59,26 +59,31 @@ export var userColumns: Column[] = [
     {
         field: 'perfilAcesso.perfil',
         header: 'Tipo de Acesso',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-    },
-    {
-        field: 'ativo',
-        header: 'Ativo',
-        maskType: MaskType.boolean,
+        maskType: MaskType.options,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-        // booleanValues: {
-        //     'true': 'ativo',
-        //     'false': 'inativo',
-        // }
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+        values: [
+            { value: 'Admin', output: 'Admin', class: 'flag-yellow' },
+            { value: 'Master', output: 'Master', class: 'flag-info' },
+        ]
+    },
+    {
+        field: 'ativo',
+        header: 'Ativo',
+        maskType: MaskType.options,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
         values: [
             { value: true, output: 'Ativo', class: 'flag-green' },
-            { value: false, output: 'Inativo', class: 'flag-red' },
+            { value: false, output: 'Inativo', class: 'flag-danger' },
         ]
     },
 ];

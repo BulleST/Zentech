@@ -73,5 +73,41 @@ export var instituicaoFinanceiraColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
 
+
+    {
+        field: 'cnpj',
+        header: 'CNPJ',
+        maskType: MaskType.cnpj,
+        mask: '0000',
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'nomeCidade',
+        header: 'Cidade',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'uf',
+        header: 'UF',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+
 ];
 

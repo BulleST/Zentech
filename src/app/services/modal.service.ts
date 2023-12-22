@@ -16,8 +16,10 @@ export class ModalService {
     ) {
         this.browserRefresh = !router.navigated;
         this.router.events.subscribe(res => {
+            // console.log('res', res)
             if (res instanceof NavigationStart) {
                 this.browserRefresh = !router.navigated;
+                // console.log('refreshed', this.browserRefresh, router.navigated)
 
             }
         })
@@ -48,6 +50,11 @@ export class ModalService {
 
         list.push(modal);
 
+
+
+        // if (this.browserRefresh) {
+        //     list = this.modalList.value.sort((x,y) => y.id - x.id);
+        // }
             list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
         console.log(list)
         this.modalList.next(list);

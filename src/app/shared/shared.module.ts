@@ -13,22 +13,23 @@ import { ModalComponent } from './modal/modal.component';
 import { InputNumberComponent } from './input-number/input-number.component';
 import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
-
 import { FormComponent as FormBanco } from './../pages/banco/form/form.component';
 import { FormComponent as FormBeneficiario } from './../pages/beneficiario/form/form.component';
 import { FormComponent as FormContrato } from '../pages/contrato/form/form.component';
 import { FormComponent as FormContratoEvento } from '../pages/contrato-evento/form/form.component';
 import { FormComponent as FormContratoTipo } from '../pages/contrato-tipo/form/form.component';
-import { FormComponent as FormSwift } from './../pages/swift/form/form.component';
+import { FormComponent as FormSwift } from './../pages/documento-swift/form/form.component';
 import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
 import { FormComponent as FormInvoice } from '../pages/invoice/form/form.component';
 import { FormComponent as FormMoeda } from './../pages/moeda/form/form.component';
-
 import { DeleteComponent as DeleteTipo } from '../pages/contrato-tipo/delete/delete.component';
 import { DeleteComponent as DeleteEvento } from '../pages/contrato-evento/delete/delete.component';
-
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+
+
+
+
 @NgModule({
     declarations: [
         ListSharedComponent,

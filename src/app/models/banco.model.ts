@@ -48,6 +48,5 @@ export var bancoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
-
 ];
 

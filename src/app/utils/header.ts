@@ -12,7 +12,7 @@ export class Header {
     minhaContaOpen = new BehaviorSubject<boolean>(false);
 
     constructor(
-        private crypto: Crypto, 
+        private crypto: Crypto,
         private table: Table,
     ) {
 
@@ -47,13 +47,13 @@ export class Header {
             classe.closeMenuMinhaConta();
             classe.setMenuAside(false);
         });
-        
+
         $('.header__userLogado').on('click', function (e) {
             e.stopPropagation();
         });
 
-     
-        $('.navigation__toggle').on('click', (e: any) => {
+
+        $('.navigation-toggle').on('click', (e: any) => {
             e.stopPropagation();
         });
 

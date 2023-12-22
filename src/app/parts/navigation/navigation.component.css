@@ -12,7 +12,8 @@
 .navigation.open {
     transform: translateX(0);
 }
-.navigation__toggle-content {
+
+.navigation-toggle-content {
     position: absolute;
     right: 0;
     z-index: 1;
@@ -23,21 +24,21 @@
     height: 50px;
 }
 
-.navigation__toggle {
+.navigation-toggle {
     position: relative;
     left: 5px;
     width: 30px;
     height: 30px;
-    background-color: rgb(var(--dark));
+    background-color: #3B3B48;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px rgb(var(--dark)) solid;
+    border: 2px #3b3b47 solid;
     border-radius: 5px;
     transition: 0.3s;
 }
 
-.navigation__toggle-logo {
+.navigation-toggle-logo {
     height: 55px;
     overflow: hidden;
     transform: translateY(-5px) translateX(-40px);
@@ -45,17 +46,17 @@
     z-index: -1;
 }
 
-.navigation__toggle-logo img {
+.navigation-toggle-logo img {
     height: 100%;
     width: auto;
 }
 
-.navigation.open .navigation__toggle {
-    background-color: rgb(var(--dark));
-    border-color: rgb(var(--dark));
+.navigation-home .navigation-toggle {
+    background-color: #12111f;
+    border-color: #12111f;
 }
 
-.navigation__toggle span {
+.navigation-toggle span {
     width: 60%;
     height: 2px;
     background-color: white;
@@ -63,15 +64,15 @@
     border-radius: 5px;
 }
 
-.navigation__toggle span:first-child {
+.navigation-toggle span:first-child {
     transform: translateY(-5px);
 }
 
-.navigation__toggle span:last-child {
+.navigation-toggle span:last-child {
     transform: translateY(5px);
 }
 
-.navigation__content {
+.navigation-content {
     height: 100vh;
     overflow-y: auto;
     display: flex;
@@ -84,35 +85,37 @@
     transition: .3s;
 }
 
-.navigation-home .navigation__content {
+.navigation-home .navigation-content {
     background: #12111f;
 }
-.navigation__logo {
+
+.navigation-logo {
     padding: 13px 15px 0;
     display: flex;
     flex-flow: column;
     justify-content: space-between;
 }
 
-.navigation__logo img {
+.navigation-logo img {
     height: auto;
     width: 90%;
     max-width: 140px;
     margin: 5px 30px;
 }
 
-.navigation__logo h3 {
+.navigation-logo h3 {
     color: #fff;
     line-height: 1;
 }
 
-.navigation__links {
+.navigation-links {
     display: flex;
     flex-flow: column;
     position: relative;
     margin: 20px 0px;
 }
-.navigation__links::before {
+
+.navigation-links::before {
     position: absolute;
     left: 0;
     top: 19px;
@@ -122,16 +125,7 @@
     opacity: 0.3;
 }
 
-.navigation__links p {
-    padding: 0 10px;
-    margin-bottom: 10px;
-}
-.navigation__links-item {
-    position: relative;
-    width: 100%;
-}
-
-.navigation__links-item .label-link{
+.navigation-links-item .label-link {
     position: relative;
     display: flex;
     align-items: center;
@@ -148,27 +142,17 @@
     transition: .3s;
 }
 
-.navigation__links-item .label-link-active {
+.navigation-links-item .label-link-active {
     background-color: rgb(var(--primary-dark));
     font-weight: 100;
     text-shadow: 0px 0px 0px white;
-}
-.navigation__links-item:hover::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff1f;
-    z-index: 0;
 }
 
 .navigation__item-icon {
     font-size: 12px;
 }
 
-.navigation__links-item:hover .navigation__item-icon {
+.navigation-links-item:hover .navigation__item-icon {
     background: var(--dark-light);
 }
 
@@ -221,4 +205,57 @@
 
 .navigation__item-search .input input.active {
     border-radius: 6px 6px 0 0;
+}
+
+.p-panel {
+    display: flex;
+    flex-flow: column;
+}
+
+::ng-deep .p-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 9px 20px; */
+    cursor: pointer;
+}
+
+
+::ng-deep .p-panel-icons .p-panel-header-icon {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    margin-right: 18px;
+}
+
+
+.navigation-links>p {
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+::ng-deep .p-panel-header .link-container p {
+    display: flex;
+    align-items: center;
+    width: auto;
+    padding: 10px 15px;
+    text-decoration: none;
+    justify-content: space-between;
+    color: white;
+    position: relative;
+}
+
+.link-container {
+    width: 100%;
+}
+
+::ng-deep.p-panel-header:hover {
+    background-color: #fbfbfb38;
+}
+
+.navigation-submenu {
+    border-top: 1px #c3c3c3e6 solid;
+    background: #00000047;
 }

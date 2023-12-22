@@ -5,8 +5,8 @@ import { HomeComponent } from './home/home.component';
 import { MyAccountComponent } from 'src/app/shared/my-account/my-account.component';
 import { ChangePasswordComponent } from 'src/app/shared/change-password/change-password.component';
 
-const analise = () => import('./../analise/analise.module').then(x => x.AnaliseModule);
 const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.PainelCpfModule);
+const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
 const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 const contrato = () => import('../contrato/contrato.module').then(x => x.ContratoModule);
@@ -24,7 +24,6 @@ const routes: Routes = [
                     ] },
                 ]
             },
-            { path: 'analise', loadChildren: analise },
             { path: 'painel-cpf', loadChildren: painelCPF },
             { path: 'operacoes', loadChildren: operacoes },
             { path: 'invoice', loadChildren: invoice },
@@ -33,6 +32,7 @@ const routes: Routes = [
             { path: 'beneficiario', loadChildren: beneficiario },
             { path: 'swift', loadChildren: documentoSwift},
             { path: 'contrato', loadChildren: contrato},
+            { path: 'usuarios', loadChildren: usuarios},
         ]
     }
 ];

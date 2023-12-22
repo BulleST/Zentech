@@ -43,13 +43,13 @@ export class FormComponent implements OnDestroy {
         this.modal.style = { 'max-width': '600px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        
+
 
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['moeda_id']) {
                 this.objeto.id = this.crypto.decrypt(x['moeda_id']);
                 this.modal.title = 'Editar Moeda';
-                this.modal.routerBack = ['../../..'];
+                this.modal.routerBack = ['../../'];
                 this.isEditPage = true;
                 lastValueFrom(this.moedaService.get(this.objeto.id))
                     .then(res => {

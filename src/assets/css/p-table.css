@@ -230,6 +230,11 @@ tr.selectable {
     color: #fff;
 }
 
+.flag.flag-yellow {
+    background-color: rgb(var(--primary-dark));
+    color: #fff;
+}
+
 .flag-green {
     background-color: #1a9d24;
     color: #fff;
@@ -420,9 +425,6 @@ tr.selectable {
     background-color: rgb(var(--secondary));
 }
 
-.p-column-filter-matchmode-dropdown {
-    /* margin-bottom: 10px; */
-}
 
 .p-column-filter-overlay-menu .p-column-filter-operator {
     padding: 7px;
@@ -738,4 +740,19 @@ tr.selected td {
 
 .p-scroller {
     padding: 0px !important;
+}
+
+.p-column-filter-constraint .p-dropdown {
+    display: flex;
+    align-items: center;
+}
+
+.p-column-filter-constraint .p-dropdown .p-dropdown-clear-icon {
+    position: absolute;
+    top: 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 60px;
+    color: #6d7277;
 }

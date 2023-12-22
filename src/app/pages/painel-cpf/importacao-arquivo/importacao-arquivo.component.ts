@@ -1,7 +1,8 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { NgModel } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { event } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
@@ -28,8 +29,8 @@ export class ImportacaoArquivoComponent {
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-    @ViewChild('file') file: NgModel;
     modal: Modal = new Modal;
+    @ViewChild('form') form: NgForm;
 
     constructor(
         private toastr: ToastrService,
@@ -62,6 +63,23 @@ export class ImportacaoArquivoComponent {
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }
+
+
+
+
+    fileChange(event: any) {
+        if (event && event.target && event.target.files && event.target.files.length > 0) {
+            this.fileUpload = event.target.files[0] as File;
+            this.form.control.setErrors(null)
+        }
+            else {
+                this.form.control.setErrors({fileRequired: true})
+                this.toastr.error('Selecione um arquivo para importação.')
+                delete this.fileUpload
+            }
+    }
+
+
     send() {
         this.loading = true;
         this.erro = '';
@@ -74,12 +92,12 @@ export class ImportacaoArquivoComponent {
             .then(res => {
                 lastValueFrom(this.pessoaService.getList());
                 this.loading = false;
-                if (res.find(x => x.sucesso == false)) {
-                    this.toastr.error('Alguns registros não puderam ser salvos.');
-                    this.erro = 'Alguns registros não puderam ser salvos.';
-
-                } else {
+                if (res.sucesso) {
                     this.voltar();
+                } else {
+                    this.toastr.error(res.mensagem);
+                    this.toastr.error('Alguns registros não puderam ser salvos.');
+                    this.erro = res.mensagem;
                 }
             })
             .catch(res => {

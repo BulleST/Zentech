@@ -18,7 +18,7 @@ import { DeleteComponent } from './delete/delete.component';
 @NgModule({
     declarations: [
         ListComponent,
-        FormComponent,
+        // FormComponent,
         DeleteComponent
     ],
     imports: [

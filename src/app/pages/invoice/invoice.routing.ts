@@ -10,6 +10,8 @@ import { FormComponent as FormBeneficiario } from './../beneficiario/form/form.c
 import { DeleteComponent as DeleteMoeda } from '../moeda/delete/delete.component';
 import { MyAccountRouter } from 'src/app/utils/my-account-router';
 
+
+
 const routes: Routes = [
     {
         path: '', component: ListComponent, children: [
@@ -40,7 +42,6 @@ const routes: Routes = [
                     },
                 ]
             },
-
             { path: 'excluir/:invoice_id', component: DeleteComponent, data: { modalOrder: 1 } },
             MyAccountRouter,
         ]

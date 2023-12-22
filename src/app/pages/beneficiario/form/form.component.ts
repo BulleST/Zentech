@@ -1,5 +1,6 @@
 import { PaisesService } from './../../../services/paises.service';
 import { BeneficiarioService } from './../../../services/beneficiario.service';
+
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -41,7 +42,7 @@ export class FormComponent implements OnDestroy {
 
     loadingBanco = true;
     bancos: BancoList[];
-
+    cepPreenchido= false
     loadingCidades = true;
     cidades: Cidades[];
     cidadesGrouped: any[] = [];

@@ -1,0 +1,21 @@
+<ng-template #icon>
+    <fa-icon [icon]="faTrash"></fa-icon>
+  </ng-template>
+  <ng-template #template>
+      <div>
+          <p class="mt-2">Tem certeza que deseja excluir esse registro? Ele não poderá ser recuperado.</p>
+          <p>O usuário não terá acesso mais à plataforma.</p>
+          <p class="text-info">Obs.: Se esse usuário estiver relacionado a um outro registro, não poderá ser excluído.</p>
+
+          <div *ngIf="erro" class="m-0  mt-1">
+              <p class="text-danger" >{{erro}}</p>
+          </div>
+  
+          <button class="btn btn-grey ms-auto d-flex mt-2" (click)="send()">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+              <span>Excluir</span>
+          </button>
+      </div>
+  </ng-template>
+  
+  
