@@ -10,7 +10,7 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
         <div class="px-2">
             <div class="row">
-                <div class="form-group col-md-12 col-sm-12">
+                <div class="form-group col-md-6 col-sm-12">
                     <label for="nome">Nome: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -25,28 +25,45 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
+                <div class="form-group col-md-6 col-sm-12">
+                  <label for="codigoSwift">Código Swift: <span class="text-danger">*</span></label>
+                  <input type="text"
+                         class="form-control"
+                         name="codigoSwift"
+                         id="codigoSwift"
+                         #codigoSwift="ngModel"
+                         [(ngModel)]="objeto.codigoSwift"
+                         pattern="\S(.*\S)?"
+                         (change)="objeto.codigoSwift = codigoSwift.value.trim();"
+                         required>
+                  <div *ngIf="codigoSwift.touched && codigoSwift.errors">
+                      <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
+                  </div>
+              </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-3 col-sm-3">
-                    <label for="cep">CEP:</label>
-                    <input type="text"
-                           class="form-control"
-                           placeholder="00000-000"
-                           mask="00000-000"
-                           name="cep"
-                           id="cep"
-                           (ngModelChange)="buscaCEP(cep)"
-                           [(ngModel)]="objeto.cep"
-                           #cep="ngModel"
-                           required
-                           [disabled]="loadingCep"/>
-                    <div *ngIf="cep.touched && cep.errors">
-                        <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
-                        <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
-                    </div>
+              <div class="form-group col-md-3 col-sm-3">
+                <label for="cep">CEP:</label>
+                <input
+                       type="text"
+                       class="form-control"
+                       name="cep"
+                       id="cep"
+                       #cep="ngModel"
+                       [(ngModel)]="objeto.cep"
+                       mask="00000-000"
+                       placeholder="00000-000"
+                       (ngModelChange)="buscaCEP(cep)"
+                       required
+                       [disabled]="loadingCep" />
+                <div *ngIf="cep.touched && cep.errors">
+                    <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
+                    <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
                 </div>
+            </div>
+
                 <div class="form-group col-md-6 col-sm-12">
-                    <label for="logradouro">Logradouro: <span class="text-danger">*</span></label>
+                    <label for="logradouro">Logradouro:</label>
                     <input type="text"
                            class="form-control"
                            name="logradouro"
@@ -62,48 +79,61 @@
                     </div>
                 </div>
                 <div class="form-group col-md-3 col-sm-12">
-                    <label for="cNumero">N°: <span class="text-danger">*</span></label>
+                    <label for="numero">N°: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
-                           name="cNumero"
-                           id="cNumero"
-                           #cNumero="ngModel"
+                           name="numero"
+                           id="numero"
+                           #numero="ngModel"
                            [(ngModel)]="objeto.numero"
                            required
                            pattern="\S(.*\S)?"
-                           (change)="objeto.numero = cNumero.value.trim();">
-                    <div *ngIf="cNumero.touched && cNumero.errors">
-                        <p class="text-danger" *ngIf="cNumero.errors['required']">Este campo é obrigatório.</p>
+                           (change)="objeto.numero = numero.value.trim();">
+                    <div *ngIf="numero.touched && numero.errors">
+                        <p class="text-danger" *ngIf="numero.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group">
-                    <label for="cidade_Id">Cidade: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="cidades"
-                                #cidade_Id="ngModel"
-                                [(ngModel)]="objeto.cidade_Id"
-                                [styleClass]="'form-control' + (loadingCidades ? 'form-control-loading' : '')"
-                                optionLabel="nomeCidade"
-                                optionValue="id"
-                                [placeholder]="'Selecione'"
-                                [disabled]="loadingCidades"
-                                name="cidade_Id"
-                                inputId="cidade_Id"
-                                [virtualScroll]="true"
-                                [virtualScrollItemSize]="10"
-                                [required]="true"
-                                [filter]="true"
-                                filterBy="nomeCidade"
-                                [showClear]="true"
-                                [disabled]="loadingCep || cepPreenchido">
-                    </p-dropdown>
-                    <div *ngIf="cidade_Id.touched && cidade_Id.errors">
-                        <p class="text-danger" *ngIf="cidade_Id.errors['required']">Este campo é obrigatório.</p>
+                  <div class="form-group col-md-6 col-sm-12">
+                    <label for="cidade">Cidade: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.numero = cidade.value.trim();">
+                    <div *ngIf="cidade.touched && cidade.errors">
+                        <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-            </div>
+                <div class="form-group col-md-6 col-sm-4">
+                  <label for="pais_Id">País: <span class="text-danger">*</span></label>
+                  <p-dropdown [styleClass]="'form-control' + (loadingPaises ? 'form-control-loading' : '')"
+                              [options]="paises"
+                              #pais_Id="ngModel"
+                              [(ngModel)]="objeto.pais_Id"
+                              optionLabel="nome"
+                              optionValue="id"
+                              [placeholder]="'Selecione'"
+                              [disabled]="loadingPaises"
+                              name="pais_Id"
+                              id="pais_Id"
+                              [virtualScroll]="true"
+                              [virtualScrollItemSize]="10"
+                              [required]="true"
+                              [filter]="true"
+                              filterBy="nome"
+                              [showClear]="true">
+                  </p-dropdown>
+                  <div *ngIf="pais_Id.touched && pais_Id.errors">
+                      <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>
+                  </div>
+              </div>
+              </div>
             <div class="row">
                 <div class="d-flex align-items-center">
                     <div *ngIf="erro || form.invalid" class="m-0">

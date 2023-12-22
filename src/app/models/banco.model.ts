@@ -9,17 +9,22 @@ export class BancoList {
     cidade: string = '';
     cep: string = '';
     numero: string = '';
-    logradouro: string = ''
+    logradouro: string = '';
+    pais: string = '';
+    codigoSwift: string = '';
 }
 
 
 export class BancoRequest {
     id: number = 0;
     nome: string = '';
-    cidade_Id: number = undefined as unknown as number;
+    cidade:string = '';
     cep: string = '';
     numero: string = '';
-    logradouro: string = ''
+    logradouro: string = '';
+    pais_Id:number = undefined as unknown as number;
+    codigoSwift: string = '';
+
 
 }
 

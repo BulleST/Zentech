@@ -16,6 +16,8 @@ export class BeneficiarioList {
     cnpj: number = 0;
     nomeBanco: string = '';
     nomePais: string = '';
+    complemento: string = '';
+    bairro: string = ''
 }
 
 export class BeneficiarioRequest {
@@ -23,14 +25,16 @@ export class BeneficiarioRequest {
     nome: string = '';
     cnpj: number = undefined as unknown as number;
     cep: string = '';
-    cidade_Id: number = undefined as unknown as number;
+    cidade: string = '';
     logradouro: string = '';
     numero: string = '';
     codigoSwift: string = '';
     banco_Id: number = undefined as unknown as number;
     conta: string = '';
-    pais_Id: number = undefined as unknown as number;
+    pais_Id:number = undefined as unknown as number;
     representante: string = '';
+    complemento: string = '';
+    bairro: string = ''
 }
 
 export var beneficiarioColumns: Column[] = [

@@ -53,6 +53,8 @@ export class FormComponent implements OnDestroy {
     loadingPaises = true;
     paises: Paises[] = [];
 
+    id:number =0
+
     @ViewChild('cep') cep: NgModel;
 
     constructor(
@@ -128,8 +130,8 @@ export class FormComponent implements OnDestroy {
                 this.modal.title = 'Cadastrar Beneficiário';
                 this.modal.routerBack = ['../'];
                 this.isEditPage = false;
-                this.objeto.pais_Id = 30;
-                this.objeto.cidade_Id = 5270;
+                // this.objeto.pais_Id = 30;
+                // this.objeto.cidade_Id = 5270;
 
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'beneficiario');
@@ -146,6 +148,16 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal.id);
     }
 
+    preencheCampos(){
+      this.bancoService.get(this.id).subscribe((data) =>{
+        this.objeto.codigoSwift = data.codigoSwift
+        this.objeto.cep = data.cep
+        this.objeto.logradouro = data.logradouro
+        this.objeto.numero = data.numero
+        this.objeto.cidade = data.cidade
+        this.objeto.pais_Id = data.pais_Id
+      })
+    }
 
     buscaCEP(input: NgModel) {
       this.loadingCep = true;
@@ -174,7 +186,7 @@ export class FormComponent implements OnDestroy {
                       return (cid == localidade || localidade.includes(cid) || cid.includes(localidade)) && data.uf.toLowerCase() == uf;
                   })
                   if (cidade) {
-                      this.objeto.cidade_Id = cidade.id;
+                      // this.objeto.cidade_Id = cidade.id;
                   }
                   this.cepPreenchido = true
 

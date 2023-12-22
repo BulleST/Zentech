@@ -12,6 +12,8 @@ import { CidadesService } from 'src/app/services/cidades.service';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { Cidades } from 'src/app/models/cidade.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { Paises } from 'src/app/models/pais.model';
+import { PaisesService } from 'src/app/services/paises.service';
 
 
 @Component({
@@ -33,6 +35,9 @@ export class FormComponent implements OnDestroy {
     cidades: Cidades[] = [];
     loadingCidades = false;
 
+    loadingPaises = true;
+    paises: Paises[] = [];
+
     @ViewChild('cep') cep: NgModel;
 
     constructor(
@@ -42,7 +47,8 @@ export class FormComponent implements OnDestroy {
         private toastr: ToastrService,
         private bancoService: BancoService,
         private cepService: CepService,
-        private cidadeService: CidadesService
+        private cidadeService: CidadesService,
+        private paisesService: PaisesService
     ) {
         console.log('banco')
         lastValueFrom(this.cidadeService.getCidade())
@@ -50,6 +56,12 @@ export class FormComponent implements OnDestroy {
                 this.cidades = res;
                 this.loadingCidades = false;
             })
+
+            lastValueFrom(this.paisesService.getPais())
+            .then(res => {
+                this.loadingPaises = false;
+                this.paises = res;
+            });
     }
 
 
@@ -86,7 +98,6 @@ export class FormComponent implements OnDestroy {
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
-                this.objeto.cidade_Id = 5270;
                 setTimeout(() => {
                     console.log('oi')
                     this.modal = this.modalService.addModal(this.modal, 'banco');
@@ -132,7 +143,7 @@ export class FormComponent implements OnDestroy {
                       return (cid == localidade || localidade.includes(cid) || cid.includes(localidade)) && data.uf.toLowerCase() == uf;
                   })
                   if (cidade) {
-                      this.objeto.cidade_Id = cidade.id;
+                      // this.objeto.cidade_Id = cidade.id;
                   }
                   this.cepPreenchido = true
 
@@ -145,7 +156,7 @@ export class FormComponent implements OnDestroy {
 
   }
 
-    validaCEP(input: NgModel) {
+  validaCEP(input: NgModel) {
       this.loadingCep = true;
       if (!this.objeto.cep.trim()) {
           input.control.setErrors({ required: true });
