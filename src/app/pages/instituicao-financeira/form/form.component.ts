@@ -109,7 +109,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     voltar() {
         this.modalService.removeModal(this.modal.id);
     }
-
     buscaCEP(input: NgModel) {
         this.loadingCep = true;
         input.control.setErrors(null);
@@ -171,7 +170,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
             return true;
         }
     }
-
     validaCNPJ(input: NgModel) {
         this.erro = '';
         this.loadingCNPJ = true;

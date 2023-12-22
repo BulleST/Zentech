@@ -15,7 +15,6 @@
 .modal {
     display: block;
     position: fixed;
-    /* z-index: 0; */
     opacity: 0;
     visibility: hidden;
     width: 100vw;
@@ -37,7 +36,7 @@
     z-index: 999;
 }
 
-/* 
+/*
 .modal__bg {
     background-color: #00000096;
     position: absolute;

@@ -16,7 +16,6 @@ const routes: Routes = [
         { path: 'reset-password/:usuario_id', component: ResetPasswordComponent, data: { modalOrder: 1 }, title: 'Zentech - Resetar senha', canActivate: [UserEditableAuth] },
         { path: 'habilitar/:usuario_id', component: DeactivatedComponent, data: { modalOrder: 1 }, title: 'Zentech - Habilitar usuário', canActivate: [UserEditableAuth] },
         { path: 'desabilitar/:usuario_id', component: DeactivatedComponent, data: { modalOrder: 1 }, title: 'Zentech - Desabilitar usuário', canActivate: [UserEditableAuth] },
-
         MyAccountRouter,
     ] }
 ];

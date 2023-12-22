@@ -154,7 +154,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         }, 50);
 
     }
-
     getOptionValue(row: any, col: Column, field: string) {
         if (col.values) {
             var value = this.table.getCellValue(row, col);
@@ -163,7 +162,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         }
         return null;
     }
-
     filterColOption(value: any, filter: any) {
         value = value != undefined && value != null ? value.value : undefined;
         filter(value);

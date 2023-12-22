@@ -146,6 +146,7 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal.id);
     }
 
+
     buscaCEP(input: NgModel) {
       this.loadingCep = true;
       input.control.setErrors(null);

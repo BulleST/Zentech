@@ -485,6 +485,7 @@ tr.selectable {
     border-radius: 50%;
     transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
+
 .p-ink {
     display: block;
     position: absolute;
