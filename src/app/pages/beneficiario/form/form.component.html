@@ -155,7 +155,7 @@
                            required
                            pattern="\S(.*\S)?"
                            (change)="objeto.logradouro = logradouro.value.trim();"
-                           [disabled]="cepPreenchido || cepPreenchido">
+                           [disabled]="loadingCep || cepPreenchido">
                     <div *ngIf="logradouro.touched && logradouro.errors">
                         <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
                     </div>

@@ -54,7 +54,7 @@
                            #logradouro="ngModel"
                            [(ngModel)]="objeto.logradouro"
                            required
-                           [disabled]="cepPreenchido"
+                           [disabled]="loadingCep ||cepPreenchido"
                            pattern="\S(.*\S)?"
                            (change)="objeto.logradouro = logradouro.value.trim();">
                     <div *ngIf="logradouro.touched && logradouro.errors">
@@ -96,7 +96,8 @@
                                 [required]="true"
                                 [filter]="true"
                                 filterBy="nomeCidade"
-                                [showClear]="true">
+                                [showClear]="true"
+                                [disabled]="loadingCep || cepPreenchido">
                     </p-dropdown>
                     <div *ngIf="cidade_Id.touched && cidade_Id.errors">
                         <p class="text-danger" *ngIf="cidade_Id.errors['required']">Este campo é obrigatório.</p>
