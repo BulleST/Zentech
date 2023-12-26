@@ -14,26 +14,20 @@ export class PaisesService {
     paises = new BehaviorSubject<Paises[]>([]);
 
     constructor(
-        private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
 
     ) { }
 
-
-
-
-  getPais() {
-    return this.http.get<Paises[]>(`${this.url}/pais/`, { headers: new HttpHeaders({ 'loading': 'false' })})
-    .pipe(tap({
-        next: list => {
-            this.paises.next(list);
-            return of(list);
-        },
-        error: res => this.toastr.error('Não foi possível carregar listagem de status da operação.')
-    }));
-}
-
-
+    getPais() {
+        return this.http.get<Paises[]>(`${this.url}/pais/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+            .pipe(tap({
+                next: list => {
+                    this.paises.next(list);
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de paises.')
+            }));
+    }
 }
 

@@ -26,6 +26,7 @@ export class ModalComponent implements OnDestroy {
     }
 
     voltar(id: number){
+        console.log('voltar', id)
         this.modalService.removeModal(id);
 
     }

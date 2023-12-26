@@ -63,12 +63,14 @@ export class ModalService {
         var index = list.findIndex(x => x.id == id);
         if (index != -1) {
             this.removeModalAnimation(id);
+            
+            
             setTimeout(() => {
                 var modal = list[index];
                 list.splice(index, 1);
                 this.modalList.next(list);
                 this.voltar(modal.routerBack, modal.routerBackOptions);
-            }, 10000);
+            }, 300);
 
         }
     }
