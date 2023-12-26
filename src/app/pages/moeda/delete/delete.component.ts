@@ -36,14 +36,13 @@ export class DeleteComponent {
         this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
         this.modal.activatedRoute =  this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.routerBack = ['../../'];
+        this.modal.routerBack = ['../../../'];
         this.modal.title = 'Excluir registro';
-
         
         var params = this.activatedRoute.params.subscribe(p => {
-            if (p['banco_id']) {
+            if (p['moeda_id']) {
                 try {
-                    this.id = this.crypto.decrypt(p['banco_id']);
+                    this.id = this.crypto.decrypt(p['moeda_id']);
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'delete moeda');
                     }, 200);

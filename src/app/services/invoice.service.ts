@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
-import { Invoice, Invoice_List } from '../models/invoice.model';
+import { Invoice, InvoiceRequest, Invoice_List } from '../models/invoice.model';
 import { Response } from '../helpers/request-response.interface';
 import { DatePipe } from '@angular/common';
 
@@ -42,9 +42,9 @@ export class InvoiceService {
     }
 
     get(id: number) {
-        return this.http.get<Invoice>(`${this.url}/invoice/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) }).pipe(tap({
+        return this.http.get<InvoiceRequest>(`${this.url}/invoice/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) }).pipe(tap({
             next: object => {
-                this.object.next(Object.assign({}, object));
+                this.object.next(JSON.parse(JSON.stringify(object)));
                 return of(object);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de invoices.')
@@ -75,6 +75,27 @@ export class InvoiceService {
                 var link = document.createElement('a');
                 link.href = data;
                 link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                // this is necessary as link.click() does not work on the latest firefox
+                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+                var url = URL.createObjectURL(res);
+                window.open(url, '_blank');
+                URL.revokeObjectURL(url);
+            }
+        }));
+    }
+
+
+    fileSwift(id: number) {
+        return this.http.post<Blob>(`${this.url}/invoice/swift/${id}`, {})
+        .pipe(tap({
+            next: res => {
+                var blob = new Blob([res], { type: 'application/pdf' })
+                const data = window.URL.createObjectURL(blob);
+    
+                var link = document.createElement('a');
+                link.href = data;
+                link.download = `Swift_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                 // this is necessary as link.click() does not work on the latest firefox
                 link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 

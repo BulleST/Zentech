@@ -72,10 +72,8 @@ export class FormComponent implements OnDestroy {
     tipos: ContratoTipo[] = []
     loadingTipo = true;
 
-
     eventos: ContratoEvento[] = []
     loadingEvento = true;
-
 
     instituicoes: InstituicaoFinanceiraList[] = []
     loadingInstituicao = true;
@@ -89,10 +87,7 @@ export class FormComponent implements OnDestroy {
 
     invoices: Invoice_List[] = []
     loadingInvoice = true;
-
     selectedInvoice?: Invoice_List
-
-
 
     constructor(
         private activatedRoute: ActivatedRoute,

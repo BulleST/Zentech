@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { MyAccountComponent } from 'src/app/shared/my-account/my-account.component';
 import { ChangePasswordComponent } from 'src/app/shared/change-password/change-password.component';
 
-const painelCPF = () => import('./../painel-cpf/painel-cpf.module').then(x => x.PainelCpfModule);
+const painelCPF = () => import('./../pessoa/pessoa.module').then(x => x.PessoaModule);
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
 const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
@@ -24,8 +24,8 @@ const routes: Routes = [
                     ] },
                 ]
             },
-            { path: 'painel-cpf', loadChildren: painelCPF },
-            { path: 'operacoes', loadChildren: operacoes },
+            { path: 'painel-cpf/pessoas', loadChildren: painelCPF },
+            { path: 'painel-cpf/operacoes', loadChildren: operacoes },
             { path: 'invoice', loadChildren: invoice },
             { path: 'instituicao-financeira', loadChildren: instituicaoFinanceira },
             { path: 'banco', loadChildren: banco },

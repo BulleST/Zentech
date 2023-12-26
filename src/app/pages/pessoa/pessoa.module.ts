@@ -1,11 +1,11 @@
-import { DEFAULT_CURRENCY_CODE, LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown'
 import localePt from '@angular/common/locales/pt';
 
-import { PainelCpfRoutingModule } from './painel-cpf.routing';
-import { PainelCpfComponent } from './painel-cpf.component';
+import { PessoaRoutingModule } from './pessoa.routing';
+import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { ImportacaoComponent } from './importacao/importacao.component';
@@ -34,7 +34,7 @@ import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arqu
 registerLocaleData(localePt);
 @NgModule({
     declarations: [
-        PainelCpfComponent,
+        PessoaComponent,
         ListComponent,
         CreateComponent,
         ImportacaoComponent,
@@ -53,7 +53,7 @@ registerLocaleData(localePt);
     ],
     imports: [
         CommonModule,
-        PainelCpfRoutingModule,
+        PessoaRoutingModule,
         TableModule,
         FontAwesomeModule,
         DropdownModule,
@@ -71,4 +71,4 @@ registerLocaleData(localePt);
         { provide: LOCALE_ID, useValue: 'pt-BR' },
     ]
 })
-export class PainelCpfModule { }
+export class PessoaModule { }

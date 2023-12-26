@@ -10,230 +10,623 @@
     </svg>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" class="needs-validation">
-        <div class="px-2">
-            <div class="row">
-                <!-- Data Invoice -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="dataInvoice">Data Invoice: <span class="text-danger">*</span></label>
-                    <input type="datetime-local"
-                           class="form-control"
-                           name="dataInvoice"
-                           id="dataInvoice"
-                           #dataInvoice="ngModel"
-                           [(ngModel)]="objeto.dataInvoice"
-                           required>
-                    <div *ngIf="dataInvoice.touched && dataInvoice.errors">
-                        <p class="text-danger" *ngIf="dataInvoice.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <!-- Moeda -->
-                <div class="form-group col-xl-3 xol-lg-3 col-md-6 col-sm-6 col-12">
-                    <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="moedas"
-                                [(ngModel)]="objeto.moeda_Id"
-                                #moeda_Id="ngModel"
-                                name="moeda_Id"
-                                inputId="moeda_Id"
-                                [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nome, simbolo, codigo"
-                                optionLabel="nome"
-                                optionValue="id"
-                                placeholder="Selecione uma moeda"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
+    <div class="mt-3">
+        <p-tabView (activeIndexChange)="tabChanged($event)" [activeIndex]="activeIndex">
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <!-- <fa-icon [icon]="faIdCard"></fa-icon> -->
+                    <span>Invoice</span>
+                </ng-template>
+                <div class="px-4">
+                <form #invoice="ngForm">
+                        <div class="mb-3 row">
                             <div class="d-flex align-items-center">
-                                <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
-                                <span>{{item.nome}}</span>
-                                <span class="ms-auto d-block">{{item.simbolo}}</span>
+                                <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0" (click)="invoiceDownload()">Baixar PDF</button>
+                                <span class="ms-2 text-danger mt-1" *ngIf="objeto.invoice.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
                             </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light">
-                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./moeda']">adicionar</a>
+                        </div>
+                        <div class="row">
+                            <!-- Número Invoice -->
+                            <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
+                                <label for="id">Nº: <span class="text-danger">*</span></label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="id"
+                                       id="id"
+                                       mask="0#"
+                                       #id="ngModel"
+                                       [(ngModel)]="objeto.invoice.id"
+                                       readonly>
                             </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="moeda_Id.touched && moeda_Id.errors">
-                        <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
+                            <!-- Data Invoice -->
+                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                <label for="dataInvoice">Data Invoice: <span class="text-danger">*</span></label>
+                                <input type="datetime-local"
+                                       class="form-control"
+                                       name="dataInvoice"
+                                       id="dataInvoice"
+                                       #dataInvoice="ngModel"
+                                       [(ngModel)]="objeto.invoice.dataInvoice"
+                                       required>
+                                <div *ngIf="dataInvoice.touched && dataInvoice.errors">
+                                    <p class="text-danger" *ngIf="dataInvoice.errors['required']">Este campo é obrigatório.</p>
+                                </div>
+                            </div>
+                            <!-- Moeda -->
+                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
+                                <p-dropdown [options]="moedas"
+                                            [(ngModel)]="objeto.invoice.moeda_Id"
+                                            #moeda_Id="ngModel"
+                                            name="moeda_Id"
+                                            inputId="moeda_Id"
+                                            [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
+                                            [showClear]="true"
+                                            [filter]="true"
+                                            filterBy="nome, simbolo, codigo"
+                                            optionLabel="nome"
+                                            optionValue="id"
+                                            placeholder="Selecione uma moeda"
+                                            [required]="true"
+                                            [showClear]="true">
+                                    <ng-template let-item pTemplate="item">
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex align-items-center w-100" [title]="item.nome">
+                                                <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
+                                                <span class="text-ellipsis">{{item.nome}}</span>
+                                                <span class="flag flag-info px-2 ms-auto">{{item.simbolo}}</span>
+                                            </div>
+                                            <div class="ms-2">
+                                                <a class="py-1 px-1 text-dark" (click)="moedaEditar(item)" title="Editar"><fa-icon [icon]="faEdit"></fa-icon></a>
+                                                <a class="py-1 px-1 text-dark" (click)="moedaExcluir(item.id)" title="Editar"><fa-icon [icon]="faTrash"></fa-icon></a>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./moeda']">adicionar</a>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="moeda_Id.touched && moeda_Id.errors">
+                                    <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
+                                </div>
+                            </div>
+                            <!-- Valor -->
+                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <label for="valor">Valor: <span class="text-danger">*</span></label>
+                                <app-input-number [valueInput]="objeto.invoice.valor"
+                                                  (valueChanges)="objeto.invoice.valor = $event;"
+                                                  [inputId]="'valor'"
+                                                  [mask]="'separator.2'"
+                                                  [showErrorMessage]="true"
+                                                  [allowNegativeNumbers]="false"
+                                                  [required]="true"
+                                                  [autoReplaceValue]="false"></app-input-number>
+                            </div>
+                            <!-- Instituição Financeira -->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
+                                <p-dropdown [styleClass]="'form-control' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
+                                            [showClear]="true"
+                                            [options]="instituicaoFinanceira"
+                                            #instituicaoFinanceira_Id="ngModel"
+                                            [(ngModel)]="objeto.invoice.instituicaoFinanceira_Id"
+                                            optionLabel="nomeInstituicao"
+                                            optionValue="id"
+                                            [placeholder]="'Selecione'"
+                                            [disabled]="loadingInstituicaoFinanceira"
+                                            name="instituicaoFinanceira_Id"
+                                            inputId="instituicaoFinanceira_Id"
+                                            [required]="true"
+                                            [filter]="true"
+                                            filterBy="nome">
+                                    <ng-template pTemplate="footer">
+                                        <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
+                                    <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é obrigatório.</p>
+                                </div>
+                            </div>
+                            <!-- Beneficiário -->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
+                                <p-dropdown
+                                            [options]="beneficiarios"
+                                            [(ngModel)]="objeto.invoice.beneficiario_Id"
+                                            #beneficiario_Id="ngModel"
+                                            name="beneficiario_Id"
+                                            inputId="beneficiario_Id"
+                                            [styleClass]="'form-control ' + (loadingBeneficiarios ? 'form-control-loading' : '')"
+                                            [showClear]="true"
+                                            [filter]="true"
+                                            filterBy="nome, cnpj"
+                                            optionLabel="nome"
+                                            optionValue="id"
+                                            placeholder="Selecione um beneficiário"
+                                            [required]="true"
+                                            [showClear]="true">
+                                    <ng-template let-item pTemplate="item">
+                                        <div>
+                                            <p>{{item.nome}}</p>
+                                            <p>{{item.cnpj}}</p>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template pTemplate="footer">
+                                        <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="beneficiario_Id.touched && beneficiario_Id.errors">
+                                    <p class="text-danger" *ngIf="beneficiario_Id.errors['required']">Este campo é obrigatório.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group mt-3">
+                                <div class="col-sm-12 card py-3 px-4">
+                                    <div class="row">
+                                        <div>
+                                            <h6>Dados do Beneficiário </h6>
+                                            <p class="mb-3"><small class="text-danger">(Selecione um beneficiário para carregar dados)</small></p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- Banco -->
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <label for="nomeBanco">Banco: </label>
+                                            <input type="text"
+                                                   id="nomeBanco"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.nomeBanco"
+                                                   readonly>
+                                        </div>
+                                        <!-- Conta -->
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <label for="conta">Conta: </label>
+                                            <input type="text"
+                                                   id="conta"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- Representante -->
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <label for="representante">Representante:</label>
+                                            <input type="text"
+                                                   id="representante"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.representante"
+                                                   readonly>
+                                        </div>
+                                        <!-- Código Swift -->
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <label for="codigoSwift">Código Swift: </label>
+                                            <input type="text"
+                                                   id="codigoSwift"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div>
+                                            <small>Endereço do banco</small>
+                                            <hr class="w-100">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <!-- CEP -->
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                            <label for="cep">CEP:</label>
+                                            <input type="text"
+                                                   id="cep"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- Logradouro -->
+                                        <div class="form-group col-xl-7 col-lg-7 col-md-6 col-sm-6 col-12">
+                                            <label for="logradouro">Logradouro:</label>
+                                            <input type="text"
+                                                   id="logradouro"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- Número -->
+                                        <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
+                                            <label for="numero">Número:</label>
+                                            <input type="text"
+                                                   id="numero"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- Complemento -->
+                                        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                            <label for="complemento">Complemento:</label>
+                                            <input type="text"
+                                                   id="complemento"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- Cidade -->
+                                        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                            <label for="cidade">Cidade:</label>
+                                            <input type="text"
+                                                   id="cidade"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                        <!-- País -->
+                                        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                            <label for="pais">País:</label>
+                                            <input type="text"
+                                                   id="pais"
+                                                   class="form-control"
+                                                   [value]="beneficiarioSelected?.conta"
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel>
+                <ng-template pTemplate="header">
+                    <!-- <fa-icon [icon]="faDollarSign"></fa-icon> -->
+                    <span>Contrato</span>
+                </ng-template>
+                <div class="px-4">
+                    <form #contrato="ngForm" >
+                        <div class="mb-3 row">
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-dark" [disabled]="objeto.contrato.id == 0">Baixar PDF</button>
+                                <span class="ms-2 text-danger mt-1" *ngIf="objeto.contrato.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
+                            </div>
+                        </div>
+                            <div class="row">
+                                <!-- Data do Contrato -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Data do Contrato">
+                                    <label for="data">Data do contrato: <span class="text-danger">*</span></label>
+                                    <input type="datetime-local"
+                                           class="form-control"
+                                           name="data"
+                                           id="data"
+                                           #data="ngModel"
+                                           [(ngModel)]="objeto.contrato.data"
+                                           required pattern="\S(.*\S)?"
+                                           (change)="objeto.contrato.data = data.value.trim();">
+                                    <div *ngIf="data.touched && data.errors">
+                                        <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
+                                    </div>
+                                </div>
+                                <!-- Nº do Contrato de Câmbio -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
+                                    <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="numContrato"
+                                           id="numContrato"
+                                           #numContrato="ngModel"
+                                           [(ngModel)]="objeto.contrato.numContrato"
+                                           required
+                                           pattern="\S(.*\S)?"
+                                           (change)="objeto.contrato.numContrato = numContrato.value.trim();">
+                                    <div *ngIf="numContrato.touched && numContrato.errors">
+                                        <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigatório.</p>
+                                    </div>
+                                </div>
+                                <!-- Tipos -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Tipos">
+                                    <label for="tipo_Id">Tipo do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                                    <p-dropdown
+                                                [options]="tipos"
+                                                [(ngModel)]="objeto.contrato.tipo_Id"
+                                                #tipo_Id="ngModel"
+                                                name="tipo_Id"
+                                                inputId="tipo_Id"
+                                                [styleClass]="'form-control ' + (loadingTipo ? 'form-control-loading' : '')"
+                                                [showClear]="true"
+                                                [filter]="true"
+                                                optionLabel="nome"
+                                                optionValue="id"
+                                                placeholder="Selecione um tipo"
+                                                [required]="true"
+                                                [showClear]="true">
+                                        <ng-template let-item pTemplate="item">
+                                            <div class="d-flex align-items-center">
+                                                <span>{{item.nome}} </span>
+                                            </div>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <div *ngIf="tipo_Id.touched && tipo_Id.errors">
+                                        <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
+                                    </div>
+                                </div>                                
+                                <!-- Eventos -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Eventos">
+                                    <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
+                                    <p-dropdown
+                                                [options]="eventos"
+                                                [(ngModel)]="objeto.contrato.invoice_Id"
+                                                #evento_Id="ngModel"
+                                                name="evento_Id"
+                                                inputId="evento_Id"
+                                                [styleClass]="'form-control ' + (loadingEvento ? 'form-control-loading' : '')"
+                                                [showClear]="true"
+                                                [filter]="true"
+                                                filterBy="nome, cnpj"
+                                                optionLabel="nome"
+                                                optionValue="id"
+                                                placeholder="Selecione um evento"
+                                                [required]="true"
+                                                [showClear]="true">
+                                        <ng-template let-item pTemplate="item">
+                                            <div class="d-flex align-items-center">
+                                                <span>{{item.nome}} </span>
+                                            </div>
+                                        </ng-template>
+                                        <!-- <ng-template pTemplate="footer">
+                                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./evento']">adicionar</a>
+                                            </div>
+                                        </ng-template> -->
+                                    </p-dropdown>
+                                    <div *ngIf="evento_Id.touched && evento_Id.errors">
+                                        <p class="text-danger" *ngIf="evento_Id.errors['required']">Este campo é obrigatório.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Taxa Cambial -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Taxa Cambial">
+                                    <label for="taxa">Taxa Cambial: <small>(USD)</small>&nbsp;<span class="text-danger">*</span> </label>
+                                    <app-input-number [valueInput]="objeto.contrato.taxa"
+                                                      (valueChanges)="objeto.contrato.taxa = $event;"
+                                                      [inputId]="'taxa'"
+                                                      [mask]="'separator.2'"
+                                                      [showErrorMessage]="true"
+                                                      [allowNegativeNumbers]="false"
+                                                      [required]="true"
+                                                      suffix=" USD"
+                                                      [autoReplaceValue]="false"></app-input-number>
+                                </div>
+                                <!-- Valor Moeda Nacional -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
+                                    <label for="valorNacional">Valor Moeda Nacional: <small>(R$)</small>&nbsp;<span class="text-danger">*</span></label>
+                                    <app-input-number [valueInput]="objeto.contrato.valorNacional"
+                                                      (valueChanges)="objeto.contrato.valorNacional = $event;"
+                                                      [inputId]="'valorNacional'"
+                                                      [mask]="'separator.2'"
+                                                      [showErrorMessage]="true"
+                                                      [allowNegativeNumbers]="false"
+                                                      [required]="true"
+                                                      prefix="R$ "
+                                                      [autoReplaceValue]="false"></app-input-number>
+                                </div>
+                                <!-- Percentual de Adiantamento -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Percentual de Adiantamento">
+                                    <label for="percentualAdiantamento">Percentual de Adiantamento: <small>(%)</small>&nbsp;</label>
+                                    <app-input-number [valueInput]="objeto.contrato.percentualAdiantamento"
+                                                      (valueChanges)="objeto.contrato.percentualAdiantamento = $event;"
+                                                      [inputId]="'percentualAdiantamento'"
+                                                      [mask]="'separator.2'"
+                                                      [showErrorMessage]="false"
+                                                      [allowNegativeNumbers]="false"
+                                                      [required]="false"
+                                                      [autoReplaceValue]="false"
+                                                      [suffix]="'%'"></app-input-number>
+                                </div>
+                                <!-- RDE -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="RDE">
+                                    <label for="rde">RDE:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="rde"
+                                           id="rde"
+                                           #rde="ngModel"
+                                           [(ngModel)]="objeto.contrato.rde"
+                                           pattern="\S(.*\S)?"
+                                           (change)="objeto.contrato.rde = rde.value.trim();">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Valor Efetivo Total (VET) -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="Valor Efetivo Total (VET)">
+                                    <label for="vet">Valor Efetivo Total (VET):</label>
+                                    <app-input-number [valueInput]="objeto.contrato.vet "
+                                                      (valueChanges)="objeto.contrato.vet = $event;"
+                                                      [inputId]="'vet'"
+                                                      [mask]="'0{1}.0{12}'"
+                                                      [placeholder]="'0.000000000000'"
+                                                      [showErrorMessage]="false"
+                                                      [allowNegativeNumbers]="false"
+                                                      [required]="false"
+                                                      [autoReplaceValue]="false"></app-input-number>
+                                </div>
+                                <!-- Descrição da Forma de Entrega da moeda estrangeira -->
+                                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
+                                    <label for="descricaoFormaEntrega">Descrição da Forma de Entrega da moeda estrangeira:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="descricaoFormaEntrega"
+                                           id="descricaoFormaEntrega"
+                                           #descricaoFormaEntrega="ngModel"
+                                           [(ngModel)]="objeto.contrato.descricaoFormaEntrega"
+                                           required 
+                                           pattern="\S(.*\S)?"
+                                           readonly
+                                           (change)="objeto.contrato.descricaoFormaEntrega = descricaoFormaEntrega.value.trim();">
+                                </div>
+                                <!-- Liquidação Até -->
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
+                                    <label for="dataLiquidacao">Liquidação Até: <span class="text-danger">*</span></label>
+                                    <input type="date"
+                                           class="form-control"
+                                           name="dataLiquidacao"
+                                           id="dataLiquidacao"
+                                           #dataLiquidacao="ngModel"
+                                           [(ngModel)]="objeto.contrato.dataLiquidacao"
+                                           required >
+                                    <div *ngIf="dataLiquidacao.touched && dataLiquidacao.errors">
+                                        <p class="text-danger" *ngIf="dataLiquidacao.errors['required']">Este campo é obrigatório.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Código da Natureza -->
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Natureza">
+                                    <label for="codigoNatureza">Código da Natureza:</label>
+                                    <app-input-number [valueInput]="objeto.contrato.codigoNatureza "
+                                                      (valueChanges)="objeto.contrato.codigoNatureza = $event;"
+                                                      [inputId]="'codigoNatureza'"
+                                                      [mask]="'00000-00-A-00-00'"
+                                                      [showErrorMessage]="false"
+                                                      [allowNegativeNumbers]="false"
+                                                      [required]="false"
+                                                      [readonly]="true"
+                                                      [autoReplaceValue]="false"></app-input-number>
+                                   
+                                </div>
+                                <!-- Descrição da Natureza do Fato -->
+                                <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">
+                                    <label for="descricaoNaturezaFato">Descrição da Natureza do Fato:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="descricaoNaturezaFato"
+                                           id="descricaoNaturezaFato"
+                                           #descricaoNaturezaFato="ngModel"
+                                           [(ngModel)]="objeto.contrato.descricaoNaturezaFato"
+                                           required 
+                                           pattern="\S(.*\S)?"
+                                           readonly
+                                           (change)="objeto.contrato.descricaoNaturezaFato = descricaoNaturezaFato.value.trim();">
+                                </div>
+                            </div>
+                            <div class="row align-items-end">
+                                <!-- País do Pagador/Recebedor no Exterior -->
+                                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="País do Pagador/Recebedor no Exterior">
+                                    <label for="pais_Id">País do Pagador/Recebedor no Exterior:</label>
+                                    <p-dropdown [styleClass]="'form-control ' + (loadingPais ? 'form-control-loading' : '')"
+                                                [showClear]="true"
+                                                [options]="paises"
+                                                #pais_Id="ngModel"
+                                                [(ngModel)]="objeto.contrato.pais_Id"
+                                                optionLabel="nome"
+                                                optionValue="id"
+                                                [placeholder]="'Selecione'"
+                                                [disabled]="loadingPais"
+                                                name="pais_Id"
+                                                id="pais_Id"
+                                                [virtualScroll]="true"
+                                                [virtualScrollItemSize]="10"
+                                                optionValue="id"
+                                                [filter]="true"
+                                                filterBy="nome">
+                                    </p-dropdown>
+                                </div>
+                                <!-- Pagador/Recebedor no Exterior -->
+                                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Pagador/Recebedor no Exterior">
+                                    <label for="pagRecExterior">Pagador/Recebedor no Exterior:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="pagRecExterior"
+                                           id="pagRecExterior"
+                                           #pagRecExterior="ngModel"
+                                           [(ngModel)]="objeto.contrato.pagRecExterior"
+                                           required pattern="\S(.*\S)?"
+                                           (change)="objeto.contrato.pagRecExterior = pagRecExterior.value.trim();">
+                                </div>
+                                <!-- Código da Relação de Vínculo entre cliente e o Pagador/Recebedor -->
+                                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Relação de Vínculo entre cliente e o Pagador/Recebedor">
+                                    <label for="codigoVinculoPagRecExterior">Código da Relação de Vínculo entre cliente e o Pagador/Recebedor:</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           name="codigoVinculoPagRecExterior"
+                                           id="codigoVinculoPagRecExterior"
+                                           #codigoVinculoPagRecExterior="ngModel"
+                                           [(ngModel)]="objeto.contrato.codigoVinculoPagRecExterior"
+                                           required 
+                                           [readonly]="true"
+                                           (change)="objeto.contrato.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim();">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Especificações -->
+                                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Especificações">
+                                    <label for="especificacoes">Especificações: </label>
+                                    <textarea
+                                        class="form-control"
+                                        name="especificacoes"
+                                        id="especificacoes"
+                                        #especificacoes="ngModel"
+                                        [(ngModel)]="objeto.contrato.especificacoes"
+                                        pattern="\S(.*\S)?"
+                                        (change)="objeto.contrato.especificacoes = especificacoes.value.trim();">
+                                    </textarea>
+                                </div>
+                                <!-- Cláusulas -->
+                                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Cláusulas">
+                                    <label for="clausulas">Cláusulas: </label>
+                                    <textarea
+                                        class="form-control"
+                                        name="clausulas"
+                                        id="clausulas"
+                                        #clausulas="ngModel"
+                                        [(ngModel)]="objeto.contrato.clausulas"
+                                        pattern="\S(.*\S)?"
+                                        (change)="objeto.contrato.clausulas = clausulas.value.trim();">
+                                    </textarea>
+                                </div>
+                                <!-- Instruções de Recebimento/Pagamento -->
+                                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Instruções de Recebimento/Pagamento">
+                                    <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: </label>
+                                    <textarea
+                                        class="form-control"
+                                        name="instrucoesRecebimentoPagamento"
+                                        id="instrucoesRecebimentoPagamento"
+                                        #instrucoesRecebimentoPagamento="ngModel"
+                                        [(ngModel)]="objeto.contrato.instrucoesRecebimentoPagamento"
+                                        pattern="\S(.*\S)?"
+                                        (change)="objeto.contrato.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
+                                    </textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            </p-tabPanel>
+            <p-tabPanel *ngIf="isEditPage"> <!---->
+                <ng-template pTemplate="header">
+                    <span>Swift</span>
+                </ng-template>
+                <div class="px-2">
+                    <div class="swift">
+                        <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0">Baixar Documento Swift</button>
                     </div>
                 </div>
-                <!-- Valor -->
-                <div class="form-group col-xl-3 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="valor">Valor: <span class="text-danger">*</span></label>
-                    <app-input-number [valueInput]="objeto.valor"
-                                      (valueChanges)="objeto.valor = $event;"
-                                      [inputId]="'valor'"
-                                      [mask]="'separator.2'"
-                                      [showErrorMessage]="true"
-                                      [allowNegativeNumbers]="false"
-                                      [required]="true"
-                                      [autoReplaceValue]="false"></app-input-number>
-
-                </div>
-            
-                <!-- Beneficiário -->
-                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="beneficiarios"
-                                [(ngModel)]="objeto.beneficiario_Id"
-                                #beneficiario_Id="ngModel"
-                                name="beneficiario_Id"
-                                inputId="beneficiario_Id"
-                                [styleClass]="'form-control ' + (loadingBeneficiarios ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nome, cnpj"
-                                optionLabel="nome"
-                                optionValue="id"
-                                placeholder="Selecione um beneficiário"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p>{{item.nome}}</p>
-                                <p>{{item.cnpj}}</p>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light">
-                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="beneficiario_Id.touched && beneficiario_Id.errors">
-                        <p class="text-danger" *ngIf="beneficiario_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <!-- Instituição Financeira -->
-                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="instituicaoFinanceira_Id">Instituição Financeira: <span
-                              class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="instituicaoFinanceira"
-                                [(ngModel)]="objeto.instituicaoFinanceira_Id"
-                                #instituicaoFinanceira_Id="ngModel"
-                                name="instituicaoFinanceira_Id"
-                                inputId="instituicaoFinanceira_Id"
-                                [styleClass]="'form-control ' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nomeInstituicao, cnpj"
-                                optionLabel="nomeInstituicao"
-                                optionValue="id"
-                                placeholder="Selecione uma instituição"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p>{{item.nomeInstituicao}}</p>
-                                <p>{{item.cnpj}}</p>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light">
-                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./instituicao-financeira']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
-                        <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é
-                            obrigatório.</p>
-                    </div>
-                </div>
-                <!-- Banco -->
-                <div class="form-group col-xl-4 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="bancos"
-                                [(ngModel)]="objeto.banco_Id"
-                                #banco_Id="ngModel"
-                                name="banco_Id"
-                                inputId="banco_Id"
-                                [styleClass]="'form-control ' + (loadingBancos ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy="nome, cidade"
-                                optionLabel="nome"
-                                optionValue="id"
-                                placeholder="Selecione um banco"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p>{{item.nome}}</p>
-                                <p>{{item.cidade}}</p>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light">
-                                Não encontrou? Clique para <a  class="link text-info" [routerLink]="['./banco']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="banco_Id.touched && banco_Id.errors">
-                        <p class="text-danger" *ngIf="banco_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <!-- Conta -->
-                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="conta">Conta: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           name="conta"
-                           id="conta"
-                           class="form-control"
-                           [(ngModel)]="objeto.conta"
-                           #conta="ngModel"
-                           required>
-                    <div *ngIf="conta.touched && conta.errors">
-                        <p class="text-danger" *ngIf="conta.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <!-- Código Swift -->
-                <div class="form-group col-xl-6 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="codigoSwift">Código Swift: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           name="codigoSwift"
-                           id="codigoSwift"
-                           class="form-control"
-                           [(ngModel)]="objeto.codigoSwift"
-                           #codigoSwift="ngModel"
-                           required>
-                    <div *ngIf="codigoSwift.touched && codigoSwift.errors">
-                        <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-              
+            </p-tabPanel>
+        </p-tabView>
+        <div class="d-flex align-items-start flex-wrap p-0 mt-3">
+            <div *ngIf="erro || invoice.invalid || contrato.invalid" class="m-0 me-3">
+                <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para salvar.</p>
+                <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
             </div>
-
-            <div class="row">
-                <div class="d-flex align-items-start flex-wrap p-0 mt-1">
-                    <div *ngIf="erro || form.invalid" class="m-0 me-3">
-                        <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                        <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*)
-                            corretamente para salvar.</p>
-                    </div>
-                    <button *ngIf="isEditPage" type="button" (click)="fileDownload()" class="btn btn-dark mr-1 ms-auto" [disabled]="loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        <span>Baixar</span>
-                    </button>
-                    <button *ngIf="isEditPage" (click)="send(form, true)" class="btn btn-dark mr-1 " [disabled]="form.invalid || loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        <span>Salvar e Baixar</span>
-                    </button>
-                    <button (click)="send(form, false)" class="btn btn-primary mr-0 " [class.ms-auto]="!isEditPage" [disabled]="form.invalid || loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                        <span>Salvar</span>
-                    </button>
-                </div>
-            </div>
+            <button (click)="filesDownload()" class="btn btn-dark mr-0 ms-auto" *ngIf="isEditPage" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                <span>Baixar Kit</span>
+            </button>
+            <button (click)="send(invoice, contrato)" class="btn btn-primary mr-0 " [class.ms-auto]="!isEditPage" [disabled]="invoice.invalid || contrato.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                <span>Salvar e Gerar Swift</span>
+            </button>
         </div>
-    </form>
+    </div>
 </ng-template>
-
 <router-outlet></router-outlet>
