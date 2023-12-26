@@ -10,17 +10,23 @@ export class InstituicaoFinanceiraList {
     logradouro: string = '';
     numero: string = '';
     cep: string = '';
-    cidade_Id: number = 0;
+    cidade:string = '';
+    pais: string = '';
+    bairro: string = ''
+    complemento: string = ''
 }
 
 export class InstituicaoFinanceiraRequest {
     id: number = 0;
     nome: string = '';
     cnpj: number = undefined as unknown as number;
-    cidade_Id: number = undefined as unknown as number;
+    cidade:string = '';
     logradouro: string = '';
     numero: string = '';
     cep: string = '';
+    bairro: string = ''
+    complemento: string = ''
+    pais_Id:number = undefined as unknown as number;
 }
 
 export var instituicaoFinanceiraColumns: Column[] = [
