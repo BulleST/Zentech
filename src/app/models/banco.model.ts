@@ -13,6 +13,7 @@ export class BancoList {
     pais: string = '';
     bairro: string = ''
     complemento: string = ''
+    codigoSwift: string = '';
 }
 
 
