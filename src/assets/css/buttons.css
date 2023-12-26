@@ -467,3 +467,12 @@ a.btn-pink.disabled:not([href]) {
 .btn i {
     font-size: 14px;
 }
+
+button[disabled] {
+    cursor: not-allowed;
+    pointer-events: bounding-box!important;
+}
+
+button[disabled]:hover, button[disabled]:focus, button[disabled]:active {
+    box-shadow: none;
+}

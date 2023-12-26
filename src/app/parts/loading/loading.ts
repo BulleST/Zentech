@@ -8,7 +8,10 @@ export class LoadingService {
     loading = new BehaviorSubject<boolean>(false);
     loadingRequests = new BehaviorSubject<boolean[]>([]);
 
-    constructor() { }
+    message = new BehaviorSubject<string>('');
+
+    constructor() { 
+    }
 
     addLoadingRequest() {
         var values = this.loadingRequests.value;

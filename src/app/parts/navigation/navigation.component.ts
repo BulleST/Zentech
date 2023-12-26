@@ -48,6 +48,7 @@ export class NavigationComponent implements OnDestroy {
     }
 
     toggleAside() {
+        console.log('button click')
         this.header.toggleMenuAside();
     }
 
@@ -62,13 +63,13 @@ export class NavigationComponent implements OnDestroy {
                     {
                         id: i++,
                         label: 'New Clickk Buyers',
-                        routerLink: "/painel-cpf",
+                        routerLink: "/painel-cpf/pessoas",
                         paddingLeft: 10,
                     },
                     {
                         id: i++,
                         label: 'Pró Câmbio',
-                        routerLink: "/operacoes",
+                        routerLink: "/painel-cpf/operacoes",
                         paddingLeft: 10,
                     },
                 ]

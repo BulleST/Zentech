@@ -81,45 +81,39 @@ export class FormComponent implements OnDestroy {
     var contratos = this.contratoService.list.subscribe(res => this.contratos = res);
     this.subscription.push(contratos);
 
+    eventos: ContratoEvento[] = []
+    loadingEvento = true;
 
-    lastValueFrom(this.invoiceService.getList())
-      .then(res => this.invoices = res)
-      .finally(() => console.log('ok'));
+    instituicoes: InstituicaoFinanceiraList[] = []
+    loadingInstituicao = true;
 
-    var invoices = this.invoiceService.list.subscribe(
-      res => {
-        this.invoices = res.map(x => {
-          x.filter = x.id + '-' + x.nomeBanco + '-' + x.nomeBeneficiario + '-' + x.cnpjBeneficiario + '-' + x.valor + '-' + x.dataInvoice
-          console.log('teste', x.filter)
-
-          return x
-        })
-      }
-    );
-    this.subscription.push(invoices);
+    paises: Paises[] = []
+    loadingPais = true;
 
 
-    lastValueFrom(this.contratoEventoService.getList())
-      .then(res => this.eventos = res)
-      .finally(() => this.loadingEvento = false);
+    cidades: Cidades[] = []
+    loadingCidade = true;
 
+    invoices: Invoice_List[] = []
+    loadingInvoice = true;
+    selectedInvoice?: Invoice_List
 
-    var eventos = this.contratoEventoService.list.subscribe(res => this.eventos = res);
-    this.subscription.push(eventos);
-
-
-    lastValueFrom(this.contratoTipoService.getList())
-      .then(res => this.tipos = res)
-      .finally(() => this.loadingTipo = false);
-
-    var tipos = this.contratoTipoService.list.subscribe(res => this.tipos = res);
-    this.subscription.push(tipos);
-    lastValueFrom(this.instituicaoFinanceiraService.getList())
-      .then(res => {
-        this.loadingInstituicao = false;
-        this.instituicoes = res;
-        console.log(this.instituicoes)
-      });
+    constructor(
+        private activatedRoute: ActivatedRoute,
+        private modalService: ModalService,
+        private pessoaSaldoService: PessoaSaldoService,
+        private contratoService: ContratoService,
+        private contratoTipoService: ContratoTipoService,
+        private crypto: Crypto,
+        private datepipe: DatePipe,
+        private toastr: ToastrService,
+        private cepService: CepService,
+        private cidadesService: CidadesService,
+        private instituicaoFinanceiraService: InstituicaoFinanceiraService,
+        private contratoEventoService: ContratoEventoService,
+        private paisesService: PaisesService,
+        private router: Router,
+        private invoiceService: InvoiceService
 
     lastValueFrom(this.paisesService.getPais())
       .then(res => {

@@ -1,17 +1,14 @@
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
+import { Contrato } from "./contrato.model";
 
 export class Invoice {
     id: number = 0;
     dataInvoice: Date = new Date;
-    valor: number = '' as unknown as number;
-    beneficiario_Id: number = undefined as unknown as number;
-    instituicaoFinanceira_Id: number = undefined as unknown as number;
-    banco_Id: number = undefined as unknown as number;
-    codigoSwift: string = '';
-    conta: number = '' as unknown as number;
     moeda_Id: number = undefined as unknown as number;
-    // contrato_Id: number = undefined as unknown as number;
+    valor: number = '' as unknown as number;
+    instituicaoFinanceira_Id: number = undefined as unknown as number;
+    beneficiario_Id: number = undefined as unknown as number;
 }
 
 export class Invoice_List {
@@ -24,10 +21,17 @@ export class Invoice_List {
     filter: string = ''
 }
 
+
+export class InvoiceRequest {
+    invoice: Invoice = new Invoice;
+    contrato: Contrato = new Contrato;
+}
+
+
 export var invoiceColumns: Column[] = [
     {
         field: 'id',
-        header: 'Id',
+        header: 'Nº Invoice',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

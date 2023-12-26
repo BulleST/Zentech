@@ -42,19 +42,13 @@ export class DeleteComponent {
         this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
         this.modal.activatedRoute =  this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-
+        this.modal.routerBack = ['../../../'];
         this.modal.title = 'Excluir registro';
-
-        this.activatedRoute.params.subscribe(params => {
-          const encryptedId = params['moeda_id'];
-          if (encryptedId) {
-            const decryptedId = this.crypto.decrypt(encryptedId);
-            this.id = decryptedId
-            console.log('ID do tipo Descriptografado:', decryptedId);}
-            this.modal.routerBack = ['../../..'];
-          var obj = this.activatedRoute.params.subscribe(p => {
+        
+        var params = this.activatedRoute.params.subscribe(p => {
             if (p['moeda_id']) {
                 try {
+                    this.id = this.crypto.decrypt(p['moeda_id']);
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'tipo');
                         this.moedaService.get(this.id).subscribe((moeda: Moeda) => {

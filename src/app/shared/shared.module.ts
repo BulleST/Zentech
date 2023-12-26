@@ -26,6 +26,7 @@ import { DeleteComponent as DeleteTipo } from '../pages/contrato-tipo/delete/del
 import { DeleteComponent as DeleteEvento } from '../pages/contrato-evento/delete/delete.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { TabViewModule } from 'primeng/tabview';
 
 
 
@@ -61,6 +62,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
         ToastrModule,
         DropdownModule,
         CalendarModule,
+        TabViewModule,
     ],
     exports: [
         ListSharedComponent,

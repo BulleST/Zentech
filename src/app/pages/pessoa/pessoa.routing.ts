@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PainelCpfComponent } from './painel-cpf.component';
+import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { ImportacaoComponent } from './importacao/importacao.component';
@@ -16,7 +16,7 @@ import { MyAccountRouter } from 'src/app/utils/my-account-router';
 
 
 const routes: Routes = [
-    { path: '', component: PainelCpfComponent, children: [
+    { path: '', component: PessoaComponent, children: [
             { path: '', component: ListComponent, children: [
                     { path: 'cadastrar', component: CreateComponent, data: { modalOrder: 1 } },
                     { path: 'cadastrar-operacao/:pessoa_id', component: FormOperacaoComponent, data: { modalOrder: 1 } },
@@ -45,4 +45,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class PainelCpfRoutingModule { }
+export class PessoaRoutingModule { }

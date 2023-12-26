@@ -3,20 +3,25 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 
 export class Contrato {
     id: number = 0;
-    tipo_Id: number = '' as unknown as number;
-    numContrato: string = '';
     evento_Id: number = '' as unknown as number;
-    data: string = '';
-    instituicaoFinanceira_Id: number = '' as unknown as number;
+    tipo_Id: number = '' as unknown as number;
+    invoice_Id: number = '' as unknown as number;
+    data: Date = new Date;
+    dataLiquidacao: Date = '' as unknown as Date;
     taxa: number = '' as unknown as number;
     valorNacional: number = '' as unknown as number;
-    dataLiquidacao: string = '';
+    numContrato: string = '';
+    descricaoNaturezaFato: string = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
+    descricaoFormaEntrega: string = '65 - Teletransmissão';
+    codigoNatureza: number = '3405209N0590' as unknown as number ;
+    pais_Id?: number = '' as unknown as number; // Pais pagador recebedor no exterior
     pagRecExterior: string = '';
-    pais_Id: number = '' as unknown as number;
-    percentualAdiantamento: number = '' as unknown as number;
-    invoice_Id: number = '' as unknown as number;
-    especificacoes: string = '';
+    codigoVinculoPagRecExterior: string = '50-Demais';
+    percentualAdiantamento?: number = '' as unknown as number;
+    vet?: number = '' as unknown as number;
+    rde?: string;
     clausulas: string = '';
+    especificacoes: string = '';
     instrucoesRecebimentoPagamento: string = '';
 }
 

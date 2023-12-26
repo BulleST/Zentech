@@ -220,7 +220,6 @@
     cursor: pointer;
 }
 
-
 ::ng-deep .p-panel-icons .p-panel-header-icon {
     color: #fff;
     display: flex;
@@ -229,7 +228,6 @@
     font-size: 15px;
     margin-right: 18px;
 }
-
 
 .navigation-links>p {
     padding: 0 10px;
@@ -258,4 +256,8 @@
 .navigation-submenu {
     border-top: 1px #c3c3c3e6 solid;
     background: #00000047;
+}
+
+::ng-deep.label-link-acive svg {
+    color: rgb(var(--primary));
 }

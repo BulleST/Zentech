@@ -27,7 +27,6 @@ export class ModalService {
 
 
     voltar(where?: string[], options?: any) {
-        console.log('voltar')
         if (where && where.length > 0) {
             this.router.navigate(where, options)
         } else {
@@ -36,7 +35,6 @@ export class ModalService {
     }
 
     addModal(modal: Modal, where: string) {
-        console.log('addModal', where, 'Refreshed', this.browserRefresh)
         var list = this.modalList.value;
 
         var listOrderedById = list.sort((x,y) => x.id - y.id);
@@ -49,14 +47,7 @@ export class ModalService {
         }
 
         list.push(modal);
-
-
-
-        // if (this.browserRefresh) {
-        //     list = this.modalList.value.sort((x,y) => y.id - x.id);
-        // }
-            list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
-        console.log(list)
+        list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
         this.modalList.next(list);
 
         setTimeout(() => {
@@ -68,7 +59,6 @@ export class ModalService {
 
 
     removeModal(id: number) {
-        console.log('removeModal', this.modalList.value)
         var list = this.modalList.value;
         var index = list.findIndex(x => x.id == id);
         if (index != -1) {
@@ -78,7 +68,7 @@ export class ModalService {
                 list.splice(index, 1);
                 this.modalList.next(list);
                 this.voltar(modal.routerBack, modal.routerBackOptions);
-            }, 300);
+            }, 10000);
 
         }
     }
