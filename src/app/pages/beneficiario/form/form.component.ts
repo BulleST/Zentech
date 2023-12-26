@@ -35,14 +35,11 @@ export class FormComponent implements OnDestroy {
 
     isEditPage = true;
     modal: Modal = new Modal;
-
-    cepCarregado = false;
-    loadingCep = false;
     loadingCNPJ = false;
 
     loadingBanco = true;
+    bancoSelected?: BancoList
     bancos: BancoList[];
-    cepPreenchido= false
     loadingCidades = true;
     cidades: Cidades[];
     cidadesGrouped: any[] = [];
@@ -55,7 +52,13 @@ export class FormComponent implements OnDestroy {
 
     id:number =0
 
+
     @ViewChild('cep') cep: NgModel;
+    cepPreenchido = false;
+    executaCEP: boolean
+    loadingCep = false;
+
+
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -159,6 +162,22 @@ export class FormComponent implements OnDestroy {
       })
     }
 
+    paisChange(){
+      this.objeto.cep = '';
+      this.objeto.bairro = '';
+      this.objeto.cidade = '';
+      this.objeto.numero = '';
+      this.objeto.complemento = '';
+      this.objeto.logradouro = '';
+      if (this.objeto.pais_Id==30){
+       this.executaCEP = true
+      }
+      else{
+        this.executaCEP = false
+        this.cepPreenchido = false;
+      }
+    }
+
     buscaCEP(input: NgModel) {
       this.loadingCep = true;
       input.control.setErrors(null);
@@ -169,6 +188,8 @@ export class FormComponent implements OnDestroy {
           input.control.setErrors({ invalid: true })
           return;
       }
+
+
 
       lastValueFrom(this.cepService.buscar(this.objeto.cep))
           .then(data => {
