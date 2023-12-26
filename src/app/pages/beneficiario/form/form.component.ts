@@ -178,7 +178,8 @@ export class FormComponent implements OnDestroy {
                   return;
 
               } else {
-                  this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
+                  this.objeto.logradouro = data.logradouro ;
+                  this.objeto.bairro = data.bairro
                   var localidade = data.localidade.toLowerCase();
                   var cidade = this.cidades.find(x => {
                       var cid = x.nomeCidade.toLowerCase()

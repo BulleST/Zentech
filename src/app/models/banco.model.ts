@@ -11,7 +11,8 @@ export class BancoList {
     numero: string = '';
     logradouro: string = '';
     pais: string = '';
-    codigoSwift: string = '';
+    bairro: string = ''
+    complemento: string = ''
 }
 
 
@@ -24,6 +25,8 @@ export class BancoRequest {
     logradouro: string = '';
     pais_Id:number = undefined as unknown as number;
     codigoSwift: string = '';
+    bairro: string = ''
+    complemento: string = ''
 
 
 }

@@ -25,20 +25,20 @@ export class FormComponent implements OnDestroy {
     objeto: BancoRequest = new BancoRequest;
     erro: string = '';
     loading = false;
-    loadingCep = false;
     subscription: Subscription[] = [];
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = false;
     modal: Modal = new Modal;
-    cepPreenchido = false;
     cidades: Cidades[] = [];
     loadingCidades = false;
-
     loadingPaises = true;
     paises: Paises[] = [];
 
     @ViewChild('cep') cep: NgModel;
+    cepPreenchido = false;
+    executaCEP: boolean
+    loadingCep = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -50,7 +50,6 @@ export class FormComponent implements OnDestroy {
         private cidadeService: CidadesService,
         private paisesService: PaisesService
     ) {
-        console.log('banco')
         lastValueFrom(this.cidadeService.getCidade())
             .then(res => {
                 this.cidades = res;
@@ -115,18 +114,35 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal.id);
     }
 
+    paisChange(){
+      this.objeto.cep = '';
+      this.objeto.bairro = '';
+      this.objeto.cidade = '';
+      this.objeto.numero = '';
+      this.objeto.complemento = '';
+      this.objeto.logradouro = '';
+      if (this.objeto.pais_Id==30){
+       this.executaCEP = true
+      }
+      else{
+        this.executaCEP = false
+        this.cepPreenchido = false;
+      }
+    }
+
 
     buscaCEP(input: NgModel) {
-      this.loadingCep = true;
-      input.control.setErrors(null);
-      this.cepPreenchido = false
+      if (this.executaCEP == true){
+        this.loadingCep = true;
+        input.control.setErrors(null);
+        this.cepPreenchido = false
 
-      if (!this.validaCEP(input)) {
-          this.toastr.error('CEP inválido.');
-          input.control.setErrors({ invalid: true })
-          return;
-      }
 
+        if (!this.validaCEP(input)) {
+            this.toastr.error('CEP inválido.');
+            input.control.setErrors({ invalid: true })
+            return;
+        }
       lastValueFrom(this.cepService.buscar(this.objeto.cep))
           .then(data => {
               if (data.erro == true) {
@@ -135,7 +151,8 @@ export class FormComponent implements OnDestroy {
                   return;
 
               } else {
-                  this.objeto.logradouro = data.logradouro + " , " + data.bairro + " - " + data.uf;
+                this.objeto.logradouro = data.logradouro ;
+                this.objeto.bairro = data.bairro
                   var localidade = data.localidade.toLowerCase();
                   var cidade = this.cidades.find(x => {
                       var cid = x.nomeCidade.toLowerCase()
@@ -154,9 +171,13 @@ export class FormComponent implements OnDestroy {
           })
           .finally(() => this.loadingCep = false)
 
+      }
+
+
   }
 
   validaCEP(input: NgModel) {
+
       this.loadingCep = true;
       if (!this.objeto.cep.trim()) {
           input.control.setErrors({ required: true });

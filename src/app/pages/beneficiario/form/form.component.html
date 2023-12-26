@@ -56,7 +56,7 @@
                                 [styleClass]="'form-control ' + (loadingBanco ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [filter]="true"
-                                (ngModelChange)="buscaCEP(cep)"
+                                (ngModelChange)="preencheCampos()"
                                 filterBy="nome, cidade"
                                 optionLabel="nome"
                                 optionValue="id"
