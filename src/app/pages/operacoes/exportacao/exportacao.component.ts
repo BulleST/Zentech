@@ -1,6 +1,7 @@
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaList } from 'src/app/models/pessoa.model';
@@ -34,6 +35,8 @@ export class ExportacaoComponent implements OnDestroy {
         private toastr: ToastrService,
         private datePipe: DatePipe,
         private modalService: ModalService,
+        private mask: MaskApplierService,
+        private currencyPipe: CurrencyPipe,
     ) {
         var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
         this.subscription.push(list);
@@ -56,7 +59,13 @@ export class ExportacaoComponent implements OnDestroy {
             await lastValueFrom(this.pessoaService.getList(true))
                 .then(res => {
                     this.loadingPessoa = false;
-                    this.pessoas = res;
+                    this.pessoas = JSON.parse(JSON.stringify(res));
+                    this.pessoas =  this.pessoas.map(x => {
+                        x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yyyy') as unknown as Date;
+                        x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2', 'pt-BR') as unknown as number;
+                        x.cpf = this.mask.applyMask( x.cpf.toString().padStart(11, '0'), '000.000.000-00');
+                        return x
+                    });
                 });
         }
         setTimeout(() => {
@@ -91,21 +100,6 @@ export class ExportacaoComponent implements OnDestroy {
     async exportar() {
         this.loading = true;
         await lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
-        // .then((res: any) => {
-        //     var blob = new Blob([res], { type: 'application/pdf' })
-        //     const data = window.URL.createObjectURL(blob);
-
-        //     var link = document.createElement('a');
-        //     link.href = data;
-        //     link.download = `Relatorio_Operacoes_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
-        //     // this is necessary as link.click() does not work on the latest firefox
-        //     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-        // })
-        // .catch(res => {
-        //     this.toastr.error('Não foi possível extrair relatório.')
-        //     this.erro = 'Não foi possível extrair relatório.';
-
-        // });
         this.loading = false;
     }
 

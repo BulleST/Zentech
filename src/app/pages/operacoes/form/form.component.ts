@@ -1,16 +1,18 @@
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
-import { Pessoa, PessoaList } from 'src/app/models/pessoa.model';
+import { Pessoa, PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { Table } from 'src/app/utils/table';
 
 @Component({
     selector: 'app-form',
@@ -42,6 +44,8 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private datepipe: DatePipe,
         private toastr: ToastrService,
+        private mask: MaskApplierService,
+        private currencyPipe: CurrencyPipe,
     ) {
 
         lastValueFrom(this.pessoaOperacaoService.getStatus())
@@ -49,7 +53,6 @@ export class FormComponent implements OnDestroy {
                 this.loadingStatus = false;
                 this.status = res;
             });
-
 
     }
     ngAfterViewInit(): void {
@@ -92,7 +95,13 @@ export class FormComponent implements OnDestroy {
                     await lastValueFrom(this.pessoaService.getList(true))
                     .then(res => {
                         this.loadingPessoa = false;
-                        this.pessoas = res;
+                        this.pessoas = JSON.parse(JSON.stringify(res));
+                        this.pessoas =  this.pessoas.map(x => {
+                            x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yyyy') as unknown as Date;
+                            x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2', 'pt-BR') as unknown as number;
+                            x.cpf = this.mask.applyMask( x.cpf.toString().padStart(11, '0'), '000.000.000-00');
+                            return x
+                        });
                     });
                 }
  

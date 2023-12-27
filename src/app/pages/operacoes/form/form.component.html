@@ -18,7 +18,7 @@
                             [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
                             [showClear]="true"
                             [filter]="true"
-                            filterBy="nome, saldoAtual, cpf, situacaoCPF"
+                            [filterFields]="['nome', 'saldoAtual', 'cpf', 'situacaoCPF']"
                             #pessoa_Id="ngModel"
                             name="pessoa_Id"
                             inputId="pessoa_Id"
@@ -37,11 +37,11 @@
                             <tbody>
                                 <tr>
                                     <td class="pe-2">{{item.nome}}</td>
-                                    <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual | currency : 'BRL' : '' : '1.2'}}</strong></td>
+                                    <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual }}</strong></td>
                                 </tr>
                                 <tr>
                                     <td class="pe-2">{{item.cpf}}</td>
-                                    <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF ?? 'INDEFINIDO'}}</strong></td>
+                                    <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF}}</strong></td>
                                 </tr>
                             </tbody>
                         </table>
