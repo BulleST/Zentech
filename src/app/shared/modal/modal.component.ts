@@ -25,10 +25,8 @@ export class ModalComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-    voltar(id: number){
-        console.log('voltar', id)
-        this.modalService.removeModal(id);
-
+    voltar(modal: Modal){
+        this.modalService.removeModal(modal);
     }
 
 }

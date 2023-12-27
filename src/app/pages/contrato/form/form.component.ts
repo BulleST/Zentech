@@ -29,7 +29,7 @@ import { Invoice_List } from 'src/app/models/invoice.model';
     styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
-    objeto: Contrato = new Contrato;
+    objeto: Contrato = new Contrato();
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
@@ -68,7 +68,7 @@ export class FormComponent implements OnDestroy {
         private toastr: ToastrService,
         private paisesService: PaisesService,
     ) {
-        lastValueFrom(this.paisesService.getPais())
+        lastValueFrom(this.paisesService.getList())
             .then(res => {
                 this.loadingPais = false;
                 this.paises = res;
@@ -131,7 +131,7 @@ export class FormComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     fileDownload() {

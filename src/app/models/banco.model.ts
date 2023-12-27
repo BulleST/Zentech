@@ -22,7 +22,7 @@ export class BancoRequest {
     id: number = 0;
     nome: string = '';
     cidade:string = '';
-    cep: string = '';
+    cep: number = '' as unknown as number;
     numero: string = '';
     logradouro: string = '';
     pais_Id:number = undefined as unknown as number;

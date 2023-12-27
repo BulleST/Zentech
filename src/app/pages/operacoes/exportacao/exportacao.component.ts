@@ -66,7 +66,7 @@ export class ExportacaoComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     datasChanged() {
@@ -84,9 +84,9 @@ export class ExportacaoComponent implements OnDestroy {
         }
     }
 
-    exportar() {
+    async exportar() {
         this.loading = true;
-        lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
+       await lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
         .then((res: any) => {
             var blob = new Blob([res], { type: 'application/pdf' })
             const data = window.URL.createObjectURL(blob);
@@ -98,15 +98,14 @@ export class ExportacaoComponent implements OnDestroy {
             link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 
 
-        this.loading = false;
-
-    })
-    .catch(res => {
-            this.loading = false;
+            
+        })
+        .catch(res => {
             this.toastr.error('Não foi possível extrair relatório.')
             this.erro = 'Não foi possível extrair relatório.';
-
+            
         });
+        this.loading = false;
     }
 
 }

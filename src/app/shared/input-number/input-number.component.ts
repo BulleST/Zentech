@@ -99,8 +99,6 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
                 this.input.control.setErrors(Object.assign({}, { min: true }));
                 return false;
             }
-        } else {
-            this.input.control.setErrors(this.error)
         }
         return true;
     }

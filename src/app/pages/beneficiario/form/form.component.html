@@ -11,7 +11,8 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
         <div class="px-2">
             <div class="row">
-                <div class="form-group col-md-6 col-sm-12">
+                <!-- Nome -->
+                <div class="form-group col-xl-6 col-lg-5 col-md-5 col-sm-4 col-12">
                     <label for="nome">Nome: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -26,7 +27,51 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-sm-8">
+                <!-- CNPJ -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12">
+                    <label for="cnpj">CNPJ: <span class="tect-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="cnpj"
+                           id="cnpj"
+                           #cnpj="ngModel"
+                           [(ngModel)]="objeto.cnpj"
+                           required
+                           (ngModelChange)="validaCNPJ(cnpj)"
+                           mask="00.000.000/0000-00"
+                           placeholder="00.000.000/0000-00">
+                    <div *ngIf="cnpj.touched && cnpj.errors">
+                        <p class="text-danger" *ngIf="cnpj.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p>
+                    </div>
+                </div>
+                <!-- País -->
+                <div class="form-group col-xl-3 col-lg-4 col-md-3 col-sm-4 col-12">
+                    <label for="pais_Id">País: <span class="text-danger">*</span></label>
+                    <p-dropdown [styleClass]="'form-control ' + (loadingPaises ? 'form-control-loading' : '')"
+                                [options]="paises"
+                                #pais_Id="ngModel"
+                                [(ngModel)]="objeto.pais_Id"
+                                optionLabel="nome"
+                                optionValue="id"
+                                [placeholder]="'Selecione'"
+                                [disabled]="loadingPaises"
+                                name="pais_Id"
+                                id="pais_Id"
+                                [virtualScroll]="true"
+                                [virtualScrollItemSize]="10"
+                                [required]="true"
+                                [filter]="true"
+                                filterBy="nome"
+                                [showClear]="true"
+                                (onChange)="paisChange(); limpaEndereco();">
+                    </p-dropdown>
+                    <div *ngIf="pais_Id.touched && pais_Id.errors">
+                        <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Representante -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
                     <label for="representante">Representante: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -41,11 +86,8 @@
                         <p class="text-danger" *ngIf="representante.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="">
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6 col-sm-4">
+                <!-- Banco -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="banco_Id">Banco: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="bancos"
@@ -56,7 +98,7 @@
                                 [styleClass]="'form-control ' + (loadingBanco ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [filter]="true"
-                                (ngModelChange)="preencheCampos()"
+                                (ngModelChange)="preencheBanco()"
                                 filterBy="nome, cidade"
                                 optionLabel="nome"
                                 optionValue="id"
@@ -78,7 +120,8 @@
                         <p class="text-danger" *ngIf="banco_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-sm-4">
+                <!-- Conta -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                     <label for="conta">Conta: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -94,6 +137,7 @@
                     </div>
                 </div>
             </div>
+            <!-- Dados do Banco -->
             <div class="row">
                 <div class="form-group mt-3">
                     <div class="col-sm-12 card py-3 px-4">
@@ -104,8 +148,17 @@
                             </div>
                         </div>
                         <div class="row">
+                            <!-- Nome -->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <label for="nome">Nome: </label>
+                                <input type="text"
+                                       id="nome"
+                                       class="form-control"
+                                       [value]="bancoSelected?.nome"
+                                       readonly>
+                            </div>
                             <!-- Código Swift -->
-                            <div class="form-group col-xl-12 col-lg-12 col-md-6 col-sm-6 col-12">
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <label for="codigoSwift">Código Swift: </label>
                                 <input type="text"
                                        id="codigoSwift"
@@ -115,8 +168,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div>
-                                <small>Endereço do banco</small>
+                            <div class="mb-2 mt-2">
+                                <small><b>Endereço do Banco</b></small>
                                 <hr class="w-100">
                             </div>
                         </div>
@@ -181,7 +234,7 @@
                             </div>
                             <!-- Estado -->
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                <label for="estado">Estado:</label>
+                                <label for="estado">UF:</label>
                                 <input type="text"
                                        id="estado"
                                        class="form-control"
@@ -194,25 +247,157 @@
                                 <input type="text"
                                        id="pais"
                                        class="form-control"
-                                       [value]="bancoSelected?.pais"
+                                       [value]="bancoSelected?.pais_Id"
                                        readonly>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="d-flex align-items-center ">
-                <div *ngIf="erro || form.invalid" class="m-0">
-                    <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                    <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+            <hr class="w-100 my-3 border-dark">
+            <!-- Endereço do Beneficiário -->
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-sm-12 card py-3 px-4">
+                        <div class="row mb-3">
+                            <div>
+                                <h6>Endereço do Beneficiário </h6>
+                            </div>
+                        </div>
+                        
+            <div class="row">
+                <!-- CEP -->
+                <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12">
+                    <label for="cep">CEP: <span class="text-danger">*</span></label>
+                    <input
+                           type="text"
+                           class="form-control"
+                           name="cep"
+                           id="cep"
+                           #cep="ngModel"
+                           [(ngModel)]="objeto.cep"
+                           [mask]="objeto.pais_Id == 30 ? '00000-000' : '0*'"
+                           [placeholder]="objeto.pais_Id == 30 ? '00000-000' : 'Digite o CEP'"
+                           (ngModelChange)="buscaCEP(cep)"
+                           required
+                           [disabled]="loadingCep" />
+                    <div *ngIf="cep.touched && cep.errors">
+                        <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
+                    </div>
                 </div>
-                <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                    <span>Salvar</span>
-                </button>
+                <!-- Logradouro -->
+                <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12">
+                    <label for="logradouro">Logradouro: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="logradouro"
+                           id="logradouro"
+                           #logradouro="ngModel"
+                           [(ngModel)]="objeto.logradouro"
+                           required
+                           [disabled]="loadingCep ||cepPreenchido"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.logradouro = logradouro.value.trim();">
+                    <div *ngIf="logradouro.touched && logradouro.errors">
+                        <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Nº -->
+                <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12">
+                    <label for="numero">N°: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="numero"
+                           id="numero"
+                           #numero="ngModel"
+                           [(ngModel)]="objeto.numero"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.numero = numero.value.trim();">
+                    <div *ngIf="numero.touched && numero.errors">
+                        <p class="text-danger" *ngIf="numero.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Complemento -->
+                <div class="form-group col-xl- col-lg col-md-6 col-sm-8 col-12">
+                    <label for="complemento">Complemento:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="complemento"
+                           id="complemento"
+                           #complemento="ngModel"
+                           [(ngModel)]="objeto.complemento"
+                           [disabled]="loadingCep"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.complemento = complemento.value.trim();">
+                    <div *ngIf="complemento.touched && complemento.errors">
+                        <p class="text-danger" *ngIf="complemento.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Bairro -->
+                <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
+                    <label for="bairro">Bairro:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="bairro"
+                           id="bairro"
+                           #bairro="ngModel"
+                           [(ngModel)]="objeto.bairro"
+                           required
+                           [disabled]="loadingCep ||cepPreenchido"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.bairro = bairro.value.trim();">
+                    <div *ngIf="bairro.touched && bairro.errors">
+                        <p class="text-danger" *ngIf="bairro.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Cidade -->
+                <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
+                    <label for="cidade">Cidade: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.numero = cidade.value.trim();">
+                    <div *ngIf="cidade.touched && cidade.errors">
+                        <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- UF -->
+                <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12">
+                    <label for="estado">UF: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="estado"
+                           id="estado"
+                           #estado="ngModel"
+                           [(ngModel)]="objeto.estado"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.numero = estado.value.trim();">
+                    <div *ngIf="estado.touched && estado.errors">
+                        <p class="text-danger" *ngIf="estado.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
             </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center mt-2">
+            <div *ngIf="erro || form.invalid">
+                <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+            </div>
+            <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                <span>Salvar</span>
+            </button>
         </div>
     </form>
 </ng-template>

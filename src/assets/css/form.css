@@ -78,15 +78,19 @@ input {
 
 
 /*datetime-local*/
-.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected, 
-.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
-    padding-right: 9px;
-    background-position: right 34px center;
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date]:-internal-autofill-selected, 
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date],
+    .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected, 
+    .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
+    padding-right: 10px;
+    background-position: right 30px center;
 }
+.form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date]:-internal-autofill-selected,
+.form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date],
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected,
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
-    padding-right: 9px;
-    background-position: right 34px center;
+    padding-right: 10px;
+    background-position: right 30px center;
 }
 
 .input-group-text {

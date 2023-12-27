@@ -4,7 +4,7 @@ import { Contrato } from "./contrato.model";
 
 export class Invoice {
     id: number = 0;
-    dataInvoice: Date = new Date;
+    data: Date = new Date;
     moeda_Id: number = undefined as unknown as number;
     valor: number = '' as unknown as number;
     instituicaoFinanceira_Id: number = undefined as unknown as number;
@@ -13,7 +13,7 @@ export class Invoice {
 
 export class Invoice_List {
     id: number = 0;
-    dataInvoice: Date = new Date;
+    data: Date = new Date;
     cnpjBeneficiario: number = 0;
     valor: number = 0;
     nomeBeneficiario: string = '';
@@ -24,7 +24,7 @@ export class Invoice_List {
 
 export class InvoiceRequest {
     invoice: Invoice = new Invoice;
-    contrato: Contrato = new Contrato;
+    contrato: Contrato = new Contrato();
 }
 
 
@@ -41,7 +41,7 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'dataInvoice',
+        field: 'data',
         header: 'Data',
         maskType: MaskType.dateTime,
         filterType: FilterType.datetime,

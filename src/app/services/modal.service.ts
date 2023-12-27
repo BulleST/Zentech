@@ -9,6 +9,8 @@ import { Location } from '@angular/common';
 export class ModalService {
     modalList: BehaviorSubject<Modal[]> = new BehaviorSubject<Modal[]>([]);
     browserRefresh: boolean;
+    lastModal: BehaviorSubject<Modal> = new BehaviorSubject<Modal>(new Modal);
+
     constructor(
         private router: Router,
         private location: Location,
@@ -48,6 +50,7 @@ export class ModalService {
 
         list.push(modal);
         list = this.modalList.value.sort((x,y) => x.modalOrder - y.modalOrder);
+        this.lastModal.next(list[list.length - 1]);
         this.modalList.next(list);
 
         setTimeout(() => {
@@ -58,21 +61,18 @@ export class ModalService {
     }
 
 
-    removeModal(id: number) {
+    removeModal(modal: Modal) {
         var list = this.modalList.value;
-        var index = list.findIndex(x => x.id == id);
-        if (index != -1) {
-            this.removeModalAnimation(id);
-            
-            
+        var index = list.findIndex(x => x.id == modal.id);
+            this.removeModalAnimation(modal.id);
             setTimeout(() => {
-                var modal = list[index];
-                list.splice(index, 1);
-                this.modalList.next(list);
+                if (index != -1 && modal.id != 0) {
+                    list.splice(index, 1);
+                    this.modalList.next(list);
+                }
                 this.voltar(modal.routerBack, modal.routerBackOptions);
             }, 300);
 
-        }
     }
 
 
@@ -81,7 +81,8 @@ export class ModalService {
     }
 
     removeModalAnimation(id: number) {
-        $(`.modal[modal=${id}]`).removeClass('active')
+        var modal = id == 0 ?  $(`.modal`).last() : $(`.modal[modal=${id}]`);
+        $(modal).removeClass('active')
     }
 
 }
@@ -98,4 +99,5 @@ export class Modal {
     modalOrder: number;
     activatedRoute?: ActivatedRoute;
     onClose?: EventEmitter<boolean> = new EventEmitter<boolean>();
+
 }

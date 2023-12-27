@@ -11,18 +11,44 @@ export class Contrato {
     taxa: number = '' as unknown as number;
     valorNacional: number = '' as unknown as number;
     numContrato: string = '';
-    descricaoNaturezaFato: string = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
-    descricaoFormaEntrega: string = '65 - Teletransmissão';
-    codigoNatureza: number = '3405209N0590' as unknown as number ;
     pais_Id?: number = '' as unknown as number; // Pais pagador recebedor no exterior
     pagRecExterior: string = '';
-    codigoVinculoPagRecExterior: string = '50-Demais';
     percentualAdiantamento?: number = '' as unknown as number;
     vet?: number = '' as unknown as number;
     rde?: string;
     clausulas: string = '';
     especificacoes: string = '';
     instrucoesRecebimentoPagamento: string = '';
+    descricaoNaturezaFato?: string = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
+    descricaoFormaEntrega?: string = '65 - Teletransmissão';
+    codigoNatureza?: number = '3405209N0590' as unknown as number ;
+    codigoVinculoPagRecExterior?: string = '50-Demais';
+
+    constructor(model?: Contrato) {
+        this.descricaoNaturezaFato = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
+        this.descricaoFormaEntrega = '65 - Teletransmissão';
+        this.codigoNatureza = '3405209N0590' as unknown as number ;
+        this.codigoVinculoPagRecExterior = '50-Demais';
+        if (model) {
+            this.id = model.id;
+            this.evento_Id = model.evento_Id;
+            this.tipo_Id = model.tipo_Id;
+            this.invoice_Id = model.invoice_Id;
+            this.data = model.data;
+            this.dataLiquidacao = model.dataLiquidacao;
+            this.taxa = model.taxa;
+            this.valorNacional = model.valorNacional;
+            this.numContrato = model.numContrato;
+            this.pais_Id = model.pais_Id;
+            this.pagRecExterior = model.pagRecExterior;
+            this.percentualAdiantamento = model.percentualAdiantamento;
+            this.vet = model.vet;
+            this.rde = model.rde;
+            this.clausulas = model.clausulas;
+            this.especificacoes = model.especificacoes;
+            this.instrucoesRecebimentoPagamento = model.instrucoesRecebimentoPagamento;
+        }
+    }
 }
 
 

@@ -8,9 +8,7 @@ import { getError } from 'src/app/utils/error';
 import { BancoRequest } from 'src/app/models/banco.model';
 import { NgForm, NgModel } from '@angular/forms';
 import { CepService } from 'src/app/services/cep-service.service';
-import { CidadesService } from 'src/app/services/cidades.service';
 import { validateCEP } from 'src/app/utils/validate-cep';
-import { Cidades } from 'src/app/models/cidade.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Paises } from 'src/app/models/pais.model';
 import { PaisesService } from 'src/app/services/paises.service';
@@ -48,7 +46,7 @@ export class FormComponent implements OnDestroy {
         private cepService: CepService,
         private paisesService: PaisesService
     ) {
-        lastValueFrom(this.paisesService.getPais())
+        lastValueFrom(this.paisesService.getList())
             .then(res => {
                 this.loadingPaises = false;
                 this.paises = res;
@@ -72,14 +70,18 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.bancoService.get(this.objeto.id))
                     .then(res => {
+                        console.log(res)
                         this.objeto = res;
-                        this.objeto.cep = this.objeto.cep.toString().padStart(8, '0');
+                        this.objeto.cep = this.objeto.cep.toString().padStart(8, '0') as unknown as number;
+
                         this.paisChange();
+
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'banco');
                         }, 200);
                     })
-                    .catch(res => {
+                    .catch((res: any) => {
+                        console.log('erro', res)
                         this.voltar();
                     })
 
@@ -104,24 +106,21 @@ export class FormComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     paisChange() {
-        this.objeto.cep = '';
+        this.executaCEP = this.objeto.pais_Id == 30;
+        this.cepPreenchido = false;
+    }
+
+    limpaEndereco() {
+        this.objeto.cep = '' as unknown as number;
         this.objeto.bairro = '';
         this.objeto.cidade = '';
         this.objeto.numero = '';
         this.objeto.complemento = '';
         this.objeto.logradouro = '';
-
-        if (this.objeto.pais_Id == 30) {
-            this.executaCEP = true
-        }
-        else {
-            this.executaCEP = false
-            this.cepPreenchido = false;
-        }
     }
 
 
@@ -164,7 +163,7 @@ export class FormComponent implements OnDestroy {
 
     validaCEP(input: NgModel) {
         this.loadingCep = true;
-        if (!this.objeto.cep.trim()) {
+        if (!this.objeto.cep.toString().trim()) {
             input.control.setErrors({ required: true });
             this.loadingCep = false;
             return false

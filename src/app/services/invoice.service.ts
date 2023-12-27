@@ -31,7 +31,7 @@ export class InvoiceService {
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
-                    x.dataInvoice = new Date(x.dataInvoice)
+                    x.data = new Date(x.data)
                     return x;
                 })
                 this.list.next(Object.assign([], list));
@@ -52,11 +52,11 @@ export class InvoiceService {
     }
     
 
-    create(request: Invoice) {
+    create(request: InvoiceRequest) {
         return this.http.post<Response>(`${this.url}/invoice`, request);
     }
     
-    edit(request: Invoice) {
+    edit(request: InvoiceRequest) {
         return this.http.put<Response>(`${this.url}/invoice`, request);
     }
 
@@ -66,28 +66,28 @@ export class InvoiceService {
 
 
     file(id: number) {
-        return this.http.post<Blob>(`${this.url}/invoice/${id}`, {})
-        .pipe(tap({
-            next: res => {
-                var blob = new Blob([res], { type: 'application/pdf' })
-                const data = window.URL.createObjectURL(blob);
+        return this.http.post(`${this.url}/invoice/exportar-pdf/${id}`, {}, {responseType: 'blob'})
+        // .pipe(tap({
+        //     next: res => {
+        //         var blob = new Blob([res], { type: 'application/pdf' })
+        //         const data = window.URL.createObjectURL(blob);
     
-                var link = document.createElement('a');
-                link.href = data;
-                link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
-                // this is necessary as link.click() does not work on the latest firefox
-                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        //         var link = document.createElement('a');
+        //         link.href = data;
+        //         link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+        //         // this is necessary as link.click() does not work on the latest firefox
+        //         link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 
-                var url = URL.createObjectURL(res);
-                window.open(url, '_blank');
-                URL.revokeObjectURL(url);
-            }
-        }));
+        //         var url = URL.createObjectURL(res);
+        //         window.open(url, '_blank');
+        //         URL.revokeObjectURL(url);
+        //     }
+        // }));
     }
 
 
     fileSwift(id: number) {
-        return this.http.post<Blob>(`${this.url}/invoice/swift/${id}`, {})
+        return this.http.post(`${this.url}/invoice/swift/exportar-pdf${id}`, {}, { responseType: 'blob'})
         .pipe(tap({
             next: res => {
                 var blob = new Blob([res], { type: 'application/pdf' })

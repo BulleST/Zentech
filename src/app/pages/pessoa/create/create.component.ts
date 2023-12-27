@@ -62,7 +62,7 @@ export class CreateComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     validaCPF(input: NgModel, doc: number) {

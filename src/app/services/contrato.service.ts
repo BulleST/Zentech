@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 export class ContratoService {
     url = environment.url;
     list = new BehaviorSubject<Contrato_List[]>([]);
-    object = new BehaviorSubject<Contrato>(new Contrato);
+    object = new BehaviorSubject<Contrato>(new Contrato());
 
     constructor(
         private http: HttpClient,
@@ -54,7 +54,7 @@ export class ContratoService {
 
                     var link = document.createElement('a');
                     link.href = data;
-                    link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                    link.download = `Contrato_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                     // this is necessary as link.click() does not work on the latest firefox
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 

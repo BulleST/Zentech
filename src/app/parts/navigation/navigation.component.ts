@@ -48,7 +48,6 @@ export class NavigationComponent implements OnDestroy {
     }
 
     toggleAside() {
-        console.log('button click')
         this.header.toggleMenuAside();
     }
 
@@ -103,13 +102,12 @@ export class NavigationComponent implements OnDestroy {
                         routerLink: "/invoice",
                         paddingLeft: 10,
                         items: [
-                            {
-                                id: i++,
-                                label: 'Swift',
-                                routerLink: "/swift",
-                                paddingLeft: 25,
-                            },
-
+                            // {
+                            //     id: i++,
+                            //     label: 'Swift',
+                            //     routerLink: "/swift",
+                            //     paddingLeft: 25,
+                            // },
                             {
                                 id: i++,
                                 label: 'Contratos',
@@ -131,7 +129,6 @@ export class NavigationComponent implements OnDestroy {
 
     addPadding() {
         this.padding = parseInt(this.padding.toString()) + 5
-        console.log('padding', this.padding)
         return this.padding;
     }
 

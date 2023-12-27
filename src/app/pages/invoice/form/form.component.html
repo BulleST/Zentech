@@ -28,28 +28,28 @@
                         <div class="row">
                             <!-- Número Invoice -->
                             <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
-                                <label for="id">Nº: <span class="text-danger">*</span></label>
+                                <label for="id">Nº: <span class="text-danger">*</span> <small>(automático)</small></label>
                                 <input type="text"
                                        class="form-control"
                                        name="id"
                                        id="id"
-                                       mask="0#"
+                                       mask="0*"
                                        #id="ngModel"
                                        [(ngModel)]="objeto.invoice.id"
                                        readonly>
                             </div>
                             <!-- Data Invoice -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                <label for="dataInvoice">Data Invoice: <span class="text-danger">*</span></label>
+                                <label for="data">Data Invoice: <span class="text-danger">*</span></label>
                                 <input type="datetime-local"
                                        class="form-control"
-                                       name="dataInvoice"
-                                       id="dataInvoice"
-                                       #dataInvoice="ngModel"
-                                       [(ngModel)]="objeto.invoice.dataInvoice"
+                                       name="data"
+                                       id="data"
+                                       #data="ngModel"
+                                       [(ngModel)]="objeto.invoice.data"
                                        required>
-                                <div *ngIf="dataInvoice.touched && dataInvoice.errors">
-                                    <p class="text-danger" *ngIf="dataInvoice.errors['required']">Este campo é obrigatório.</p>
+                                <div *ngIf="data.touched && data.errors">
+                                    <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
                             <!-- Moeda -->
@@ -111,7 +111,7 @@
                                             [options]="instituicaoFinanceira"
                                             #instituicaoFinanceira_Id="ngModel"
                                             [(ngModel)]="objeto.invoice.instituicaoFinanceira_Id"
-                                            optionLabel="nomeInstituicao"
+                                            optionLabel="nome"
                                             optionValue="id"
                                             [placeholder]="'Selecione'"
                                             [disabled]="loadingInstituicaoFinanceira"
@@ -146,7 +146,8 @@
                                             optionValue="id"
                                             placeholder="Selecione um beneficiário"
                                             [required]="true"
-                                            [showClear]="true">
+                                            [showClear]="true"
+                                            (ngModelChange)="beneficiarioChange()">
                                     <ng-template let-item pTemplate="item">
                                         <div>
                                             <p>{{item.nome}}</p>
@@ -179,7 +180,7 @@
                                             <input type="text"
                                                    id="nomeBanco"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.nomeBanco"
+                                                   [value]="beneficiarioSelected?.nomeBanco ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Conta -->
@@ -188,7 +189,7 @@
                                             <input type="text"
                                                    id="conta"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.conta ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Representante -->
@@ -197,7 +198,7 @@
                                             <input type="text"
                                                    id="representante"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.representante"
+                                                   [value]="beneficiarioSelected?.representante ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Código Swift -->
@@ -206,7 +207,7 @@
                                             <input type="text"
                                                    id="codigoSwift"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.codigoSwift ?? 'N/A'"
                                                    readonly>
                                         </div>
                                     </div>
@@ -223,7 +224,7 @@
                                             <input type="text"
                                                    id="cep"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.cep ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Logradouro -->
@@ -232,7 +233,7 @@
                                             <input type="text"
                                                    id="logradouro"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.logradouro ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Número -->
@@ -241,7 +242,7 @@
                                             <input type="text"
                                                    id="numero"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.numero ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Complemento -->
@@ -250,7 +251,7 @@
                                             <input type="text"
                                                    id="complemento"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.complemento ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- Cidade -->
@@ -259,7 +260,7 @@
                                             <input type="text"
                                                    id="cidade"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.cidade ?? 'N/A'"
                                                    readonly>
                                         </div>
                                         <!-- País -->
@@ -268,7 +269,7 @@
                                             <input type="text"
                                                    id="pais"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.conta"
+                                                   [value]="beneficiarioSelected?.nomePais ?? 'N/A'"
                                                    readonly>
                                         </div>
                                     </div>
@@ -287,7 +288,7 @@
                     <form #contrato="ngForm" >
                         <div class="mb-3 row">
                             <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-dark" [disabled]="objeto.contrato.id == 0">Baixar PDF</button>
+                                <button type="button" class="btn btn-dark" [disabled]="objeto.contrato.id == 0" (click)="contratoDownload()">Baixar PDF</button>
                                 <span class="ms-2 text-danger mt-1" *ngIf="objeto.contrato.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
                             </div>
                         </div>
@@ -355,7 +356,7 @@
                                     <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
                                     <p-dropdown
                                                 [options]="eventos"
-                                                [(ngModel)]="objeto.contrato.invoice_Id"
+                                                [(ngModel)]="objeto.contrato.evento_Id"
                                                 #evento_Id="ngModel"
                                                 name="evento_Id"
                                                 inputId="evento_Id"
@@ -443,9 +444,9 @@
                                     <app-input-number [valueInput]="objeto.contrato.vet "
                                                       (valueChanges)="objeto.contrato.vet = $event;"
                                                       [inputId]="'vet'"
-                                                      [mask]="'0{1}.0{12}'"
+                                                      [mask]="'0.000000000000'"
                                                       [placeholder]="'0.000000000000'"
-                                                      [showErrorMessage]="false"
+                                                      [showErrorMessage]="true"
                                                       [allowNegativeNumbers]="false"
                                                       [required]="false"
                                                       [autoReplaceValue]="false"></app-input-number>
@@ -607,23 +608,23 @@
                 </ng-template>
                 <div class="px-2">
                     <div class="swift">
-                        <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0">Baixar Documento Swift</button>
+                        <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0" (click)="swiftDownload()">Baixar Documento Swift</button>
                     </div>
                 </div>
             </p-tabPanel>
         </p-tabView>
-        <div class="d-flex align-items-start flex-wrap p-0 mt-3">
+        <div class="d-flex align-items-stretch flex-wrap p-0 mt-3 ">
             <div *ngIf="erro || invoice.invalid || contrato.invalid" class="m-0 me-3">
                 <p class="text-danger" *ngIf="erro">{{erro}}</p>
                 <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para salvar.</p>
                 <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
             </div>
-            <button (click)="filesDownload()" class="btn btn-dark mr-0 ms-auto" *ngIf="isEditPage" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            <button (click)="filesDownload()" class="btn btn-dark me-1 ms-auto" *ngIf="isEditPage" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                 <span>Baixar Kit</span>
             </button>
-            <button (click)="send(invoice, contrato)" class="btn btn-primary mr-0 " [class.ms-auto]="!isEditPage" [disabled]="invoice.invalid || contrato.invalid || loading">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            <button (click)="send(invoice, contrato)" class="btn btn-primary me-0 " [class.ms-auto]="!isEditPage" [disabled]="invoice.invalid || contrato.invalid || loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                 <span>Salvar e Gerar Swift</span>
             </button>
         </div>

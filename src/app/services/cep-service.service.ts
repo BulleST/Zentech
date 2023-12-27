@@ -19,7 +19,7 @@ interface Endereco {
 export class CepService {
     constructor(private http: HttpClient) { }
 
-    buscar(cep: string): Observable<Endereco> {
+    buscar(cep: string | number): Observable<Endereco> {
         return this.http.get<Endereco>(`https://viacep.com.br/ws/${cep}/json/`);
     }
 }

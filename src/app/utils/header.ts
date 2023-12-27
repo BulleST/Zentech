@@ -23,7 +23,6 @@ export class Header {
     }
 
     setMenuAside(value: boolean) {
-        console.log('setMenuAside', value)
         var encryted = this.crypto.encrypt(value) ?? '';
         localStorage.setItem('navigation', encryted);
         this.menuAsideOpen.next(value);

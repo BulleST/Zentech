@@ -23,9 +23,10 @@ export class BeneficiarioList {
 export class BeneficiarioRequest {
     id: number = 0;
     nome: string = '';
-    cnpj: number = undefined as unknown as number;
-    cep: string = '';
+    cnpj: number = '' as unknown as number;
+    cep:  number = '' as unknown as number;
     cidade: string = '';
+    estado: string = '';
     logradouro: string = '';
     numero: string = '';
     codigoSwift: string = '';

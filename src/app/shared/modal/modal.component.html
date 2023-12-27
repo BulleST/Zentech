@@ -1,6 +1,6 @@
 
 <div class="modal" [attr.modal]="item.id" *ngFor="let item of modalList" >
-    <div class="modal__bg" (click)="voltar(item.id)"></div>
+    <div class="modal__bg" (click)="voltar(item)"></div>
     <div class="modal__inner"
          [ngStyle]="item.style">
         <div class="modal__content">
@@ -11,7 +11,7 @@
                     </span>
                     <span>{{item.title}}</span>
                 </h3>
-                <a (click)="voltar(item.id)" class="modal__header-close btn-close">
+                <a (click)="voltar(item)" class="modal__header-close btn-close">
                     <span></span>
                     <span></span>
                 </a>

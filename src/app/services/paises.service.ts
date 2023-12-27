@@ -11,7 +11,7 @@ import { Paises } from '../models/pais.model';
 })
 export class PaisesService {
     url = environment.url;
-    paises = new BehaviorSubject<Paises[]>([]);
+    list = new BehaviorSubject<Paises[]>([]);
 
     constructor(
         private http: HttpClient,
@@ -19,11 +19,11 @@ export class PaisesService {
 
     ) { }
 
-    getPais() {
+    getList() {
         return this.http.get<Paises[]>(`${this.url}/pais/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
-                    this.paises.next(list);
+                    this.list.next(list);
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de paises.')

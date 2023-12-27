@@ -92,7 +92,7 @@ export class FormComponent implements OnDestroy {
 
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     send(form: NgForm) {

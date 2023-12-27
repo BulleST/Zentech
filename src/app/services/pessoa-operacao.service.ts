@@ -79,7 +79,8 @@ export class PessoaOperacaoService {
     }
 
     exportacao(request: Filtro) {
-        return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'});
+        return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'})
+        
     }
 
     importarArquivo(file: File){

@@ -18,7 +18,6 @@ import { FormComponent as FormBeneficiario } from './../pages/beneficiario/form/
 import { FormComponent as FormContrato } from '../pages/contrato/form/form.component';
 import { FormComponent as FormContratoEvento } from '../pages/contrato-evento/form/form.component';
 import { FormComponent as FormContratoTipo } from '../pages/contrato-tipo/form/form.component';
-import { FormComponent as FormSwift } from './../pages/documento-swift/form/form.component';
 import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
 import { FormComponent as FormInvoice } from '../pages/invoice/form/form.component';
 import { FormComponent as FormMoeda } from './../pages/moeda/form/form.component';
@@ -44,7 +43,6 @@ import { TabViewModule } from 'primeng/tabview';
         FormContrato,
         FormContratoEvento,
         FormContratoTipo,
-        FormSwift,
         FormInstituicaoFinanceira,
         FormInvoice,
         FormMoeda,
@@ -76,7 +74,6 @@ import { TabViewModule } from 'primeng/tabview';
         FormContrato,
         FormContratoEvento,
         FormContratoTipo,
-        FormSwift,
         FormInstituicaoFinanceira,
         FormInvoice,
         FormMoeda,

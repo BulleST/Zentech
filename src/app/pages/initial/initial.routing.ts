@@ -10,7 +10,6 @@ const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.Usuar
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
 const invoice = () => import('./../invoice/invoice.module').then(x => x.InvoiceModule);
 const contrato = () => import('../contrato/contrato.module').then(x => x.ContratoModule);
-const documentoSwift = () => import('../documento-swift/documento-swift.module').then(x => x.DocumentoSwiftModule);
 const instituicaoFinanceira = () => import('../instituicao-financeira/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
@@ -30,7 +29,6 @@ const routes: Routes = [
             { path: 'instituicao-financeira', loadChildren: instituicaoFinanceira },
             { path: 'banco', loadChildren: banco },
             { path: 'beneficiario', loadChildren: beneficiario },
-            { path: 'swift', loadChildren: documentoSwift},
             { path: 'contrato', loadChildren: contrato},
             { path: 'usuarios', loadChildren: usuarios},
         ]

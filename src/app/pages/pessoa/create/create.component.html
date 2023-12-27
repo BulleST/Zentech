@@ -72,7 +72,7 @@
                         [class.mt-2]="screen == 'sm'" style="height: 35px;"
                         (click)="procuraPessoa(cpf, dataNascimento)"
                         [disabled]="cpf.errors || !dataNascimento.value">
-                        <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm mr-1"></span>
+                        <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
                         <span>Consultar API</span>
                 </button>
             </div>
@@ -134,8 +134,8 @@
                 <p class="text-danger" *ngIf="erro">{{erro }}</p>
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>
-            <button class="btn btn-primary mr-1 ms-auto col" [disabled]="form.invalid || loading || loadingConsultaApi">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            <button class="btn btn-primary me-1 ms-auto col" [disabled]="form.invalid || loading || loadingConsultaApi">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                 <span>Salvar</span>
             </button>
         </div>

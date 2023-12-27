@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { BancoList } from 'src/app/models/banco.model';
 import { BeneficiarioList } from 'src/app/models/beneficiario.model';
-import { Contrato_List } from 'src/app/models/contrato.model';
+import { Contrato, Contrato_List } from 'src/app/models/contrato.model';
 import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
 import { Invoice, InvoiceRequest } from 'src/app/models/invoice.model';
 import { Moeda } from 'src/app/models/moeda.model';
@@ -25,6 +25,9 @@ import { ContratoEvento } from 'src/app/models/contrato-evento.model';
 import { Paises } from 'src/app/models/pais.model';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/parts/loading/loading';
+import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
+import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
+import { PaisesService } from 'src/app/services/paises.service';
 
 @Component({
     selector: 'app-form',
@@ -35,7 +38,36 @@ export class FormComponent implements OnDestroy {
     faEdit = faEdit;
     faTrash = faTrash;
 
-    objeto: InvoiceRequest = new InvoiceRequest;
+    objeto: InvoiceRequest = 
+        {
+            "invoice": {
+              "id": 0,
+              "data": "2023-12-26T11:31:00" as unknown as Date,
+              "valor": 10000,
+              "beneficiario_Id": 44,
+              "instituicaoFinanceira_Id": 1,
+              "moeda_Id": 1
+            },
+            "contrato": {
+              "id": 0,
+              "tipo_Id": 1,
+              "invoice_Id": 0,
+              "numContrato": "0123",
+              "evento_Id": 22,
+              "data": "2023-12-26T00:00:00" as unknown as Date,
+              "taxa": 50,
+              "valorNacional": 456,
+              "dataLiquidacao": "2023-12-26T00:00:00" as unknown as Date,
+              "pagRecExterior": "246",
+              "pais_Id": 30,
+              "percentualAdiantamento": 456,
+              "rde": "456",
+              "especificacoes": "Especificações Teste",
+              "clausulas": "Cláusulas Teste",
+              "instrucoesRecebimentoPagamento": "Instruções de Recebimento/Pagamento Teste",
+              "vet": "0002315648987" as unknown as number
+            }
+          };
     erro: string = '';
     loading = false;
     loadingInvoiceFile = false;
@@ -81,11 +113,16 @@ export class FormComponent implements OnDestroy {
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private invoiceService: InvoiceService,
         private contratoService: ContratoService,
+        private contratoTipoService: ContratoTipoService,
+        private contratoEventoService: ContratoEventoService,
+        private paisesService: PaisesService,
         private modalService: ModalService,
         private loadingService: LoadingService,
         private router: Router,
+        private datePipe: DatePipe,
     ) {
-
+this.objeto.contrato = new Contrato(this.objeto.contrato)
+ this.beneficiarioChange();
         lastValueFrom(this.moedaService.getList())
             .then(res => this.moedas = res)
             .finally(() => this.loadingMoedas = false);
@@ -107,6 +144,18 @@ export class FormComponent implements OnDestroy {
         var instituicaoFinanceira = this.instituicaoFinanceiraService.list.subscribe(res => this.instituicaoFinanceira = res);
         this.subscription.push(instituicaoFinanceira);
 
+        lastValueFrom(this.contratoTipoService.getList())
+            .then(res => this.tipos = res)
+            .finally(() => this.loadingTipo = false);
+
+        lastValueFrom(this.contratoEventoService.getList())
+            .then(res => this.eventos = res)
+            .finally(() => this.loadingEvento = false);
+
+        lastValueFrom(this.paisesService.getList())
+            .then(res => this.paises = res)
+            .finally(() => this.loadingPais = false);
+
     }
 
     ngAfterViewInit(): void {
@@ -117,10 +166,12 @@ export class FormComponent implements OnDestroy {
         this.modal.style = { 'max-width': '1100px' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-
+        console.log('snapshot', this.activatedRoute.snapshot)
         var params = this.activatedRoute.params.subscribe(x => {
+            console.log('params', x)
             if (x['invoice_id']) {
                 this.objeto.invoice.id = this.crypto.decrypt(x['invoice_id']);
+                console.log('invoice id decrypted', this.objeto.invoice.id)
 
                 this.modal.title = 'Editar Invoice';
                 this.modal.routerBack = ['../../'];
@@ -128,10 +179,12 @@ export class FormComponent implements OnDestroy {
 
                 lastValueFrom(this.invoiceService.get(this.objeto.invoice.id))
                     .then(async res => {
-                        res.invoice.dataInvoice = this.datepipe.transform(res.invoice.dataInvoice, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        
                         this.objeto = res;
+                        this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
 
                         setTimeout(() => {
@@ -148,7 +201,7 @@ export class FormComponent implements OnDestroy {
 
                 this.isEditPage = false;
                 this.objeto.contrato.pais_Id = 30;
-                this.objeto.invoice.dataInvoice = this.datepipe.transform(this.objeto.invoice.dataInvoice, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 this.objeto.contrato.dataLiquidacao = this.datepipe.transform(this.objeto.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                 this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
@@ -169,7 +222,7 @@ export class FormComponent implements OnDestroy {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     tabChanged(index: number) {
@@ -197,6 +250,18 @@ export class FormComponent implements OnDestroy {
         await lastValueFrom(this.invoiceService.file(this.objeto.invoice.id))
             .then(res => {
                 this.loadingInvoiceFile = false;
+                    var blob = new Blob([res], { type: 'application/pdf' })
+                    const data = window.URL.createObjectURL(blob);
+        
+                    var link = document.createElement('a');
+                    link.href = data;
+                    link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                    // this is necessary as link.click() does not work on the latest firefox
+                    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+    
+                    var url = URL.createObjectURL(res);
+                    window.open(url, '_blank');
+                    URL.revokeObjectURL(url);
             })
             .catch(res => {
                 this.loadingInvoiceFile = false;
@@ -278,11 +343,25 @@ export class FormComponent implements OnDestroy {
             return;
         }
 
+        if (!this.isEditPage) {
+            this.objeto.contrato.invoice_Id = 0;
+        }
         this.request()
             .then(async res => {
                 if (res.sucesso == true) {
+                    this.objeto.contrato.id = res.objeto.contrato.id;
+                    this.objeto.contrato.invoice_Id = res.objeto.contrato.invoice_Id;
+                    this.objeto.invoice.id = res.objeto.invoice.id;
+
+                    console.log('response', res)
+                    var a = this.crypto.encrypt(this.objeto.invoice.id);
+                    console.log('id encrypted', a)
+                    if (!this.isEditPage) {
+                        this.modalService.removeModalAnimation(this.modal.id);
+                        this.router.navigate(['../editar', a], { relativeTo: this.activatedRoute })
+                    }
                     await lastValueFrom(this.invoiceService.getList());
-                    this.voltar();
+
                 } else {
                     this.erro = res.mensagem;
                     this.toastr.error(res.mensagem);
@@ -298,8 +377,8 @@ export class FormComponent implements OnDestroy {
 
     request() {
         if (this.isEditPage)
-            return lastValueFrom(this.invoiceService.edit(this.objeto.invoice));
+            return lastValueFrom(this.invoiceService.edit(this.objeto));
         
-        return lastValueFrom(this.invoiceService.create(this.objeto.invoice));
+        return lastValueFrom(this.invoiceService.create(this.objeto));
     }
 }

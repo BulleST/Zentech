@@ -32,8 +32,8 @@
                     <p *ngIf="!fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
                 </div>
 
-                <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading">
-                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                     <span>Salvar</span>
                 </button>
             </div>
