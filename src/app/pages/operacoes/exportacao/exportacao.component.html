@@ -124,8 +124,8 @@
                     <div *ngIf="erro || form.invalid" class="m-0 me-3">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
                     </div>
-                    <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading" (click)="exportar()">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading" (click)="exportar()">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                         <span>Exportar</span>
                     </button>
                 </div>

@@ -1,0 +1,19 @@
+
+<ng-template #icon>
+    <fa-icon [icon]="faTrash"></fa-icon>
+</ng-template>
+<ng-template #template>
+    <div>
+        <p class="mt-2">Tem certeza que deseja excluir esse registro? </p>
+        <p>Ele não poderá ser recuperado.</p>
+        
+        <div *ngIf="erro" class="m-0  mt-1">
+            <p class="text-danger" >{{erro}}</p>
+        </div>
+        <button class="btn btn-grey ms-auto d-flex mt-2" (click)="send()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <span>Excluir</span>
+        </button>
+    </div>
+</ng-template>
+

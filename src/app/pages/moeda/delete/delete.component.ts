@@ -22,9 +22,7 @@ export class DeleteComponent {
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     modal: Modal = new Modal;
-    eventoId: number = 0
-    objeto: Moeda[]
-    nome: string = ''
+    objeto: Moeda = new Moeda;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -36,54 +34,33 @@ export class DeleteComponent {
 
 
     ngAfterViewInit(): void {
-        this.modal.id =  0;
-        this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-
+        this.modal.routerBack = ['../../../'];
         this.modal.title = 'Excluir registro';
 
-        this.activatedRoute.params.subscribe(params => {
-          const encryptedId = params['moeda_id'];
-          if (encryptedId) {
-            const decryptedId = this.crypto.decrypt(encryptedId);
-            this.id = decryptedId
-            console.log('ID do tipo Descriptografado:', decryptedId);}
-            this.modal.routerBack = ['../../..'];
-          var obj = this.activatedRoute.params.subscribe(p => {
+        var params = this.activatedRoute.params.subscribe(p => {
             if (p['moeda_id']) {
-                try {
-                    setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'tipo');
-                        this.moedaService.get(this.id).subscribe((moeda: Moeda) => {
-                          if (moeda.id == this.eventoId) {
-                              this.nome = moeda.nome;
-                              console.log('tste',this.nome)
-                              this.modal.title = `Excluir registro: ${this.nome}` , this.eventoId;
-                          }
-                          else {
-                            this.nome = moeda.nome;
-                            console.log('tste', this.eventoId, moeda.id)
-                            this.modal.title = `Excluir registro - ${this.nome}`
+                this.id = this.crypto.decrypt(p['moeda_id']);
+                this.modal = this.modalService.addModal(this.modal, 'tipo');
+                lastValueFrom(this.moedaService.get(this.id))
+                    .then((res: Moeda) => {
+                        this.modal.title = `Excluir registro: ${res.nome}`;
+                    })
+                    .catch(res => {
+                        this.voltar();
+                    });
 
-                        }
-                        });
-                    }, 200);
-                } catch(e) {
-                    this.voltar();
-
-                }
             } else {
                 this.voltar();
-                this.modal.routerBack = ['../../..'];
+                this.modal.routerBack = ['../../../'];
             }
         });
-        this.subscription.push(obj);
-          // Faça o que precisar com o eventoId recuperado aqui
-          console.log('ID do Evento:', this.eventoId);
-        });
+        this.subscription.push(params);
     }
 
     ngOnDestroy(): void {
@@ -91,27 +68,26 @@ export class DeleteComponent {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
-
     send() {
-      this.loading = true;
-      this.erro = '';
+        this.loading = true;
+        this.erro = '';
 
-      lastValueFrom(this.moedaService.delete(this.id))
-          .then(res => {
-              this.loading = false;
-              if (res.sucesso) {
-                  lastValueFrom(this.moedaService.getList());
-                  this.voltar();
-              } else {
-                  this.erro = res.mensagem;
-              }
-          })
-          .catch(res => {
-              this.loading = false;
-              this.erro = getError(res);
-          })
-  }
+        lastValueFrom(this.moedaService.delete(this.id))
+            .then(res => {
+                this.loading = false;
+                if (res.sucesso) {
+                    lastValueFrom(this.moedaService.getList());
+                    this.voltar();
+                } else {
+                    this.erro = res.mensagem;
+                }
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            })
+    }
 }

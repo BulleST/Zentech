@@ -13,7 +13,7 @@ import { DatePipe } from '@angular/common';
 export class ContratoService {
     url = environment.url;
     list = new BehaviorSubject<Contrato_List[]>([]);
-    object = new BehaviorSubject<Contrato>(new Contrato);
+    object = new BehaviorSubject<Contrato>(new Contrato());
 
     constructor(
         private http: HttpClient,
@@ -46,7 +46,7 @@ export class ContratoService {
     }
 
     file(id: number) {
-        return this.http.post<Blob>(`${this.url}/contrato/exportar-pdf/${id}`, {})
+        return this.http.post(`${this.url}/contrato/exportar-pdf/${id}`, {}, { responseType: 'blob'})
             .pipe(tap({
                 next: res => {
                     var blob = new Blob([res], { type: 'application/pdf' })
@@ -54,10 +54,10 @@ export class ContratoService {
 
                     var link = document.createElement('a');
                     link.href = data;
-                    link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                    link.download = `Contrato_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                     // this is necessary as link.click() does not work on the latest firefox
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
+///////////////////
                     var url = URL.createObjectURL(res);
                     window.open(url, '_blank');
                     URL.revokeObjectURL(url);

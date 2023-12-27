@@ -15,10 +15,23 @@ label {
     display: inline-block;
 }
 
+
 .form-group label {
-    margin-bottom: 2px;
+    margin-bottom: 2px; 
+    text-wrap: nowrap;
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis; 
 }
 
+.form-group label::-webkit-scrollbar {
+    width: 0px;
+    height: 0;
+}
+
+.form-group label small {
+    font-size: 10px;
+}
 .form-control, .p-inputtext.form-control {
     display: block;
     width: 100%;
@@ -40,7 +53,6 @@ input {
     font-size: 14px;
 }
 
-.form-control.ng-invalid:not(.form-control[readonly]):not(.form-control[disabled]),
 .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]):-internal-autofill-selected,
 .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]) {
     background-blend-mode: hard-light;
@@ -54,7 +66,6 @@ input {
 }
 
 
-.form-control.ng-valid:not(.form-control[readonly]):not(.form-control[disabled]),
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled]):-internal-autofill-selected,
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled]) {
     background-blend-mode: hard-light;
@@ -67,30 +78,20 @@ input {
 
 
 /*datetime-local*/
-.form-control.ng-invalid:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local], 
-.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected, 
-.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
-    padding-right: 9px;
-    background-position: right 34px center;
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date]:-internal-autofill-selected, 
+.form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date],
+    .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected, 
+    .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
+    padding-right: 10px;
+    background-position: right 30px center;
 }
-.form-control.ng-valid:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local],
+.form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date]:-internal-autofill-selected,
+.form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=date],
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local]:-internal-autofill-selected,
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled])[type=datetime-local] {
-    padding-right: 9px;
-    background-position: right 34px center;
+    padding-right: 10px;
+    background-position: right 30px center;
 }
-
-/* .form-control.ng-invalid[type=date]::-webkit-calendar-picker-indicator,
-.form-control.ng-invalid[type=datetime]::-webkit-calendar-picker-indicator {
-    background-position: 98% center;
-    padding: 12px 20px 12px 6px;
-}
-
-.form-control.ng-valid[type=date]::-webkit-calendar-picker-indicator,
-.form-control.ng-valid[type=datetime]::-webkit-calendar-picker-indicator {
-    background-position: 100% center;
-    padding: 12px 0px 12px 0px;
-} */
 
 .input-group-text {
     padding: 0 12px;
@@ -126,5 +127,12 @@ input {
     padding: 0 .75rem;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
+}
+
+
+.text-ellipsis {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }

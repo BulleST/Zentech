@@ -3,21 +3,52 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 
 export class Contrato {
     id: number = 0;
-    tipo_Id: number = '' as unknown as number;
-    numContrato: string = '';
     evento_Id: number = '' as unknown as number;
-    data: string = '';
-    instituicaoFinanceira_Id: number = '' as unknown as number;
+    tipo_Id: number = '' as unknown as number;
+    invoice_Id: number = '' as unknown as number;
+    data: Date = new Date;
+    dataLiquidacao: Date = '' as unknown as Date;
     taxa: number = '' as unknown as number;
     valorNacional: number = '' as unknown as number;
-    dataLiquidacao: string = '';
+    numContrato: string = '';
+    pais_Id?: number = '' as unknown as number; // Pais pagador recebedor no exterior
     pagRecExterior: string = '';
-    pais_Id: number = '' as unknown as number;
-    percentualAdiantamento: number = '' as unknown as number;
-    invoice_Id: number = '' as unknown as number;
-    especificacoes: string = '';
+    percentualAdiantamento?: number = '' as unknown as number;
+    vet?: number = '' as unknown as number;
+    rde?: string;
     clausulas: string = '';
+    especificacoes: string = '';
     instrucoesRecebimentoPagamento: string = '';
+    descricaoNaturezaFato?: string = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
+    descricaoFormaEntrega?: string = '65 - Teletransmissão';
+    codigoNatureza?: number = '3405209N0590' as unknown as number ;
+    codigoVinculoPagRecExterior?: string = '50-Demais';
+
+    constructor(model?: Contrato) {
+        this.descricaoNaturezaFato = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
+        this.descricaoFormaEntrega = '65 - Teletransmissão';
+        this.codigoNatureza = '3405209N0590' as unknown as number ;
+        this.codigoVinculoPagRecExterior = '50-Demais';
+        if (model) {
+            this.id = model.id;
+            this.evento_Id = model.evento_Id;
+            this.tipo_Id = model.tipo_Id;
+            this.invoice_Id = model.invoice_Id;
+            this.data = model.data;
+            this.dataLiquidacao = model.dataLiquidacao;
+            this.taxa = model.taxa;
+            this.valorNacional = model.valorNacional;
+            this.numContrato = model.numContrato;
+            this.pais_Id = model.pais_Id;
+            this.pagRecExterior = model.pagRecExterior;
+            this.percentualAdiantamento = model.percentualAdiantamento;
+            this.vet = model.vet;
+            this.rde = model.rde;
+            this.clausulas = model.clausulas;
+            this.especificacoes = model.especificacoes;
+            this.instrucoesRecebimentoPagamento = model.instrucoesRecebimentoPagamento;
+        }
+    }
 }
 
 
@@ -39,6 +70,8 @@ export class Contrato_List {
     especificacoes: string = '';
     clausulas: string = '';
     instrucoesRecebimentoPagamento: string = '';
+    beneficiario: string = '';
+    banco: string = '';
 
 }
 
@@ -46,23 +79,10 @@ export class Contrato_List {
 export var contratoColumns: Column[] = [
 
     {
-
-        field: 'tipo',
-        header: 'Tipo',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-
-    },
-    {
         field: 'numContrato',
-        header: 'Número do contrato',
+        header: 'Nº',
         maskType: MaskType.mask,
-        mask: '0#',// Só funciona com o MaskType.mask
+        mask: '0*', // Só funciona com o MaskType.mask
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -70,21 +90,11 @@ export var contratoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
-    {
-        field: 'evento',
-        header: 'Evento',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
+  
     {
         field: 'data',
         header: 'Data',
-        maskType: MaskType.dateTime,
+        maskType: MaskType.date,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -104,11 +114,33 @@ export var contratoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
+        field: 'beneficiario',
+        header: 'Beneficiário',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'banco',
+        header: 'Banco',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
         field: 'taxa',
         header: 'Taxa',
-        maskType: MaskType.mask,
-        mask: '0#', // Só funciona com o MaskType.mask
-        filterType: FilterType.text,
+        maskType: MaskType.number,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
@@ -118,8 +150,9 @@ export var contratoColumns: Column[] = [
     {
         field: 'valorNacional',
         header: 'Valor Nacional',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
+        maskType: MaskType.number,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
@@ -129,7 +162,7 @@ export var contratoColumns: Column[] = [
     {
         field: 'dataLiquidacao',
         header: 'Data de Liquidação',
-        maskType: MaskType.undefined,
+        maskType: MaskType.date,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -162,6 +195,30 @@ export var contratoColumns: Column[] = [
     {
         field: 'percentualAdiantamento',
         header: 'Percentual de Adiantamento',
+        maskType: MaskType.percentage,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'tipo',
+        header: 'Tipo',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+
+    },
+    {
+        field: 'evento',
+        header: 'Evento',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

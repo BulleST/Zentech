@@ -19,7 +19,9 @@ const routes: Routes = [
                 path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 }, children: [
 
                     { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
-                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 }},
+                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 } },
+                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 } },
+                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, data: { modalOrder: 2 } },
                     { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, data: { modalOrder: 2 } },
                     {
                         path: 'beneficiario', component: FormBeneficiario, data: { modalOrder: 2 }, children: [
@@ -34,6 +36,8 @@ const routes: Routes = [
                 path: 'editar/:invoice_id', component: FormComponent, data: { modalOrder: 1 }, children: [
                     { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
                     { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 } },
+                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 } },
+                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, data: { modalOrder: 2 } },
                     { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, data: { modalOrder: 2 } },
                     {
                         path: 'beneficiario', component: FormBeneficiario, data: { modalOrder: 2 }, children: [

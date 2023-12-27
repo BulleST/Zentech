@@ -1,5 +1,6 @@
 <div class="loading" [class.active]="loading || loadingRequest.length > 0">
     <span class="spinner-border spinner-border-sm me-1"></span>
     <br>
-    <p>Carregando</p>
+    <p *ngIf="!message">Carregando</p>
+    <p *ngIf="message" class="message">{{message}}</p>
 </div>

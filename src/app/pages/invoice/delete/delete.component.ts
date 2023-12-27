@@ -43,15 +43,9 @@ export class DeleteComponent {
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['invoice_id']) {
                 this.id = this.crypto.decrypt(p['invoice_id']);
-                lastValueFrom(this.invoiceService.get(this.id))
-                    .then(res => {
-                        setTimeout(() => {
-                            this.modal = this.modalService.addModal(this.modal, 'delete invoice');
-                        }, 200);
-                    })
-                    .catch(res => {
-                        this.voltar();
-                    })
+                setTimeout(() => {
+                    this.modal = this.modalService.addModal(this.modal, 'delete invoice');
+                }, 200);
             } else {
                 this.voltar();
             }
@@ -65,7 +59,7 @@ export class DeleteComponent {
 
    
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
 

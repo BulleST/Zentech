@@ -85,7 +85,7 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
     }
 
     voltar() {
-        this.modalService.removeModal(this.modal.id);
+        this.modalService.removeModal(this.modal);
     }
 
     readExcel1(event: any) {

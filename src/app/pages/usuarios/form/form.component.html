@@ -82,8 +82,8 @@
                 <p *ngIf="form.invalid && erro.length == 0" class="text-red">Preencha todos os campos obrigatórios (*)
                     corretamente para salvar</p>
             </div>
-            <button class="btn btn-primary mr-0 ms-auto" [disabled]="form.invalid || loading || !podeEditar">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span> Salvar
+            <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading || !podeEditar">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span> Salvar
             </button>
         </div>
     </form>

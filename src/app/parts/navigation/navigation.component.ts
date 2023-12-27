@@ -62,13 +62,13 @@ export class NavigationComponent implements OnDestroy {
                     {
                         id: i++,
                         label: 'New Clickk Buyers',
-                        routerLink: "/painel-cpf",
+                        routerLink: "/painel-cpf/pessoas",
                         paddingLeft: 10,
                     },
                     {
                         id: i++,
                         label: 'Pró Câmbio',
-                        routerLink: "/operacoes",
+                        routerLink: "/painel-cpf/operacoes",
                         paddingLeft: 10,
                     },
                 ]
@@ -102,13 +102,12 @@ export class NavigationComponent implements OnDestroy {
                         routerLink: "/invoice",
                         paddingLeft: 10,
                         items: [
-                            {
-                                id: i++,
-                                label: 'Swift',
-                                routerLink: "/swift",
-                                paddingLeft: 25,
-                            },
-
+                            // {
+                            //     id: i++,
+                            //     label: 'Swift',
+                            //     routerLink: "/swift",
+                            //     paddingLeft: 25,
+                            // },
                             {
                                 id: i++,
                                 label: 'Contratos',
@@ -130,7 +129,6 @@ export class NavigationComponent implements OnDestroy {
 
     addPadding() {
         this.padding = parseInt(this.padding.toString()) + 5
-        console.log('padding', this.padding)
         return this.padding;
     }
 
