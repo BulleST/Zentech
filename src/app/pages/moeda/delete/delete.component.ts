@@ -47,17 +47,9 @@ export class DeleteComponent {
             if (p['moeda_id']) {
                 this.id = this.crypto.decrypt(p['moeda_id']);
                 this.modal = this.modalService.addModal(this.modal, 'tipo');
-                lastValueFrom(this.moedaService.get(this.id))
-                    .then((res: Moeda) => {
-                        this.modal.title = `Excluir registro: ${res.nome}`;
-                    })
-                    .catch(res => {
-                        this.voltar();
-                    });
-
             } else {
+                this.modal.routerBack = ['../../'];
                 this.voltar();
-                this.modal.routerBack = ['../../../'];
             }
         });
         this.subscription.push(params);

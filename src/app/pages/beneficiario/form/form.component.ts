@@ -129,7 +129,6 @@ export class FormComponent implements OnDestroy {
 
    async preencheBanco() {
         this.loadingBanco = true;
-        console.log(this.objeto.banco_Id)
         if (this.objeto.banco_Id) {
             await lastValueFrom(this.bancoService.get(this.objeto.banco_Id))
             .then(res => {

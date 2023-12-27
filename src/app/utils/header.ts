@@ -44,24 +44,20 @@ export class Header {
     clickOut() {
         // var classe = this;
         // $('body').on('click', function (e) {
-        //     console.log('body click')
         //     classe.closeMenuMinhaConta();
         //     classe.setMenuAside(false);
         // });
         
         // $('.navigation-toggle-content').on('click', function (e) {
-        //     console.log('btn click')
         //     classe.setMenuAside(true);
         // });
         
         // $('.navigation-content*').each((i, el) => {
         //     $(el).on('click', function (e) {
-        //         console.log('navigation-content * click')
         //         e.stopPropagation();
         //     });
         // })
         // $('.navigation-content').on('click', function (e) {
-        //     console.log('navigation-content click')
         //     e.stopPropagation();
         // });
     }

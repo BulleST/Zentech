@@ -36,53 +36,42 @@ export class FormComponent implements OnDestroy {
 
 
     ngAfterViewInit(): void {
-      this.modal.id = 0;
-      this.modal.template = this.template;
-      this.modal.icon = this.icon;
-      this.modal.style = { 'max-width': '450px', overflow: 'visible' };
-      this.modal.activatedRoute = this.activatedRoute;
-      this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-      this.route.params.subscribe(params => {
-        const eventId = params['tipo_id'];
-        console.log('ID do tipo:', eventId);
-        const encryptedId = params['tipo_id'];
-      var teste = this.activatedRoute.params.subscribe(x => {
-        if (encryptedId) {
-          const decryptedId = this.crypto.decrypt(encryptedId);
-          console.log('ID do tipo Descriptografado:', decryptedId);
-          this.modal.title = 'Editar tipo';
-          console.log( 'testeee')
-          this.modal.routerBack = ['../../..'];
-          this.isEditPage = true;
-          lastValueFrom(this.contratoTipoService.get(decryptedId))
-            .then(res => {
-              this.objeto = res;
-              console.log(this.objeto)
-              setTimeout(() => {
-                this.modal = this.modalService.addModal(this.modal, 'tipo');
-              }, 200);
-            })
-            .catch(res => {
-              this.voltar();
-            })
-        } else {
-          this.modal.title = 'Cadastrar Tipo';
-          this.modal.routerBack = ['../'];
-          this.isEditPage = false;
-          setTimeout(() => {
-            console.log('oiiiiieiei')
-            this.modal = this.modalService.addModal(this.modal, 'tipo');
-          }, 200);
-        }
-      });
-      this.subscription.push(teste);
-
-
-      });
-
-
-
-
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '450px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.route.params.subscribe(params => {
+            const eventId = params['tipo_id'];
+            const encryptedId = params['tipo_id'];
+            var teste = this.activatedRoute.params.subscribe(x => {
+                if (encryptedId) {
+                    const decryptedId = this.crypto.decrypt(encryptedId);
+                    this.modal.title = 'Editar tipo';
+                    this.modal.routerBack = ['../../..'];
+                    this.isEditPage = true;
+                    lastValueFrom(this.contratoTipoService.get(decryptedId))
+                        .then(res => {
+                            this.objeto = res;
+                            setTimeout(() => {
+                                this.modal = this.modalService.addModal(this.modal, 'tipo');
+                            }, 200);
+                        })
+                        .catch(res => {
+                            this.voltar();
+                        })
+                } else {
+                    this.modal.title = 'Cadastrar Tipo';
+                    this.modal.routerBack = ['../'];
+                    this.isEditPage = false;
+                    setTimeout(() => {
+                        this.modal = this.modalService.addModal(this.modal, 'tipo');
+                    }, 200);
+                }
+            });
+            this.subscription.push(teste);
+        });
     }
 
     ngOnDestroy(): void {

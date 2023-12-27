@@ -38,53 +38,34 @@ export class DeleteComponent {
 
 
     ngAfterViewInit(): void {
-        this.modal.id =  0;
-        this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '400px', overflow: 'visible' };
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
         this.modal.title = 'Excluir registro';
 
         this.activatedRoute.params.subscribe(params => {
-          const encryptedId = params['evento_id'];
-          if (encryptedId) {
-            const decryptedId = this.crypto.decrypt(encryptedId);
-            this.id = decryptedId
-            console.log('ID do tipo Descriptografado:', decryptedId);}
-            this.modal.routerBack = ['../../..'];
-          var obj = this.activatedRoute.params.subscribe(p => {
-            if (p['evento_id']) {
-                try {
-                    setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'tipo');
-                        this.contratoEventoService.get(this.id).subscribe((contratoEvento: ContratoEvento) => {
-                          if (contratoEvento.id == this.eventoId) {
-                              this.nome = contratoEvento.nome;
-                              console.log('tste',this.nome)
-                              this.modal.title = `Excluir registro: ${this.nome}` , this.eventoId;
-                          }
-                          else {
-                            this.nome = contratoEvento.nome;
-                            console.log('tste', this.eventoId, contratoEvento.id)
-                            this.modal.title = `Excluir registro - ${this.nome}`
-
-                        }
-                        });
-                    }, 200);
-                } catch(e) {
-                    this.voltar();
-
-                }
-            } else {
-                this.voltar();
+            const encryptedId = params['evento_id'];
+            if (encryptedId) {
+                const decryptedId = this.crypto.decrypt(encryptedId);
+                this.id = decryptedId
                 this.modal.routerBack = ['../../..'];
+                var obj = this.activatedRoute.params.subscribe(p => {
+                    if (p['evento_id']) {
+                        this.id = this.crypto.decrypt(p['evento_id'])
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'tipo');
+                        }, 200);
+                    } else {
+                        this.voltar();
+                        this.modal.routerBack = ['../../..'];
+                    }
+                });
+                this.subscription.push(obj);
             }
-        });
-        this.subscription.push(obj);
-          // Faça o que precisar com o eventoId recuperado aqui
-          console.log('ID do Evento:', this.eventoId);
         });
     }
 
@@ -98,22 +79,22 @@ export class DeleteComponent {
 
 
     send() {
-      this.loading = true;
-      this.erro = '';
+        this.loading = true;
+        this.erro = '';
 
-      lastValueFrom(this.contratoEventoService.delete(this.id))
-          .then(res => {
-              this.loading = false;
-              if (res.sucesso) {
-                  lastValueFrom(this.contratoEventoService.getList());
-                  this.voltar();
-              } else {
-                  this.erro = res.mensagem;
-              }
-          })
-          .catch(res => {
-              this.loading = false;
-              this.erro = getError(res);
-          })
-  }
+        lastValueFrom(this.contratoEventoService.delete(this.id))
+            .then(res => {
+                this.loading = false;
+                if (res.sucesso) {
+                    lastValueFrom(this.contratoEventoService.getList());
+                    this.voltar();
+                } else {
+                    this.erro = res.mensagem;
+                }
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            })
+    }
 }

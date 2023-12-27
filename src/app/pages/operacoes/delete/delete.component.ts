@@ -77,6 +77,13 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
+                    var list = this.pessoaOperacaoService.list.value;
+                    var index = list.findIndex(x => x.id == this.id)
+                    if (index != -1) {
+                        list.splice(index, 1);
+                        this.pessoaOperacaoService.list.next(list);
+                    }
+
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaOperacaoService.getList());
                     this.voltar();

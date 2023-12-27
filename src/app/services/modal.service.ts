@@ -18,11 +18,8 @@ export class ModalService {
     ) {
         this.browserRefresh = !router.navigated;
         this.router.events.subscribe(res => {
-            // console.log('res', res)
             if (res instanceof NavigationStart) {
                 this.browserRefresh = !router.navigated;
-                // console.log('refreshed', this.browserRefresh, router.navigated)
-
             }
         })
     }

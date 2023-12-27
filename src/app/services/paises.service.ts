@@ -19,7 +19,7 @@ export class PaisesService {
 
     ) { }
 
-    getList() {
+    getList(loading: boolean = false) {
         return this.http.get<Paises[]>(`${this.url}/pais/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {

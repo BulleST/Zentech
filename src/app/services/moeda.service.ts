@@ -22,7 +22,7 @@ export class MoedaService {
 
     ) { }
 
-    getList() {
+    getList(loading: boolean = false) {
         return this.http.get<Moeda[]>(`${this.url}/moeda/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {

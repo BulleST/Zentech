@@ -43,9 +43,9 @@ export class DeleteComponent {
 
         
         var params = this.activatedRoute.params.subscribe(p => {
-            if (p['pessoa_Id']) {
+            if (p['pessoa_id']) {
                 try {
-                    this.id = this.crypto.decrypt(p['pessoa_Id']);
+                    this.id = this.crypto.decrypt(p['pessoa_id']);
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'delete pessoa');
                     }, 200);
@@ -77,6 +77,14 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
+
+                    var list = this.pessoaService.list.value;
+                    var index = list.findIndex(x => x.id == this.id)
+                    if (index != -1) {
+                        list.splice(index, 1);
+                        this.pessoaService.list.next(list);
+                    }
+
                     lastValueFrom(this.pessoaService.getList());
                     lastValueFrom(this.pessoaOperacaoService.getList());
                     this.voltar();

@@ -7,6 +7,8 @@ import { Table } from '../utils/table';
 import { PessoaOperacaoImportacao, PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from '../models/pessoa-operacao.model';
 import { Response } from '../helpers/request-response.interface';
 import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
+import { DatePipe } from '@angular/common';
+import { getError } from '../utils/error';
 
 @Injectable({
     providedIn: 'root'
@@ -21,9 +23,10 @@ export class PessoaOperacaoService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private datePipe: DatePipe,
     ) { }
 
-    getList() {
+    getList(loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
@@ -35,7 +38,7 @@ export class PessoaOperacaoService {
         }));
     }
 
-    getListById(pessoa_Id: number) {
+    getListById(pessoa_Id: number, loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/pessoa/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
@@ -80,7 +83,41 @@ export class PessoaOperacaoService {
 
     exportacao(request: Filtro) {
         return this.http.post(`${this.url}/operacao/exportar-pdf`, request, {responseType: 'blob'})
-        
+        .pipe(tap({
+            next: res => {
+                var blob = new Blob([res], { type: 'application/pdf' })
+                const data = window.URL.createObjectURL(blob);
+    
+                var link = document.createElement('a');
+                link.href = data;
+                link.download = `Relatorio_Operacoes_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                // this is necessary as link.click() does not work on the latest firefox
+                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+            },
+            error: res => {
+                this.toastr.error(getError(res))
+                this.toastr.error('Não foi possível carregar operações para exportação.')
+            }
+         }));
+    }
+
+    exportacaoOperacao(id: number) {
+        return this.http.post(`${this.url}/operacao/exportar-pdf-operacao/${id}`, {}, {responseType: 'blob'})
+        .pipe(tap({
+            next: res => {
+                var blob = new Blob([res], { type: 'application/pdf' })
+                const data = window.URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.href = data;
+                link.download = `Relatorio_Operacao_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                // this is necessary as link.click() does not work on the latest firefox
+                link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+            },
+            error: res => {
+                this.toastr.error(getError(res))
+                this.toastr.error('Não foi possível carregar operações para exportação.')
+            }
+        }));
     }
 
     importarArquivo(file: File){

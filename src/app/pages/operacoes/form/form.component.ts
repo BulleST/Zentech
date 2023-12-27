@@ -3,8 +3,8 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
-import { PessoaList } from 'src/app/models/pessoa.model';
+import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
+import { Pessoa, PessoaList } from 'src/app/models/pessoa.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
@@ -25,11 +25,12 @@ export class FormComponent implements OnDestroy {
     status: PessoaOperacaoStatus[] = [];
     loadingStatus = true;
     pessoas: PessoaList[] = [];
-    loadingPessoa = true;
+    loadingPessoa = false;
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
     isEditPage = true;
     pessoa_id: number = 0;
+    pessoaSelected?: PessoaOperacaoList;
     modal: Modal = new Modal;
 
     constructor(
@@ -49,14 +50,6 @@ export class FormComponent implements OnDestroy {
                 this.status = res;
             });
 
-         var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
-        this.subscription.push(list)
-
-        lastValueFrom(this.pessoaService.getList())
-            .then(res => {
-                this.loadingPessoa = false;
-                this.pessoas = res;
-            });
 
     }
     ngAfterViewInit(): void {
@@ -68,17 +61,17 @@ export class FormComponent implements OnDestroy {
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
-        var params = this.activatedRoute.params.subscribe(x => {
+        var params = this.activatedRoute.params.subscribe(async x => {
             if (x['operacao_id']) {
                 this.objeto.id = this.crypto.decrypt(x['operacao_id']);
                 this.modal.title = 'Editar Operação';
                 this.modal.routerBack = ['../../'];
                 this.isEditPage = true;
-
+                this.pessoaChange();
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
                         res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        res.num_Op = res.num_Op.toString().padStart(4, '0') as unknown as number;
+                        res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
 
                         this.objeto = res;
                         this.pessoa_id = this.objeto.pessoa_Id;
@@ -90,13 +83,27 @@ export class FormComponent implements OnDestroy {
                         this.voltar();
                     })
             } else {
+
+                var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
+                this.subscription.push(list);
+
+                if (this.pessoas.length == 0) {
+                    this.loadingPessoa = true;
+                    await lastValueFrom(this.pessoaService.getList(true))
+                    .then(res => {
+                        this.loadingPessoa = false;
+                        this.pessoas = res;
+                    });
+                }
+ 
+
                 this.modal.title = 'Cadastrar Operação';
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
 
                 this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                
+
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'moeda');
                 }, 200);
@@ -112,6 +119,12 @@ export class FormComponent implements OnDestroy {
     voltar() {
         this.modalService.removeModal(this.modal);
     }
+
+
+    pessoaChange() {
+        this.pessoaSelected = this.pessoaOperacaoService.list.value.find(x => x.id == this.objeto.id) as PessoaOperacaoList;
+    }
+
     send() {
         this.loading = true;
         this.erro = '';

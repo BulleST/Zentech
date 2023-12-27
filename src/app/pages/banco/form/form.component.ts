@@ -70,7 +70,6 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.bancoService.get(this.objeto.id))
                     .then(res => {
-                        console.log(res)
                         this.objeto = res;
                         this.objeto.cep = this.objeto.cep.toString().padStart(8, '0') as unknown as number;
 
@@ -81,7 +80,6 @@ export class FormComponent implements OnDestroy {
                         }, 200);
                     })
                     .catch((res: any) => {
-                        console.log('erro', res)
                         this.voltar();
                     })
 

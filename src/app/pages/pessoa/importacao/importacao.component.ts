@@ -295,7 +295,6 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
             this.loading = false;
             return;
         }
-        console.log(list);
         lastValueFrom(this.pessoaService.create(list))
             .then(res => {
                 lastValueFrom(this.pessoaService.getList());
@@ -312,10 +311,8 @@ export class ImportacaoComponent implements OnDestroy, AfterViewInit {
                             return x;
                         });
                         this.listErros.concat(items);
-                        console.log('items', items)
                     })
 
-                    console.log('listErros', this.listErros)
                     if (this.listErros.length > 0) {
                         this.modal.style = { 'width': '95vw', 'max-width': '95vw' };
                     }

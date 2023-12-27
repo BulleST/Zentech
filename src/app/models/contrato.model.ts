@@ -111,7 +111,7 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'beneficiario',
@@ -122,7 +122,18 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'representante',
+        header: 'Representante',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'banco',
@@ -133,7 +144,7 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'taxa',
@@ -179,7 +190,7 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'pais',
@@ -190,7 +201,7 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'percentualAdiantamento',
@@ -225,7 +236,7 @@ export var contratoColumns: Column[] = [
         filterShowAddButton: false,
         filterShowMatchMode: false,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
 ];
 

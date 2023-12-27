@@ -110,7 +110,6 @@ export class FormComponent implements OnDestroy {
                         this.objeto = new Contrato(res);
                         this.objeto.dataLiquidacao = this.datepipe.transform(this.objeto.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
-                        console.log(this.objeto)
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'contrato');
                         }, 200);
@@ -120,13 +119,6 @@ export class FormComponent implements OnDestroy {
                     })
 
             } else {
-                // this.modal.title = 'Cadastrar Contrato';
-                // this.modal.routerBack = ['../'];
-
-                // this.isEditPage = false;
-                // setTimeout(() => {
-                //     this.modal = this.modalService.addModal(this.modal, 'contrato');
-                // }, 200);
                 this.voltar();
             }
         });
@@ -167,7 +159,6 @@ export class FormComponent implements OnDestroy {
         this.erro = '';
         this.loading = true;
 
-        console.log(this.objeto)
         return lastValueFrom(this.contratoService.post(this.objeto))
             .then(async res => {
                 if (res.sucesso != false) {

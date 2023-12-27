@@ -38,36 +38,36 @@ export class FormComponent implements OnDestroy {
     faEdit = faEdit;
     faTrash = faTrash;
 
-    objeto: InvoiceRequest = 
+    objeto: InvoiceRequest =
         {
             "invoice": {
-              "id": 0,
-              "data": "2023-12-26T11:31:00" as unknown as Date,
-              "valor": 10000,
-              "beneficiario_Id": 44,
-              "instituicaoFinanceira_Id": 1,
-              "moeda_Id": 1
+                "id": 0,
+                "data": "2023-12-26T11:31:00" as unknown as Date,
+                "valor": 10000,
+                "beneficiario_Id": 44,
+                "instituicaoFinanceira_Id": 1,
+                "moeda_Id": 1
             },
             "contrato": {
-              "id": 0,
-              "tipo_Id": 1,
-              "invoice_Id": 0,
-              "numContrato": "0123",
-              "evento_Id": 22,
-              "data": "2023-12-26T00:00:00" as unknown as Date,
-              "taxa": 50,
-              "valorNacional": 456,
-              "dataLiquidacao": "2023-12-26T00:00:00" as unknown as Date,
-              "pagRecExterior": "246",
-              "pais_Id": 30,
-              "percentualAdiantamento": 456,
-              "rde": "456",
-              "especificacoes": "Especificações Teste",
-              "clausulas": "Cláusulas Teste",
-              "instrucoesRecebimentoPagamento": "Instruções de Recebimento/Pagamento Teste",
-              "vet": "0002315648987" as unknown as number
+                "id": 0,
+                "tipo_Id": 1,
+                "invoice_Id": 0,
+                "numContrato": "0123",
+                "evento_Id": 22,
+                "data": "2023-12-26T00:00:00" as unknown as Date,
+                "taxa": 50,
+                "valorNacional": 456,
+                "dataLiquidacao": "2023-12-26T00:00:00" as unknown as Date,
+                "pagRecExterior": "246",
+                "pais_Id": 30,
+                "percentualAdiantamento": 456,
+                "rde": "456",
+                "especificacoes": "Especificações Teste",
+                "clausulas": "Cláusulas Teste",
+                "instrucoesRecebimentoPagamento": "Instruções de Recebimento/Pagamento Teste",
+                "vet": "0002315648987" as unknown as number
             }
-          };
+        };
     erro: string = '';
     loading = false;
     loadingInvoiceFile = false;
@@ -102,7 +102,7 @@ export class FormComponent implements OnDestroy {
     moedas: Moeda[] = [];
     loadingMoedas = false;
 
-    
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
@@ -121,8 +121,6 @@ export class FormComponent implements OnDestroy {
         private router: Router,
         private datePipe: DatePipe,
     ) {
-this.objeto.contrato = new Contrato(this.objeto.contrato)
- this.beneficiarioChange();
         lastValueFrom(this.moedaService.getList())
             .then(res => this.moedas = res)
             .finally(() => this.loadingMoedas = false);
@@ -166,12 +164,9 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         this.modal.style = { 'max-width': '1100px' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        console.log('snapshot', this.activatedRoute.snapshot)
         var params = this.activatedRoute.params.subscribe(x => {
-            console.log('params', x)
             if (x['invoice_id']) {
                 this.objeto.invoice.id = this.crypto.decrypt(x['invoice_id']);
-                console.log('invoice id decrypted', this.objeto.invoice.id)
 
                 this.modal.title = 'Editar Invoice';
                 this.modal.routerBack = ['../../'];
@@ -182,7 +177,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        
+
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
@@ -217,8 +212,8 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
     }
 
     encryptId(id: any): string {
-      const encryptedId = this.crypto.encrypt(id);
-      return encryptedId !== null ? encryptedId : ''; // Se encryptedId for null, retorna uma string vazia ('')
+        const encryptedId = this.crypto.encrypt(id);
+        return encryptedId !== null ? encryptedId : ''; // Se encryptedId for null, retorna uma string vazia ('')
     }
 
     voltar() {
@@ -239,8 +234,8 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
             this.loadingBeneficiarios = false;
         }
     }
-    
-   async invoiceDownload() {
+
+    async invoiceDownload() {
         if (this.objeto.invoice.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
             return
@@ -248,27 +243,9 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         this.loadingInvoiceFile = true;
         this.loadingService.message.next('Carregando documento invoice.')
         await lastValueFrom(this.invoiceService.file(this.objeto.invoice.id))
-            .then(res => {
-                this.loadingInvoiceFile = false;
-                    var blob = new Blob([res], { type: 'application/pdf' })
-                    const data = window.URL.createObjectURL(blob);
-        
-                    var link = document.createElement('a');
-                    link.href = data;
-                    link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
-                    // this is necessary as link.click() does not work on the latest firefox
-                    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-    
-                    var url = URL.createObjectURL(res);
-                    window.open(url, '_blank');
-                    URL.revokeObjectURL(url);
-            })
-            .catch(res => {
-                this.loadingInvoiceFile = false;
-                this.toastr.error('Não foi possível fazer download')
-            });
-            this.loadingService.message.next('');
-    } 
+        this.loadingInvoiceFile = false;
+        this.loadingService.message.next('');
+    }
 
     async contratoDownload() {
         if (this.objeto.invoice.id == 0) {
@@ -277,13 +254,8 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         }
         this.loadingContratoFile = true;
         this.loadingService.message.next('Carregando Contrato.')
-        await  lastValueFrom(this.contratoService.file(this.objeto.contrato.id))
-            .then(res => {
-                this.loadingContratoFile = false;
-            })
-            .catch(res => {
-                this.loadingContratoFile = false;
-            });
+        await lastValueFrom(this.contratoService.file(this.objeto.contrato.id))
+        this.loadingContratoFile = false;
         this.loadingService.message.next('');
     }
 
@@ -295,12 +267,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         this.loadingSwiftFile = true;
         this.loadingService.message.next('Carregando Swift.')
         await lastValueFrom(this.invoiceService.fileSwift(this.objeto.invoice.id))
-            .then(res => {
-                this.loadingSwiftFile = false;
-            })
-            .catch(res => {
-                this.loadingSwiftFile = false;
-            });
+        this.loadingSwiftFile = false;
         this.loadingService.message.next('');
     }
 
@@ -314,11 +281,11 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         await this.invoiceDownload();
         await this.contratoDownload();
         await this.swiftDownload();
-        
+
         this.loading = false;
     }
 
-   
+
     moedaEditar(moeda: Moeda) {
         var idEncrypted = this.crypto.encrypt(moeda.id);
         this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
@@ -353,9 +320,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
                     this.objeto.contrato.invoice_Id = res.objeto.contrato.invoice_Id;
                     this.objeto.invoice.id = res.objeto.invoice.id;
 
-                    console.log('response', res)
                     var a = this.crypto.encrypt(this.objeto.invoice.id);
-                    console.log('id encrypted', a)
                     if (!this.isEditPage) {
                         this.modalService.removeModalAnimation(this.modal.id);
                         this.router.navigate(['../editar', a], { relativeTo: this.activatedRoute })
@@ -378,7 +343,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
     request() {
         if (this.isEditPage)
             return lastValueFrom(this.invoiceService.edit(this.objeto));
-        
+
         return lastValueFrom(this.invoiceService.create(this.objeto));
     }
 }
