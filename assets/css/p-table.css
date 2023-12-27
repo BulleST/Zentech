@@ -425,9 +425,6 @@ tr.selectable {
     background-color: rgb(var(--secondary));
 }
 
-.p-column-filter-matchmode-dropdown {
-    /* margin-bottom: 10px; */
-}
 
 .p-column-filter-overlay-menu .p-column-filter-operator {
     padding: 7px;
