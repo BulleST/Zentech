@@ -70,6 +70,8 @@ export class Contrato_List {
     especificacoes: string = '';
     clausulas: string = '';
     instrucoesRecebimentoPagamento: string = '';
+    beneficiario: string = '';
+    banco: string = '';
 
 }
 
@@ -77,23 +79,10 @@ export class Contrato_List {
 export var contratoColumns: Column[] = [
 
     {
-
-        field: 'tipo',
-        header: 'Tipo',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-
-    },
-    {
         field: 'numContrato',
-        header: 'Número do contrato',
+        header: 'Nº',
         maskType: MaskType.mask,
-        mask: '0#',// Só funciona com o MaskType.mask
+        mask: '0*', // Só funciona com o MaskType.mask
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -101,21 +90,11 @@ export var contratoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
-    {
-        field: 'evento',
-        header: 'Evento',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
+  
     {
         field: 'data',
         header: 'Data',
-        maskType: MaskType.dateTime,
+        maskType: MaskType.date,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -135,11 +114,33 @@ export var contratoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
+        field: 'beneficiario',
+        header: 'Beneficiário',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'banco',
+        header: 'Banco',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
         field: 'taxa',
         header: 'Taxa',
-        maskType: MaskType.mask,
-        mask: '0#', // Só funciona com o MaskType.mask
-        filterType: FilterType.text,
+        maskType: MaskType.number,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
@@ -149,8 +150,9 @@ export var contratoColumns: Column[] = [
     {
         field: 'valorNacional',
         header: 'Valor Nacional',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
+        maskType: MaskType.number,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
         filterShowMatchMode: false,
@@ -160,7 +162,7 @@ export var contratoColumns: Column[] = [
     {
         field: 'dataLiquidacao',
         header: 'Data de Liquidação',
-        maskType: MaskType.undefined,
+        maskType: MaskType.date,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: false,
@@ -193,6 +195,30 @@ export var contratoColumns: Column[] = [
     {
         field: 'percentualAdiantamento',
         header: 'Percentual de Adiantamento',
+        maskType: MaskType.percentage,
+        decimal: '1.2',
+        filterType: FilterType.numeric,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'tipo',
+        header: 'Tipo',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+
+    },
+    {
+        field: 'evento',
+        header: 'Evento',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

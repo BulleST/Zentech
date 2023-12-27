@@ -18,9 +18,8 @@ import { ContratoEventoService } from 'src/app/services/contrato-evento.service'
 import { Paises } from 'src/app/models/pais.model';
 import { Modal } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { InvoiceService } from 'src/app/services/invoice.service';
-import { Invoice_List } from 'src/app/models/invoice.model';
+import { LoadingService } from 'src/app/parts/loading/loading';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -54,10 +53,7 @@ export class FormComponent implements OnDestroy {
     paises: Paises[] = []
     loadingPais = true;
 
-    invoices: Invoice_List[] = []
-    loadingInvoice = true;
-
-    selectedInvoice?: Invoice_List
+    loadingContratoFile = false;
 
 
     constructor(
@@ -67,12 +63,25 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private toastr: ToastrService,
         private paisesService: PaisesService,
+        private loadingService: LoadingService,
+        private contratoTipoService: ContratoTipoService,
+        private contratoEventoService: ContratoEventoService,
+        private datepipe: DatePipe,
     ) {
         lastValueFrom(this.paisesService.getList())
             .then(res => {
                 this.loadingPais = false;
                 this.paises = res;
-
+            });
+        lastValueFrom(this.contratoTipoService.getList())
+            .then(res => {
+                this.tipos = res;
+                this.loadingTipo = false;
+            });
+        lastValueFrom(this.contratoEventoService.getList())
+            .then(res => {
+                this.eventos = res;
+                this.loadingEvento = false;
             });
     }
 
@@ -80,11 +89,12 @@ export class FormComponent implements OnDestroy {
         const encryptedId = this.crypto.encrypt(id);
         return encryptedId !== null ? encryptedId : ''; // Se encryptedId for null, retorna uma string vazia ('')
     }
+
     ngAfterViewInit(): void {
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '650px', overflow: 'visible' };
+        this.modal.style = { 'max-width': '950px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
@@ -97,8 +107,10 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.contratoService.get(this.objeto.id))
                     .then(res => {
-                        this.objeto = res;
-                        this.selectedInvoice = this.invoices.find(x => x.id == this.objeto.invoice_Id)
+                        this.objeto = new Contrato(res);
+                        this.objeto.dataLiquidacao = this.datepipe.transform(this.objeto.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
+                        this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                        console.log(this.objeto)
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'contrato');
                         }, 200);
@@ -108,23 +120,18 @@ export class FormComponent implements OnDestroy {
                     })
 
             } else {
-                this.modal.title = 'Cadastrar Contrato';
-                this.modal.routerBack = ['../'];
+                // this.modal.title = 'Cadastrar Contrato';
+                // this.modal.routerBack = ['../'];
 
-                this.isEditPage = false;
-                setTimeout(() => {
-                    this.modal = this.modalService.addModal(this.modal, 'contrato');
-                }, 200);
+                // this.isEditPage = false;
+                // setTimeout(() => {
+                //     this.modal = this.modalService.addModal(this.modal, 'contrato');
+                // }, 200);
+                this.voltar();
             }
         });
         this.subscription.push(params);
     }
-
-
-    invoiceChange() {
-        this.objeto.invoice_Id = this.selectedInvoice?.id ?? undefined as unknown as number
-    }
-
 
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
@@ -134,18 +141,24 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal);
     }
 
-    fileDownload() {
-        this.loading = true;
-        lastValueFrom(this.contratoService.file(this.objeto.id))
+    async contratoDownload() {
+        if (this.objeto.id == 0) {
+            this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
+            return
+        }
+        this.loadingContratoFile = true;
+        this.loadingService.message.next('Carregando Contrato.')
+        await lastValueFrom(this.contratoService.file(this.objeto.id))
             .then(res => {
-                this.loading = false;
+                this.loadingContratoFile = false;
             })
             .catch(res => {
-                this.loading = false;
-            })
+                this.loadingContratoFile = false;
+            });
+        this.loadingService.message.next('');
     }
 
-    send(form: NgForm, salvarEBaixar: boolean) {
+    send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
             this.erro = 'Campos inválidos';
@@ -153,21 +166,13 @@ export class FormComponent implements OnDestroy {
         }
         this.erro = '';
         this.loading = true;
-        this.erro = '';
+
+        console.log(this.objeto)
         return lastValueFrom(this.contratoService.post(this.objeto))
-            .then(res => {
+            .then(async res => {
                 if (res.sucesso != false) {
-                    if (salvarEBaixar && this.isEditPage) {
-                        lastValueFrom(this.contratoService.file(this.objeto.id))
-                            .then(res => {
-                                this.loading = false;
-                            })
-                            .catch(res => {
-                                this.loading = false;
-                            })
-                    } else {
-                        this.voltar();
-                    }
+                    await lastValueFrom(this.contratoService.getList())
+                    this.voltar();
                 } else {
                     this.erro = res.mensagem;
                     this.toastr.error(res.mensagem);

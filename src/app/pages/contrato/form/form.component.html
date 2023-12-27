@@ -8,10 +8,75 @@
     </span>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" class="needs-validation">
-        <div class="px-2">
+    <form #form="ngForm" (ngSubmit)="send(form)">
+        <div class="px-3">
+            <div class="my-3 row">
+                <div class="d-flex align-items-center">
+                    <button type="button" class="btn btn-dark" [disabled]="objeto.id == 0" (click)="contratoDownload()">Baixar PDF</button>
+                    <span class="ms-2 text-danger mt-1" *ngIf="objeto.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
+                </div>
+            </div>
             <div class="row">
-                <div class="form-group col-md-6 col-sm-4">
+                <!-- Data do Contrato -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Data do Contrato">
+                    <label for="data">Data do contrato: <span class="text-danger">*</span></label>
+                    <input type="datetime-local"
+                           class="form-control"
+                           name="data"
+                           id="data"
+                           #data="ngModel"
+                           [(ngModel)]="objeto.data"
+                           required pattern="\S(.*\S)?"
+                           (change)="objeto.data = data.value.trim();">
+                    <div *ngIf="data.touched && data.errors">
+                        <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Nº do Contrato de Câmbio -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
+                    <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="numContrato"
+                           id="numContrato"
+                           #numContrato="ngModel"
+                           [(ngModel)]="objeto.numContrato"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.numContrato = numContrato.value.trim();">
+                    <div *ngIf="numContrato.touched && numContrato.errors">
+                        <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigató rio.</p>
+                    </div>
+                </div>
+                <!-- Tipos -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Tipos">
+                    <label for="tipo_Id">Tipo do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                    <p-dropdown
+                                [options]="tipos"
+                                [(ngModel)]="objeto.tipo_Id"
+                                #tipo_Id="ngModel"
+                                name="tipo_Id"
+                                inputId="tipo_Id"
+                                [styleClass]="'form-control ' + (loadingTipo ? 'form-control-loading' : '')"
+                                [showClear]="true"
+                                [filter]="true"
+                                optionLabel="nome"
+                                optionValue="id"
+                                placeholder="Selecione um tipo"
+                                [required]="true"
+                                [showClear]="true">
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex align-items-center">
+                                <span>{{item.nome}} </span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <div *ngIf="tipo_Id.touched && tipo_Id.errors">
+                        <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- Eventos -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Eventos">
                     <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
                     <p-dropdown
                                 [options]="eventos"
@@ -31,101 +96,152 @@
                         <ng-template let-item pTemplate="item">
                             <div class="d-flex align-items-center">
                                 <span>{{item.nome}} </span>
-                                <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/evento/', encryptId(item.id)]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512" fill="#555" style="margin-right: 4px;">
-                                        <path
-                                              d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
-                                    </svg>
-                                </a>
-                                <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
-                                <a [routerLink]="['./excluir/evento/', encryptId(item.id)]" class="link text-info">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="11"
-                                         width="14" viewBox="0 0 448 512" fill="#555">
-                                        <path
-                                              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                                    </svg>
-                                </a>
                             </div>
                         </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./evento']">adicionar</a>
-                            </div>
-                        </ng-template>
+                        <!-- <ng-template pTemplate="footer">
+                        <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./evento']">adicionar</a>
+                        </div>
+                    </ng-template> -->
                     </p-dropdown>
                     <div *ngIf="evento_Id.touched && evento_Id.errors">
                         <p class="text-danger" *ngIf="evento_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-sm-4">
-                    <label for="tipo_Id">Tipo: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="tipos"
-                                [(ngModel)]="objeto.tipo_Id"
-                                #tipo_Id="ngModel"
-                                name="tipo_Id"
-                                inputId="tipo_Id"
-                                [styleClass]="'form-control ' + (loadingTipo ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                optionLabel="nome"
-                                optionValue="id"
-                                placeholder="Selecione um tipo"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template let-item pTemplate="item">
-                            <div class="d-flex align-items-center">
-                                <span>{{item.nome}} </span>
-                                <a class="link text-info d-flex ms-auto" [routerLink]="['./editar/tipo/', encryptId(item.id)]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="11" width="16" viewBox="0 0 512 512" fill="#555" style="margin-right: 4px;">
-                                        <path
-                                              d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z" />
-                                    </svg>
-                                </a>
-                                <!-- <i class="fas fa-coffee"></i> Exemplo no template HTML do seu componente -->
-                                <a [routerLink]="['./excluir/tipo/', encryptId(item.id)]" class="link text-info">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="11"
-                                         width="14" viewBox="0 0 448 512" fill="#555">
-                                        <path
-                                              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./tipo']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="tipo_Id.touched && tipo_Id.errors">
-                        <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
+            </div>
+            <div class="row">
+                <!-- Taxa Cambial -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Taxa Cambial">
+                    <label for="taxa">Taxa Cambial: <small>(USD)</small>&nbsp;<span class="text-danger">*</span> </label>
+                    <app-input-number [valueInput]="objeto.taxa"
+                                      (valueChanges)="objeto.taxa = $event;"
+                                      [inputId]="'taxa'"
+                                      [mask]="'separator.2'"
+                                      [showErrorMessage]="true"
+                                      [allowNegativeNumbers]="false"
+                                      [required]="true"
+                                      suffix=" USD"
+                                      [autoReplaceValue]="false"></app-input-number>
+                </div>
+                <!-- Valor Moeda Nacional -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
+                    <label for="valorNacional">Valor Moeda Nacional: <small>(R$)</small>&nbsp;<span class="text-danger">*</span></label>
+                    <app-input-number [valueInput]="objeto.valorNacional"
+                                      (valueChanges)="objeto.valorNacional = $event;"
+                                      [inputId]="'valorNacional'"
+                                      [mask]="'separator.2'"
+                                      [showErrorMessage]="true"
+                                      [allowNegativeNumbers]="false"
+                                      [required]="true"
+                                      prefix="R$ "
+                                      [autoReplaceValue]="false"></app-input-number>
+                </div>
+                <!-- Percentual de Adiantamento -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Percentual de Adiantamento">
+                    <label for="percentualAdiantamento">Percentual de Adiantamento: <small>(%)</small>&nbsp;</label>
+                    <app-input-number [valueInput]="objeto.percentualAdiantamento"
+                                      (valueChanges)="objeto.percentualAdiantamento = $event;"
+                                      [inputId]="'percentualAdiantamento'"
+                                      [mask]="'separator.2'"
+                                      [showErrorMessage]="false"
+                                      [allowNegativeNumbers]="false"
+                                      [required]="false"
+                                      [autoReplaceValue]="false"
+                                      [suffix]="'%'"></app-input-number>
+                </div>
+                <!-- RDE -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="RDE">
+                    <label for="rde">RDE:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="rde"
+                           id="rde"
+                           #rde="ngModel"
+                           [(ngModel)]="objeto.rde"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.rde = rde.value.trim();">
+                </div>
+            </div>
+            <div class="row">
+                <!-- Valor Efetivo Total (VET) -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="Valor Efetivo Total (VET)">
+                    <label for="vet">Valor Efetivo Total (VET):</label>
+                    <input type="text"
+                        class="form-control"
+                        name="vet"
+                        id="vet"
+                        #vet="ngModel"
+                        [(ngModel)]="objeto.vet"
+                        pattern="\S(.*\S)?">
+                        <!-- 
+                        mask="0.000000000000"
+                        placeholder="0.000000000000" -->
+                    <div *ngIf="vet.errors && vet.touched">
+                         <p class="text-danger" *ngIf="vet.errors['mask']">Valor inválido</p>
+                    </div>
+                </div>
+                <!-- Descrição da Forma de Entrega da moeda estrangeira -->
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
+                    <label for="descricaoFormaEntrega">Descrição da Forma de Entrega da moeda estrangeira:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="descricaoFormaEntrega"
+                           id="descricaoFormaEntrega"
+                           #descricaoFormaEntrega="ngModel"
+                           [(ngModel)]="objeto.descricaoFormaEntrega"
+                           required
+                           pattern="\S(.*\S)?"
+                           readonly
+                           (change)="objeto.descricaoFormaEntrega = descricaoFormaEntrega.value.trim();">
+                </div>
+                <!-- Liquidação Até -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
+                    <label for="dataLiquidacao">Liquidação Até: <span class="text-danger">*</span></label>
+                    <input type="date"
+                           class="form-control"
+                           name="dataLiquidacao"
+                           id="dataLiquidacao"
+                           #dataLiquidacao="ngModel"
+                           [(ngModel)]="objeto.dataLiquidacao"
+                           required>
+                    <div *ngIf="dataLiquidacao.touched && dataLiquidacao.errors">
+                        <p class="text-danger" *ngIf="dataLiquidacao.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6 col-sm-4">
-                    <!-- <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
-            <p-dropdown [styleClass]="'form-control' + (loadingInstituicao ? 'form-control-loading' : '')"
-                        [showClear]="true"
-                        [options]="instituicoes"
-                        #instituicaoFinanceira_Id="ngModel"
-                        [(ngModel)]="objeto.instituicaoFinanceira_Id"
-                        optionLabel="nomeInstituicao"
-                        optionValue="id"
-                        [placeholder]="'Selecione'"
-                        [disabled]="loadingInstituicao"
-                        name="instituicaoFinanceira_Id"
-                        inputId="instituicaoFinanceira_Id"
-                        [required]="true"
-                        [filter]="true"
-                        filterBy="nome">
-            </p-dropdown>
-            <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
-              <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é obrigatório.</p>
-            </div> -->
+                <!-- Código da Natureza -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Natureza">
+                    <label for="codigoNatureza">Código da Natureza:</label>
+                    <app-input-number [valueInput]="objeto.codigoNatureza "
+                                      (valueChanges)="objeto.codigoNatureza = $event;"
+                                      [inputId]="'codigoNatureza'"
+                                      [mask]="'00000-00-A-00-00'"
+                                      [showErrorMessage]="false"
+                                      [allowNegativeNumbers]="false"
+                                      [required]="false"
+                                      [readonly]="true"
+                                      [autoReplaceValue]="false"></app-input-number>
                 </div>
-                <div class="form-group col-md-6 col-sm-4">
-                    <label for="pais_Id">País: <span class="text-danger">*</span></label>
-                    <p-dropdown [styleClass]="'form-control' + (loadingPais ? 'form-control-loading' : '')"
+                <!-- Descrição da Natureza do Fato -->
+                <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">
+                    <label for="descricaoNaturezaFato">Descrição da Natureza do Fato:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="descricaoNaturezaFato"
+                           id="descricaoNaturezaFato"
+                           #descricaoNaturezaFato="ngModel"
+                           [(ngModel)]="objeto.descricaoNaturezaFato"
+                           required
+                           pattern="\S(.*\S)?"
+                           readonly
+                           (change)="objeto.descricaoNaturezaFato = descricaoNaturezaFato.value.trim();">
+                </div>
+            </div>
+            <div class="row align-items-end">
+                <!-- País do Pagador/Recebedor no Exterior -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="País do Pagador/Recebedor no Exterior">
+                    <label for="pais_Id">País do Pagador/Recebedor no Exterior:</label>
+                    <p-dropdown [styleClass]="'form-control ' + (loadingPais ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [options]="paises"
                                 #pais_Id="ngModel"
@@ -138,251 +254,85 @@
                                 id="pais_Id"
                                 [virtualScroll]="true"
                                 [virtualScrollItemSize]="10"
-                                [required]="true"
                                 optionValue="id"
                                 [filter]="true"
                                 filterBy="nome">
                     </p-dropdown>
-                    <div *ngIf="pais_Id.touched && pais_Id.errors">
-                        <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-4 col-sm-12">
-                    <label for="valorNacional">Valor Nacional: <span class="text-danger">*</span></label>
-                    <app-input-number [valueInput]="objeto.valorNacional"
-                                      (valueChanges)="objeto.valorNacional = $event;"
-                                      [inputId]="'valorNacional'"
-                                      [mask]="'separator.2'"
-                                      [showErrorMessage]="true"
-                                      [allowNegativeNumbers]="false"
-                                      [required]="true"
-                                      [autoReplaceValue]="false"></app-input-number>
-                    <!-- <input type="text"
-  
-                   class="form-control"
-                   name="valorNacional"
-                   id="valorNacional"
-                   #valorNacional="ngModel"
-                   [(ngModel)]="objeto.valorNacional"
-                   required pattern="\S(.*\S)?">
-            <div *ngIf="valorNacional.touched && valorNacional.errors">
-              <p class="text-danger" *ngIf="valorNacional.errors['required']">Este campo é obrigatório.</p>
-            </div> -->
-                </div>
-                <div class="form-group col-md-3 col-sm-12">
-                    <label for="numContrato">Nº de contrato: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="numContrato"
-                           id="numContrato"
-                           #numContrato="ngModel"
-                           [(ngModel)]="objeto.numContrato"
-                           required
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.numContrato = numContrato.value.trim();">
-                    <div *ngIf="numContrato.touched && numContrato.errors">
-                        <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-md-5 col-sm-12">
-                    <label for="percentualAdiantamento">Percentual de Adiantamento: <span class="text-danger">*</span></label>
-                    <app-input-number [valueInput]="objeto.percentualAdiantamento"
-                                      (valueChanges)="objeto.percentualAdiantamento = $event;"
-                                      [inputId]="'percentualAdiantamento'"
-                                      [mask]="'separator.2'"
-                                      [showErrorMessage]="true"
-                                      [allowNegativeNumbers]="false"
-                                      [required]="true"
-                                      [autoReplaceValue]="false"
-                                      [suffix]="'%'"></app-input-number>
-                    <!-- <input type="text"
-  
-                   class="form-control"
-                   name="percentualAdiantamento"
-                   id="percentualAdiantamento"
-                   #percentualAdiantamento="ngModel"
-                   [(ngModel)]="objeto.percentualAdiantamento"
-                   required pattern="\S(.*\S)?"
-                   (change)="objeto.percentualAdiantamento = percentualAdiantamento.value.trim();">
-            <div *ngIf="percentualAdiantamento.touched && percentualAdiantamento.errors">
-              <p class="text-danger" *ngIf="percentualAdiantamento.errors['required']">Este campo é obrigatório.</p>
-            </div> -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-3 col-sm-12">
-                    <label for="data">Data de contrato: <span class="text-danger">*</span></label>
-                    <input type="datetime-local"
-                           class="form-control"
-                           name="data"
-                           id="data"
-                           #data="ngModel"
-                           [(ngModel)]="objeto.data"
-                           required pattern="\S(.*\S)?"
-                           (change)="objeto.data = data.value.trim();">
-                    <div *ngIf="data.touched && data.errors">
-                        <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-md-3 col-sm-12">
-                    <label for="dataLiquidacao">Data de Liquidação: <span class="text-danger">*</span></label>
-                    <input type="datetime-local"
-                           class="form-control"
-                           name="dataLiquidacao"
-                           id="dataLiquidacao"
-                           #dataLiquidacao="ngModel"
-                           [(ngModel)]="objeto.dataLiquidacao"
-                           required pattern="\S(.*\S)?"
-                           (change)="objeto.dataLiquidacao = dataLiquidacao.value.trim();">
-                    <div *ngIf="dataLiquidacao.touched && dataLiquidacao.errors">
-                        <p class="text-danger" *ngIf="dataLiquidacao.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-xl-12 xol-lg-4 col-md-6 col-sm-6 col-12">
-                    <label for="invoice_Id">Invoice: <span class="text-danger">*</span></label>
-                    <p-dropdown
-                                [options]="invoices"
-                                [(ngModel)]="selectedInvoice"
-                                (ngModelChange)="invoiceChange()"
-                                #invoice_Id="ngModel"
-                                name="invoice_Id"
-                                inputId="invoice_Id"
-                                [styleClass]="'form-control ' + (loadingInvoice ? 'form-control-loading' : '')"
-                                [showClear]="true"
-                                [filter]="true"
-                                filterBy='filter'
-                                optionLabel="data"
-                                placeholder="Selecione um invoice"
-                                [required]="true"
-                                [showClear]="true">
-                        <ng-template pTemplate="selectedItem">
-                            <div class="flex align-items-center gap-2" *ngIf="selectedInvoice">
-                                <p>
-                                    <strong>Id: </strong>{{selectedInvoice.id}} <strong>Data : </strong>{{selectedInvoice.data | date:'dd/MM/yyyy'}}
-                                </p>
-                            </div>
-                        </ng-template>
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <p><strong>Id: </strong>{{item.id}}</p>
-                                <div class="d-flex justify-content-between">
-                                    <p><strong>Data: </strong>{{item.data| date:'dd/MM/yyyy'}}</p>
-                                    <p><strong>Valor: </strong>{{item.valor | currency: 'BRL': '': '1.2'}}</p>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <p><strong>Beneficiário: </strong>{{item.nomeBeneficiario}}</p>
-                                    <p><strong>CNPJ: </strong>{{item.cnpj | mask: '00.000.000/0000-00'}}</p>
-                                </div>
-                                <p><strong>Banco: </strong>{{item.nomeBanco}}</p>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="footer">
-                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./invoice']">adicionar</a>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                    <div *ngIf="invoice_Id.touched && invoice_Id.errors">
-                        <p class="text-danger" *ngIf="invoice_Id.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-md-3 col-sm-12">
-                    <label for="taxa">Taxa: <span class="text-danger">*</span></label>
-                    <app-input-number [valueInput]="objeto.taxa"
-                                      (valueChanges)="objeto.taxa = $event;"
-                                      [inputId]="'taxa'"
-                                      [mask]="'separator.2'"
-                                      [showErrorMessage]="true"
-                                      [allowNegativeNumbers]="false"
-                                      [required]="true"
-                                      [autoReplaceValue]="false"></app-input-number>
-                    <!-- <input type="text"
-                   class="form-control"
-                   name="taxa"
-                   id="taxa"
-                   #taxa="ngModel"
-                   [(ngModel)]="objeto.taxa"
-                   required pattern="\S(.*\S)?">
-            <div *ngIf="taxa.touched && taxa.errors">
-              <p class="text-danger" *ngIf="taxa.errors['required']">Este campo é obrigatório.</p>
-            </div> -->
-                </div>
-                <div class="form-group col-md-5 col-sm-12">
-                    <label for="pagRecExterior">Pagador ou Recebedor no Exterior: <span class="text-danger">*</span></label>
+                <!-- Pagador/Recebedor no Exterior -->
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Pagador/Recebedor no Exterior">
+                    <label for="pagRecExterior">Pagador/Recebedor no Exterior:</label>
                     <input type="text"
                            class="form-control"
                            name="pagRecExterior"
                            id="pagRecExterior"
                            #pagRecExterior="ngModel"
                            [(ngModel)]="objeto.pagRecExterior"
-                           required pattern="\S(.*\S)?"
+                          pattern="\S(.*\S)?"
                            (change)="objeto.pagRecExterior = pagRecExterior.value.trim();">
-                    <div *ngIf="pagRecExterior.touched && pagRecExterior.errors">
-                        <p class="text-danger" *ngIf="pagRecExterior.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+                </div>
+                <!-- Código da Relação de Vínculo entre cliente e o Pagador/Recebedor -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Relação de Vínculo entre cliente e o Pagador/Recebedor">
+                    <label for="codigoVinculoPagRecExterior">Código da Relação de Vínculo entre cliente e o Pagador/Recebedor:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="codigoVinculoPagRecExterior"
+                           id="codigoVinculoPagRecExterior"
+                           #codigoVinculoPagRecExterior="ngModel"
+                           [(ngModel)]="objeto.codigoVinculoPagRecExterior"
+                           required
+                           [readonly]="true"
+                           (change)="objeto.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim();">
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-4 col-sm-12">
-                    <label for="especificacoes">Especificações: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="especificacoes"
-                           id="especificacoes"
-                           #especificacoes="ngModel"
-                           [(ngModel)]="objeto.especificacoes"
-                           required pattern="\S(.*\S)?">
-                    <div *ngIf="especificacoes.touched && especificacoes.errors">
-                        <p class="text-danger" *ngIf="especificacoes.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+                <!-- Especificações -->
+                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Especificações">
+                    <label for="especificacoes">Especificações: </label>
+                    <textarea
+                              class="form-control"
+                              name="especificacoes"
+                              id="especificacoes"
+                              #especificacoes="ngModel"
+                              [(ngModel)]="objeto.especificacoes"
+                              pattern="\S(.*\S)?"
+                              (change)="objeto.especificacoes = especificacoes.value.trim();">
+                </textarea>
                 </div>
-                <div class="form-group col-md-2 col-sm-12">
-                    <label for="clausulas">Cláusulas: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="clausulas"
-                           id="clausulas"
-                           #clausulas="ngModel"
-                           [(ngModel)]="objeto.clausulas"
-                           required pattern="\S(.*\S)?"
-                           (change)="objeto.clausulas = clausulas.value.trim();">
-                    <div *ngIf="clausulas.touched && clausulas.errors">
-                        <p class="text-danger" *ngIf="clausulas.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+                <!-- Cláusulas -->
+                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Cláusulas">
+                    <label for="clausulas">Cláusulas: </label>
+                    <textarea
+                              class="form-control"
+                              name="clausulas"
+                              id="clausulas"
+                              #clausulas="ngModel"
+                              [(ngModel)]="objeto.clausulas"
+                              pattern="\S(.*\S)?"
+                              (change)="objeto.clausulas = clausulas.value.trim();">
+                </textarea>
                 </div>
-                <div class="form-group col-md-6 col-sm-12">
-                    <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="instrucoesRecebimentoPagamento"
-                           id="instrucoesRecebimentoPagamento"
-                           #instrucoesRecebimentoPagamento="ngModel"
-                           [(ngModel)]="objeto.instrucoesRecebimentoPagamento"
-                           required pattern="\S(.*\S)?"
-                           (change)="objeto.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
-                    <div *ngIf="instrucoesRecebimentoPagamento.touched && instrucoesRecebimentoPagamento.errors">
-                        <p class="text-danger" *ngIf="instrucoesRecebimentoPagamento.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+                <!-- Instruções de Recebimento/Pagamento -->
+                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Instruções de Recebimento/Pagamento">
+                    <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: </label>
+                    <textarea
+                              class="form-control"
+                              name="instrucoesRecebimentoPagamento"
+                              id="instrucoesRecebimentoPagamento"
+                              #instrucoesRecebimentoPagamento="ngModel"
+                              [(ngModel)]="objeto.instrucoesRecebimentoPagamento"
+                              pattern="\S(.*\S)?"
+                              (change)="objeto.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
+                </textarea>
                 </div>
             </div>
-            <div class="row">
-                <div class="d-flex align-items-center ">
+            <div class="row mt-2 mb-2">
+                <div class="d-flex align-items-center">
                     <div *ngIf="erro || form.invalid" class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
                         <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
                     </div>
-                    <button *ngIf="isEditPage" type="button" (click)="fileDownload()" class="btn btn-dark me-1 ms-auto" [disabled]="loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                        <span>Baixar</span>
-                    </button>
-                    <button *ngIf="isEditPage" (click)="send(form, true)" class="btn btn-dark me-1 " [disabled]="form.invalid || loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                        <span>Salvar e Baixar</span>
-                    </button>
-                    <button (click)="send(form, false)" class="btn btn-primary me-0 " [class.ms-auto]="!isEditPage" [disabled]="form.invalid || loading">
+                    <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                         <span>Salvar</span>
                     </button>

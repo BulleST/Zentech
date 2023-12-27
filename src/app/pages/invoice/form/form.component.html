@@ -441,15 +441,19 @@
                                 <!-- Valor Efetivo Total (VET) -->
                                 <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="Valor Efetivo Total (VET)">
                                     <label for="vet">Valor Efetivo Total (VET):</label>
-                                    <app-input-number [valueInput]="objeto.contrato.vet "
-                                                      (valueChanges)="objeto.contrato.vet = $event;"
-                                                      [inputId]="'vet'"
-                                                      [mask]="'0.000000000000'"
-                                                      [placeholder]="'0.000000000000'"
-                                                      [showErrorMessage]="true"
-                                                      [allowNegativeNumbers]="false"
-                                                      [required]="false"
-                                                      [autoReplaceValue]="false"></app-input-number>
+                                    <input type="text"
+                                        class="form-control"
+                                        name="vet"
+                                        id="vet"
+                                        #vet="ngModel"
+                                        [(ngModel)]="objeto.contrato.vet"
+                                        pattern="\S(.*\S)?">
+                                        <!-- 
+                                        mask="0.000000000000"
+                                        placeholder="0.000000000000" -->
+                                    <div *ngIf="vet.errors && vet.touched">
+                                        <p class="text-danger" *ngIf="vet.errors['mask']">Valor inválido</p>
+                                    </div>
                                 </div>
                                 <!-- Descrição da Forma de Entrega da moeda estrangeira -->
                                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
@@ -541,7 +545,7 @@
                                            id="pagRecExterior"
                                            #pagRecExterior="ngModel"
                                            [(ngModel)]="objeto.contrato.pagRecExterior"
-                                           required pattern="\S(.*\S)?"
+                                            pattern="\S(.*\S)?"
                                            (change)="objeto.contrato.pagRecExterior = pagRecExterior.value.trim();">
                                 </div>
                                 <!-- Código da Relação de Vínculo entre cliente e o Pagador/Recebedor -->
@@ -599,8 +603,8 @@
                                     </textarea>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                    </form>
+                </div>
             </p-tabPanel>
             <p-tabPanel *ngIf="isEditPage"> <!---->
                 <ng-template pTemplate="header">

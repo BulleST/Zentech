@@ -43,7 +43,7 @@ export class ListComponent {
                 this.tableLinks = [
 
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
+                    // { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
