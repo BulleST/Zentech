@@ -1,0 +1,19 @@
+<input [type]="type"
+       class="form-control"
+       [id]="inputId"
+       [name]="inputId"
+       #data="ngModel"
+       [(ngModel)]="valueInput"
+       (change)="inputChanged(); validate();"
+       (focusout)="validate();"
+       [min]="min"
+       [max]="max"
+       [required]="required"
+       [readonly]="readonly"
+       [disabled]="disabled">
+<div *ngIf="data.touched && data.errors && showErrorMessage">   
+    <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
+    <p class="text-danger" *ngIf="data.errors['min']">Data mínima é {{min | date : 'dd/MM/yyyy'}}.</p>
+    <p class="text-danger" *ngIf="data.errors['max']">Data máxima é {{max | date : 'dd/MM/yyyy'}}.</p>
+    <p class="text-danger" *ngIf="data.errors['message']">{{data.errors['message']}}</p>
+</div>

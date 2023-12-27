@@ -30,7 +30,6 @@ import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-opera
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
 
-
 registerLocaleData(localePt);
 @NgModule({
     declarations: [

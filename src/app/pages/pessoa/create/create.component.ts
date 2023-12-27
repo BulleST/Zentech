@@ -32,6 +32,9 @@ export class CreateComponent implements OnDestroy {
     liberaNome = false;
     modal: Modal = new Modal;
 
+    minDate = new Date('1900-01-01')
+    maxDate = new Date()
+
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -65,6 +68,10 @@ export class CreateComponent implements OnDestroy {
         this.modalService.removeModal(this.modal);
     }
 
+    validaData(input: NgModel) {
+        console.log(input)
+    }
+
     validaCPF(input: NgModel, doc: number) {
         if (!input) {
             return;
@@ -92,8 +99,8 @@ export class CreateComponent implements OnDestroy {
         input.control.setErrors(null);
     }
 
-    procuraPessoa(cpf: NgModel, nasc: NgModel) {
-        if (cpf.invalid || nasc.invalid) {
+    procuraPessoa(cpf: NgModel) {
+        if (cpf.invalid || !this.objeto.dataNascimento) {
             return;
         }
 

@@ -26,6 +26,7 @@ import { DeleteComponent as DeleteEvento } from '../pages/contrato-evento/delete
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { TabViewModule } from 'primeng/tabview';
+import { InputDateComponent } from './input-date/input-date.component';
 
 
 
@@ -35,6 +36,7 @@ import { TabViewModule } from 'primeng/tabview';
         ListSharedComponent,
         ModalComponent,
         InputNumberComponent,
+        InputDateComponent,
         PDropdownActionsComponent,
         MyAccountComponent,
         ChangePasswordComponent,
@@ -65,6 +67,7 @@ import { TabViewModule } from 'primeng/tabview';
     exports: [
         ListSharedComponent,
         ModalComponent,
+        InputDateComponent,
         InputNumberComponent,
         PDropdownActionsComponent,
         MyAccountComponent,

@@ -62,7 +62,7 @@ export class ExportacaoComponent implements OnDestroy {
                     this.pessoas = JSON.parse(JSON.stringify(res));
                     this.pessoas =  this.pessoas.map(x => {
                         x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yyyy') as unknown as Date;
-                        x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2', 'pt-BR') as unknown as number;
+                        x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2') as unknown as number;
                         x.cpf = this.mask.applyMask( x.cpf.toString().padStart(11, '0'), '000.000.000-00');
                         return x
                     });

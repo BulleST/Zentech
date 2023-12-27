@@ -41,16 +41,12 @@
                             <!-- Data Invoice -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                 <label for="data">Data Invoice: <span class="text-danger">*</span></label>
-                                <input type="datetime-local"
-                                       class="form-control"
-                                       name="data"
-                                       id="data"
-                                       #data="ngModel"
-                                       [(ngModel)]="objeto.invoice.data"
-                                       required>
-                                <div *ngIf="data.touched && data.errors">
-                                    <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
-                                </div>
+                                <app-input-date [valueInput]="objeto.invoice.data"
+                                    (valueChanges)="objeto.invoice.data = $event;"
+                                    [inputId]="'data'"
+                                    [showErrorMessage]="true"
+                                    [required]="true"
+                                    type="datetime-local"></app-input-date>
                             </div>
                             <!-- Moeda -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
@@ -296,17 +292,12 @@
                                 <!-- Data do Contrato -->
                                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Data do Contrato">
                                     <label for="data">Data do contrato: <span class="text-danger">*</span></label>
-                                    <input type="datetime-local"
-                                           class="form-control"
-                                           name="data"
-                                           id="data"
-                                           #data="ngModel"
-                                           [(ngModel)]="objeto.contrato.data"
-                                           required pattern="\S(.*\S)?"
-                                           (change)="objeto.contrato.data = data.value.trim();">
-                                    <div *ngIf="data.touched && data.errors">
-                                        <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
-                                    </div>
+                                    <app-input-date [valueInput]="objeto.contrato.data"
+                                        (valueChanges)="objeto.contrato.data = $event;"
+                                        [inputId]="'data'"
+                                        [showErrorMessage]="true"
+                                        [required]="true"
+                                        type="datetime-local"></app-input-date>
                                 </div>
                                 <!-- Nº do Contrato de Câmbio -->
                                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
@@ -472,16 +463,12 @@
                                 <!-- Liquidação Até -->
                                 <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
                                     <label for="dataLiquidacao">Liquidação Até: <span class="text-danger">*</span></label>
-                                    <input type="date"
-                                           class="form-control"
-                                           name="dataLiquidacao"
-                                           id="dataLiquidacao"
-                                           #dataLiquidacao="ngModel"
-                                           [(ngModel)]="objeto.contrato.dataLiquidacao"
-                                           required >
-                                    <div *ngIf="dataLiquidacao.touched && dataLiquidacao.errors">
-                                        <p class="text-danger" *ngIf="dataLiquidacao.errors['required']">Este campo é obrigatório.</p>
-                                    </div>
+                                    <app-input-date [valueInput]="objeto.contrato.dataLiquidacao"
+                                        (valueChanges)="objeto.contrato.dataLiquidacao = $event;"
+                                        [inputId]="'dataLiquidacao'"
+                                        [showErrorMessage]="true"
+                                        [required]="true"
+                                        type="date"></app-input-date>
                                 </div>
                             </div>
                             <div class="row">
