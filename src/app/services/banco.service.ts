@@ -22,10 +22,7 @@ export class BancoService {
 
     ) { }
 
-
-
-
-    getList() {
+    getList(loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<BancoList[]>(`${this.url}/banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({

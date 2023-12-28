@@ -36,7 +36,6 @@ export class ChangePasswordComponent {
         private modalService: ModalService,
         ) { 
 
-        console.log('change-password')
         var account =  this.accountService.accountSubject.subscribe(res => {
             if (!res)
                 this.voltar()

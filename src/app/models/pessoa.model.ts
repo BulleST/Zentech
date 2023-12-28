@@ -41,7 +41,8 @@ export class PessoaList {
     dataCadastro: Date = '' as unknown as Date;
     situacaoCPF: string = '';
     statusSaldo: string = '';
-    filterConcat?: string = '';
+    usuarioCadastroNome: string = '';
+    usuarioCadastroEmail: string = '';
 }
 
 export class PessoaFormulario {
@@ -173,6 +174,17 @@ export var pessoaColumns: Column[] = [
     {
         field: 'statusSaldo',
         header: 'Status Saldo',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: false,
+        filterShowMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
+        field: 'usuarioCadastroNome',
+        header: 'Cadastrado por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

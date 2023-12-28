@@ -43,7 +43,7 @@ export class UsuarioService {
         this.objeto.next(value);
     }
 
-    getList() {
+    getList(loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<Usuario[]>(`${this.url}/usuario`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({

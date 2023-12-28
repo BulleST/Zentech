@@ -7,6 +7,8 @@ import { Table } from '../utils/table';
 import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
 import { Response } from '../helpers/request-response.interface';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MaskApplierService } from 'ngx-mask';
 
 @Injectable({
     providedIn: 'root'
@@ -23,15 +25,15 @@ export class PessoaService {
     ) {
     }
 
-    getList() {
+    getList(loading: boolean = false) {
         this.table.loading.next(true);
-        return this.http.get<PessoaList[]>(`${this.url}/pessoa`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaList[]>(`${this.url}/pessoa`, { headers: new HttpHeaders({ 'loading': loading.toString() })})
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
-                    x.dataCadastro = new Date(x.dataCadastro)
+                    x.dataCadastro = new Date(x.dataCadastro);
                     return x;
-                })
+                });
                 this.list.next(Object.assign([], list));
                 return of(list);
             },
@@ -57,8 +59,8 @@ export class PessoaService {
     }
 
 
-    create(request: any[]) {
-        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, request);
+    create(request: Pessoa) {
+        return this.http.post<PessoaResponse>(`${this.url}/pessoa`, request);
     }
 
     delete(id: number) {
@@ -87,7 +89,6 @@ export class BRConsultaResponse  {
     SITUACAO: string = '';
     STATUS: string = '';
     ID_CONSULTA: string = '';
-    ERRO: string = '';
-    RETORNO: string = '';
-
+    ERRO?: string = '';
+    RETORNO?: string = '';
 }

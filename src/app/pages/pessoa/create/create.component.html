@@ -1,4 +1,3 @@
-
 <ng-template #icon>
     <fa-icon [icon]="faUser"></fa-icon>
 </ng-template>
@@ -6,17 +5,17 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="px-2">
         <div class="row">
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                <label for="nome">Nome Completo: <span class="text-danger">*</span> <small *ngIf="!liberaNome">(automático)</small> <small *ngIf="liberaNome">(manual)</small>  </label>
+                <label for="nome">Nome Completo: <span class="text-danger">*</span> <small *ngIf="!liberaNome">(automático)</small> <small *ngIf="liberaNome">(manual)</small> </label>
                 <input type="text"
-                        class="form-control"
-                        name="nome"
-                        id="nome"
-                        #nome="ngModel"
-                        [(ngModel)]="objeto.nome"
-                        required
-                        pattern="\S(.*\S)?"
-                        (change)="objeto.nome = nome.value.trim(); "
-                        [disabled]="!liberaNome">
+                       class="form-control"
+                       name="nome"
+                       id="nome"
+                       #nome="ngModel"
+                       [(ngModel)]="objeto.nome"
+                       required
+                       pattern="\S(.*\S)?"
+                       (change)="objeto.nome = nome.value.trim(); "
+                       [readonly]="!liberaNome">
                 <div *ngIf="nome.touched && nome.errors">
                     <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="nome.errors['pattern']">
@@ -29,19 +28,19 @@
             <div class="form-group col-lg-5 col-md-5 col-sm-6 col-12">
                 <label for="cpf">CPF: <span class="text-danger">*</span></label>
                 <input type="text"
-                        class="form-control"
-                        [class.form-control-loading]="loadingConsultaApi"
-                        name="cpf"
-                        id="cpf"
-                        #cpf="ngModel"
-                        [(ngModel)]="objeto.cpf"
-                        mask="000.000.000-00"
-                        placeholder="000.000.000-00"
-                        required
-                        pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
-                        (change)="validaCPF(cpf, cpf.value);"
-                        [readonly]="loadingConsultaApi">
-                <div *ngIf="cpf.touched && cpf.errors" >
+                       class="form-control"
+                       [class.form-control-loading]="loadingConsultaApi"
+                       name="cpf"
+                       id="cpf"
+                       #cpf="ngModel"
+                       [(ngModel)]="objeto.cpf"
+                       mask="000.000.000-00"
+                       placeholder="000.000.000-00"
+                       required
+                       pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                       (change)="validaCPF(cpf, cpf.value);"
+                       [readonly]="loadingConsultaApi">
+                <div *ngIf="cpf.touched && cpf.errors">
                     <p class="text-danger" *ngIf="cpf.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="cpf.errors['mask'] || cpf.errors['invalid']">CPF inválido.</p>
                     <p class="text-danger" *ngIf="cpf.errors['jaCadastrado']">CPF já cadastrado</p>
@@ -49,18 +48,14 @@
             </div>
             <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
                 <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
-                <input type="date"
-                        class="form-control"
-                        name="dataNascimento"
-                        id="dataNascimento"
-                        #dataNascimento="ngModel"
-                        [(ngModel)]="objeto.dataNascimento"
-                        [readonly]="cpf.errors || loadingConsultaApi"
-                        required>
-                <div *ngIf="dataNascimento.touched && dataNascimento.errors; else erroCPF" >
-                    <p class="text-danger" *ngIf="dataNascimento.errors['required']">Este campo é obrigatório.</p>
-                    <p class="text-danger" *ngIf="dataNascimento.errors['date']">Data inválida.</p>
-                </div>
+                <app-input-date [valueInput]="objeto.dataNascimento"
+                                (valueChanges)="objeto.dataNascimento = $event;"
+                                [inputId]="'dataNascimento'"
+                                [showErrorMessage]="true"
+                                [required]="true"
+                                [readonly]="cpf.errors != null || loadingConsultaApi"
+                                type="date"
+                                [max]="'hoje'"></app-input-date>
                 <ng-template #erroCPF>
                     <p class="text-danger" *ngIf="cpf.touched && (cpf.invalid || cpf.errors)">Preencha CPF corretamente.</p>
                 </ng-template>
@@ -70,10 +65,10 @@
                         class="btn btn-dark w-100"
                         [class.mt-4]="screen == 'lg' || screen == 'xl' || screen == 'md'"
                         [class.mt-2]="screen == 'sm'" style="height: 35px;"
-                        (click)="procuraPessoa(cpf, dataNascimento)"
-                        [disabled]="cpf.errors || !dataNascimento.value">
-                        <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
-                        <span>Consultar API</span>
+                        (click)="procuraPessoa(cpf)"
+                        [disabled]="cpf.errors || !this.objeto.dataNascimento">
+                    <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
+                    <span>Consultar API</span>
                 </button>
             </div>
         </div>
@@ -84,13 +79,13 @@
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                 <label for="nomeMae">Nome da Mãe:</label>
                 <input type="text"
-                        class="form-control"
-                        name="nomeMae"
-                        id="nomeMae"
-                        #nomeMae="ngModel"
-                        [(ngModel)]="objeto.nomeMae"
-                        pattern="\S(.*\S)?"
-                        (change)="objeto.nomeMae = nomeMae.value.trim(); ">
+                       class="form-control"
+                       name="nomeMae"
+                       id="nomeMae"
+                       #nomeMae="ngModel"
+                       [(ngModel)]="objeto.nomeMae"
+                       pattern="\S(.*\S)?"
+                       (change)="objeto.nomeMae = nomeMae.value.trim(); ">
                 <div *ngIf="nomeMae.touched && nomeMae.errors">
                     <p class="text-danger" *ngIf="nomeMae.errors['required']">Este campo é obrigatório.</p>
                 </div>
@@ -100,13 +95,13 @@
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                 <label for="email">E-mail: </label>
                 <input type="email"
-                        [email]="true"
-                        class="form-control"
-                        name="email"
-                        id="email"
-                        #email="ngModel"
-                        [(ngModel)]="objeto.email"
-                        [pattern]="emailPattern">
+                       [email]="true"
+                       class="form-control"
+                       name="email"
+                       id="email"
+                       #email="ngModel"
+                       [(ngModel)]="objeto.email"
+                       [pattern]="emailPattern">
                 <div *ngIf="email.touched && email.errors">
                     <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido.</p>
@@ -117,28 +112,29 @@
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                 <label for="email">Observações: </label>
                 <textarea class="form-control"
-                        name="obs"
-                        id="obs"
-                        #obs="ngModel"
-                        [(ngModel)]="objeto.obs"
-                        pattern="\S(.*\S)?"
-                        (change)="objeto.obs = obs.value.trim(); ">
+                          name="obs"
+                          id="obs"
+                          #obs="ngModel"
+                          [(ngModel)]="objeto.obs"
+                          pattern="\S(.*\S)?"
+                          (change)="objeto.obs = obs.value.trim(); ">
                 </textarea>
                 <div *ngIf="obs.touched && obs.errors">
                     <p class="text-danger" *ngIf="obs.errors">{{email.errors|json}}</p>
                 </div>
             </div>
         </div>
-        <div class="row mt-1 align-items-start">
-            <div *ngIf="erro || form.invalid" class="col-lg-10 col-md-8 col-12 mb-2 me-3">
-                <p class="text-danger" *ngIf="erro">{{erro }}</p>
-                <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+        <div class="row mt-1 mt-2">
+            <div class="d-flex align-items-start justify-content-end">
+                <div *ngIf="erro || form.invalid" class="col-lg-10 col-md-8 col-12 mb-2 me-3 px-0">
+                    <p class="text-danger" *ngIf="erro">{{erro }}</p>
+                    <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+                </div>
+                <button class="btn btn-primary ms-auto" [disabled]="form.invalid || loading || loadingConsultaApi">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                    <span>Salvar</span>
+                </button>
             </div>
-            <button class="btn btn-primary me-1 ms-auto col" [disabled]="form.invalid || loading || loadingConsultaApi">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                <span>Salvar</span>
-            </button>
         </div>
     </form>
 </ng-template>
-

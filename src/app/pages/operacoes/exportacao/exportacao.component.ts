@@ -1,6 +1,7 @@
-import { DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaList } from 'src/app/models/pessoa.model';
@@ -34,30 +35,42 @@ export class ExportacaoComponent implements OnDestroy {
         private toastr: ToastrService,
         private datePipe: DatePipe,
         private modalService: ModalService,
+        private mask: MaskApplierService,
+        private currencyPipe: CurrencyPipe,
     ) {
         var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
-       this.subscription.push(list)
+        this.subscription.push(list);
 
-        lastValueFrom(this.pessoaService.getList())
-            .then(res => {
-                this.loadingPessoa = false;
-                this.pessoas = res;
-            });
 
-            setTimeout(() => {
-                this.modal = this.modalService.addModal(this.modal, 'exportar operacao');
-            }, 200);
     }
 
-    ngAfterViewInit(): void {
-        this.modal.id =  0;
+    async ngAfterViewInit() {
+        this.modal.id = 0;
         this.modal.template = this.template;
-        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
+        this.modal.style = { 'max-width': '400px' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.icon = this.icon;
         this.modal.title = 'Exportar Operações';
         this.modal.routerBack = ['../'];
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+
+        if (this.pessoas.length == 0) {
+            this.loadingPessoa = true;
+            await lastValueFrom(this.pessoaService.getList(true))
+                .then(res => {
+                    this.loadingPessoa = false;
+                    this.pessoas = JSON.parse(JSON.stringify(res));
+                    this.pessoas =  this.pessoas.map(x => {
+                        x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yyyy') as unknown as Date;
+                        x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2') as unknown as number;
+                        x.cpf = this.mask.applyMask( x.cpf.toString().padStart(11, '0'), '000.000.000-00');
+                        return x
+                    });
+                });
+        }
+        setTimeout(() => {
+            this.modal = this.modalService.addModal(this.modal, 'exportar operacao');
+        }, 200);
 
     }
 
@@ -78,7 +91,7 @@ export class ExportacaoComponent implements OnDestroy {
             delete this.filtro.ate;
         }
         else if (this.datasFiltro == undefined) {
-             delete this.filtro.data;
+            delete this.filtro.data;
             delete this.filtro.de;
             delete this.filtro.ate;
         }
@@ -86,25 +99,7 @@ export class ExportacaoComponent implements OnDestroy {
 
     async exportar() {
         this.loading = true;
-       await lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
-        .then((res: any) => {
-            var blob = new Blob([res], { type: 'application/pdf' })
-            const data = window.URL.createObjectURL(blob);
-
-            var link = document.createElement('a');
-            link.href = data;
-            link.download = `Relatorio_Operacoes_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
-            // this is necessary as link.click() does not work on the latest firefox
-            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-
-            
-        })
-        .catch(res => {
-            this.toastr.error('Não foi possível extrair relatório.')
-            this.erro = 'Não foi possível extrair relatório.';
-            
-        });
+        await lastValueFrom(this.pessoaOperacaoService.exportacao(this.filtro))
         this.loading = false;
     }
 

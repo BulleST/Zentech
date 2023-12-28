@@ -57,10 +57,10 @@ export class ContratoService {
                     link.download = `Contrato_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                     // this is necessary as link.click() does not work on the latest firefox
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-///////////////////
-                    var url = URL.createObjectURL(res);
-                    window.open(url, '_blank');
-                    URL.revokeObjectURL(url);
+
+                    // var url = URL.createObjectURL(res);
+                    // window.open(url, '_blank');
+                    // URL.revokeObjectURL(url);
                 }
             }));
     }

@@ -59,7 +59,7 @@ export class FormComponent implements OnDestroy {
         private beneficiarioService: BeneficiarioService,
         private cepService: CepService,
         private bancoService: BancoService,
-        private paisesService: PaisesService
+        private paisesService: PaisesService,
     ) {
 
         lastValueFrom(this.bancoService.getList())
@@ -129,7 +129,6 @@ export class FormComponent implements OnDestroy {
 
    async preencheBanco() {
         this.loadingBanco = true;
-        console.log(this.objeto.banco_Id)
         if (this.objeto.banco_Id) {
             await lastValueFrom(this.bancoService.get(this.objeto.banco_Id))
             .then(res => {
@@ -141,7 +140,7 @@ export class FormComponent implements OnDestroy {
         }
         this.loadingBanco = false;
     }
-    
+
 
     paisChange() {
         this.executaCEP = this.objeto.pais_Id == 30;
@@ -245,7 +244,7 @@ export class FormComponent implements OnDestroy {
     }
 
 
-   
+
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');

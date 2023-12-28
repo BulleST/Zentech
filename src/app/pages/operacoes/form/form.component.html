@@ -11,14 +11,14 @@
     <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
       <div class="px-2">
         <div class="row">
-            <div class="form-group col-md-8 col-sm-8 col-12">
+            <div class="form-group col-md-8 col-sm-8 col-12" *ngIf="!isEditPage">
                 <label for="pessoa_Id">Pessoa: <span class="text-danger">*</span></label>
-                <p-dropdown [options]="pessoas"
+                <p-dropdown [options]="pessoas" 
                             [(ngModel)]="objeto.pessoa_Id"
                             [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
                             [showClear]="true"
                             [filter]="true"
-                            filterBy="nome, saldoAtual, cpf, situacaoCPF"
+                            [filterFields]="['nome', 'saldoAtual', 'cpf', 'situacaoCPF']"
                             #pessoa_Id="ngModel"
                             name="pessoa_Id"
                             inputId="pessoa_Id"
@@ -37,11 +37,11 @@
                             <tbody>
                                 <tr>
                                     <td class="pe-2">{{item.nome}}</td>
-                                    <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual | currency : 'BRL' : '' : '1.2'}}</strong></td>
+                                    <td class="pe-2">Saldo atual: <strong>{{item.saldoAtual }}</strong></td>
                                 </tr>
                                 <tr>
                                     <td class="pe-2">{{item.cpf}}</td>
-                                    <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF ?? 'INDEFINIDO'}}</strong></td>
+                                    <td class="pe-2">Situação CPF: <strong>{{item.situacaoCPF}}</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -50,6 +50,16 @@
                 <div *ngIf="pessoa_Id.touched && pessoa_Id.errors">
                     <p class="text-danger" *ngIf="pessoa_Id.errors['required']">Este campo é obrigatório.</p>
                 </div>
+            </div>
+            <div class="form-group col-md-8 col-sm-8 col-12" *ngIf="isEditPage">
+                <label for="pessoa">Pessoa: <span class="text-danger">*</span></label>
+                <input type="text"
+                    class="form-control"
+                    id="pessoa"
+                    name="pessoa"
+                    [value]="pessoaSelected?.nomeCliente ?? 'N/A'"
+                    readonly
+                    disabled>
             </div>
             <div class="form-group col-md-4 col-sm-4 col-sm-12">
                 <label for="num_Op">Nº Operação: <span class="text-danger">*</span></label>
@@ -67,18 +77,21 @@
 
         </div>
         <div class="row">
-            <div class="form-group col-md-4 col-sm-12">
+            <div class="form-group col-md-4 col-sm-12 " *ngIf="isEditPage">
                 <label for="data">Data: <span class="text-danger">*</span></label>
-                <input type="datetime-local"
+                <!-- <app-input-date [valueInput]="objeto.data"
+                    (valueChanges)="objeto.data = $event;"
+                    [inputId]="'data'"
+                    [showErrorMessage]="true"
+                    [required]="true"
+                    [readonly]="isEditPage"
+                    type="datetime-local"></app-input-date> -->
+                    <input type="text"
                         class="form-control"
                         name="data"
                         id="data"
-                        #data="ngModel"
-                        [(ngModel)]="objeto.data"
-                        required>
-                    <div *ngIf="data.touched && data.errors">
-                        <p class="text-danger" *ngIf="data.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+                        [value]="objeto.data | date : 'dd/MM/yyyy hh:mm'"
+                        disabled>
             </div>
             <div class="form-group col-md-4 col-sm-12">
                 <label for="valor">Valor: <span class="text-danger">*</span></label>

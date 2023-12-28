@@ -8,7 +8,6 @@ import { PessoaRoutingModule } from './pessoa.routing';
 import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
-import { ImportacaoComponent } from './importacao/importacao.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
@@ -30,14 +29,12 @@ import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-opera
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
 
-
 registerLocaleData(localePt);
 @NgModule({
     declarations: [
         PessoaComponent,
         ListComponent,
         CreateComponent,
-        ImportacaoComponent,
         DeleteComponent,
         DetailsComponent,
 

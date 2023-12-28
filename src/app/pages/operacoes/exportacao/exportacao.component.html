@@ -20,7 +20,7 @@
                                 [styleClass]="'form-control ' + (loadingPessoa ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [filter]="true"
-                                filterBy="nome, saldoAtual, cpf, situacaoCPF"
+                                [filterFields]="['nome', 'saldoAtual', 'cpf', 'situacaoCPF']"
                                 #pessoa_Id="ngModel"
                                 name="pessoa_Id"
                                 inputId="pessoa_Id"

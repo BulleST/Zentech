@@ -37,8 +37,6 @@ export class ListComponent {
 
         lastValueFrom(this.userService.getList());
 
-        console.log('oi')
-
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [

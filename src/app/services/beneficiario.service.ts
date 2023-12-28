@@ -25,10 +25,7 @@ export class BeneficiarioService {
 
     ) { }
 
-
-
-
-    getList() {
+    getList(loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({

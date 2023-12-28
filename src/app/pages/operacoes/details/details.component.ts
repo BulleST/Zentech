@@ -93,8 +93,9 @@ export class DetailsComponent implements OnDestroy {
     }
 
 
-    exportarPDF() {
+    async exportarPDF() {
         this.loading = true;
+        await lastValueFrom(this.pessoaOperacaoService.exportacaoOperacao(this.objeto.id));
       
         this.loading = false;
     }

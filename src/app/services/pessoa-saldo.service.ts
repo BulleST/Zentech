@@ -22,7 +22,7 @@ export class PessoaSaldoService {
     }
 
 
-    getList(pessoa_Id: number) {
+    getList(pessoa_Id: number, loading: boolean = false) {
         this.table.loading.next(true);
         return this.http.get<PessoaSaldo[]>(`${this.url}/pessoaSaldo/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({

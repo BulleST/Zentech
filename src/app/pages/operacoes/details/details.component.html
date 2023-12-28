@@ -44,7 +44,7 @@
                         class="form-control" 
                         id="valorOperacao" 
                         name="valorOperacao" 
-                        [value]="objetoList.valorOperacao" 
+                        [value]="objetoList.valorOperacao | currency : 'BRL' : '' : '1.0-2'" 
                         readonly>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                         class="form-control" 
                         id="limiteConcedido" 
                         name="limiteConcedido" 
-                        [value]="objetoList.limiteConcedido" 
+                        [value]="objetoList.limiteConcedido | currency : 'BRL' : '' : '1.0-2'" 
                         readonly>
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-sm-6 col-12">
@@ -64,7 +64,7 @@
                         class="form-control" 
                         id="limiteUtilizado" 
                         name="limiteUtilizado" 
-                        [value]="objetoList.limiteUtilizado" 
+                        [value]="objetoList.limiteUtilizado | currency : 'BRL' : '' : '1.0-2'" 
                         readonly>
                        
                 </div>
@@ -74,7 +74,7 @@
                             class="form-control" 
                             id="limiteAtual" 
                             name="limiteAtual" 
-                            [value]="objetoList.limiteAtual" 
+                            [value]="objetoList.limiteAtual | currency : 'BRL' : '' : '1.0-2'" 
                             readonly>
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
@@ -87,8 +87,8 @@
                             readonly>
                 </div>
             </div>
-            <div class="row px-1 mt-2">
-                <button class="btn btn-dark" (click)="exportarPDF()">
+            <div class="row px-1 my-2">
+                <button class="btn btn-dark" (click)="exportarPDF()" [disabled]="loading">
                     <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-down" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M3.5 10a.5.5 0 0 1-.5-.5v-8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 0 0 1h2A1.5 1.5 0 0 0 14 9.5v-8A1.5 1.5 0 0 0 12.5 0h-9A1.5 1.5 0 0 0 2 1.5v8A1.5 1.5 0 0 0 3.5 11h2a.5.5 0 0 0 0-1h-2z"/>

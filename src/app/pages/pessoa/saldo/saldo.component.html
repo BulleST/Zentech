@@ -48,9 +48,30 @@
     </ng-template>
     <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
         <tr>
-            <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
-                <input type="hidden" [value]="getCellData(item, col)" #text>
-                <p> {{text.value}} </p>
+            <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
+          
+                <div *ngSwitchCase="maskType.number">
+                    <p [class.text-danger]="item[col.field] < 0">
+                        {{item[col.field] | currency : 'BRL' : '' : col.decimal}}
+                    </p>
+                </div>
+                <div *ngSwitchCase="maskType.money">
+                    <p [class.text-danger]="item[col.field] < 0">
+                        {{item[col.field] | currency : 'BRL' : col.moeda : col.decimal}}
+                    </p>
+                </div>
+                <div *ngSwitchCase="maskType.percentage">
+                    <p [class.text-danger]="item[col.field] < 0">
+                        {{item[col.field] | currency : 'BRL' : '' : col.decimal}}%
+                    </p>
+                </div>
+
+                <div *ngSwitchDefault>
+                    <p >
+                        {{item[col.field]}}
+                    </p>
+                </div>
+
             </td>
             <td class="td-actions">
                 <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>

@@ -40,8 +40,7 @@ export class MyAccountComponent implements OnDestroy {
 
     ) {
 
-        console.log(this.activatedRoute.snapshot.data)
-        var account =  this.accountService.accountSubject.subscribe(res => {
+        var account = this.accountService.accountSubject.subscribe(res => {
             if (!res)
                 this.voltar()
             else {
@@ -59,7 +58,7 @@ export class MyAccountComponent implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        
+
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
@@ -86,14 +85,13 @@ export class MyAccountComponent implements OnDestroy {
             return;
         }
         lastValueFrom(this.accountService.updateAccount(this.objeto))
-        .then(res => {
-            this.voltar();
-            console.log(res);
-            this.loading = false;
-        })
-        .catch(res => {
-            this.erro = getError(res);
-            this.loading = false;
-        })
+            .then(res => {
+                this.voltar();
+                this.loading = false;
+            })
+            .catch(res => {
+                this.erro = getError(res);
+                this.loading = false;
+            })
     }
 }

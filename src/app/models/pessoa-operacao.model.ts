@@ -14,7 +14,8 @@ export class PessoaOperacaoList {
     limiteConcedido: number = 0;
     limiteUtilizado: number = 0;
     limiteAtual: number = 0;
-    cadastradaPor: string = '';
+    usuarioCadastroNome: string = '';
+    usuarioCadastroEmail: string = '';
 }
 
 export class PessoaOperacaoRequest {
@@ -108,7 +109,7 @@ export var pessoaOperacaoColumns: Column[] = [
         ]
     },
     {
-        field: 'cadastradaPor',
+        field: 'usuarioCadastroNome',
         header: 'Cadastrado Por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

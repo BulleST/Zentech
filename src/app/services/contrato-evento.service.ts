@@ -19,8 +19,8 @@ export class ContratoEventoService {
         private toastr: ToastrService,
 
     ) { }
-
-    getList() {
+    
+    getList(loading: boolean = false) {
         return this.http.get<ContratoEvento[]>(`${this.url}/contrato_Evento/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {

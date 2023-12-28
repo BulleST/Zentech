@@ -75,7 +75,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                 this.modal.routerBack = ['../../'];
 
                 this.isEditPage = true;
-                console.log(1)
                 lastValueFrom(this.instituicaoFinanceiraService.get(this.objeto.id))
                     .then(res => {
                         res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
@@ -86,7 +85,6 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                         }, 200);
                     })
                     .catch(res => {
-                        console.log(2, res)
                         this.voltar();
                     })
 

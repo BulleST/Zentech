@@ -22,7 +22,7 @@ export class InstituicaoFinanceiraService {
 
     ) { }
 
-    getList() {
+    getList(loading: boolean = false) {
       this.table.loading.next(true);
       return this.http.get<InstituicaoFinanceiraList[]>(`${this.url}/instituicaoFinanceira`, { headers: new HttpHeaders({ 'loading': 'false' })})
       .pipe(tap({

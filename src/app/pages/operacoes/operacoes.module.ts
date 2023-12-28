@@ -8,9 +8,8 @@ import { DeleteComponent } from './delete/delete.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { MaskPipe, NgxMaskModule } from 'ngx-mask';
+import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { ImportacaoComponent } from './importacao/importacao.component';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DetailsComponent } from './details/details.component';
@@ -23,7 +22,6 @@ import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arqu
         FormComponent,
         ListComponent,
         DeleteComponent,
-        ImportacaoComponent,
         ImportacaoArquivoComponent,
         DetailsComponent,
         ExportacaoComponent,
@@ -38,13 +36,6 @@ import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arqu
         SharedModule,
         TableModule,
         CalendarModule,
-    ],
-    providers: [
-        // CurrencyPipe,
-        // MaskPipe,
-        // DatePipe,
-        // { provide: LOCALE_ID, useValue: 'pt-BR' },
-        // { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },
     ]
 })
 export class OperacoesModule { }
