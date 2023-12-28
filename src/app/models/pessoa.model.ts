@@ -28,7 +28,8 @@ export class Pessoa {
     brConsulta_Erro: string = '';
     saldoAtual: number = 0;
     dataCadastro: Date = new Date;
-    cadastradoPor: string = '';
+    usuarioCadastroNome: string = '';
+    usuarioCadastroEmail: string = '';
     dataAtualizacaoExcel: Date = new Date;
     dataAtualizacaoBRConsulta: Date = new Date;
 }

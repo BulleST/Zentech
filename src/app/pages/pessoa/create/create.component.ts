@@ -99,7 +99,7 @@ export class CreateComponent implements OnDestroy {
         input.control.setErrors(null);
     }
 
-    procuraPessoa(cpf: NgModel) {
+    consultaPessoa(cpf: NgModel) {
         if (cpf.invalid || !this.objeto.dataNascimento) {
             return;
         }
@@ -107,6 +107,12 @@ export class CreateComponent implements OnDestroy {
         this.loadingConsultaApi = true;
         this.erro = '';
         this.liberaNome = false;
+        console.log(this.objeto.dataNascimento)
+
+
+        
+
+
 
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {

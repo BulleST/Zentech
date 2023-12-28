@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
-import { FormComponent as FormMoeda } from './../moeda/form/form.component';
 import { FormComponent as FormBanco } from './../banco/form/form.component';
 import { FormComponent as FormInstituicaoFinanceira } from './../instituicao-financeira/form/form.component';
 import { FormComponent as FormBeneficiario } from './../beneficiario/form/form.component';
+import { FormComponent as FormMoeda } from './../moeda/form/form.component';
 import { DeleteComponent as DeleteMoeda } from '../moeda/delete/delete.component';
 import { MyAccountRouter } from 'src/app/utils/my-account-router';
 

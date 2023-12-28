@@ -13,7 +13,7 @@
     </div>
     <div class="page__body">
         <div class="content">
-            <p-tabView  (activeIndexChange)="tabChanged($event)" [activeIndex]="activeIndex">
+            <p-tabView (activeIndexChange)="tabChanged($event)" [activeIndex]="activeIndex">
                 <p-tabPanel>
                     <ng-template pTemplate="header">
                         <fa-icon [icon]="faIdCard"></fa-icon>
@@ -24,257 +24,299 @@
                             <p>{{erroPessoa}}</p>
                         </div>
                         <div *ngIf="!erroPessoa">
-                            <div class="row">
-                                <div class="form-group col-xl-2"> <!-- Id -->
-                                    <label for="id" style="white-space: nowrap;">Id:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="id"
-                                           id="id"
-                                           [value]="pessoa.id ? pessoa.id :  'N/A'"
-                                           readonly>
+                            <form #form="ngForm">
+                                <!-- Dados Cadastrais -->
+                                <div class="row">
+                                    <div class="form-group col-xl-2"> <!-- Id -->
+                                        <label for="id" style="white-space: nowrap;">Id:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="id"
+                                               id="id"
+                                               [value]="objeto.id ? objeto.id :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-4"> <!-- Nome Completo-->
+                                        <label for="nome" style="white-space: nowrap;">Nome Completo:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="nome"
+                                               id="nome"
+                                               [value]="objeto.nome ? objeto.nome :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2"> <!-- CPF -->
+                                        <label for="cpf" style="white-space: nowrap;">CPF:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="cpf"
+                                               id="cpf"
+                                               #cpf="ngModel"
+                                               ngModel
+                                               [value]="objeto.cpf ? (objeto.cpf | mask : '000.000.000-00') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2"> <!-- Data de Nascimento -->
+                                        <label for="dataNascimento" style="white-space: nowrap;">Data de Nascimento:</label>
+                                        <app-input-date [valueInput]="objeto.dataNascimento"
+                                            (valueChanges)="objeto.dataNascimento = $event;"
+                                            [inputId]="'dataNascimento'"
+                                            [showErrorMessage]="true"
+                                            [required]="true"
+                                            [readonly]="loadingConsultaApi"
+                                            type="date"
+                                            [max]="'hoje'"></app-input-date>
+                                    </div>
+                                    <div class="form-group col-xl-2"><!-- Telefone -->
+                                        <label for="telefone" style="white-space: nowrap;">Telefone:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="telefone"
+                                               id="telefone"
+                                               #telefone="ngModel"
+                                               [(ngModel)]="objeto.telefone">
+                                    </div>
+                                    <div class="form-group col-xl-4"><!-- Nome da Mãe -->
+                                        <label for="nomeMae" style="white-space: nowrap;">Nome da Mãe:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="nomeMae"
+                                               id="nomeMae"
+                                               #nomeMae="ngModel"
+                                               [(ngModel)]="objeto.nomeMae">
+                                    </div>
+                                    <div class="form-group col-xl-2"> <!-- Data de Cadastro -->
+                                        <label for="dataCadastro" style="white-space: nowrap;">Data de Cadastro:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="dataCadastro"
+                                               id="dataCadastro"
+                                               [value]="objeto.dataCadastro ? (objeto.dataCadastro | date : 'dd/MM/yyyy') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2"><!-- Cadastrado Por -->
+                                        <label for="usuarioCadastroNome" style="white-space: nowrap;">Cadastrado Por:</label>
+                                        <input type="text"
+                                               class="form-control"
+                                               name="usuarioCadastroNome"
+                                               id="usuarioCadastroNome"
+                                               [value]="objeto.usuarioCadastroNome ? objeto.usuarioCadastroNome :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-4"> <!--Email-->
+                                        <label for="email" style="white-space: nowrap;">E-mail:</label>
+                                        <input type="email"
+                                               [email]="true"
+                                               class="form-control"
+                                               name="email"
+                                               id="email"
+                                               #email="ngModel"
+                                               [(ngModel)]="objeto.email"
+                                               [pattern]="emailPattern">
+                                        <div *ngIf="email.touched && email.errors">
+                                            <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-4"> <!-- Nome Completo-->
-                                    <label for="nome" style="white-space: nowrap;">Nome Completo:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="nome"
-                                           id="nome"
-                                           [value]="pessoa.nome ? pessoa.nome :  'N/A'"
-                                           readonly>
+                                <div class="row"><!--Observações-->
+                                    <div class="form-group col-12"><!--Observações-->
+                                        <label for="obs" style="white-space: nowrap;">Observações: </label>
+                                        <textarea class="form-control"
+                                                  name="obs"
+                                                  id="obs"
+                                                  #obs="ngModel"
+                                                  [(ngModel)]="objeto.obs"
+                                                  [placeholder]="!objeto.obs ? 'N/A' : ''"
+                                                  [rows]="objeto.obs ? 3 : 1">
+                                        </textarea>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-2"> <!-- CPF -->
-                                    <label for="cpf" style="white-space: nowrap;">CPF:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="cpf"
-                                           id="cpf"
-                                           [value]="pessoa.cpf ? (pessoa.cpf | mask : '000.000.000-00') : 'N/A'"
-                                           readonly>
+                                <div class="row">
+                                    <div class="form-group col-xl-1"><!--Situação CPF-->
+                                        <label for="situacao" style="white-space: nowrap;">Situação CPF: </label>
+                                        <input class="form-control"
+                                               name="situacao"
+                                               id="situacao"
+                                               [value]="objeto.situacao ? objeto.situacao :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-1"><!--Dígito-->
+                                        <label for="digito" style="white-space: nowrap;">Dígito: </label>
+                                        <input class="form-control"
+                                               name="digito"
+                                               id="digito"
+                                               [value]="objeto.digito ? objeto.digito :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-1"><!--Data Inscrição-->
+                                        <label for="dataInscricao" style="white-space: nowrap;">Data Inscrição: </label>
+                                        <input class="form-control"
+                                               name="dataInscricao"
+                                               id="dataInscricao"
+                                               [value]="objeto.dataInscricao ? (objeto.dataInscricao | date : 'dd/MM/yyyy') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-1"><!--Limite Disponível-->
+                                        <label for="saldoAtual" style="white-space: nowrap;">Limite Disponível: </label>
+                                        <input class="form-control"
+                                               name="saldoAtual"
+                                               id="saldoAtual"
+                                               [value]="(objeto.saldoAtual | currency : 'BRL' : '' : '1.2') "
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-1"><!--Limite Concedido-->
+                                        <label for="limiteConcedido" style="white-space: nowrap;">Limite Concedido: </label>
+                                        <input class="form-control"
+                                               name="limiteConcedido"
+                                               id="limiteConcedido"
+                                               [value]="limiteConcedido | currency : 'BRL' : '' : '1.2'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-1"><!--Limite Utilizado-->
+                                        <label for="limiteUtilizado" style="white-space: nowrap;">Limite Utilizado: </label>
+                                        <input class="form-control"
+                                               name="limiteUtilizado"
+                                               id="limiteUtilizado"
+                                               [value]="limiteUtilizado | currency : 'BRL' : '' : '1.2'"
+                                               readonly>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-2"> <!-- Data de Nascimento -->
-                                    <label for="dataNascimento" style="white-space: nowrap;">Data de Nascimento:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="dataNascimento"
-                                           id="dataNascimento"
-                                           [value]="pessoa.dataNascimento ? (pessoa.dataNascimento | date : 'dd/MM/yyyy') : 'N/A'"
-                                           readonly>
+                                <!-- Dados Excel -->
+                                <div class="row mt-2 mb-2 border-top pt-2">
+                                    <h6>Dados Excel</h6>
                                 </div>
-                                <div class="form-group col-xl-2"><!-- Telefone -->
-                                    <label for="telefone" style="white-space: nowrap;">Telefone:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="telefone"
-                                           id="telefone"
-                                           [value]="pessoa.telefone ? (pessoa.telefone  | mask : '(00) 9.0000-0000 || (11) 0000-0000 || 9.0000-0000 || 0000-0000') : 'N/A'"
-                                           readonly>
+                                <div class="row">
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-12"><!--Status-->
+                                        <label for="excel_Status" style="white-space: nowrap;">Status: </label>
+                                        <input class="form-control"
+                                               name="excel_Status"
+                                               id="excel_Status"
+                                               [value]="objeto.excel_Status ? objeto.excel_Status :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-12"><!--Id Num-->
+                                        <label for="excel_IdNum" style="white-space: nowrap;">Id Num: </label>
+                                        <input class="form-control"
+                                               name="excel_IdNum"
+                                               id="excel_IdNum"
+                                               [value]="objeto.excel_IdNum ? objeto.excel_IdNum :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-12"><!--Id Num-->
+                                        <label for="excel_Controle" style="white-space: nowrap;">Controle: </label>
+                                        <input class="form-control"
+                                               name="excel_Controle"
+                                               id="excel_Controle"
+                                               [value]="objeto.excel_Controle ? objeto.excel_Controle :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-6 col-12"><!--Data Captação-->
+                                        <label for="excel_Data_Cap" style="white-space: nowrap;">Data Captação: </label>
+                                        <input class="form-control"
+                                               name="excel_Data_Cap"
+                                               id="excel_Data_Cap"
+                                               [value]="objeto.excel_Data_Cap ? (objeto.excel_Data_Cap | date : 'dd/MM/yyyy') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-6 col-12"><!--Hora Captação-->
+                                        <label for="excel_Hora_Cap" style="white-space: nowrap;">Hora Captação: </label>
+                                        <input class="form-control"
+                                               name="excel_Hora_Cap"
+                                               id="excel_Hora_Cap"
+                                               [value]="objeto.excel_Hora_Cap ? (objeto.excel_Hora_Cap | date : 'HH:mm') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12"><!--Erro-->
+                                        <label for="excel_Erro" style="white-space: nowrap;">Erro: </label>
+                                        <input class="form-control"
+                                               name="excel_Erro"
+                                               id="excel_Erro"
+                                               [value]="objeto.excel_Erro ? objeto.excel_Erro :  'N/A'"
+                                               readonly>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-4"><!-- Nome da Mãe -->
-                                    <label for="nomeMae" style="white-space: nowrap;">Nome da Mãe:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="nomeMae"
-                                           id="nomeMae"
-                                           [value]="pessoa.nomeMae ? pessoa.nomeMae :  'N/A'"
-                                           readonly>
+                                <!-- Dados BR Consulta -->
+                                <div class="row mt-2 mb-2 border-top pt-2">
+                                    <div class="d-flex align-items-center">
+                                        <h6>Dados BR Consulta</h6>
+                                        <button type="button" class="btn btn-dark btn-smaller ms-auto" (click)="consultaPessoa()" [disabled]="loading || loadingConsultaApi">
+                                            <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
+                                            <span *ngIf="objeto.brConsulta_Id_Consulta">Consultar novamente</span>
+                                            <span *ngIf="!objeto.brConsulta_Id_Consulta">Consultar pessoa</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-2"> <!-- Data de Cadastro -->
-                                    <label for="dataCadastro" style="white-space: nowrap;">Data de Cadastro:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="dataCadastro"
-                                           id="dataCadastro"
-                                           [value]="pessoa.dataCadastro ? (pessoa.dataCadastro | date : 'dd/MM/yyyy') : 'N/A'"
-                                           readonly>
+                                <div class="row">
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"><!--Data da Consulta-->
+                                        <label for="dataAtualizacaoBRConsulta" style="white-space: nowrap;">Data da Consulta: </label>
+                                        <input class="form-control"
+                                               name="dataAtualizacaoBRConsulta"
+                                               id="dataAtualizacaoBRConsulta"
+                                               [value]="objeto.dataAtualizacaoBRConsulta ? (objeto.dataAtualizacaoBRConsulta | date : 'dd/MM/yyyy hh:mm') :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-6 col-lg-6 col-md-8 col-sm-8 col-12"><!--Erro-->
+                                        <label for="brConsulta_Erro" style="white-space: nowrap;">Erro: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Erro"
+                                               id="brConsulta_Erro"
+                                               [value]="objeto.brConsulta_Erro ? objeto.brConsulta_Erro :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"><!--Id Consulta-->
+                                        <label for="brConsulta_Id_Consulta" style="white-space: nowrap;">Id Consulta: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Id_Consulta"
+                                               id="brConsulta_Id_Consulta"
+                                               [value]="objeto.brConsulta_Id_Consulta ? objeto.brConsulta_Id_Consulta :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"><!--Status-->
+                                        <label for="brConsulta_Status" style="white-space: nowrap;">Status: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Status"
+                                               id="brConsulta_Status"
+                                               [value]="objeto.brConsulta_Status ? objeto.brConsulta_Status :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"><!--Controle-->
+                                        <label for="brConsulta_Controle" style="white-space: nowrap;">Controle: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Controle"
+                                               id="brConsulta_Controle"
+                                               [value]="objeto.brConsulta_Controle ? objeto.brConsulta_Controle :  'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"><!--Data Captação-->
+                                        <label for="brConsulta_Data_Cap" style="white-space: nowrap;">Data Captação: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Data_Cap"
+                                               id="brConsulta_Data_Cap"
+                                               [value]="objeto.brConsulta_Data_Cap ? (objeto.brConsulta_Data_Cap | date : 'dd/MM/yyyy') : 'N/A'"
+                                               readonly>
+                                    </div>
+                                    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"><!--Hora Captação-->
+                                        <label for="brConsulta_Hora_Cap" style="white-space: nowrap;">Hora Captação: </label>
+                                        <input class="form-control"
+                                               name="brConsulta_Hora_Cap"
+                                               id="brConsulta_Hora_Cap"
+                                               [value]="objeto.brConsulta_Hora_Cap ? (objeto.brConsulta_Hora_Cap | date : 'HH:mm') : 'N/A'"
+                                               readonly>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-2"><!-- Cadastrado Por -->
-                                    <label for="cadastradoPor" style="white-space: nowrap;">Cadastrado Por:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="cadastradoPor"
-                                           id="cadastradoPor"
-                                           [value]="pessoa.cadastradoPor ? pessoa.cadastradoPor :  'N/A'"
-                                           readonly>
+                                <div class="row mt-1 mt-2">
+                                    <div class="d-flex align-items-start justify-content-end">
+                                        <div *ngIf="erro || form.invalid" class="col-lg-10 col-md-8 col-12 mb-2 me-3 px-0">
+                                            <p class="text-danger" *ngIf="erro">{{erro }}</p>
+                                            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
+                                        </div>
+                                        <button class="btn btn-primary ms-auto" [disabled]="form.invalid || loading || loadingConsultaApi" (click)="send()">
+                                            <span *ngIf="loading || loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
+                                            <span>Salvar alterações</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-xl-4"> <!--Email-->
-                                    <label for="email" style="white-space: nowrap;">E-mail:</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           name="email"
-                                           id="email"
-                                           [value]="pessoa.email ? pessoa.email :  'N/A'"
-                                           readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-12"><!--Observações-->
-                                    <label for="obs" style="white-space: nowrap;">Observações: </label>
-                                    <textarea class="form-control"
-                                              name="obs"
-                                              id="obs"
-                                              [value]="pessoa.obs ? pessoa.obs :  'N/A'"
-                                              readonly
-                                              [rows]="pessoa.obs ? 2 : 1">
-                    </textarea>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xl-1"><!--Situação CPF-->
-                                    <label for="situacao" style="white-space: nowrap;">Situação CPF: </label>
-                                    <input class="form-control"
-                                           name="situacao"
-                                           id="situacao"
-                                           [value]="pessoa.situacao ? pessoa.situacao :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Dígito-->
-                                    <label for="digito" style="white-space: nowrap;">Dígito: </label>
-                                    <input class="form-control"
-                                           name="digito"
-                                           id="digito"
-                                           [value]="pessoa.digito ? pessoa.digito :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Data Inscrição-->
-                                    <label for="dataInscricao" style="white-space: nowrap;">Data Inscrição: </label>
-                                    <input class="form-control"
-                                           name="dataInscricao"
-                                           id="dataInscricao"
-                                           [value]="pessoa.dataInscricao ? (pessoa.dataInscricao | date : 'dd/MM/yyyy') : 'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Limite Disponível-->
-                                    <label for="saldoAtual" style="white-space: nowrap;">Limite Disponível: </label>
-                                    <input class="form-control"
-                                           name="saldoAtual"
-                                           id="saldoAtual"
-                                           [value]="(pessoa.saldoAtual | currency : 'BRL' : '' : '1.2') "
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Limite Concedido-->
-                                    <label for="limiteConcedido" style="white-space: nowrap;">Limite Concedido: </label>
-                                    <input class="form-control"
-                                           name="limiteConcedido"
-                                           id="limiteConcedido"
-                                           [value]="limiteConcedido | currency : 'BRL' : '' : '1.2'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Limite Utilizado-->
-                                    <label for="limiteUtilizado" style="white-space: nowrap;">Limite Utilizado: </label>
-                                    <input class="form-control"
-                                           name="limiteUtilizado"
-                                           id="limiteUtilizado"
-                                           [value]="limiteUtilizado | currency : 'BRL' : '' : '1.2'"
-                                           readonly>
-                                </div>
-                            </div>
-                            <div class="row mt-2 mb-2 border-top pt-2">
-                                <h6>Dados Excel</h6>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xl-1"><!--Status-->
-                                    <label for="excel_Status" style="white-space: nowrap;">Status: </label>
-                                    <input class="form-control"
-                                           name="excel_Status"
-                                           id="excel_Status"
-                                           [value]="pessoa.excel_Status ? pessoa.excel_Status :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Id Num-->
-                                    <label for="excel_IdNum" style="white-space: nowrap;">Id Num: </label>
-                                    <input class="form-control"
-                                           name="excel_IdNum"
-                                           id="excel_IdNum"
-                                           [value]="pessoa.excel_IdNum ? pessoa.excel_IdNum :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Id Num-->
-                                    <label for="excel_Controle" style="white-space: nowrap;">Controle: </label>
-                                    <input class="form-control"
-                                           name="excel_Controle"
-                                           id="excel_Controle"
-                                           [value]="pessoa.excel_Controle ? pessoa.excel_Controle :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Data Captação-->
-                                    <label for="excel_Data_Cap" style="white-space: nowrap;">Data Captação: </label>
-                                    <input class="form-control"
-                                           name="excel_Data_Cap"
-                                           id="excel_Data_Cap"
-                                           [value]="pessoa.excel_Data_Cap ? (pessoa.excel_Data_Cap | date : 'dd/MM/yyyy') : 'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Hora Captação-->
-                                    <label for="excel_Hora_Cap" style="white-space: nowrap;">Hora Captação: </label>
-                                    <input class="form-control"
-                                           name="excel_Hora_Cap"
-                                           id="excel_Hora_Cap"
-                                           [value]="pessoa.excel_Hora_Cap ? (pessoa.excel_Hora_Cap | date : 'HH:mm') : 'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-2"><!--Erro-->
-                                    <label for="excel_Erro" style="white-space: nowrap;">Erro: </label>
-                                    <input class="form-control"
-                                           name="excel_Erro"
-                                           id="excel_Erro"
-                                           [value]="pessoa.excel_Erro ? pessoa.excel_Erro :  'N/A'"
-                                           readonly>
-                                </div>
-                            </div>
-                            <div class="row mt-2 mb-2 border-top pt-2">
-                                <h6>Dados BR Consulta</h6>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-xl-1"><!--Status-->
-                                    <label for="brConsulta_Status" style="white-space: nowrap;">Status: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Status"
-                                           id="brConsulta_Status"
-                                           [value]="pessoa.brConsulta_Status ? pessoa.brConsulta_Status :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Id Consulta-->
-                                    <label for="brConsulta_Id_Consulta" style="white-space: nowrap;">Id Consulta: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Id_Consulta"
-                                           id="brConsulta_Id_Consulta"
-                                           [value]="pessoa.brConsulta_Id_Consulta ? pessoa.brConsulta_Id_Consulta :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Controle-->
-                                    <label for="brConsulta_Controle" style="white-space: nowrap;">Controle: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Controle"
-                                           id="brConsulta_Controle"
-                                           [value]="pessoa.brConsulta_Controle ? pessoa.brConsulta_Controle :  'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Data Captação-->
-                                    <label for="brConsulta_Data_Cap" style="white-space: nowrap;">Data Captação: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Data_Cap"
-                                           id="brConsulta_Data_Cap"
-                                           [value]="pessoa.brConsulta_Data_Cap ? (pessoa.brConsulta_Data_Cap | date : 'dd/MM/yyyy') : 'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-1"><!--Hora Captação-->
-                                    <label for="brConsulta_Hora_Cap" style="white-space: nowrap;">Hora Captação: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Hora_Cap"
-                                           id="brConsulta_Hora_Cap"
-                                           [value]="pessoa.brConsulta_Hora_Cap ? (pessoa.brConsulta_Hora_Cap | date : 'HH:mm') : 'N/A'"
-                                           readonly>
-                                </div>
-                                <div class="form-group col-xl-2"><!--Erro-->
-                                    <label for="brConsulta_Erro" style="white-space: nowrap;">Erro: </label>
-                                    <input class="form-control"
-                                           name="brConsulta_Erro"
-                                           id="brConsulta_Erro"
-                                           [value]="pessoa.brConsulta_Erro ? pessoa.brConsulta_Erro :  'N/A'"
-                                           readonly>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </p-tabPanel>
@@ -288,10 +330,10 @@
                             <p>{{erroSaldo}}</p>
                         </div>
                         <app-saldo *ngIf="!erroSaldo"
-                            [saldos]="saldos"
-                            [loading]="loadingSaldo"
-                            [limiteConcedido]="limiteConcedido"
-                            [lastIdDelete]="lastIdDeleteSaldo"></app-saldo>
+                                   [saldos]="saldos"
+                                   [loading]="loadingSaldo"
+                                   [limiteConcedido]="limiteConcedido"
+                                   [lastIdDelete]="lastIdDeleteSaldo"></app-saldo>
                     </div>
                 </p-tabPanel>
                 <p-tabPanel>
@@ -304,9 +346,9 @@
                             <p>{{erroOperacoes}}</p>
                         </div>
                         <app-operacao *ngIf="!erroOperacoes"
-                            [list]="operacoes"
-                            [loading]="loadingOperacoes"
-                            [limiteUtilizado]="limiteUtilizado"></app-operacao>
+                                      [list]="operacoes"
+                                      [loading]="loadingOperacoes"
+                                      [limiteUtilizado]="limiteUtilizado"></app-operacao>
                     </div>
                 </p-tabPanel>
             </p-tabView>

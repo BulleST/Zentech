@@ -89,9 +89,6 @@ export class FormComponent implements OnDestroy {
     eventos: ContratoEvento[] = []
     loadingEvento = true;
 
-    paises: Paises[] = []
-    loadingPais = true;
-
     beneficiarios: BeneficiarioList[] = [];
     loadingBeneficiarios = false;
     beneficiarioSelected?: BeneficiarioList = new BeneficiarioList;
@@ -102,6 +99,9 @@ export class FormComponent implements OnDestroy {
     moedas: Moeda[] = [];
     loadingMoedas = false;
 
+    paises: Paises[] = []
+    loadingPais = true;
+
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -109,25 +109,18 @@ export class FormComponent implements OnDestroy {
         private datepipe: DatePipe,
         private toastr: ToastrService,
         private moedaService: MoedaService,
+        private paisesService: PaisesService,
         private beneficiarioService: BeneficiarioService,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private invoiceService: InvoiceService,
         private contratoService: ContratoService,
         private contratoTipoService: ContratoTipoService,
         private contratoEventoService: ContratoEventoService,
-        private paisesService: PaisesService,
         private modalService: ModalService,
         private loadingService: LoadingService,
         private router: Router,
         private datePipe: DatePipe,
     ) {
-        lastValueFrom(this.moedaService.getList())
-            .then(res => this.moedas = res)
-            .finally(() => this.loadingMoedas = false);
-
-        var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
-        this.subscription.push(moedas);
-
         lastValueFrom(this.beneficiarioService.getList())
             .then(res => this.beneficiarios = res)
             .finally(() => this.loadingBeneficiarios = false);
@@ -149,6 +142,13 @@ export class FormComponent implements OnDestroy {
         lastValueFrom(this.contratoEventoService.getList())
             .then(res => this.eventos = res)
             .finally(() => this.loadingEvento = false);
+
+            lastValueFrom(this.moedaService.getList())
+            .then(res => this.moedas = res)
+            .finally(() => this.loadingMoedas = false);
+
+        var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
+        this.subscription.push(moedas);
 
         lastValueFrom(this.paisesService.getList())
             .then(res => this.paises = res)
@@ -271,16 +271,27 @@ export class FormComponent implements OnDestroy {
         this.loadingService.message.next('');
     }
 
-    async filesDownload() {
+    // async kitDownload() {
+    //     if (this.objeto.invoice.id == 0) {
+    //         this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
+    //         return
+    //     }
+
+    //     this.loading = true;
+    //     await this.invoiceDownload();
+    //     await this.contratoDownload();
+    //     await this.swiftDownload();
+
+    //     this.loading = false;
+    // }
+    async kitDownload() {
         if (this.objeto.invoice.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
             return
         }
 
         this.loading = true;
-        await this.invoiceDownload();
-        await this.contratoDownload();
-        await this.swiftDownload();
+        await lastValueFrom(this.invoiceService.kitZip(this.objeto.invoice.id));
 
         this.loading = false;
     }

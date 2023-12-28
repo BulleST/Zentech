@@ -610,7 +610,7 @@
                 <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para salvar.</p>
                 <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
             </div>
-            <button (click)="filesDownload()" class="btn btn-dark me-1 ms-auto" *ngIf="isEditPage" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
+            <button (click)="kitDownload()" class="btn btn-dark me-1 ms-auto" *ngIf="isEditPage" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                 <span>Baixar Kit</span>
             </button>

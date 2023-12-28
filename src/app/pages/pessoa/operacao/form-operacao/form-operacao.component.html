@@ -9,71 +9,142 @@
 </ng-template>
 <ng-template #template>
     <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
-      <div class="px-2">
-        <div class="row">
-            <div class="form-group col-md-6 col-sm-6 col-12" *ngIf="isEditPage">
-                <label for="data">Data: <span class="text-danger">*</span></label>
-                <!-- <app-input-date [valueInput]="objeto.data"
-                    (valueChanges)="objeto.data = $event;"
-                    [inputId]="'data'"
-                    [showErrorMessage]="true"
-                    [required]="true"
-                    [readonly]="isEditPage"
-                    type="datetime-local"></app-input-date> -->
+        <div class="px-2">
+            <div class="row">
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 " *ngIf="isEditPage"> <!-- Data de cadastro no sistema -->
+                    <label for="dataCadastro">Data de cadastro no sistema: <span class="text-danger">*</span></label>
                     <input type="text"
-                        class="form-control"
-                        name="data"
-                        id="data"
-                        [value]="objeto.data | date : 'dd/MM/yyyy hh:mm'"
-                        disabled>
-            </div>
-            <div class="form-group col-md-6 col-sm-6 col-12">
-                <label for="num_Op">Nº Operação: <span class="text-danger">*</span></label>
-                <input type="text"
-                        class="form-control"
-                        name="num_Op"
-                        id="num_Op"
-                        mask="0000"
-                        placeholder="0000"
-                        #num_Op="ngModel"
-                        [(ngModel)]="objeto.num_Op"
-                        required>
-                    <div *ngIf="num_Op.touched && num_Op.errors">
-                        <p class="text-danger" *ngIf="num_Op.errors['required']">Este campo é obrigatório.</p>
+                           class="form-control"
+                           name="dataCadastro"
+                           id="dataCadastro"
+                           [value]="objeto.dataCadastro | date : 'dd/MM/yyyy hh:mm'"
+                           disabled>
+                </div>
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12"> <!-- Data da Transação -->
+                    <label for="dataTransacao">Data da Transação: <span class="text-danger">*</span></label>
+                    <app-input-date [valueInput]="objeto.dataTransacao"
+                                    (valueChanges)="objeto.dataTransacao = $event;"
+                                    [inputId]="'dataTransacao'"
+                                    [showErrorMessage]="true"
+                                    [required]="true"
+                                    type="date"></app-input-date>
+                </div>
+                <!-- Valor -->
+                <div [classList]="isEditPage ? 'form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12' : 'form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12' "> 
+                    <label for="valor">Valor: <span class="text-danger">*</span></label>
+                    <app-input-number [valueInput]="objeto.valor"
+                                      (valueChanges)="objeto.valor = $event;"
+                                      [inputId]="'valor'"
+                                      [mask]="'separator.2'"
+                                      [showErrorMessage]="true"
+                                      [allowNegativeNumbers]="false"
+                                      [required]="true"
+                                      [autoReplaceValue]="false"></app-input-number>
+                </div>
+                 <!-- Status -->
+                <div [classList]="isEditPage ? 'form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12' : 'form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12' ">
+                    <label for="operacao_Status_Id">Status: <span class="text-danger">*</span></label>
+                    <select class="form-control"
+                            [class.form-control-loading]="loadingStatus"
+                            name="operacao_Status_Id"
+                            id="operacao_Status_Id"
+                            #operacao_Status_Id="ngModel"
+                            [(ngModel)]="objeto.operacao_Status_Id"
+                            required>
+                        <option [ngValue]="undefined">Selecione</option>
+                        <option [ngValue]="item.id" *ngFor="let item of status">{{item.name}}</option>
+                    </select>
+                    <div *ngIf="operacao_Status_Id.touched && operacao_Status_Id.errors">
+                        <p class="text-danger" *ngIf="operacao_Status_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
+                </div>
             </div>
-            <div class="form-group col-md-6 col-sm-6 col-12">
-                <label for="valor">Valor: <span class="text-danger">*</span></label>
-                <app-input-number [valueInput]="objeto.valor"
-                    (valueChanges)="objeto.valor = $event;"
-                    [inputId]="'valor'"
-                    [mask]="'separator.2'"
-                    [showErrorMessage]="true"
-                    [allowNegativeNumbers]="false"
-                    [required]="true"
-                    [autoReplaceValue]="false"></app-input-number>
-            </div>
-            <div class="form-group col-md-6 col-sm-6 col-12">
-                <label for="operacao_Status_Id">Status: <span class="text-danger">*</span></label>
-                <select class="form-control"
-                        [class.form-control-loading]="loadingStatus"
-                        name="operacao_Status_Id"
-                        id="operacao_Status_Id"
-                        #operacao_Status_Id="ngModel"
-                        [(ngModel)]="objeto.operacao_Status_Id"
-                        required>
-                    <option [ngValue]="undefined">Selecione</option>
-                    <option [ngValue]="item.id" *ngFor="let item of status">{{item.name}}</option>
-                </select>
-                <div *ngIf="operacao_Status_Id.touched && operacao_Status_Id.errors">
-                    <p class="text-danger" *ngIf="operacao_Status_Id.errors['required']">Este campo é obrigatório.</p>
+            <div class="row">
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Nº Operação -->
+                    <label for="num_Op">Nº Operação: </label>
+                    <input class="form-control"
+                           name="num_Op"
+                           id="num_Op"
+                           #num_Op="ngModel"
+                           [(ngModel)]="objeto.num_Op">
+                    <div *ngIf="num_Op.touched && num_Op.errors">
+                        <p class="text-danger" *ngIf="num_Op.errors['mask']">Valor inválido.</p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Tipo de Transação -->
+                    <label for="tipoTransacao">Tipo de Transação: </label>
+                    <input class="form-control"
+                           name="tipoTransacao"
+                           id="tipoTransacao"
+                           #tipoTransacao="ngModel"
+                           [(ngModel)]="objeto.tipoTransacao">
+                </div>
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Forma de Pagamento -->
+                    <label for="formaPagamento">Forma de Pagamento: </label>
+                    <input class="form-control"
+                           name="formaPagamento"
+                           id="formaPagamento"
+                           #formaPagamento="ngModel"
+                           [(ngModel)]="objeto.formaPagamento">
+                </div>
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Moeda -->
+                    <label for="moeda">Moeda: </label>
+                    <p-dropdown [options]="moedas"
+                                [(ngModel)]="objeto.moeda"
+                                #moeda="ngModel"
+                                name="moeda"
+                                inputId="moeda"
+                                [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
+                                [showClear]="true"
+                                [filter]="true"
+                                [filterFields]="['nome', 'codigo', 'simbolo']"
+                                optionLabel="codigo"
+                                optionValue="codigo"
+                                placeholder="Selecione uma moeda"
+                                [showClear]="true">
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex align-items-center w-100" [title]="item.nome">
+                                    <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
+                                    <span class="text-ellipsis">{{item.nome}}</span>
+                                    <span class="flag flag-info px-2 ms-auto">{{item.simbolo}}</span>
+                                </div>
+                                <div class="ms-2">
+                                    <a class="py-1 px-1 text-dark" (click)="moedaEditar(item)" title="Editar"><fa-icon [icon]="faEdit"></fa-icon></a>
+                                    <a class="py-1 px-1 text-dark" (click)="moedaExcluir(item.id)" title="Editar"><fa-icon [icon]="faTrash"></fa-icon></a>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./moeda']">adicionar</a>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <div *ngIf="moeda.touched && moeda.errors">
+                        <p class="text-danger" *ngIf="moeda.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Nome do Comprador -->
+                    <label for="nomeComprador">Nome do Comprador: </label>
+                    <input class="form-control"
+                           name="nomeComprador"
+                           id="nomeComprador"
+                           #nomeComprador="ngModel"
+                           [(ngModel)]="objeto.nomeComprador">
+                </div>
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- País do Comprador -->
+                    <label for="paisComprador">País do Comprador: </label>
+                    <input class="form-control"
+                           name="paisComprador"
+                           id="paisComprador"
+                           #paisComprador="ngModel"
+                           [(ngModel)]="objeto.paisComprador">
                 </div>
             </div>
         </div>
-      </div>
-        <div class="d-flex align-items-start flex-wrap p-0 mt-1">
-            <div *ngIf="erro || form.invalid" class="m-0 me-3">
-                <p class="text-danger" *ngIf="erro">{{erro}}</p>
+        <div class="d-flex align-items-start flex-wrap p-0 my-2">
+            <div *ngIf="erro || form.invalid" class="me-3">
+                <p class="text-danger" *ngIf="erro" [innerHTML]="erro"></p>
                 <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
             </div>
             <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
@@ -84,3 +155,4 @@
     </form>
 </ng-template>
 
+<router-outlet></router-outlet>
