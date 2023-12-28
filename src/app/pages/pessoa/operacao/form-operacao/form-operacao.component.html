@@ -39,7 +39,9 @@
                                       [showErrorMessage]="true"
                                       [allowNegativeNumbers]="false"
                                       [required]="true"
-                                      [autoReplaceValue]="false"></app-input-number>
+                                      [autoReplaceValue]="false"
+                                      [min]="0.1"
+                                      [max]="999999999" ></app-input-number>
                 </div>
                  <!-- Status -->
                 <div [classList]="isEditPage ? 'form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12' : 'form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12' ">
@@ -66,7 +68,8 @@
                            name="num_Op"
                            id="num_Op"
                            #num_Op="ngModel"
-                           [(ngModel)]="objeto.num_Op">
+                           [(ngModel)]="objeto.num_Op"
+                           mask="0000">
                     <div *ngIf="num_Op.touched && num_Op.errors">
                         <p class="text-danger" *ngIf="num_Op.errors['mask']">Valor inválido.</p>
                     </div>

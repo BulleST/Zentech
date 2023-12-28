@@ -29,7 +29,7 @@
 <div *ngIf="input.touched && input.errors && showErrorMessage">
     <p class="text-danger" *ngIf="input.errors['required']">Este campo é obrigatório.</p>
     <p class="text-danger" *ngIf="input.errors['mask']">Valor inválido.</p>
-    <p class="text-danger" *ngIf="input.errors['min']">Valor mínimo é {{min}}.</p>
-    <p class="text-danger" *ngIf="input.errors['max']">Valor máximo é {{max}}.</p>
+    <p class="text-danger" *ngIf="input.errors['min']">Valor mínimo é {{min | currency : 'BRL' : '' : '1.0-2'}}.</p>
+    <p class="text-danger" *ngIf="input.errors['max']">Valor máximo é {{max | currency : 'BRL' : '' : '1.0-2'}}.</p>
     <p class="text-danger" *ngIf="input.errors['message']">{{input.errors['message']}}</p>
 </div>

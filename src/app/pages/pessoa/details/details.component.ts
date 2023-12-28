@@ -90,8 +90,9 @@ export class DetailsComponent implements OnDestroy {
                 this.objeto.id = this.crypto.decrypt(p['pessoa_id']);
                 lastValueFrom(this.pessoaService.get(this.objeto.id))
                     .then(res => {
+                        res.cpf = res.cpf.toString().padStart(11, '0') as unknown as number;
+                        console.log(res)
                         this.objeto = res;
-                        this.objeto.cpf = this.objeto.cpf.toString().padStart(11, '0') as unknown as number;
                     })
                     .catch(res => {
                         this.erroPessoa = getError(res);
@@ -155,25 +156,41 @@ export class DetailsComponent implements OnDestroy {
 
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
+                console.log('retorno api', res)
                 this.loadingConsultaApi = false;
-                console.log(res)
-                console.log(typeof(res))
                 if (typeof (res) == 'object') {
-                    console.log('if')
                     var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
-                    console.log('if 2')
                     if (obj.ERRO && obj.ERRO != '') {
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
                         this.erro = obj.ERRO;
                         this.toastr.error(obj.ERRO)
                     } else if (!obj.ERRO) {
-                        console.log('else if 2')
-                        this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
-                        this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        try {
+                            this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Nascimento. (${obj.DATA_NASC}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Nascimento.')
+                        }
+                        try {
+                            this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Captação. (${obj.DATA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Captação.')
+                        }
+                        try {
                         this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Hora de Captação. (${obj.HORA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Hora de Captação.')
+                        }
+                        try {
                         this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Inscrição. (${obj.DATA_INSCRICAO}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Inscrição.')
+                        }
                         this.objeto.nome = obj.NOME;
                         this.objeto.digito = obj.DIGITO;
                         this.objeto.brConsulta_Controle = obj.CONTROLE;
@@ -182,14 +199,14 @@ export class DetailsComponent implements OnDestroy {
                         this.objeto.brConsulta_Status = obj.STATUS;
                     }
                 } else {
-                    console.log('else')
+                
                     this.objeto.brConsulta_Erro = res as string;
                     this.erro = res as string;
                     this.toastr.error(res as string)
                 }
             })
             .catch(res => {
-                console.log('erro', res)
+                console.log('retorno api erro', res)
                 this.loadingConsultaApi = false;
                 this.erro = getError(res);
             })
@@ -224,7 +241,7 @@ export class DetailsComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    this.router.navigate(['./../../'], { relativeTo: this.activatedRoute })
+                    // this.router.navigate(['./../../'], { relativeTo: this.activatedRoute })
                     lastValueFrom(this.pessoaService.getList());
                 } else {
                     this.erro = res.detalhes;
