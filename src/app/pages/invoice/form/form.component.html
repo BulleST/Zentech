@@ -120,6 +120,7 @@
                                             [required]="true"
                                             [filter]="true"
                                             filterBy="nome">
+                                            [filterFields]="['nome', 'id']"
                                     <ng-template pTemplate="footer">
                                         <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./beneficiario']">adicionar</a>
                                         </div>
@@ -141,7 +142,7 @@
                                             [styleClass]="'form-control ' + (loadingBeneficiarios ? 'form-control-loading' : '')"
                                             [showClear]="true"
                                             [filter]="true"
-                                            filterBy="nome, cnpj"
+                                            [filterFields]="['nome', 'cnpj']"
                                             optionLabel="nome"
                                             optionValue="id"
                                             placeholder="Selecione um beneficiário"
@@ -350,7 +351,7 @@
                                     <div *ngIf="tipo_Id.touched && tipo_Id.errors">
                                         <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
                                     </div>
-                                </div>                                
+                                </div>
                                 <!-- Eventos -->
                                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Eventos">
                                     <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
@@ -448,7 +449,7 @@
                                         #vet="ngModel"
                                         [(ngModel)]="objeto.contrato.vet"
                                         pattern="\S(.*\S)?">
-                                        <!-- 
+                                        <!--
                                         mask="0.000000000000"
                                         placeholder="0.000000000000" -->
                                     <div *ngIf="vet.errors && vet.touched">
@@ -464,7 +465,7 @@
                                            id="descricaoFormaEntrega"
                                            #descricaoFormaEntrega="ngModel"
                                            [(ngModel)]="objeto.contrato.descricaoFormaEntrega"
-                                           required 
+                                           required
                                            pattern="\S(.*\S)?"
                                            readonly
                                            (change)="objeto.contrato.descricaoFormaEntrega = descricaoFormaEntrega.value.trim();">
@@ -497,7 +498,7 @@
                                                       [required]="false"
                                                       [readonly]="true"
                                                       [autoReplaceValue]="false"></app-input-number>
-                                   
+
                                 </div>
                                 <!-- Descrição da Natureza do Fato -->
                                 <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">
@@ -508,7 +509,7 @@
                                            id="descricaoNaturezaFato"
                                            #descricaoNaturezaFato="ngModel"
                                            [(ngModel)]="objeto.contrato.descricaoNaturezaFato"
-                                           required 
+                                           required
                                            pattern="\S(.*\S)?"
                                            readonly
                                            (change)="objeto.contrato.descricaoNaturezaFato = descricaoNaturezaFato.value.trim();">
@@ -557,7 +558,7 @@
                                            id="codigoVinculoPagRecExterior"
                                            #codigoVinculoPagRecExterior="ngModel"
                                            [(ngModel)]="objeto.contrato.codigoVinculoPagRecExterior"
-                                           required 
+                                           required
                                            [readonly]="true"
                                            (change)="objeto.contrato.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim();">
                                 </div>

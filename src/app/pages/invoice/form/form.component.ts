@@ -38,7 +38,7 @@ export class FormComponent implements OnDestroy {
     faEdit = faEdit;
     faTrash = faTrash;
 
-    objeto: InvoiceRequest = 
+    objeto: InvoiceRequest =
         {
             "invoice": {
               "id": 0,
@@ -102,7 +102,7 @@ export class FormComponent implements OnDestroy {
     moedas: Moeda[] = [];
     loadingMoedas = false;
 
-    
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
@@ -131,8 +131,26 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         this.subscription.push(moedas);
 
         lastValueFrom(this.beneficiarioService.getList())
-            .then(res => this.beneficiarios = res)
-            .finally(() => this.loadingBeneficiarios = false);
+        .then(res => {
+          this.beneficiarios = JSON.parse(JSON.stringify(res));
+          this.beneficiarios = this.beneficiarios.map(beneficiario => {
+            // beneficiario.dataCadastro = this.mask.applyMask(new Date(beneficiario.dataCadastro), 'dd/MM/yy') as unknown as Date;
+            // beneficiario.cep = this.mask.applyMaskCEP(beneficiario.cep);
+
+            return beneficiario;
+          });
+        })
+        .finally(() => {
+          this.loadingBeneficiarios = false;
+        });
+
+
+
+            // this.pessoas = JSON.pasrse(JSON.stringify(res))
+            // this.pessoas = this.pessoas.map(x=>{
+            //   x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yy') as unkonwn as Date
+            // })
+
 
         var beneficiarios = this.beneficiarioService.list.subscribe(res => this.beneficiarios = res);
         this.subscription.push(beneficiarios);
@@ -182,7 +200,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        
+
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
@@ -239,7 +257,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
             this.loadingBeneficiarios = false;
         }
     }
-    
+
    async invoiceDownload() {
         if (this.objeto.invoice.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
@@ -252,13 +270,13 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
                 this.loadingInvoiceFile = false;
                     var blob = new Blob([res], { type: 'application/pdf' })
                     const data = window.URL.createObjectURL(blob);
-        
+
                     var link = document.createElement('a');
                     link.href = data;
                     link.download = `Invoice_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                     // this is necessary as link.click() does not work on the latest firefox
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-    
+
                     var url = URL.createObjectURL(res);
                     window.open(url, '_blank');
                     URL.revokeObjectURL(url);
@@ -268,7 +286,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
                 this.toastr.error('Não foi possível fazer download')
             });
             this.loadingService.message.next('');
-    } 
+    }
 
     async contratoDownload() {
         if (this.objeto.invoice.id == 0) {
@@ -314,11 +332,11 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
         await this.invoiceDownload();
         await this.contratoDownload();
         await this.swiftDownload();
-        
+
         this.loading = false;
     }
 
-   
+
     moedaEditar(moeda: Moeda) {
         var idEncrypted = this.crypto.encrypt(moeda.id);
         this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
@@ -378,7 +396,7 @@ this.objeto.contrato = new Contrato(this.objeto.contrato)
     request() {
         if (this.isEditPage)
             return lastValueFrom(this.invoiceService.edit(this.objeto));
-        
+
         return lastValueFrom(this.invoiceService.create(this.objeto));
     }
 }
