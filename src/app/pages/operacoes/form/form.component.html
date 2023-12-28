@@ -77,14 +77,21 @@
 
         </div>
         <div class="row">
-            <div class="form-group col-md-4 col-sm-12">
+            <div class="form-group col-md-4 col-sm-12 " *ngIf="isEditPage">
                 <label for="data">Data: <span class="text-danger">*</span></label>
-                <app-input-date [valueInput]="objeto.data"
+                <!-- <app-input-date [valueInput]="objeto.data"
                     (valueChanges)="objeto.data = $event;"
                     [inputId]="'data'"
                     [showErrorMessage]="true"
                     [required]="true"
-                    type="datetime-local"></app-input-date>
+                    [readonly]="isEditPage"
+                    type="datetime-local"></app-input-date> -->
+                    <input type="text"
+                        class="form-control"
+                        name="data"
+                        id="data"
+                        [value]="objeto.data | date : 'dd/MM/yyyy hh:mm'"
+                        disabled>
             </div>
             <div class="form-group col-md-4 col-sm-12">
                 <label for="valor">Valor: <span class="text-danger">*</span></label>

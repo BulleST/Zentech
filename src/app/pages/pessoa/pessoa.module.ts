@@ -8,7 +8,6 @@ import { PessoaRoutingModule } from './pessoa.routing';
 import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
-import { ImportacaoComponent } from './importacao/importacao.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
@@ -36,7 +35,6 @@ registerLocaleData(localePt);
         PessoaComponent,
         ListComponent,
         CreateComponent,
-        ImportacaoComponent,
         DeleteComponent,
         DetailsComponent,
 

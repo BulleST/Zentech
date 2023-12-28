@@ -121,13 +121,30 @@
                     <div *ngSwitchCase="maskType.options" style="max-width: 70px;">
                         <span [classList]="'flag ' + getOptionValue(item, col, 'class')">{{getOptionValue(item, col, 'output')}}</span>
                     </div>
+
+                    <div *ngSwitchCase="maskType.number">
+                        <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0">
+                            {{item[col.field] | currency : 'BRL' : '' : col.decimal}}
+                        </p>
+                    </div>
+                    <div *ngSwitchCase="maskType.money">
+                        <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0">
+                            {{item[col.field] | currency : 'BRL' : col.moeda : col.decimal}}
+                        </p>
+                    </div>
+                    <div *ngSwitchCase="maskType.percentage">
+                        <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0">
+                            {{item[col.field] | currency : 'BRL' : '' : col.decimal}}%
+                        </p>
+                    </div>
+
                     <div *ngSwitchDefault>
-                        <p [classList]="(col.maskType == 'number' || col.maskType == 'money' || col.maskType == 'percentage')
-                                ? 'text-right pe-5 me-2'
-                                : ''" [class.text-right]="">
+                        <p >
                             {{item[col.field]}}
                         </p>
                     </div>
+
+
                 </td>
                 <td class="td-actions">
                     <div class="d-flex align-items-center">

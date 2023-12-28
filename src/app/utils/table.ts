@@ -86,18 +86,31 @@ export class Table {
         var value = this.getCellValue(row, col);
         // try {
             if (col.maskType && value != undefined && value.toString().trim()) {
+     
+     /*
                 if (col.maskType == MaskType.number) {
-                    value = this.currency.transform(value, 'BRL', '', col.decimal);
-                }
-                else if (col.maskType == MaskType.mask && col.mask) {
-                    value = value.toString().padStart( col.mask.length, '0');
-                    value = this.mask.applyMask(value, col.mask);
+                    var number = JSON.parse(JSON.stringify(value));
+                    value = number < 0 ? `<span class="text-danger">` : '';
+                    value += this.currency.transform(number, 'BRL', '', col.decimal);
+                    value = number < 0 ? `</span>` : '';
                 }
                 else if (col.maskType == MaskType.percentage) {
-                    value = this.currency.transform(value, 'BRL', '', col.decimal) + '%';
+                    var number = JSON.parse(JSON.stringify(value));
+                    value = number < 0 ? `<span class="text-danger">` : '';
+                    value += this.currency.transform(number, 'BRL', '', col.decimal) + '%';;
+                    value = number < 0 ? `</span>` : '';
                 }
                 else if (col.maskType == MaskType.money) {
-                    value = this.currency.transform(value, 'BRL', col.moeda, col.decimal)
+                    var number = JSON.parse(JSON.stringify(value));
+                    value = number < 0 ? `<span class="text-danger">` : '';
+                    value += this.currency.transform(number, 'BRL', col.moeda, col.decimal)
+                    value = number < 0 ? `</span>` : '';
+                }
+                else
+                 */
+                if (col.maskType == MaskType.mask && col.mask) {
+                    value = value.toString().padStart( col.mask.length, '0');
+                    value = this.mask.applyMask(value, col.mask);
                 }
                 else if (col.maskType == MaskType.cnpj) {
                     value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');

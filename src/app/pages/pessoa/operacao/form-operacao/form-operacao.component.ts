@@ -23,7 +23,7 @@ export class FormOperacaoComponent implements OnDestroy {
     subscription: Subscription[] = [];
     status: PessoaOperacaoStatus[] = [];
     loadingStatus = true;
-
+    isEditPage = false;
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
 
@@ -80,10 +80,12 @@ export class FormOperacaoComponent implements OnDestroy {
                 this.objeto.id = this.crypto.decrypt(id) as number;
                 this.modal.title = 'Editar Operação';
                 this.modal.routerBack = ['../../../'];
+                this.isEditPage = true;
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                 .then(res => {
                     this.loading = false;
-                    res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                    // res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                    // res.data = this.datepipe.transform(res.data, 'dd//MM/yyyy hh:mm') as unknown as Date;
                     res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '')  as unknown as number;
                     this.objeto = res;
                     
@@ -98,10 +100,11 @@ export class FormOperacaoComponent implements OnDestroy {
             } else {
                 this.modal.title = 'Cadastrar Operação';
                 this.modal.routerBack = ['../../'];
+                this.isEditPage = false;
                 this.objeto.data = this.datepipe.transform(new Date(), 'yyyy-MM-ddThh:mm') as unknown as Date;
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'moeda');
-                }, 200);
+            }, 200);
 
             }
         });

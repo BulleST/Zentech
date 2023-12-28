@@ -59,8 +59,8 @@ export class PessoaService {
     }
 
 
-    create(request: any[]) {
-        return this.http.post<PessoaResponse[]>(`${this.url}/pessoa`, request);
+    create(request: Pessoa) {
+        return this.http.post<PessoaResponse>(`${this.url}/pessoa`, request);
     }
 
     delete(id: number) {
@@ -89,7 +89,6 @@ export class BRConsultaResponse  {
     SITUACAO: string = '';
     STATUS: string = '';
     ID_CONSULTA: string = '';
-    ERRO: string = '';
-    RETORNO: string = '';
-
+    ERRO?: string = '';
+    RETORNO?: string = '';
 }

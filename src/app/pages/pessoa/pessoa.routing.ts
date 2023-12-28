@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
-import { ImportacaoComponent } from './importacao/importacao.component';
 import { DeleteComponent } from './delete/delete.component';
 import { DetailsComponent } from './details/details.component';
 import { DeleteSaldoComponent } from './saldo/delete-saldo/delete-saldo.component';

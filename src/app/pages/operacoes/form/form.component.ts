@@ -73,7 +73,8 @@ export class FormComponent implements OnDestroy {
                 this.pessoaChange();
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
-                        res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        // res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        // res.data = this.datepipe.transform(res.data, 'dd//MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
                         res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
 
                         this.objeto = res;

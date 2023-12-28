@@ -7,7 +7,8 @@ export class PessoaSaldo {
     idEncrypted: string = '';
     dataConcessao: Date = '' as unknown as Date;
     valorConcedido: number = 0;
-    cadastradoPor: string = '';
+    usuarioCadastroNome: string = '';
+    usuarioCadastroEmail: string = '';
 }
 export class PessoaSaldoRequest {
     pessoa_Id: number = 0;
@@ -40,7 +41,7 @@ export var pessoaSaldoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'cadastradoPor',
+        field: 'usuarioCadastroNome',
         header: 'Cadastrado Por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

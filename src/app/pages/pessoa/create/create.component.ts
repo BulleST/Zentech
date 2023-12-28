@@ -111,24 +111,26 @@ export class CreateComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingConsultaApi = false;
-                if (res instanceof BRConsultaResponse) {
-                    if (res.ERRO == 'ERRO') {
-                        this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
-                        this.objeto.brConsulta_Erro = res.ERRO as unknown as string;
+                
+                if (typeof(res) == 'object') {
+                    var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
+                    if (obj.ERRO == 'ERRO') {
+                        this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
+                        this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
                         this.liberaNome = true;
-                        this.erro = res.ERRO;
-                        this.toastr.error(res.ERRO)
-                    } else if (!res.ERRO) {
-                        this.objeto.dataNascimento = this.formataData(res.DATA_NASC).substring(0, 10) as unknown as Date;
-                        this.objeto.brConsulta_Data_Cap = this.formataData(res.DATA_CAP) as unknown as Date;
-                        this.objeto.brConsulta_Hora_Cap = this.formataData(res.DATA_CAP, res.HORA_CAP) as unknown as Date;
-                        this.objeto.dataInscricao = this.formataData(res.DATA_INSCRICAO) as unknown as Date;
-                        this.objeto.nome = res.NOME;
-                        this.objeto.digito = res.DIGITO;
-                        this.objeto.brConsulta_Controle = res.CONTROLE;
-                        this.objeto.brConsulta_Id_Consulta = res.ID_CONSULTA;
-                        this.objeto.situacao = res.SITUACAO;
-                        this.objeto.brConsulta_Status = res.STATUS;
+                        this.erro = obj.ERRO;
+                        this.toastr.error(obj.ERRO)
+                    } else if (!obj.ERRO) {
+                        this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
+                        this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
+                        this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
+                        this.objeto.nome = obj.NOME;
+                        this.objeto.digito = obj.DIGITO;
+                        this.objeto.brConsulta_Controle = obj.CONTROLE;
+                        this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
+                        this.objeto.situacao = obj.SITUACAO;
+                        this.objeto.brConsulta_Status = obj.STATUS;
                     }
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
                     this.liberaNome = false;
@@ -140,6 +142,7 @@ export class CreateComponent implements OnDestroy {
                 }
             })
             .catch(res => {
+                console.log('erro', res)
                 this.loadingConsultaApi = false;
                 this.liberaNome = true;
                 this.erro = getError(res);
@@ -151,11 +154,15 @@ export class CreateComponent implements OnDestroy {
         this.loading = true;
         this.erro = '';
 
-        lastValueFrom(this.pessoaService.create([this.objeto]))
+        lastValueFrom(this.pessoaService.create(this.objeto))
             .then(res => {
-                lastValueFrom(this.pessoaService.getList());
-                this.voltar();
                 this.loading = false;
+                if (res.sucesso) {
+                    this.voltar();
+                    lastValueFrom(this.pessoaService.getList());
+                } else {
+                    this.erro = res.detalhes;
+                }
             })
             .catch(res => {
                 this.loading = false;

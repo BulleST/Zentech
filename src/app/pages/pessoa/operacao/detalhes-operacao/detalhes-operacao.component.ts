@@ -84,4 +84,12 @@ export class DetalhesOperacaoComponent implements OnDestroy {
     voltar() {
         this.modalService.removeModal(this.modal);
     }
+
+    async exportarPDF() {
+        this.loading = true;
+        await lastValueFrom(this.pessoaOperacaoService.exportacaoOperacao(this.objeto.id));
+
+        this.loading = false;
+    }
+
 }
