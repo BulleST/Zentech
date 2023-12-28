@@ -78,11 +78,8 @@ import { InputDateComponent } from './input-date/input-date.component';
         FormContratoEvento,
         FormContratoTipo,
         FormInstituicaoFinanceira,
-        FormInvoice,
-        FormMoeda,
-        DeleteEvento,
-        DeleteTipo,
-        DeleteMoeda,
+
+
     ],
 })
 export class SharedModule {
