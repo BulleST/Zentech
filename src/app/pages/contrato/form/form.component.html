@@ -20,7 +20,7 @@
                 <!-- Data do Contrato -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Data do Contrato">
                     <label for="data">Data do contrato: <span class="text-danger">*</span></label>
-                    
+
                     <app-input-date [valueInput]="objeto.data"
                         (valueChanges)="objeto.data = $event;"
                         [inputId]="'data'"
@@ -84,7 +84,7 @@
                                 [styleClass]="'form-control ' + (loadingEvento ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [filter]="true"
-                                filterBy="nome, cnpj"
+                                [filterFields]="['nome', 'cnpj']"
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um evento"
@@ -169,7 +169,7 @@
                         #vet="ngModel"
                         [(ngModel)]="objeto.vet"
                         pattern="\S(.*\S)?">
-                        <!-- 
+                        <!--
                         mask="0.000000000000"
                         placeholder="0.000000000000" -->
                     <div *ngIf="vet.errors && vet.touched">
@@ -193,7 +193,7 @@
                 <!-- Liquidação Até -->
                 <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
                     <label for="dataLiquidacao">Liquidação Até: <span class="text-danger">*</span></label>
-                    
+
                     <app-input-date [valueInput]="objeto.dataLiquidacao"
                         (valueChanges)="objeto.dataLiquidacao = $event;"
                         [inputId]="'dataLiquidacao'"

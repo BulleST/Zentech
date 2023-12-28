@@ -59,7 +59,7 @@
                                           [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
                                           [showClear]="true"
                                           [filter]="true"
-                                          filterBy="nome, simbolo, codigo"
+                                          [filterFields]="['nome', 'simbolo', 'codigo']"
                                           optionLabel="nome"
                                           optionValue="id"
                                           placeholder="Selecione uma moeda"
@@ -137,7 +137,7 @@
                                           [styleClass]="'form-control ' + (loadingBeneficiarios ? 'form-control-loading' : '')"
                                           [showClear]="true"
                                           [filter]="true"
-                                          filterBy="nome, cnpj"
+                                          [filterFields]="['nome', 'cnpj']"
                                           optionLabel="nome"
                                           optionValue="id"
                                           placeholder="Selecione um beneficiário"
@@ -220,7 +220,8 @@
                                           <input type="text"
                                                  id="cep"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.cep ?? 'N/A'"
+                                                 [ngModel]="beneficiarioSelected?.cep "
+                                                 [mask] ="'00000-000'"
                                                  readonly>
                                       </div>
                                       <!-- Logradouro -->
@@ -354,7 +355,7 @@
                                               [styleClass]="'form-control ' + (loadingEvento ? 'form-control-loading' : '')"
                                               [showClear]="true"
                                               [filter]="true"
-                                              filterBy="nome, cnpj"
+                                              [filterFields]="['nome']"
                                               optionLabel="nome"
                                               optionValue="id"
                                               placeholder="Selecione um evento"

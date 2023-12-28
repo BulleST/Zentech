@@ -37,7 +37,7 @@ export var bancoColumns: Column[] = [
     {
         field: 'nome',
         header: 'Nome',
-        maskType: MaskType.undefined, 
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
