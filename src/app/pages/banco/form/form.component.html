@@ -129,7 +129,6 @@
                  id="complemento"
                  #complemento="ngModel"
                  [(ngModel)]="objeto.complemento"
-                 required
                  [disabled]="loadingCep ||cepPreenchido"
                  pattern="\S(.*\S)?"
                  (change)="objeto.complemento = complemento.value.trim();">

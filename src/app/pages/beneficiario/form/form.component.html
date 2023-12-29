@@ -304,7 +304,7 @@
                                        class="form-control"
                                        [ngModel]="bancoSelected?.cep "
                                        [mask]="'00000-000'"
-                                       readonly>
+                                       disabled>
                             </div>
                             <div class="form-group col-xl-7 col-lg-7 col-md-6 col-sm-6 col-12"> <!-- Logradouro -->
                                 <label for="logradouro">Logradouro:</label>
@@ -312,7 +312,7 @@
                                        id="logradouro"
                                        class="form-control"
                                        [value]="bancoSelected?.logradouro"
-                                       readonly>
+                                       disabled>
                             </div>
                             <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12"> <!-- Número -->
                                 <label for="numero">Número:</label>
@@ -320,7 +320,7 @@
                                        id="numero"
                                        class="form-control"
                                        [value]="bancoSelected?.numero"
-                                       readonly>
+                                       disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -330,7 +330,7 @@
                                        id="complemento"
                                        class="form-control"
                                        [value]="bancoSelected?.complemento"
-                                       readonly>
+                                       disabled>
                             </div>
                             <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Bairro-->
                                 <label for="bairro">Bairro:</label>
@@ -338,7 +338,7 @@
                                        id="bairro"
                                        class="form-control"
                                        [value]="bancoSelected?.bairro"
-                                       readonly>
+                                       disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -348,7 +348,7 @@
                                        id="cidade"
                                        class="form-control"
                                        [value]="bancoSelected?.cidade"
-                                       readonly>
+                                       disabled>
                             </div>
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Estado -->
                                 <label for="estado">UF:</label>
@@ -356,7 +356,7 @@
                                        id="estado"
                                        class="form-control"
                                        [value]="bancoSelected?.estado"
-                                       readonly>
+                                       disabled>
                             </div>
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- País -->
                                 <label for="pais">País:</label>
@@ -364,7 +364,7 @@
                                        id="pais"
                                        class="form-control"
                                        [value]="bancoSelected?.pais_Id"
-                                       readonly>
+                                       disabled>
                             </div>
                         </div>
                     </div>

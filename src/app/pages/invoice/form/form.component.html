@@ -178,7 +178,7 @@
                                           <input type="text"
                                                  id="nomeBanco"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.nomeBanco ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.nome ?? 'N/A'"
                                                  readonly>
                                       </div>
                                       <!-- Conta -->
@@ -211,7 +211,7 @@
                                   </div>
                                   <div class="row">
                                       <div>
-                                          <small>Endereço do banco</small>
+                                          <small><b>Endereço do banco</b></small>
                                           <hr class="w-100">
                                       </div>
                                   </div>
@@ -222,7 +222,7 @@
                                           <input type="text"
                                                  id="cep"
                                                  class="form-control"
-                                                 [ngModel]="beneficiarioSelected?.cep "
+                                                 [ngModel]="bancoBeneficiarioSelected?.cep "
                                                  [mask] ="'00000-000'"
                                                  readonly>
                                       </div>
@@ -232,7 +232,7 @@
                                           <input type="text"
                                                  id="logradouro"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.logradouro ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.logradouro ?? 'N/A'"
                                                  readonly>
                                       </div>
                                       <!-- Número -->
@@ -241,7 +241,7 @@
                                           <input type="text"
                                                  id="numero"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.numero ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.numero ?? 'N/A'"
                                                  readonly>
                                       </div>
                                       <!-- Complemento -->
@@ -250,7 +250,7 @@
                                           <input type="text"
                                                  id="complemento"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.complemento ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.complemento ?? 'N/A'"
                                                  readonly>
                                       </div>
                                       <!-- Cidade -->
@@ -259,7 +259,7 @@
                                           <input type="text"
                                                  id="cidade"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.cidade ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.cidade ?? 'N/A'"
                                                  readonly>
                                       </div>
                                       <!-- País -->
@@ -268,7 +268,7 @@
                                           <input type="text"
                                                  id="pais"
                                                  class="form-control"
-                                                 [value]="beneficiarioSelected?.nomePais ?? 'N/A'"
+                                                 [value]="bancoBeneficiarioSelected?.pais_Id ?? 'N/A'"
                                                  readonly>
                                       </div>
                                   </div>

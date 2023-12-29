@@ -3,8 +3,8 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { BancoList } from 'src/app/models/banco.model';
-import { BeneficiarioList } from 'src/app/models/beneficiario.model';
+import { BancoList, BancoRequest } from 'src/app/models/banco.model';
+import { BeneficiarioList, BeneficiarioRequest } from 'src/app/models/beneficiario.model';
 import { Contrato, Contrato_List } from 'src/app/models/contrato.model';
 import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
 import { Invoice, InvoiceRequest } from 'src/app/models/invoice.model';
@@ -63,7 +63,8 @@ export class FormComponent implements OnDestroy {
 
     beneficiarios: BeneficiarioList[] = [];
     loadingBeneficiarios = false;
-    beneficiarioSelected?: BeneficiarioList = new BeneficiarioList;
+    beneficiarioSelected?: BeneficiarioRequest = new BeneficiarioRequest;
+    bancoBeneficiarioSelected?: BancoRequest = new BancoRequest;
 
 
     paises: Paises[] = []
@@ -83,6 +84,7 @@ export class FormComponent implements OnDestroy {
         private toastr: ToastrService,
         private moedaService: MoedaService,
         private beneficiarioService: BeneficiarioService,
+        private bancoService: BancoService,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private invoiceService: InvoiceService,
         private contratoService: ContratoService,
@@ -218,14 +220,29 @@ export class FormComponent implements OnDestroy {
 
     async beneficiarioChange() {
         if (this.objeto.invoice.beneficiario_Id) {
-
             this.loadingBeneficiarios = true;
-            if (this.beneficiarios.length == 0) {
-                await lastValueFrom(this.beneficiarioService.getList());
+            
+            await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
+                .then(async (res: any ) => {
+                    res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                    res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                    
+                    await lastValueFrom(this.bancoService.get(res.banco_Id))
+                    .then(res => {
+                        res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                        res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                        this.bancoBeneficiarioSelected = res;
+                    })
+                    .catch(res => {
+                        this.toastr.error('Não foi possível carregar dados do banco.')
+                    })
 
-            }
-            this.beneficiarioSelected = this.beneficiarios.find(x => x.id == this.objeto.invoice.beneficiario_Id
-            );
+
+                    this.beneficiarioSelected = res;
+                })
+                .catch(res => {
+                    this.toastr.error('Não foi possível carregar dados do beneficiário.')
+                })
 
             this.loadingBeneficiarios = false;
         }
