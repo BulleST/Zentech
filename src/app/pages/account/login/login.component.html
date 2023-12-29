@@ -50,7 +50,7 @@
             </div>
             <div *ngIf="password.errors != null && password.touched" class="p-1 py-0">
                 <p class="text-danger" *ngIf="password.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="password.errors['minlength']">Senha deve conter {{password.errors['minlength']['requiredLength']}} caracteres.</p>
+                <p class="text-danger" *ngIf="password.errors['minlength']">A senha deve conter pelo menos 6 caracteres.</p>
             </div>
         </div>
     </div>

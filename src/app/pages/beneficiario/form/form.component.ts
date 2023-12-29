@@ -68,10 +68,8 @@ export class FormComponent implements OnDestroy {
             .then(res => {
                 this.loadingBanco = false;
                 this.bancos = res
-                console.log(this.bancos)
-
-
             });
+
         var bancos = this.bancoService.list.subscribe(res => this.bancos = res);
         this.subscription.push(bancos);
 

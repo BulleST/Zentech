@@ -32,6 +32,6 @@ import { LoginComponent } from './login/login.component';
     FontAwesomeModule,
     CheckboxModule
   ],
-  bootstrap: [AccountComponent]
+  bootstrap: [AccountComponent],
 })
 export class AccountModule { }

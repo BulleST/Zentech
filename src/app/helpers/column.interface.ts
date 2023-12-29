@@ -9,9 +9,9 @@ export interface Column {
     moeda?: string
     filterType: FilterType;
     filterDisplay: FilterDisplay;
-    filterShowMatchMode?: boolean;
+    showMatchMode?: boolean;
     showOperator?: boolean;
-    filterShowAddButton?: boolean;
+    showAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
     substringLength?: number; // Masktype.substring
     title?: string;

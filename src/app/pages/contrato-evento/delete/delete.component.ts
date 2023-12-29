@@ -61,7 +61,6 @@ export class DeleteComponent {
                         }, 200);
                     } else {
                         this.voltar();
-                        this.modal.routerBack = ['../../..'];
                     }
                 });
                 this.subscription.push(obj);

@@ -31,6 +31,11 @@ export class PessoaOperacaoService {
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
         .pipe(tap({
             next: list => {
+                // list = list.map(x => {
+                //     x.dataCadastro = new Date(x.dataCadastro);
+                //     x.dataTransacao = new Date(x.dataTransacao);
+                //     return x
+                // })
                 this.list.next(list);
                 return of(list);
             },

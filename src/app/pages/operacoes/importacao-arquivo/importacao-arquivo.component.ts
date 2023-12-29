@@ -32,6 +32,8 @@ export class ImportacaoArquivoComponent {
     @ViewChild('form') form: NgForm;
 
     modal: Modal = new Modal;
+    salvo = false;
+    mensagem = '';
 
     constructor(
         private toastr: ToastrService,
@@ -78,7 +80,9 @@ export class ImportacaoArquivoComponent {
     }
 
     send() {
+        this.salvo = false;
         this.loading = true;
+        this.mensagem = '';
         this.erro = '';
         if (!this.fileUpload) {
             this.toastr.error('Selecione um arquivo para enviar.');
@@ -90,18 +94,21 @@ export class ImportacaoArquivoComponent {
                 lastValueFrom(this.operacaoService.getList());
                 this.loading = false;
                 if (res.sucesso) {
-                    this.voltar();
+                    this.salvo = true;
+                    this.mensagem = res.mensagem;
                 } else {
-                    this.toastr.error(res.mensagem);
+                    this.salvo = false;
                     this.toastr.error('Alguns registros não puderam ser salvos.');
                     this.erro = res.mensagem;
                 }
             })
             .catch(res => {
+                this.salvo = false;
                 this.loading = false;
                 this.erro = getError(res);
             })
 
     }
+
 
 }

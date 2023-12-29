@@ -135,25 +135,36 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         return this.table.getCellValue(row, col);
     }
 
-    primeNgDataFilter(value: Date, filterCallback: any, filter: ColumnFilter) {
-        if (value) {
-            filterCallback(new Date(value));
-        } else {
-            filter.clearFilter();
-        }
-    }
 
     evalRowActions(str: any, item: any) {
         return eval(str) as boolean
     }
-    filterCol(value: any, filter: any, filterEl: ColumnFilter) {
-        filter(value);
+
+    filterDate(value: any, filterCallback: any, filterEl: ColumnFilter) {
+        if (value)
+            filterCallback(value);
+        else
+            filterEl.clearFilter();
+    }
+
+    filterNumeric(event: any, filterCallback: any, filterEl: ColumnFilter) {
+        var value = event.target.value.replaceAll('.', '')
+        value = parseFloat(value.replaceAll(',', '.'))
+        if (value)
+            filterCallback(value);
+        else
+            filterEl.clearFilter();
+    }
+
+    filterCol(value: any, filterCallback: any, filterEl: ColumnFilter) {
+        filterCallback(value);
         $(filterEl.el.nativeElement).find('.p-column-filter-menu-button').trigger('click');
         setTimeout(() => {
             $(filterEl.el.nativeElement).find('.p-column-filter-menu-button').trigger('click');
         }, 50);
 
     }
+
     getOptionValue(row: any, col: Column, field: string) {
         if (col.values) {
             var value = this.table.getCellValue(row, col);
@@ -162,10 +173,16 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         }
         return null;
     }
+
     filterColOption(value: any, filter: any) {
         value = value != undefined && value != null ? value.value : undefined;
         filter(value);
     }
+
+    setDate(date: string) {
+        return new Date(date) ?? 'N/A'
+    }
+    
 
 }
 

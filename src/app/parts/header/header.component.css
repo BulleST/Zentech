@@ -115,7 +115,7 @@
 }
 
 .header__userLogado-submenu {
-    position: fixed;
+    position: absolute;
     top: 50px;
     left: auto;
     right: calc(.5vw + 10px);

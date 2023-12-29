@@ -109,7 +109,6 @@ export class CreateComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingConsultaApi = false;
-                console.log('retorno api', res)
                 if (typeof(res) == 'object') {
                     var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
                     if (obj.ERRO == 'ERRO') {
@@ -160,7 +159,6 @@ export class CreateComponent implements OnDestroy {
                 }
             })
             .catch(res => {
-                console.log('retorno api erro', res)
                 this.loadingConsultaApi = false;
                 this.liberaNome = true;
                 this.erro = getError(res);

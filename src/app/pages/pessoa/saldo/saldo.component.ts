@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, AfterViewChecked } from '@angular/core';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { PessoaSaldo, pessoaSaldoColumns } from 'src/app/models/pessoa-saldo.model';
@@ -66,7 +67,6 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
             return row;
         })
 
-        console.log(list)
         this.saldos = Object.assign([], list);
         this.table.loading.next(false);
     }
@@ -80,4 +80,19 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
         return null;
     }
 
+    filterDate(value: any, filterCallback: any, filterEl: ColumnFilter) {
+        if (value)
+            filterCallback(value);
+        else
+            filterEl.clearFilter();
+    }
+
+    filterNumeric(event: any, filterCallback: any, filterEl: ColumnFilter) {
+        var value = event.target.value.replaceAll('.', '')
+        value = parseFloat(value.replaceAll(',', '.'))
+        if (value)
+            filterCallback(value);
+        else
+            filterEl.clearFilter();
+    }
 }
