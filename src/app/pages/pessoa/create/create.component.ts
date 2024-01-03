@@ -44,6 +44,8 @@ export class CreateComponent implements OnDestroy {
         private mobile: IsMobile,
     ) {
         this.mobile.value.subscribe(res => this.screen = res);
+        this.objeto.cpf = 53504763000
+        this.objeto.dataNascimento = '1942-04-29' as unknown as Date;
 
     }
     ngAfterViewInit(): void {
@@ -66,10 +68,6 @@ export class CreateComponent implements OnDestroy {
 
     voltar() {
         this.modalService.removeModal(this.modal);
-    }
-
-    validaData(input: NgModel) {
-        console.log(input)
     }
 
     validaCPF(input: NgModel, doc: number) {
@@ -99,7 +97,7 @@ export class CreateComponent implements OnDestroy {
         input.control.setErrors(null);
     }
 
-    procuraPessoa(cpf: NgModel) {
+    consultaPessoa(cpf: NgModel) {
         if (cpf.invalid || !this.objeto.dataNascimento) {
             return;
         }
@@ -111,7 +109,7 @@ export class CreateComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingConsultaApi = false;
-                
+                console.log('retorno api', res)
                 if (typeof(res) == 'object') {
                     var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
                     if (obj.ERRO == 'ERRO') {
@@ -121,10 +119,30 @@ export class CreateComponent implements OnDestroy {
                         this.erro = obj.ERRO;
                         this.toastr.error(obj.ERRO)
                     } else if (!obj.ERRO) {
-                        this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
-                        this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        try {
+                            this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Nascimento. (${obj.DATA_NASC}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Nascimento.')
+                        }
+                        try {
+                            this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Captação. (${obj.DATA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Captação.')
+                        }
+                        try {
                         this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Hora de Captação. (${obj.HORA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Hora de Captação.')
+                        }
+                        try {
                         this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Inscrição. (${obj.DATA_INSCRICAO}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Inscrição.')
+                        }
                         this.objeto.nome = obj.NOME;
                         this.objeto.digito = obj.DIGITO;
                         this.objeto.brConsulta_Controle = obj.CONTROLE;
@@ -142,7 +160,7 @@ export class CreateComponent implements OnDestroy {
                 }
             })
             .catch(res => {
-                console.log('erro', res)
+                console.log('retorno api erro', res)
                 this.loadingConsultaApi = false;
                 this.liberaNome = true;
                 this.erro = getError(res);
@@ -176,11 +194,11 @@ export class CreateComponent implements OnDestroy {
         var min = 0;
         var seg = 0;
         var date = dataString.split('/')
-
+        
         var year = parseInt(date[2]);
         var month = parseInt(date[1]) - 1;
         var day = parseInt(date[0]);
-
+        
         if (horaString) {
             var time = horaString.split(':');
             hour = parseInt(time[0]);

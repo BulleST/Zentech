@@ -65,7 +65,7 @@
                         class="btn btn-dark w-100"
                         [class.mt-4]="screen == 'lg' || screen == 'xl' || screen == 'md'"
                         [class.mt-2]="screen == 'sm'" style="height: 35px;"
-                        (click)="procuraPessoa(cpf)"
+                        (click)="consultaPessoa(cpf)"
                         [disabled]="cpf.errors || !this.objeto.dataNascimento">
                     <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
                     <span>Consultar API</span>

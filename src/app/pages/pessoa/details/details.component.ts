@@ -1,14 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronCircleLeft, faDollarSign, faIdCard } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoList } from 'src/app/models/pessoa-operacao.model';
 import { PessoaSaldo } from 'src/app/models/pessoa-saldo.model';
 import { Pessoa } from 'src/app/models/pessoa.model';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
+import { BRConsultaResponse, PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { tabChanged } from 'src/app/utils/tabview';
@@ -23,20 +25,19 @@ export class DetailsComponent implements OnDestroy {
     faChevronCircleLeft = faChevronCircleLeft;
     faDollarSign = faDollarSign;
 
-
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
     activeIndex = 0;
 
-    pessoa: Pessoa = new Pessoa;
+    objeto: Pessoa = new Pessoa;
     loadingPessoa = true;
     erroPessoa = '';
 
     saldos: PessoaSaldo[] = [];
     loadingSaldo = true;
     erroSaldo = '';
-    
+
     operacoes: PessoaOperacaoList[] = [];
     loadingOperacoes = true;
     erroOperacoes = '';
@@ -45,6 +46,8 @@ export class DetailsComponent implements OnDestroy {
     limiteUtilizado = 0;
     lastIdDeleteSaldo: number = 0;
 
+    loadingConsultaApi = false;
+    emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -53,14 +56,16 @@ export class DetailsComponent implements OnDestroy {
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
+        private toastr: ToastrService,
+        private router: Router,
     ) {
 
         this.activeIndex = parseInt(localStorage.getItem('tabIndex') ?? '0')
         this.tabChanged(this.activeIndex);
 
-        var object = this.pessoaService.object.subscribe(res => this.pessoa = res);
+        var object = this.pessoaService.object.subscribe(res => this.objeto = res);
         this.subscription.push(object);
-        
+
         var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
             this.saldos = res.map(x => {
                 x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
@@ -70,29 +75,31 @@ export class DetailsComponent implements OnDestroy {
             this.lastIdDeleteSaldo = res.length > 0 ? res[res.length - 1].id : 0;
             this.calculaLimiteConcedido();
         });
-        this.subscription.push(listSaldos); 
+        this.subscription.push(listSaldos);
 
         var listOperacoes = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
             this.operacoes = Object.assign([], res);
             this.calculaLimiteUtilizado();
         });
-        this.subscription.push(listOperacoes); 
-        
+        this.subscription.push(listOperacoes);
+
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['pessoa_id']) {
                 this.loadingPessoa = true;
                 this.loadingSaldo = true;
-                this.pessoa.id = this.crypto.decrypt(p['pessoa_id']);
-                lastValueFrom(this.pessoaService.get(this.pessoa.id))
+                this.objeto.id = this.crypto.decrypt(p['pessoa_id']);
+                lastValueFrom(this.pessoaService.get(this.objeto.id))
                     .then(res => {
-                        this.pessoa = res;
+                        res.cpf = res.cpf.toString().padStart(11, '0') as unknown as number;
+                        console.log(res)
+                        this.objeto = res;
                     })
                     .catch(res => {
                         this.erroPessoa = getError(res);
                     })
                     .finally(() => this.loadingPessoa = false);
 
-                lastValueFrom(this.pessoaSaldoService.getList(this.pessoa.id))
+                lastValueFrom(this.pessoaSaldoService.getList(this.objeto.id))
                     .then(res => {
                         this.saldos = res;
                         this.calculaLimiteConcedido();
@@ -102,7 +109,7 @@ export class DetailsComponent implements OnDestroy {
                     })
                     .finally(() => this.loadingSaldo = false);
 
-                lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa.id))
+                lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.id))
                     .then(res => {
                         this.operacoes = res;
                         this.calculaLimiteUtilizado();
@@ -138,5 +145,112 @@ export class DetailsComponent implements OnDestroy {
         this.limiteUtilizado = liberados.length > 0 ? liberados.map(x => x.valorOperacao).reduce((x, y) => x + y) : 0;
     }
 
+    consultaPessoa() {
+        if (!this.objeto.cpf || !this.objeto.dataNascimento) {
+            return;
+        }
+
+        this.loadingConsultaApi = true;
+        this.erro = '';
+        console.log(this.objeto.dataNascimento)
+
+        lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
+            .then(res => {
+                console.log('retorno api', res)
+                this.loadingConsultaApi = false;
+                if (typeof (res) == 'object') {
+                    var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
+                    this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
+                    if (obj.ERRO && obj.ERRO != '') {
+                        this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
+                        this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
+                        this.erro = obj.ERRO;
+                        this.toastr.error(obj.ERRO)
+                    } else if (!obj.ERRO) {
+                        try {
+                            this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Nascimento. (${obj.DATA_NASC}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Nascimento.')
+                        }
+                        try {
+                            this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Captação. (${obj.DATA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Captação.')
+                        }
+                        try {
+                        this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Hora de Captação. (${obj.HORA_CAP}) \n`;
+                            this.toastr.error('Não foi possível ler Hora de Captação.')
+                        }
+                        try {
+                        this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
+                        } catch (e) {
+                            this.erro += `Não foi possível ler Data de Inscrição. (${obj.DATA_INSCRICAO}) \n`;
+                            this.toastr.error('Não foi possível ler Data de Inscrição.')
+                        }
+                        this.objeto.nome = obj.NOME;
+                        this.objeto.digito = obj.DIGITO;
+                        this.objeto.brConsulta_Controle = obj.CONTROLE;
+                        this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
+                        this.objeto.situacao = obj.SITUACAO;
+                        this.objeto.brConsulta_Status = obj.STATUS;
+                    }
+                } else {
+                
+                    this.objeto.brConsulta_Erro = res as string;
+                    this.erro = res as string;
+                    this.toastr.error(res as string)
+                }
+            })
+            .catch(res => {
+                console.log('retorno api erro', res)
+                this.loadingConsultaApi = false;
+                this.erro = getError(res);
+            })
+
+    }
+
+    formataData(dataString: string, horaString?: string, where?: string) {
+        var hour = 0;
+        var min = 0;
+        var seg = 0;
+        var date = dataString.split('/')
+
+        var year = parseInt(date[2]);
+        var month = parseInt(date[1]) - 1;
+        var day = parseInt(date[0]);
+
+        if (horaString) {
+            var time = horaString.split(':');
+            hour = parseInt(time[0]);
+            min = parseInt(time[1]);
+            seg = parseInt(time[2]);
+        }
+        var fullDate = new Date(year, month, day, hour, min, seg).toISOString();
+        return fullDate;
+    }
+
+    send() {
+        this.loading = true;
+        this.erro = '';
+
+        lastValueFrom(this.pessoaService.create(this.objeto))
+            .then(res => {
+                this.loading = false;
+                if (res.sucesso) {
+                    // this.router.navigate(['./../../'], { relativeTo: this.activatedRoute })
+                    lastValueFrom(this.pessoaService.getList());
+                } else {
+                    this.erro = res.detalhes;
+                }
+            })
+            .catch(res => {
+                this.loading = false;
+                this.erro = getError(res);
+            });
+    }
 
 }

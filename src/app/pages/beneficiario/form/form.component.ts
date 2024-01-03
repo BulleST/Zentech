@@ -17,6 +17,7 @@ import { Paises } from 'src/app/models/pais.model';
 import { Cidades } from 'src/app/models/cidade.model';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { validateCNPJ } from 'src/app/utils/validate-cnpj';
+import { MaskApplierService } from 'ngx-mask';
 
 @Component({
     selector: 'app-form',
@@ -59,16 +60,21 @@ export class FormComponent implements OnDestroy {
         private beneficiarioService: BeneficiarioService,
         private cepService: CepService,
         private bancoService: BancoService,
-        private paisesService: PaisesService
+        private paisesService: PaisesService,
+        private mask: MaskApplierService
     ) {
 
         lastValueFrom(this.bancoService.getList())
-        .then(res => {
-            this.loadingBanco = false;
-            this.bancos = res;
-        });
+            .then(res => {
+                this.loadingBanco = false;
+                this.bancos = res
+                console.log(this.bancos)
+
+
+            });
         var bancos = this.bancoService.list.subscribe(res => this.bancos = res);
         this.subscription.push(bancos);
+
 
         lastValueFrom(this.paisesService.getList())
             .then(res => {
@@ -127,20 +133,22 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal);
     }
 
-   async preencheBanco() {
+    async preencheBanco() {
         this.loadingBanco = true;
         if (this.objeto.banco_Id) {
+
             await lastValueFrom(this.bancoService.get(this.objeto.banco_Id))
-            .then(res => {
-                this.bancoSelected = res;
-                this.bancoSelected.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-            })
+                .then(res => {
+                    this.bancoSelected = res;
+                    this.bancoSelected.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                    this.bancoSelected.cep = this.bancoSelected.cep.toString().padStart(8, '0') as unknown as number;
+                })
         } else {
             this.bancoSelected = new BancoRequest;
         }
         this.loadingBanco = false;
     }
-    
+
 
     paisChange() {
         this.executaCEP = this.objeto.pais_Id == 30;
@@ -244,7 +252,7 @@ export class FormComponent implements OnDestroy {
     }
 
 
-   
+
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');

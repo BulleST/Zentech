@@ -62,10 +62,15 @@ export class DetalhesOperacaoComponent implements OnDestroy {
                     this.voltar();
                     return;
                 }
-                this.objeto.data = this.datepipe.transform(new Date(this.objeto.data), 'yyyy-MM-ddTHH:mm') as unknown as Date
+
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(operacao => {
+                        operacao.dataCadastro = this.datepipe.transform(operacao.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        operacao.dataTransacao = this.datepipe.transform(operacao.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                         this.objeto = operacao;
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'detalhe operacao');
+                        }, 200);
                     })
                     .catch(res => {
                         this.voltar();
@@ -76,9 +81,6 @@ export class DetalhesOperacaoComponent implements OnDestroy {
         });
         this.subscription.push(params);
 
-        setTimeout(() => {
-            this.modal = this.modalService.addModal(this.modal, 'detalhe operacao');
-        }, 200);
     }
 
     voltar() {

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
@@ -10,13 +10,19 @@ import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { Moeda } from 'src/app/models/moeda.model';
+import { MoedaService } from 'src/app/services/moeda.service';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-form-operacao',
-  templateUrl: './form-operacao.component.html',
-  styleUrls: ['./form-operacao.component.css']
+    selector: 'app-form-operacao',
+    templateUrl: './form-operacao.component.html',
+    styleUrls: ['./form-operacao.component.css']
 })
 export class FormOperacaoComponent implements OnDestroy {
+    faEdit = faEdit;
+    faTrash = faTrash;
+
     objeto: PessoaOperacaoRequest = new PessoaOperacaoRequest;
     erro: string = '';
     loading = false;
@@ -28,6 +34,10 @@ export class FormOperacaoComponent implements OnDestroy {
     @ViewChild('icon') icon: TemplateRef<any>
 
     modal: Modal = new Modal;
+
+    moedas: Moeda[] = [];
+    loadingMoedas = false;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
@@ -37,22 +47,31 @@ export class FormOperacaoComponent implements OnDestroy {
         private crypto: Crypto,
         private datepipe: DatePipe,
         private toastr: ToastrService,
+        private router: Router,
+        private moedaService: MoedaService,
     ) {
         lastValueFrom(this.pessoaOperacaoService.getStatus())
-        .then(res => {
-            this.loadingStatus = false;
-            this.status = res;
-        });
+            .then(res => {
+                this.loadingStatus = false;
+                this.status = res;
+            });
+
+        lastValueFrom(this.moedaService.getList())
+            .then(res => this.moedas = res)
+            .finally(() => this.loadingMoedas = false);
+
+        var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
+        this.subscription.push(moedas);
     }
     ngAfterViewInit(): void {
-        this.modal.id =  0;
-        this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '600px'};
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '800px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         this.modal.routerBack = ['../../'];
-        
+
         var parent = this.activatedRoute.parent?.snapshot.paramMap.has('pessoa_id');
         var child = this.activatedRoute.snapshot.paramMap.has('pessoa_id');
         if (parent || child) {
@@ -60,14 +79,14 @@ export class FormOperacaoComponent implements OnDestroy {
 
         } else {
             this.voltar();
-            return ;
+            return;
         }
-        
+
         if (paramsSubscriber) {
             var params = paramsSubscriber.subscribe(x => {
                 if (x['pessoa_id']) {
                     this.objeto.pessoa_Id = this.crypto.decrypt(x['pessoa_id']);
-             
+
                 } else {
                     this.voltar();
                 }
@@ -82,29 +101,30 @@ export class FormOperacaoComponent implements OnDestroy {
                 this.modal.routerBack = ['../../../'];
                 this.isEditPage = true;
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
-                .then(res => {
-                    this.loading = false;
-                    // res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                    // res.data = this.datepipe.transform(res.data, 'dd//MM/yyyy hh:mm') as unknown as Date;
-                    res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '')  as unknown as number;
-                    this.objeto = res;
-                    
-                    setTimeout(() => {
-                        this.modal = this.modalService.addModal(this.modal, 'moeda');
-                    }, 200);
-                }) 
-                .catch(res => {
-                    this.loading = false;
-                    this.voltar()
-                }) 
+                    .then(res => {
+                        this.loading = false;
+                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.dataTransacao = this.datepipe.transform(res.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
+                        res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
+                        this.objeto = res;
+
+                        setTimeout(() => {
+                            this.modal = this.modalService.addModal(this.modal, 'moeda');
+                        }, 200);
+                    })
+                    .catch(res => {
+                        this.loading = false;
+                        this.voltar()
+                    })
             } else {
                 this.modal.title = 'Cadastrar Operação';
                 this.modal.routerBack = ['../../'];
                 this.isEditPage = false;
-                this.objeto.data = this.datepipe.transform(new Date(), 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataTransacao = this.datepipe.transform(this.objeto.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'moeda');
-            }, 200);
+                }, 200);
 
             }
         });
@@ -118,11 +138,23 @@ export class FormOperacaoComponent implements OnDestroy {
     voltar() {
         this.modalService.removeModal(this.modal);
     }
-    
+
+
+    moedaEditar(moeda: Moeda) {
+        var idEncrypted = this.crypto.encrypt(moeda.id);
+        this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
+    }
+
+    moedaExcluir(id: number) {
+        var idEncrypted = this.crypto.encrypt(id);
+        this.router.navigate(['moeda', 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
+    }
+
+
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.pessoaOperacaoService.create(this.objeto));
-        
+
         return lastValueFrom(this.pessoaOperacaoService.edit(this.objeto));
     }
 
@@ -130,7 +162,7 @@ export class FormOperacaoComponent implements OnDestroy {
         this.loading = true;
         this.erro = '';
 
-            this.request()
+        this.request()
             .then(res => {
                 if (res.sucesso == true) {
                     lastValueFrom(this.pessoaService.getList());
@@ -151,5 +183,5 @@ export class FormOperacaoComponent implements OnDestroy {
             })
 
     }
-    
+
 }

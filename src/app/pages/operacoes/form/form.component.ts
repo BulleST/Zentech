@@ -1,12 +1,17 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { Moeda } from 'src/app/models/moeda.model';
+import { Paises } from 'src/app/models/pais.model';
 import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
 import { Pessoa, PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { MoedaService } from 'src/app/services/moeda.service';
+import { PaisesService } from 'src/app/services/paises.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
@@ -20,6 +25,9 @@ import { Table } from 'src/app/utils/table';
     styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
+    faEdit = faEdit;
+    faTrash = faTrash;
+
     objeto: PessoaOperacaoRequest = new PessoaOperacaoRequest;
     erro: string = '';
     loading = false;
@@ -35,6 +43,10 @@ export class FormComponent implements OnDestroy {
     pessoaSelected?: PessoaOperacaoList;
     modal: Modal = new Modal;
 
+    moedas: Moeda[] = [];
+    loadingMoedas = false;
+
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
@@ -46,6 +58,8 @@ export class FormComponent implements OnDestroy {
         private toastr: ToastrService,
         private mask: MaskApplierService,
         private currencyPipe: CurrencyPipe,
+        private moedaService: MoedaService,
+        private router: Router,
     ) {
 
         lastValueFrom(this.pessoaOperacaoService.getStatus())
@@ -54,13 +68,20 @@ export class FormComponent implements OnDestroy {
                 this.status = res;
             });
 
+
+        lastValueFrom(this.moedaService.getList())
+            .then(res => this.moedas = res)
+            .finally(() => this.loadingMoedas = false);
+
+        var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
+        this.subscription.push(moedas);
+
     }
     ngAfterViewInit(): void {
-
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '600px', overflow: 'visible' };
+        this.modal.style = { 'max-width': '700px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
@@ -73,9 +94,9 @@ export class FormComponent implements OnDestroy {
                 this.pessoaChange();
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
-                        // res.data = this.datepipe.transform(res.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        // res.data = this.datepipe.transform(res.data, 'dd//MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
                         res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
+                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.dataTransacao = this.datepipe.transform(res.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
 
                         this.objeto = res;
                         this.pessoa_id = this.objeto.pessoa_Id;
@@ -94,25 +115,26 @@ export class FormComponent implements OnDestroy {
                 if (this.pessoas.length == 0) {
                     this.loadingPessoa = true;
                     await lastValueFrom(this.pessoaService.getList(true))
-                    .then(res => {
-                        this.loadingPessoa = false;
-                        this.pessoas = JSON.parse(JSON.stringify(res));
-                        this.pessoas =  this.pessoas.map(x => {
-                            x.dataCadastro = this.mask.applyMask(new Date(x.dataCadastro), 'dd/MM/yyyy') as unknown as Date;
-                            x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2') as unknown as number;
-                            x.cpf = this.mask.applyMask( x.cpf.toString().padStart(11, '0'), '000.000.000-00');
-                            return x
+                        .then(res => {
+                            this.loadingPessoa = false;
+                            this.pessoas = JSON.parse(JSON.stringify(res));
+                            this.pessoas = this.pessoas.map(x => {
+                                x.dataCadastro = this.datepipe.transform(x.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                                x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2') as unknown as number;
+                                x.cpf = this.mask.applyMask(x.cpf.toString().padStart(11, '0'), '000.000.000-00');
+                                return x
+                            });
                         });
-                    });
                 }
- 
+
 
                 this.modal.title = 'Cadastrar Operação';
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
 
-                this.objeto.data = this.datepipe.transform(this.objeto.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataTransacao = this.datepipe.transform(this.objeto.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
 
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'moeda');
@@ -133,6 +155,16 @@ export class FormComponent implements OnDestroy {
 
     pessoaChange() {
         this.pessoaSelected = this.pessoaOperacaoService.list.value.find(x => x.id == this.objeto.id) as PessoaOperacaoList;
+    }
+
+    moedaEditar(moeda: Moeda) {
+        var idEncrypted = this.crypto.encrypt(moeda.id);
+        this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
+    }
+
+    moedaExcluir(id: number) {
+        var idEncrypted = this.crypto.encrypt(id);
+        this.router.navigate(['moeda', 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
     }
 
     send() {

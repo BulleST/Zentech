@@ -30,12 +30,12 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-6 col-12">
-                    <label for="dataOperacao">Data da Operação:</label>
-                    <input type="datetime-local" 
+                    <label for="dataTransacao">Data da Transação:</label>
+                    <input type="date" 
                             class="form-control" 
-                            id="dataOperacao" 
-                            name="dataOperacao" 
-                            [value]="objeto.data" 
+                            id="dataTransacao" 
+                            name="dataTransacao" 
+                            [value]="objeto.dataTransacao" 
                             readonly>
                 </div>
                 <div class="form-group col-sm-6 col-12">
@@ -44,7 +44,7 @@
                         class="form-control" 
                         id="valorOperacao" 
                         name="valorOperacao" 
-                        [value]="objetoList.valorOperacao | currency : 'BRL' : '' : '1.0-2'" 
+                        [value]="objetoList.valorOperacao | currency : 'BRL' : '' : '1.2'" 
                         readonly>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                         class="form-control" 
                         id="limiteConcedido" 
                         name="limiteConcedido" 
-                        [value]="objetoList.limiteConcedido | currency : 'BRL' : '' : '1.0-2'" 
+                        [value]="objetoList.limiteConcedido | currency : 'BRL' : '' : '1.2'" 
                         readonly>
                 </div>
                 <div class="form-group col-lg-4 col-md-6 col-sm-6 col-12">
@@ -64,7 +64,7 @@
                         class="form-control" 
                         id="limiteUtilizado" 
                         name="limiteUtilizado" 
-                        [value]="objetoList.limiteUtilizado | currency : 'BRL' : '' : '1.0-2'" 
+                        [value]="objetoList.limiteUtilizado | currency : 'BRL' : '' : '1.2'" 
                         readonly>
                        
                 </div>
@@ -74,7 +74,7 @@
                             class="form-control" 
                             id="limiteAtual" 
                             name="limiteAtual" 
-                            [value]="objetoList.limiteAtual | currency : 'BRL' : '' : '1.0-2'" 
+                            [value]="objetoList.limiteAtual | currency : 'BRL' : '' : '1.2'" 
                             readonly>
                 </div>
                 <div class="form-group col-lg-6 col-md-6 col-sm-6 col-12">
@@ -84,6 +84,15 @@
                             id="status" 
                             name="status" 
                             [value]="objetoList.statusOperacao" 
+                            readonly>
+                </div>
+                <div class="form-group col-sm-6 col-12">
+                    <label for="dataCadastro">Data de cadastro no sistema:</label>
+                    <input type="datetime-local" 
+                            class="form-control" 
+                            id="dataCadastro" 
+                            name="dataCadastro" 
+                            [value]="objeto.dataCadastro" 
                             readonly>
                 </div>
             </div>

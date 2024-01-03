@@ -3,8 +3,8 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { BancoList } from 'src/app/models/banco.model';
-import { BeneficiarioList } from 'src/app/models/beneficiario.model';
+import { BancoList, BancoRequest } from 'src/app/models/banco.model';
+import { BeneficiarioList, BeneficiarioRequest } from 'src/app/models/beneficiario.model';
 import { Contrato, Contrato_List } from 'src/app/models/contrato.model';
 import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
 import { Invoice, InvoiceRequest } from 'src/app/models/invoice.model';
@@ -28,6 +28,7 @@ import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
 import { PaisesService } from 'src/app/services/paises.service';
+import { MaskApplierService } from 'ngx-mask';
 
 @Component({
     selector: 'app-form',
@@ -38,36 +39,7 @@ export class FormComponent implements OnDestroy {
     faEdit = faEdit;
     faTrash = faTrash;
 
-    objeto: InvoiceRequest =
-        {
-            "invoice": {
-                "id": 0,
-                "data": "2023-12-26T11:31:00" as unknown as Date,
-                "valor": 10000,
-                "beneficiario_Id": 44,
-                "instituicaoFinanceira_Id": 1,
-                "moeda_Id": 1
-            },
-            "contrato": {
-                "id": 0,
-                "tipo_Id": 1,
-                "invoice_Id": 0,
-                "numContrato": "0123",
-                "evento_Id": 22,
-                "data": "2023-12-26T00:00:00" as unknown as Date,
-                "taxa": 50,
-                "valorNacional": 456,
-                "dataLiquidacao": "2023-12-26T00:00:00" as unknown as Date,
-                "pagRecExterior": "246",
-                "pais_Id": 30,
-                "percentualAdiantamento": 456,
-                "rde": "456",
-                "especificacoes": "Especificações Teste",
-                "clausulas": "Cláusulas Teste",
-                "instrucoesRecebimentoPagamento": "Instruções de Recebimento/Pagamento Teste",
-                "vet": "0002315648987" as unknown as number
-            }
-        };
+    objeto: InvoiceRequest = new InvoiceRequest;
     erro: string = '';
     loading = false;
     loadingInvoiceFile = false;
@@ -89,18 +61,20 @@ export class FormComponent implements OnDestroy {
     eventos: ContratoEvento[] = []
     loadingEvento = true;
 
+    beneficiarios: BeneficiarioList[] = [];
+    loadingBeneficiarios = false;
+    beneficiarioSelected?: BeneficiarioRequest = new BeneficiarioRequest;
+    bancoBeneficiarioSelected?: BancoRequest = new BancoRequest;
+
+
     paises: Paises[] = []
     loadingPais = true;
 
-    beneficiarios: BeneficiarioList[] = [];
-    loadingBeneficiarios = false;
-    beneficiarioSelected?: BeneficiarioList = new BeneficiarioList;
+    moedas: Moeda[] = [];
+    loadingMoedas = true;
 
     instituicaoFinanceira: InstituicaoFinanceiraList[] = [];
-    loadingInstituicaoFinanceira = false;
-
-    moedas: Moeda[] = [];
-    loadingMoedas = false;
+    loadingInstituicaoFinanceira = true;
 
 
     constructor(
@@ -110,6 +84,7 @@ export class FormComponent implements OnDestroy {
         private toastr: ToastrService,
         private moedaService: MoedaService,
         private beneficiarioService: BeneficiarioService,
+        private bancoService: BancoService,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private invoiceService: InvoiceService,
         private contratoService: ContratoService,
@@ -120,7 +95,9 @@ export class FormComponent implements OnDestroy {
         private loadingService: LoadingService,
         private router: Router,
         private datePipe: DatePipe,
+        private mask: MaskApplierService,
     ) {
+
         lastValueFrom(this.moedaService.getList())
             .then(res => this.moedas = res)
             .finally(() => this.loadingMoedas = false);
@@ -128,10 +105,23 @@ export class FormComponent implements OnDestroy {
         var moedas = this.moedaService.list.subscribe(res => this.moedas = res);
         this.subscription.push(moedas);
 
-        lastValueFrom(this.beneficiarioService.getList())
-            .then(res => this.beneficiarios = res)
-            .finally(() => this.loadingBeneficiarios = false);
+        lastValueFrom(this.paisesService.getList())
+            .then(res => this.paises = res)
+            .finally(() => this.loadingPais = false);
 
+        lastValueFrom(this.beneficiarioService.getList())
+            .then(res => {
+                // Supondo que 'res' é uma matriz de objetos onde cada objeto tem uma propriedade 'cnpj' do tipo número
+
+                // Convertendo cada CNPJ para uma string e aplicando a máscara
+                this.beneficiarios = res.map(beneficiario => {
+
+
+                    beneficiario.cnpj = this.mask.applyMask(beneficiario.cnpj.toString(), '00.000.000/0000-00') as unknown as number
+                    return beneficiario;
+                });
+
+            })
         var beneficiarios = this.beneficiarioService.list.subscribe(res => this.beneficiarios = res);
         this.subscription.push(beneficiarios);
 
@@ -155,6 +145,10 @@ export class FormComponent implements OnDestroy {
             .finally(() => this.loadingPais = false);
 
     }
+
+
+
+
 
     ngAfterViewInit(): void {
 
@@ -227,12 +221,42 @@ export class FormComponent implements OnDestroy {
     async beneficiarioChange() {
         if (this.objeto.invoice.beneficiario_Id) {
             this.loadingBeneficiarios = true;
-            if (this.beneficiarios.length == 0) {
-                await lastValueFrom(this.beneficiarioService.getList());
-            }
-            this.beneficiarioSelected = this.beneficiarios.find(x => x.id == this.objeto.invoice.beneficiario_Id);
+            
+            await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
+                .then(async (res: any ) => {
+                    res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                    res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                    
+                    await lastValueFrom(this.bancoService.get(res.banco_Id))
+                    .then(res => {
+                        res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                        res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                        this.bancoBeneficiarioSelected = res;
+                    })
+                    .catch(res => {
+                        this.toastr.error('Não foi possível carregar dados do banco.')
+                    })
+
+
+                    this.beneficiarioSelected = res;
+                })
+                .catch(res => {
+                    this.toastr.error('Não foi possível carregar dados do beneficiário.')
+                })
+
             this.loadingBeneficiarios = false;
         }
+    }
+
+
+    moedaEditar(moeda: Moeda) {
+        var idEncrypted = this.crypto.encrypt(moeda.id);
+        this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
+    }
+
+    moedaExcluir(id: number) {
+        var idEncrypted = this.crypto.encrypt(id);
+        this.router.navigate(['moeda', 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
     }
 
     async invoiceDownload() {
@@ -271,29 +295,29 @@ export class FormComponent implements OnDestroy {
         this.loadingService.message.next('');
     }
 
-    async filesDownload() {
+    // async kitDownload() {
+    //     if (this.objeto.invoice.id == 0) {
+    //         this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
+    //         return
+    //     }
+
+    //     this.loading = true;
+    //     await this.invoiceDownload();
+    //     await this.contratoDownload();
+    //     await this.swiftDownload();
+
+    //     this.loading = false;
+    // }
+    
+    async kitDownload() {
         if (this.objeto.invoice.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
             return
         }
 
         this.loading = true;
-        await this.invoiceDownload();
-        await this.contratoDownload();
-        await this.swiftDownload();
-
+        await lastValueFrom(this.invoiceService.kitZip(this.objeto.invoice.id));
         this.loading = false;
-    }
-
-
-    moedaEditar(moeda: Moeda) {
-        var idEncrypted = this.crypto.encrypt(moeda.id);
-        this.router.navigate(['moeda', idEncrypted], { relativeTo: this.activatedRoute })
-    }
-
-    moedaExcluir(id: number) {
-        var idEncrypted = this.crypto.encrypt(id);
-        this.router.navigate(['moeda', 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
     }
 
     send(invoice: NgForm, contrato: NgForm) {
@@ -331,13 +355,12 @@ export class FormComponent implements OnDestroy {
                     this.erro = res.mensagem;
                     this.toastr.error(res.mensagem);
                 }
-                this.loading = false;
             })
+
             .catch(res => {
                 this.loading = false;
                 this.erro = getError(res);
             })
-
     }
 
     request() {
@@ -346,4 +369,5 @@ export class FormComponent implements OnDestroy {
 
         return lastValueFrom(this.invoiceService.create(this.objeto));
     }
+
 }

@@ -45,32 +45,33 @@ export class DetailsComponent implements OnDestroy {
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
-    
-  ngAfterViewInit() {
-    this.modal.id =  0;
-    this.modal.template =  this.template;
-    this.modal.icon =  this.icon;
-    this.modal.style =  { 'max-width': '600px', overflow: 'visible' };
-    this.modal.activatedRoute =  this.activatedRoute;
-    this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-    this.modal.title = 'Detalhes';
-    this.modal.routerBack = ['../../'];
+
+    ngAfterViewInit() {
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '600px', overflow: 'visible' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.title = 'Detalhes';
+        this.modal.routerBack = ['../../'];
 
 
         var params = this.activatedRoute.params.subscribe(async p => {
             if (p['operacao_id']) {
                 this.objeto.id = this.crypto.decrypt(p['operacao_id']);
                 var list = this.pessoaOperacaoService.list.value;
-                if (list.length == 0) 
-                var list =  await lastValueFrom(this.pessoaOperacaoService.getList())
+                if (list.length == 0)
+                    var list = await lastValueFrom(this.pessoaOperacaoService.getList())
                 this.objetoList = list.find(x => x.id == this.objeto.id) as PessoaOperacaoList;
                 if (!this.objetoList) {
                     this.voltar();
                     return;
                 }
-                this.objeto.data = this.datepipe.transform(new Date(this.objeto.data), 'yyyy-MM-ddTHH:mm') as unknown as Date
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(operacao => {
+                        operacao.dataCadastro = this.datepipe.transform(operacao.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        operacao.dataTransacao = this.datepipe.transform(operacao.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                         this.objeto = operacao;
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'moeda');
@@ -87,20 +88,16 @@ export class DetailsComponent implements OnDestroy {
 
     }
 
-    
+
     voltar() {
         this.modalService.removeModal(this.modal);
     }
 
-
     async exportarPDF() {
         this.loading = true;
         await lastValueFrom(this.pessoaOperacaoService.exportacaoOperacao(this.objeto.id));
-      
+
         this.loading = false;
     }
-
-
-
 
 }

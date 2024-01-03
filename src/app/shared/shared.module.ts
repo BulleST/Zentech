@@ -50,7 +50,7 @@ import { InputDateComponent } from './input-date/input-date.component';
         FormMoeda,
         DeleteEvento,
         DeleteTipo,
-        DeleteMoeda,
+        DeleteMoeda
     ],
     imports: [
         CommonModule,

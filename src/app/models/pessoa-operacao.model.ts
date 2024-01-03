@@ -10,7 +10,6 @@ export class PessoaOperacaoList {
     cpfCliente: string = '';
     valorOperacao: number = 0;
     statusOperacao: string = '';
-    chargeback: string = '';
     limiteConcedido: number = 0;
     limiteUtilizado: number = 0;
     limiteAtual: number = 0;
@@ -21,11 +20,16 @@ export class PessoaOperacaoList {
 export class PessoaOperacaoRequest {
     id: number = 0;
     pessoa_Id: number = '' as unknown as number;
-    data: Date = new Date;
+    dataCadastro: Date = new Date;
+    dataTransacao: Date = new Date;
     valor: number = '' as unknown as number;
     num_Op: number = '' as unknown as number;
     operacao_Status_Id: number = undefined as unknown as number;
-    chargeback: boolean = false;
+    tipoTransacao: string = '';
+    formaPagamento: string = '';
+    nomeComprador: string = '';
+    paisComprador: string = '';
+    moeda: string = '';
 }
 
 export class PessoaOperacaoStatus {
@@ -58,10 +62,10 @@ export class PessoaOperacaoImportacao {
 export var pessoaOperacaoColumns: Column[] = [
 
     {
-        field: 'dataOperacao',
-        header: 'Data da Operação',
-        maskType: MaskType.dateTime,
-        filterType: FilterType.datetime,
+        field: 'dataTransacao',
+        header: 'Data da Transação',
+        maskType: MaskType.date,
+        filterType: FilterType.date,
         filterDisplay: FilterDisplay.menu,
         filterShowAddButton: true,
         filterShowMatchMode: true,
@@ -107,6 +111,17 @@ export var pessoaOperacaoColumns: Column[] = [
             { value: 'Bloqueado', output: 'Bloqueado', class: 'flag-danger' },
             { value: 'Chargeback', output: 'Chargeback', class: 'flag-warning' },
         ]
+    },
+    {
+        field: 'dataCadastro',
+        header: 'Data de Cadastro',
+        maskType: MaskType.dateTime,
+        filterType: FilterType.datetime,
+        filterDisplay: FilterDisplay.menu,
+        filterShowAddButton: true,
+        filterShowMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
         field: 'usuarioCadastroNome',

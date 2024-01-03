@@ -53,6 +53,7 @@ input {
     font-size: 14px;
 }
 
+.form-control.ng-invalid.ng-dirty.ng-touched:not(.form-control[required]):not(.form-control[readonly]):not(.form-control[disabled]),
 .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]):-internal-autofill-selected,
 .form-control.ng-invalid[required]:not(.form-control[readonly]):not(.form-control[disabled]) {
     background-blend-mode: hard-light;
@@ -66,6 +67,7 @@ input {
 }
 
 
+.form-control.ng-valid.ng-dirty.ng-touched:not(.form-control[required]):not(.form-control[readonly]):not(.form-control[disabled]),
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled]):-internal-autofill-selected,
 .form-control.ng-valid[required]:not(.form-control[readonly]):not(.form-control[disabled]) {
     background-blend-mode: hard-light;

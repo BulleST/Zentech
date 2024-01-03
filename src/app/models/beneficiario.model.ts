@@ -6,7 +6,7 @@ export class BeneficiarioList {
     id: number = 0;
     nome: string = '';
     cep: string = '';
-    uf: string = '';
+    estado: string = '';
     cidade: string = '';
     logradouro: string = '';
     numero: string = '';
@@ -119,7 +119,7 @@ export var beneficiarioColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'uf',
+        field: 'estado',
         header: 'UF',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

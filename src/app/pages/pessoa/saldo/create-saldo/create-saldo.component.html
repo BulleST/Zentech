@@ -14,8 +14,10 @@
                     [showErrorMessage]="true"
                     [allowNegativeNumbers]="false"
                     [required]="true"
+                    [min]="0.1"
+                    [max]="999999999" 
                     [autoReplaceValue]="false"></app-input-number>
-            </div>
+            </div> <!--MAX 999.999.999-->
         </div>
         <div class="d-flex align-items-start flex-wrap p-0 mt-1">
             <div *ngIf="erro || form.invalid" class="m-0 me-3">

@@ -49,6 +49,14 @@ export class InputDateComponent implements OnChanges, AfterViewInit {
         if (changes['showErrorMessage']) this.showErrorMessage = changes['showErrorMessage'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['disabled']) this.disabled = changes['disabled'].currentValue;
+        if (changes['type']) this.type = changes['type'].currentValue;
+
+        if (this.type && this.valueInput) {
+            if(this.type == 'date' && (this.valueInput as unknown as string ).length > 10) {
+                this.valueInput = this.valueInput.toString().substring(0,10) as unknown as Date;
+                this.inputChanged();
+            }
+        }
     }
 
     ngAfterViewInit(): void {

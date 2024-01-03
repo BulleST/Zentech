@@ -22,6 +22,7 @@ export class PessoaService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private datepipe: DatePipe,
     ) {
     }
 
@@ -69,8 +70,8 @@ export class PessoaService {
 
 
     getPessoa(cpf: number, dataNasc: Date) {
-        dataNasc = new Date(dataNasc.toString() + 'T00:00:00').toLocaleString().substring(0,10) as unknown as Date;
-        return this.http.post(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
+        var data = this.datepipe.transform(dataNasc, 'dd/MM/yyyy')
+        return this.http.post(`${this.url}/pessoa/consulta-pessoa`, {cpf, data});
     }
 
 

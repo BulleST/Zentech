@@ -28,7 +28,7 @@
                         <a href="assets/modelos/modelo-importacao-pessoa.xlsx" download="modelo-importacao-pessoa.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a>
                     </p>
                     <div *ngIf="erro || form.invalid " class="m-0">
-                        <p class="text-danger" *ngIf="erro">{{erro}}</p>
+                        <p class="text-danger" *ngIf="erro" [innerHTML]="erro"></p>
                     </div>
                     <p *ngIf="!fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
                 </div>
