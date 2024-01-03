@@ -13,7 +13,7 @@
             <!-- Dados do Beneficiário -->
             <div class="row">
                 <div class="form-group col-xl-6 col-lg-5 col-md-5 col-sm-4 col-12"> <!-- Nome -->
-                    <label for="nome">Nome: <span class="text-danger">*</span></label>
+                    <label for="nome">Nome:</label>
                     <input type="text"
                            class="form-control"
                            name="nome"
@@ -58,7 +58,6 @@
                                 id="pais_Id"
                                 [virtualScroll]="true"
                                 [virtualScrollItemSize]="10"
-                                [required]="true"
                                 [filter]="true"
                                 filterBy="nome"
                                 [showClear]="true"
@@ -146,7 +145,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12"> <!-- CEP -->
-                                <label for="cep">CEP: <span class="text-danger">*</span></label>
+                                <label for="cep">Código Postal: </label>
                                 <input
                                        type="text"
                                        class="form-control"
@@ -157,7 +156,6 @@
                                        [mask]="objeto.pais_Id == 30 ? '00000-000' : '0*'"
                                        [placeholder]="objeto.pais_Id == 30 ? '00000-000' : 'Digite o CEP'"
                                        (ngModelChange)="buscaCEP(cep)"
-                                       required
                                        [disabled]="loadingCep" />
                                 <div *ngIf="cep.touched && cep.errors">
                                     <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
@@ -165,15 +163,14 @@
                                 </div>
                             </div>
                             <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12"> <!-- Logradouro -->
-                                <label for="logradouro">Logradouro: <span class="text-danger">*</span></label>
+                                <label for="logradouro">Logradouro:</label>
                                 <input type="text"
                                        class="form-control"
                                        name="logradouro"
                                        id="logradouro"
                                        #logradouro="ngModel"
                                        [(ngModel)]="objeto.logradouro"
-                                       required
-                                       [disabled]="loadingCep ||cepPreenchido"
+                                       [disabled]="loadingCep || cepPreenchido"
                                        pattern="\S(.*\S)?"
                                        (change)="objeto.logradouro = logradouro.value.trim();">
                                 <div *ngIf="logradouro.touched && logradouro.errors">
@@ -181,14 +178,13 @@
                                 </div>
                             </div>
                             <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12"> <!-- Nº -->
-                                <label for="numero">N°: <span class="text-danger">*</span></label>
+                                <label for="numero">N°:</label>
                                 <input type="text"
                                        class="form-control"
                                        name="numero"
                                        id="numero"
                                        #numero="ngModel"
                                        [(ngModel)]="objeto.numero"
-                                       required
                                        pattern="\S(.*\S)?"
                                        (change)="objeto.numero = numero.value.trim();">
                                 <div *ngIf="numero.touched && numero.errors">
@@ -218,7 +214,6 @@
                                        id="bairro"
                                        #bairro="ngModel"
                                        [(ngModel)]="objeto.bairro"
-                                       required
                                        [disabled]="loadingCep ||cepPreenchido"
                                        pattern="\S(.*\S)?"
                                        (change)="objeto.bairro = bairro.value.trim();">
@@ -227,14 +222,13 @@
                                 </div>
                             </div>
                             <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12"> <!-- Cidade -->
-                                <label for="cidade">Cidade: <span class="text-danger">*</span></label>
+                                <label for="cidade">Cidade:</label>
                                 <input type="text"
                                        class="form-control"
                                        name="cidade"
                                        id="cidade"
                                        #cidade="ngModel"
                                        [(ngModel)]="objeto.cidade"
-                                       required
                                        pattern="\S(.*\S)?"
                                        (change)="objeto.numero = cidade.value.trim();">
                                 <div *ngIf="cidade.touched && cidade.errors">
@@ -242,14 +236,13 @@
                                 </div>
                             </div>
                             <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12"> <!-- UF -->
-                                <label for="estado">UF: <span class="text-danger">*</span></label>
+                                <label for="estado">UF:</label>
                                 <input type="text"
                                        class="form-control"
                                        name="estado"
                                        id="estado"
                                        #estado="ngModel"
                                        [(ngModel)]="objeto.estado"
-                                       required
                                        pattern="\S(.*\S)?"
                                        (change)="objeto.numero = estado.value.trim();">
                                 <div *ngIf="estado.touched && estado.errors">
@@ -298,7 +291,7 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- CEP -->
-                                <label for="cep">CEP:</label>
+                                <label for="cep">Código Postal:</label>
                                 <input type="text"
                                        id="cep"
                                        class="form-control"

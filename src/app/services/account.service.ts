@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, lastValueFrom, of, throwError } from 'rxjs';
 import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
-import { map, catchError, tap } from 'rxjs/operators';
-import { Role } from '../models/account-perfil.model';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

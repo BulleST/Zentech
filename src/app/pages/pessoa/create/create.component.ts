@@ -44,8 +44,6 @@ export class CreateComponent implements OnDestroy {
         private mobile: IsMobile,
     ) {
         this.mobile.value.subscribe(res => this.screen = res);
-        this.objeto.cpf = 53504763000
-        this.objeto.dataNascimento = '1942-04-29' as unknown as Date;
 
     }
     ngAfterViewInit(): void {
