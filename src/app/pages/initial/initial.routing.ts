@@ -14,6 +14,7 @@ const contrato = () => import('../contrato/contrato.module').then(x => x.Contrat
 const instituicaoFinanceira = () => import('../instituicao-financeira/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
+const representante = () => import('../representante/representante.module').then(x => x.RepresentanteModule);
 
 const routes: Routes = [
     {
@@ -32,6 +33,7 @@ const routes: Routes = [
             { path: 'banco', loadChildren: banco  },
             { path: 'beneficiario', loadChildren: beneficiario  },
             { path: 'contrato', loadChildren: contrato },
+            { path: 'representante', loadChildren: representante },
             { path: 'usuarios', loadChildren: usuarios },
         ]
     }

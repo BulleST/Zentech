@@ -49,7 +49,7 @@
     <a class="link-container" 
                 [routerLink]="item.routerLink"
                 routerLinkActive="label-link-active"
-                [title]="item.routerLink ? 'Redirecionar para {{item.label}}' : ''">
+                [title]="item.routerLink ? 'Ir para ' + item.label : ''">
         <p class="d-flex justify-content-between"
            [ngStyle]="{marginLeft: item.paddingLeft + 'px'}">
             <span>{{item.label}}</span>

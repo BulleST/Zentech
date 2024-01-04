@@ -13,7 +13,7 @@
             <!-- Dados do Beneficiário -->
             <div class="row">
                 <div class="form-group col-xl-6 col-lg-5 col-md-5 col-sm-4 col-12"> <!-- Nome -->
-                    <label for="nome">Nome:</label>
+                    <label for="nome">Nome:<span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
                            name="nome"
@@ -27,25 +27,26 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"> <!-- CNPJ -->
-                    <label for="cnpj">CNPJ: <span class="tect-danger">*</span></label>
+                <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12"> <!-- Código de Registro -->
+                    <label for="codigoRegistro">Código de Registro: </label>
                     <input type="text"
                            class="form-control"
-                           name="cnpj"
-                           id="cnpj"
-                           #cnpj="ngModel"
-                           [(ngModel)]="objeto.cnpj"
+                           name="codigoRegistro"
+                           id="codigoRegistro"
+                           #codigoRegistro="ngModel"
+                           [(ngModel)]="objeto.codigoRegistro">
+                    <!-- 
                            required
                            (ngModelChange)="validaCNPJ(cnpj)"
                            mask="00.000.000/0000-00"
-                           placeholder="00.000.000/0000-00">
-                    <div *ngIf="cnpj.touched && cnpj.errors">
-                        <p class="text-danger" *ngIf="cnpj.errors['required']">Este campo é obrigatório.</p>
-                        <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p>
+                           placeholder="00.000.000/0000-00" -->
+                    <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
+                        <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
+                        <!-- <p class="text-danger" *ngIf="codigoRegistro.errors['mask'] || codigoRegistro.errors['invalid']">CNPJ inválido.</p> -->
                     </div>
                 </div>
                 <div class="form-group col-xl-3 col-lg-4 col-md-3 col-sm-4 col-12"> <!-- País -->
-                    <label for="pais_Id">País: <span class="text-danger">*</span></label>
+                    <label for="pais_Id">País: </label>
                     <p-dropdown [styleClass]="'form-control ' + (loadingPaises ? 'form-control-loading' : '')"
                                 [options]="paises"
                                 #pais_Id="ngModel"
@@ -56,8 +57,6 @@
                                 [disabled]="loadingPaises"
                                 name="pais_Id"
                                 id="pais_Id"
-                                [virtualScroll]="true"
-                                [virtualScrollItemSize]="10"
                                 [filter]="true"
                                 filterBy="nome"
                                 [showClear]="true"
@@ -68,18 +67,46 @@
                     </div>
                 </div>
                 <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12"> <!-- Representante -->
-                    <label for="representante">Representante: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="representante"
-                           id="representante"
-                           #representante="ngModel"
-                           [(ngModel)]="objeto.representante"
-                           required
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.representante = representante.value.trim();">
-                    <div *ngIf="representante.touched && representante.errors">
-                        <p class="text-danger" *ngIf="representante.errors['required']">Este campo é obrigatório.</p>
+                    <label for="representante_Id">Representante: <span class="text-danger">*</span></label>
+                    <p-dropdown [styleClass]="'form-control ' + (loadingRepresentantes ? 'form-control-loading' : '')"
+                                [options]="representantes"
+                                #representante_Id="ngModel"
+                                [(ngModel)]="objeto.representante_Id"
+                                optionLabel="nome"
+                                optionValue="id"
+                                [placeholder]="'Selecione'"
+                                [disabled]="loadingRepresentantes"
+                                name="representante_Id"
+                                id="representante_Id"
+                                [filter]="true"
+                                [filterFields]="['codigo', 'nome']"
+                                [showClear]="true"
+                                (ngModelChange)="representanteChanged($event)"
+                                [required]="true">
+                                <ng-template pTemplate="selectedItem">
+                                    <div *ngIf="representanteSelected">
+                                        <p>{{representanteSelected.codigo}} - {{representanteSelected.nome}}</p>
+                                    </div>
+                                </ng-template>
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex justify-content-between">
+                                <div class=" w-100">
+                                    <p class="text-ellipsis">{{item.nome}}</p>
+                                    <p class="text-ellipsis"><strong>Código:</strong> {{item.codigo}}</p>
+                                </div>
+                                <div class="ms-2">
+                                    <a class="py-1 px-1 text-dark" (click)="editar(item, 'representante')" title="Editar"><fa-icon [icon]="faEdit"></fa-icon></a>
+                                    <a class="py-1 px-1 text-dark" (click)="excluir(item.id, 'representante')" title="Excluir"><fa-icon [icon]="faTrash"></fa-icon></a>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info" [routerLink]="['./representante']">adicionar</a>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <div *ngIf="representante_Id.touched && representante_Id.errors">
+                        <p class="text-danger" *ngIf="representante_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
                 <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Banco -->
@@ -133,9 +160,45 @@
                     </div>
                 </div>
             </div>
-            <hr class="w-100 my-3 border-dark">
-            <!-- Endereço do Beneficiário -->
+            <!-- <hr class="w-100 my-3 border-dark"> -->
+            <!-- Endereço -->
             <div class="row">
+                <div class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-12 col-12 ">
+                    <label for="logradouro">Endereço: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="logradouro"
+                           id="logradouro"
+                           #logradouro="ngModel"
+                           [(ngModel)]="objeto.logradouro"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.logradouro = logradouro.value.trim();">
+                </div>
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 ">
+                    <label for="cidade">Cidade: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.cidade = cidade.value.trim();">
+                </div>
+                <div class="form-group col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12 ">
+                    <label for="estado">UF: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="estado"
+                           id="estado"
+                           #estado="ngModel"
+                           [(ngModel)]="objeto.estado"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.estado = estado.value.trim();">
+                </div>
+            </div>
+            <!-- Endereço do Beneficiário -->
+            <!--  <div class="row">
                 <div class="form-group">
                     <div class="col-sm-12 card py-3 px-4">
                         <div class="row mb-3">
@@ -143,18 +206,19 @@
                                 <h6>Endereço do Beneficiário </h6>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12"> <!-- CEP -->
+
+                        
+                       <div class="row">
+                            <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12">
                                 <label for="cep">Código Postal: </label>
-                                <input
-                                       type="text"
+                                <input type="text"
                                        class="form-control"
                                        name="cep"
                                        id="cep"
                                        #cep="ngModel"
                                        [(ngModel)]="objeto.cep"
                                        [mask]="objeto.pais_Id == 30 ? '00000-000' : '0*'"
-                                       [placeholder]="objeto.pais_Id == 30 ? '00000-000' : 'Digite o CEP'"
+                                       [placeholder]="objeto.pais_Id == 30 ? '00000-000' : ''"
                                        (ngModelChange)="buscaCEP(cep)"
                                        [disabled]="loadingCep" />
                                 <div *ngIf="cep.touched && cep.errors">
@@ -162,8 +226,8 @@
                                     <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12"> <!-- Logradouro -->
-                                <label for="logradouro">Logradouro:</label>
+                            <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12">
+                                <label for="logradouro">Endereço:</label>
                                 <input type="text"
                                        class="form-control"
                                        name="logradouro"
@@ -177,7 +241,7 @@
                                     <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12"> <!-- Nº -->
+                            <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12">
                                 <label for="numero">N°:</label>
                                 <input type="text"
                                        class="form-control"
@@ -191,7 +255,7 @@
                                     <p class="text-danger" *ngIf="numero.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-6 col-sm-8 col-12"> <!-- Complemento -->
+                            <div class="form-group col-xl- col-lg col-md-6 col-sm-8 col-12">
                                 <label for="complemento">Complemento:</label>
                                 <input type="text"
                                        class="form-control"
@@ -206,7 +270,7 @@
                                     <p class="text-danger" *ngIf="complemento.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12"> <!-- Bairro -->
+                            <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
                                 <label for="bairro">Bairro:</label>
                                 <input type="text"
                                        class="form-control"
@@ -221,7 +285,7 @@
                                     <p class="text-danger" *ngIf="bairro.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12"> <!-- Cidade -->
+                            <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
                                 <label for="cidade">Cidade:</label>
                                 <input type="text"
                                        class="form-control"
@@ -235,7 +299,7 @@
                                     <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12"> <!-- UF -->
+                            <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12">
                                 <label for="estado">UF:</label>
                                 <input type="text"
                                        class="form-control"
@@ -252,8 +316,12 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+            <div class="row">
+                <div class="col-12">
+                    <hr class="w-100 mt-2 mb-0 border-dark">
+                </div>
             </div>
-            <hr class="w-100 my-3 border-dark">
             <div class="row">
                 <div class="form-group mt-3">
                     <div class="col-sm-12 card py-3 px-4">
@@ -261,36 +329,65 @@
                         <div class="row">
                             <div>
                                 <h6>Dados do Banco </h6>
-                                <p class="mb-3"><small class="text-danger">(Selecione um banco para carregar dados)</small></p>
+                                <p class="mb-3"><small class="text-danger">(Selecione um banco para carregar os dados)</small></p>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Nome -->
+                            <div class="form-group col-xl-5 col-lg-5 col-md-4 col-sm-12 col-12"> <!-- Nome -->
                                 <label for="nome">Nome: </label>
                                 <input type="text"
                                        id="nome"
                                        class="form-control"
                                        [value]="bancoSelected?.nome"
-                                       readonly>
+                                       disabled>
                             </div>
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Código Swift -->
+                            <div class="form-group col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12"> <!-- Código Swift -->
                                 <label for="codigoSwift">Código Swift: </label>
                                 <input type="text"
                                        id="codigoSwift"
                                        class="form-control"
                                        [value]="bancoSelected?.codigoSwift"
-                                       readonly>
+                                       disabled>
+                            </div>
+                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"> <!--Pais -->
+                                <label for="pais">País:</label>
+                                <input type="text"
+                                       id="pais"
+                                       class="form-control"
+                                       [value]="bancoSelected?.pais_Id"
+                                       disabled>
                             </div>
                         </div>
                         <!-- Endereço do Banco -->
                         <div class="row">
-                            <div class="mb-2 mt-2">
-                                <small><b>Endereço do Banco</b></small>
-                                <hr class="w-100">
+                            <div class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-12 col-12 ">
+                                <label for="logradouro">Endereço: </label> <!-- Endereço -->
+                                <input type="text"
+                                       class="form-control"
+                                       id="logradouro"
+                                       [value]="bancoSelected?.logradouro"
+                                       disabled>
+                            </div>
+                            <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 ">
+                                <label for="cidade">Cidade: </label> <!-- Cidade -->
+                                <input type="text"
+                                       class="form-control"
+                                       id="cidade"
+                                       [value]="bancoSelected?.cidade"
+                                       disabled>
+                            </div>
+                            <div class="form-group col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12 ">
+                                <label for="estado">UF: </label> <!-- UF -->
+                                <input type="text"
+                                       class="form-control"
+                                       id="estado"
+                                       [value]="bancoSelected?.estado"
+                                       disabled>
                             </div>
                         </div>
+                        <!--
                         <div class="row">
-                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- CEP -->
+                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                 <label for="cep">Código Postal:</label>
                                 <input type="text"
                                        id="cep"
@@ -299,15 +396,15 @@
                                        [mask]="'00000-000'"
                                        disabled>
                             </div>
-                            <div class="form-group col-xl-7 col-lg-7 col-md-6 col-sm-6 col-12"> <!-- Logradouro -->
-                                <label for="logradouro">Logradouro:</label>
+                            <div class="form-group col-xl-7 col-lg-7 col-md-6 col-sm-6 col-12">
+                                <label for="logradouro">Endereço:</label>
                                 <input type="text"
                                        id="logradouro"
                                        class="form-control"
                                        [value]="bancoSelected?.logradouro"
                                        disabled>
                             </div>
-                            <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12"> <!-- Número -->
+                            <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
                                 <label for="numero">Número:</label>
                                 <input type="text"
                                        id="numero"
@@ -317,7 +414,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Complemento -->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <label for="complemento">Complemento:</label>
                                 <input type="text"
                                        id="complemento"
@@ -325,7 +422,7 @@
                                        [value]="bancoSelected?.complemento"
                                        disabled>
                             </div>
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Bairro-->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
                                 <label for="bairro">Bairro:</label>
                                 <input type="text"
                                        id="bairro"
@@ -335,7 +432,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Cidade -->
+                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <label for="cidade">Cidade:</label>
                                 <input type="text"
                                        id="cidade"
@@ -343,7 +440,7 @@
                                        [value]="bancoSelected?.cidade"
                                        disabled>
                             </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Estado -->
+                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <label for="estado">UF:</label>
                                 <input type="text"
                                        id="estado"
@@ -351,7 +448,7 @@
                                        [value]="bancoSelected?.estado"
                                        disabled>
                             </div>
-                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- País -->
+                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                 <label for="pais">País:</label>
                                 <input type="text"
                                        id="pais"
@@ -359,7 +456,7 @@
                                        [value]="bancoSelected?.pais_Id"
                                        disabled>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

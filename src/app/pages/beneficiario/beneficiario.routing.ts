@@ -4,6 +4,8 @@ import { ListComponent } from './list/list.component';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { FormComponent as FormBanco } from './../banco/form/form.component';
+import { FormComponent as FormRepresentante } from './../representante/form/form.component';
+import { DeleteComponent as DeleteRepresentante } from './../representante/delete/delete.component';
 import { MyAccountRouter } from 'src/app/utils/my-account-router';
 
 const routes: Routes = [
@@ -12,11 +14,17 @@ const routes: Routes = [
             {
                 path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 }, children: [
                     { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
+                    { path: 'representante', component: FormRepresentante, data: { modalOrder: 2 } },
+                    { path: 'representante/:representante_id', component: FormRepresentante, data: { modalOrder: 2 } },
+                    { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, data: { modalOrder: 2 } },
                 ]
             },
             {
                 path: 'editar/:beneficiario_id', component: FormComponent, data: { modalOrder: 1 }, children: [
                     { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
+                    { path: 'representante', component: FormRepresentante, data: { modalOrder: 2 } },
+                    { path: 'representante/:representante_id', component: FormRepresentante, data: { modalOrder: 2 } },
+                    { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, data: { modalOrder: 2 } },
                 ]
             },
             { path: 'excluir/:beneficiario_id', component: DeleteComponent, data: { modalOrder: 1 } },

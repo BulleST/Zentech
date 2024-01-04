@@ -5,37 +5,33 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class BeneficiarioList {
     id: number = 0;
     nome: string = '';
-    cep: string = '';
     estado: string = '';
     cidade: string = '';
     logradouro: string = '';
-    numero: string = '';
-    codigoSwift: string = '';
     conta: string = '';
     representante: string = '';
-    cnpj: number = 0;
+    codigoSwift: string = '';
     nomeBanco: string = '';
     nomePais: string = '';
-    complemento: string = '';
-    bairro: string = ''
+    codigoRegistro: number = 0;
 }
 
 export class BeneficiarioRequest {
     id: number = 0;
     nome: string = '';
-    cnpj: number = '' as unknown as number;
+    codigoRegistro: number = '' as unknown as number;
     cep:  number = '' as unknown as number;
     cidade: string = '';
     estado: string = '';
     logradouro: string = '';
     numero: string = '';
     codigoSwift: string = '';
-    banco_Id: number = undefined as unknown as number;
     conta: string = '';
-    pais_Id:number = undefined as unknown as number;
-    representante: string = '';
     complemento: string = '';
     bairro: string = ''
+    banco_Id: number = undefined as unknown as number;
+    pais_Id:number = undefined as unknown as number;
+    representante_Id: number = undefined as unknown as number;
 }
 
 export var beneficiarioColumns: Column[] = [
@@ -53,26 +49,16 @@ export var beneficiarioColumns: Column[] = [
 
     },
     {
-        field: 'cnpj',
-        header: 'CNPJ',
-        maskType: MaskType.cnpj,
+        field: 'codigoRegistro',
+        header: 'Código de Registro',
+        // maskType: MaskType.cnpj,
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         showAddButton: false,
         showMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
-    },
-    {
-        field: 'representante',
-        header: 'Representante',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'codigoSwift',
@@ -108,30 +94,19 @@ export var beneficiarioColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'cidade',
-        header: 'Cidade',
+        field: 'nomePais',
+        header: 'País',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         showAddButton: false,
         showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'estado',
-        header: 'UF',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
-    {
-        field: 'nomePais',
-        header: 'País',
+        field: 'representante',
+        header: 'Representante',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

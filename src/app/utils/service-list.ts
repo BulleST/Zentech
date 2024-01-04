@@ -15,6 +15,6 @@ export function insertOrReplace(service: any, object: any) {
         var index = list.findIndex(x => x.id == object.id);
         list.splice(index, 1, object);
     }
-    list = sortList(list, 'name');
+    // list = sortList(list, 'name');
     service.list.next(list);
 }

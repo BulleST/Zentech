@@ -5,6 +5,7 @@ import { faCircleCheck, faCircleXmark, faTriangleExclamation, faUpload } from '@
 import { event } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { AlertService } from 'src/app/parts/alert/alert.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
@@ -40,6 +41,7 @@ export class ImportacaoArquivoComponent {
         private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
         private pessoaService: PessoaService,
+        private alertService: AlertService
     ) {
 
     }
@@ -99,11 +101,17 @@ export class ImportacaoArquivoComponent {
                 this.loading = false;
                 if (res.sucesso) {
                     this.salvo = true;
-                    this.mensagem = res.mensagem;
+                    if (res.mensagem) {
+                        this.alertService.info(res.mensagem)
+                    }
+                    // this.mensagem = res.mensagem;
                 } else {
                     this.salvo = false;
-                    this.toastr.error('Alguns registros não puderam ser salvos.');
-                    this.erro = res.mensagem;
+                    this.toastr.error('Erro ao salvar registros.');
+                    if (res.mensagem) {
+                        this.alertService.error(res.mensagem)
+                    }
+                    // this.erro = res.mensagem;
                 }
             })
             .catch(res => {

@@ -2,7 +2,7 @@ import { PaisesService } from './../../../services/paises.service';
 import { BeneficiarioService } from './../../../services/beneficiario.service';
 
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
@@ -18,6 +18,10 @@ import { Cidades } from 'src/app/models/cidade.model';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { validateCNPJ } from 'src/app/utils/validate-cnpj';
 import { MaskApplierService } from 'ngx-mask';
+import { Representante } from 'src/app/models/representante.model';
+import { RepresentanteService } from 'src/app/services/representante.service';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-form',
@@ -25,6 +29,9 @@ import { MaskApplierService } from 'ngx-mask';
     styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
+    faEdit = faEdit;
+    faTrash = faTrash;
+
     objeto: BeneficiarioRequest = new BeneficiarioRequest;
     erro: string = '';
     loading = false;
@@ -41,11 +48,12 @@ export class FormComponent implements OnDestroy {
     bancoSelected?: BancoRequest;
     bancos: BancoList[];
 
-    loadingBeneficiario = true;
-    beneficiarios: BeneficiarioList[] = [];
-
     loadingPaises = true;
     paises: Paises[] = [];
+
+    loadingRepresentantes = true;
+    representantes: Representante[] = [];
+    representanteSelected?: Representante;
 
     @ViewChild('cep') cep: NgModel;
     cepPreenchido = false;
@@ -61,7 +69,9 @@ export class FormComponent implements OnDestroy {
         private cepService: CepService,
         private bancoService: BancoService,
         private paisesService: PaisesService,
-        private mask: MaskApplierService
+        private mask: MaskApplierService,
+        private representanteService: RepresentanteService,
+        private router: Router,
     ) {
 
         lastValueFrom(this.bancoService.getList())
@@ -72,6 +82,16 @@ export class FormComponent implements OnDestroy {
 
         var bancos = this.bancoService.list.subscribe(res => this.bancos = res);
         this.subscription.push(bancos);
+
+
+        lastValueFrom(this.representanteService.getList())
+            .then(res => {
+                this.loadingRepresentantes = false;
+                this.representantes = res
+            });
+
+        var representantes = this.representanteService.list.subscribe(res => this.representantes = res);
+        this.subscription.push(representantes);
 
 
         lastValueFrom(this.paisesService.getList())
@@ -98,9 +118,10 @@ export class FormComponent implements OnDestroy {
                 this.isEditPage = true;
                 lastValueFrom(this.beneficiarioService.get(this.objeto.id))
                     .then(res => {
-                        res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
-                        res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                        // res.codigoRegistro = res.codigoRegistro.toString().padStart(14, '0') as unknown as number;
+                        // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                         this.objeto = res;
+                        this.representanteChanged(res.representante_Id);
                         this.preencheBanco();
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'beneficiario');
@@ -139,14 +160,13 @@ export class FormComponent implements OnDestroy {
                 .then(res => {
                     this.bancoSelected = res;
                     this.bancoSelected.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-                    this.bancoSelected.cep = this.bancoSelected.cep.toString().padStart(8, '0') as unknown as number;
+                    // this.bancoSelected.cep = this.bancoSelected.cep.toString().padStart(8, '0') as unknown as number;
                 })
         } else {
             this.bancoSelected = new BancoRequest;
         }
         this.loadingBanco = false;
     }
-
 
     paisChange() {
         this.executaCEP = this.objeto.pais_Id == 30;
@@ -163,7 +183,7 @@ export class FormComponent implements OnDestroy {
     }
 
     buscaCEP(input: NgModel) {
-        if (this.executaCEP == true) {
+        if (this.executaCEP == true && this.cep) {
             this.loadingCep = true;
             input.control.setErrors(null);
             this.cepPreenchido = false
@@ -222,34 +242,50 @@ export class FormComponent implements OnDestroy {
         this.erro = '';
         this.loadingCNPJ = true;
 
-        if (this.objeto.cnpj.toString().length < 14) {
+        if (this.objeto.codigoRegistro.toString().length < 14) {
             input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
             return false;
         }
 
-        if (!this.objeto.cnpj || this.objeto.cnpj == 0) {
+        if (!this.objeto.codigoRegistro || this.objeto.codigoRegistro == 0) {
             input.control.setErrors({ required: true });
             this.loadingCNPJ = false;
             return false;
         }
 
-        var valid = validateCNPJ(this.objeto.cnpj);
+        var valid = validateCNPJ(this.objeto.codigoRegistro);
         if (!valid) {
             input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
             return false;
-
-            return;
         } else {
             this.loadingCNPJ = false;
             input.control.setErrors(null);
             return true;
         }
-        return;
     }
 
+    async representanteChanged(e: any) {
+        this.loadingRepresentantes = true;
+        if (!this.representantes || !this.representantes.length) {
+            await lastValueFrom(this.representanteService.getList());
+        }
+        this.representanteSelected = this.representantes.find(x => x.id == e);
+        this.loadingRepresentantes = false;
 
+        console.log(this.objeto.representante_Id, this.representanteSelected)
+    }
+
+    editar(model: Representante, router: string) {
+        var idEncrypted = this.crypto.encrypt(model.id);
+        this.router.navigate([router, idEncrypted], { relativeTo: this.activatedRoute })
+    }
+
+    excluir(id: number, router: string) {
+        var idEncrypted = this.crypto.encrypt(id);
+        this.router.navigate([router, 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
+    }
 
     send(form: NgForm) {
         if (form.invalid) {
@@ -259,20 +295,34 @@ export class FormComponent implements OnDestroy {
         }
         this.erro = '';
         this.loading = true;
-        this.erro = '';
+
+        // if (!this.validaCNPJ(this.cnpj)) {
+        //     this.toastr.error('CNPJ inválido');
+        //     this.erro = 'CNPJ inválido';
+        //     return;
+        // }
+        // if (!this.validaCEP(this.cep)) {
+        //     this.toastr.error('CEP inválido');
+        //     this.erro = 'CEP inválido';
+        //     return;
+        // }
 
         return lastValueFrom(this.beneficiarioService.post(this.objeto))
             .then(res => {
                 if (res.sucesso != false) {
-                    lastValueFrom(this.beneficiarioService.getList());
+                    if (res.objeto) {
+                        insertOrReplace(this.beneficiarioService, res.objeto)
+                    } else {
+                        lastValueFrom(this.beneficiarioService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
                 this.loading = false;
             })
             .catch(res => {
+                console.error(res)
                 this.loading = false;
                 this.erro = getError(res);
             })

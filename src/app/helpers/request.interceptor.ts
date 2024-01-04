@@ -63,8 +63,8 @@ export class RequestInterceptor implements HttpInterceptor {
                         if ([200, 204, 201].includes(data.status)) {
                             if (data.body && (data.body.sucesso == false || data.body == false)) {
                                 if (notToastr.length == 0) {
-                                    if (data.body.message)
-                                        this.toastr.error(data.body.message)
+                                    if (data.body.mensagem)
+                                        this.toastr.error(data.body.mensagem)
                                     else {
                                         if (request.method == 'POST') {
                                             this.toastr.error('Não foi possível concluir essa operação.');

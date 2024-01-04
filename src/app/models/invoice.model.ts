@@ -86,17 +86,6 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'cnpjBeneficiario',
-        header: 'CNPJ Beneficiário',
-        maskType: MaskType.cnpj,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
-    {
         field: 'representante',
         header: 'Representante',
         maskType: MaskType.undefined,

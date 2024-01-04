@@ -27,22 +27,23 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- CNPJ -->
-                <div class="form-group col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12">
-                    <label for="cnpj">CNPJ: <span class="tect-danger">*</span></label>
+                
+                <div class="form-group col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12"><!-- Código de Registro -->
+                    <label for="codigoRegistro">Código de Registro:</label>
                     <input type="text"
                            class="form-control"
-                           name="cnpj"
-                           id="cnpj"
-                           #cnpj="ngModel"
-                           [(ngModel)]="objeto.cnpj"
+                           name="codigoRegistro"
+                           id="codigoRegistro"
+                           #codigoRegistro="ngModel"
+                           [(ngModel)]="objeto.codigoRegistro">
+                           <!-- 
                            required
                            (ngModelChange)="validaCNPJ(cnpj)"
                            mask="00.000.000/0000-00"
-                           placeholder="00.000.000/0000-00">
-                    <div *ngIf="cnpj.touched && cnpj.errors">
-                        <p class="text-danger" *ngIf="cnpj.errors['required']">Este campo é obrigatório.</p>
-                        <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p>
+                           placeholder="00.000.000/0000-00" -->
+                    <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
+                        <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
+                        <!-- <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p> -->
                     </div>
                 </div>
                 <!-- País -->
@@ -58,8 +59,6 @@
                                 [disabled]="loadingPaises"
                                 name="pais_Id"
                                 id="pais_Id"
-                                [virtualScroll]="true"
-                                [virtualScrollItemSize]="10"
                                 [required]="true"
                                 [filter]="true"
                                 filterBy="nome"
@@ -71,10 +70,46 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Endereço -->
             <div class="row">
-                <!-- CEP -->
+                <div class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-12 col-12 ">
+                    <label for="logradouro">Endereço: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="logradouro"
+                           id="logradouro"
+                           #logradouro="ngModel"
+                           [(ngModel)]="objeto.logradouro"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.logradouro = logradouro.value.trim();">
+                </div>
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 ">
+                    <label for="cidade">Cidade: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.cidade = cidade.value.trim();">
+                </div>
+                <div class="form-group col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12 ">
+                    <label for="estado">UF: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="estado"
+                           id="estado"
+                           #estado="ngModel"
+                           [(ngModel)]="objeto.estado"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.estado = estado.value.trim();">
+                </div>
+            </div>
+            <!-- <div class="row">
                 <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12">
-                    <label for="cep">CEP: <span class="text-danger">*</span></label>
+                    <label for="cep">Código Postal: </label>
                     <input
                            type="text"
                            class="form-control"
@@ -83,25 +118,22 @@
                            #cep="ngModel"
                            [(ngModel)]="objeto.cep"
                            [mask]="objeto.pais_Id == 30 ? '00000-000' : '0*'"
-                           [placeholder]="objeto.pais_Id == 30 ? '00000-000' : 'Digite o CEP'"
+                           [placeholder]="objeto.pais_Id == 30 ? '00000-000' : ''"
                            (ngModelChange)="buscaCEP(cep)"
-                           required
                            [disabled]="loadingCep" />
                     <div *ngIf="cep.touched && cep.errors">
                         <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
                         <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
                     </div>
                 </div>
-                <!-- Logradouro -->
                 <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12">
-                    <label for="logradouro">Logradouro: <span class="text-danger">*</span></label>
+                    <label for="logradouro">Endereço: </label>
                     <input type="text"
                            class="form-control"
                            name="logradouro"
                            id="logradouro"
                            #logradouro="ngModel"
                            [(ngModel)]="objeto.logradouro"
-                           required
                            [disabled]="loadingCep ||cepPreenchido"
                            pattern="\S(.*\S)?"
                            (change)="objeto.logradouro = logradouro.value.trim();">
@@ -109,23 +141,20 @@
                         <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- Nº -->
                 <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12">
-                    <label for="numero">N°: <span class="text-danger">*</span></label>
+                    <label for="numero">N°: </label>
                     <input type="text"
                            class="form-control"
                            name="numero"
                            id="numero"
                            #numero="ngModel"
                            [(ngModel)]="objeto.numero"
-                           required
                            pattern="\S(.*\S)?"
                            (change)="objeto.numero = numero.value.trim();">
                     <div *ngIf="numero.touched && numero.errors">
                         <p class="text-danger" *ngIf="numero.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- Complemento -->
                 <div class="form-group col-xl- col-lg col-md-6 col-sm-8 col-12">
                     <label for="complemento">Complemento:</label>
                     <input type="text"
@@ -141,7 +170,6 @@
                         <p class="text-danger" *ngIf="complemento.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- Bairro -->
                 <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
                     <label for="bairro">Bairro:</label>
                     <input type="text"
@@ -150,7 +178,6 @@
                            id="bairro"
                            #bairro="ngModel"
                            [(ngModel)]="objeto.bairro"
-                           required
                            [disabled]="loadingCep || cepPreenchido"
                            pattern="\S(.*\S)?"
                            (change)="objeto.bairro = bairro.value.trim();">
@@ -158,39 +185,35 @@
                         <p class="text-danger" *ngIf="bairro.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- Cidade -->
                 <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
-                    <label for="cidade">Cidade: <span class="text-danger">*</span></label>
+                    <label for="cidade">Cidade: </label>
                     <input type="text"
                            class="form-control"
                            name="cidade"
                            id="cidade"
                            #cidade="ngModel"
                            [(ngModel)]="objeto.cidade"
-                           required
                            pattern="\S(.*\S)?"
                            (change)="objeto.numero = cidade.value.trim();">
                     <div *ngIf="cidade.touched && cidade.errors">
                         <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- UF -->
                 <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12">
-                    <label for="estado">UF: <span class="text-danger">*</span></label>
+                    <label for="estado">UF: </label>
                     <input type="text"
                            class="form-control"
                            name="estado"
                            id="estado"
                            #estado="ngModel"
                            [(ngModel)]="objeto.estado"
-                           required
                            pattern="\S(.*\S)?"
                            (change)="objeto.numero = estado.value.trim();">
                     <div *ngIf="estado.touched && estado.errors">
                         <p class="text-danger" *ngIf="estado.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="d-flex align-items-center mt-1">
                     <div *ngIf="erro || form.invalid" class="m-0">

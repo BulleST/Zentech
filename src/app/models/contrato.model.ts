@@ -75,7 +75,6 @@ export class Contrato_List {
 
 }
 
-
 export var contratoColumns: Column[] = [
 
     {
@@ -125,17 +124,6 @@ export var contratoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'representante',
-        header: 'Representante',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
         field: 'banco',
         header: 'Banco',
         maskType: MaskType.undefined,
@@ -150,7 +138,7 @@ export var contratoColumns: Column[] = [
         field: 'taxa',
         header: 'Taxa',
         maskType: MaskType.number,
-        decimal: '1.2',
+        decimal: '1.0-10',
         filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         showAddButton: false,

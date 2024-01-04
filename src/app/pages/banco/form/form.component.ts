@@ -12,6 +12,7 @@ import { validateCEP } from 'src/app/utils/validate-cep';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Paises } from 'src/app/models/pais.model';
 import { PaisesService } from 'src/app/services/paises.service';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 
 @Component({
@@ -123,7 +124,7 @@ export class FormComponent implements OnDestroy {
 
 
     buscaCEP(input: NgModel) {
-        if (this.executaCEP == true) {
+        if (this.executaCEP == true && this.cep) {
             this.loadingCep = true;
             input.control.setErrors(null);
             this.cepPreenchido = false
@@ -194,11 +195,14 @@ export class FormComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso == true) {
-                    lastValueFrom(this.bancoService.getList());
+                    if (res.objeto) {
+                        insertOrReplace(this.bancoService, res.objeto)
+                    } else {
+                        lastValueFrom(this.bancoService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
             })
             .catch(res => {
