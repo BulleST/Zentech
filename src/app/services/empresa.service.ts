@@ -13,13 +13,16 @@ import { Empresa } from '../models/empresa.model';
 export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
-
+    empresaSelected:  BehaviorSubject<EmpresaSelected>;
     constructor(
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
 
-    ) { }
+    ) { 
+        this.empresaSelected = new BehaviorSubject<EmpresaSelected>(new EmpresaSelected);
+    
+    }
 
     getList(loading: boolean = false) {
         this.table.loading.next(true);
@@ -55,5 +58,9 @@ export class EmpresaService {
         return this.http.delete<Response>(`${this.url}/empresa/${id}`);
     }
 
+}
+export class EmpresaSelected {
+    empresa?: Empresa;
+    id: number = 0;
 }
 

@@ -1,5 +1,5 @@
 export const regexCNPJ = /^\d{2}.\d{3}.\d{3}\/\d{4}-\d{2}$/
-export function validateCNPJ(doc: number) {
+export function validateCNPJ(doc: number | string) {
     var cnpj = doc.toString();
 
     if (!doc) return false;

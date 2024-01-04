@@ -25,6 +25,7 @@ export class Invoice_List {
 export class InvoiceRequest {
     invoice: Invoice = new Invoice;
     contrato: Contrato = new Contrato();
+    beneficiarioConta: string = '';
 }
 
 

@@ -13,13 +13,14 @@ export class BeneficiarioList {
     codigoSwift: string = '';
     nomeBanco: string = '';
     nomePais: string = '';
-    codigoRegistro: number = 0;
+    codigoRegistro: string = '';
+    empresa_Id: number = 0;
 }
 
 export class BeneficiarioRequest {
     id: number = 0;
     nome: string = '';
-    codigoRegistro: number = '' as unknown as number;
+    codigoRegistro: string = '';
     cep:  number = '' as unknown as number;
     cidade: string = '';
     estado: string = '';
@@ -32,6 +33,7 @@ export class BeneficiarioRequest {
     banco_Id: number = undefined as unknown as number;
     pais_Id:number = undefined as unknown as number;
     representante_Id: number = undefined as unknown as number;
+    empresa_Id: number = 0;
 }
 
 export var beneficiarioColumns: Column[] = [

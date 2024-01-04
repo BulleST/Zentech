@@ -43,7 +43,7 @@
                 </div>
                 <div class="form-group col-md-4 col-sm-4">
                     <label for="pais_Id">País: </label>
-                    <p-dropdown [styleClass]="'form-control' + (loadingPaises ? 'form-control-loading' : '')"
+                    <p-dropdown [styleClass]="'form-control ' + (loadingPaises ? 'form-control-loading' : '')"
                                 [options]="paises"
                                 #pais_Id="ngModel"
                                 [(ngModel)]="objeto.pais_Id"

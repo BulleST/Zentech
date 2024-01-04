@@ -150,7 +150,7 @@
                                             optionValue="id"
                                             placeholder="Selecione um beneficiário"
                                             [required]="true"
-                                            [showClear]="true"
+                                            [showClear]="false"
                                             (ngModelChange)="beneficiarioChange()">
                                     <ng-template let-item pTemplate="item">
                                         <div>
@@ -172,10 +172,15 @@
                             <div class="form-group mt-3">
                                 <div class="col-sm-12 card py-3 px-4">
                                     <div class="row">
-                                        <div>
-                                            <h6>Dados do Beneficiário </h6>
-                                            <p class="mb-3"><small class="text-danger">(Selecione um beneficiário para carregar dados)</small></p>
-                                        </div>
+                                       <div class="d-flex">
+                                            <div col="col-xl-9 col-lg-9 col-md-8 col-sm-7 col-12">
+                                                <h6>Dados do Beneficiário </h6>
+                                                <p class="mb-3"><small class="text-danger">(Selecione um beneficiário para carregar dados)</small></p>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <button type="button" class="btn btn-dark" (click)="alterarConta = true">Alterar conta</button>
+                                            </div>
+                                       </div>
                                     </div>
                                     <div class="row">
                                         <!-- Banco -->
@@ -191,10 +196,16 @@
                                         <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
                                             <label for="conta">Conta: </label>
                                             <input type="text"
+                                                    class="form-control"
                                                    id="conta"
-                                                   class="form-control"
-                                                   [value]="beneficiarioSelected?.conta ?? 'N/A'"
-                                                   readonly>
+                                                   name="conta"
+                                                   #conta="ngModel"
+                                                   [(ngModel)]="objeto.beneficiarioConta"
+                                                   [readonly]="!alterarConta"
+                                                   required>
+                                            <div *ngIf="conta.touched && conta.errors">
+                                                <p class="text-danger" *ngIf="conta.errors['required']">Este campo é obrigatório.</p>
+                                            </div>
                                         </div>
                                         <!-- Representante -->
                                         <!-- <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">

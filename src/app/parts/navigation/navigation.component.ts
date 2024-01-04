@@ -126,12 +126,12 @@ export class NavigationComponent implements OnDestroy {
                     },
                 ]
             },
-            {
-                id: i++,
-                label: 'Empresas',
-                routerLink: "/empresa",
-                paddingLeft: 0,
-            },
+            // {
+            //     id: i++,
+            //     label: 'Empresas',
+            //     routerLink: "/empresa",
+            //     paddingLeft: 0,
+            // },
             {
                 id: i++,
                 label: 'Usuários',

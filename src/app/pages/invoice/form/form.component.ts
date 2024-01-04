@@ -66,7 +66,6 @@ export class FormComponent implements OnDestroy {
     beneficiarioSelected?: BeneficiarioRequest;
     bancoBeneficiarioSelected?: BancoRequest;
 
-
     paises: Paises[] = []
     loadingPais = true;
 
@@ -76,6 +75,7 @@ export class FormComponent implements OnDestroy {
     instituicaoFinanceira: InstituicaoFinanceiraList[] = [];
     loadingInstituicaoFinanceira = true;
 
+    alterarConta = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -94,8 +94,6 @@ export class FormComponent implements OnDestroy {
         private modalService: ModalService,
         private loadingService: LoadingService,
         private router: Router,
-        private datePipe: DatePipe,
-        private mask: MaskApplierService,
     ) {
 
         lastValueFrom(this.moedaService.getList())
@@ -111,15 +109,8 @@ export class FormComponent implements OnDestroy {
 
         lastValueFrom(this.beneficiarioService.getList())
             .then(res => {
-                // Supondo que 'res' é uma matriz de objetos onde cada objeto tem uma propriedade 'cnpj' do tipo número
-
-                // Convertendo cada CNPJ para uma string e aplicando a máscara
-                this.beneficiarios = res
-                // .map(beneficiario => {
-                //     beneficiario.cnpj = this.mask.applyMask(beneficiario.cnpj.toString(), '00.000.000/0000-00') as unknown as number
-                //     return beneficiario;
-                // });
-
+                this.beneficiarios = res;
+                this.loadingBeneficiarios = false;
             })
         var beneficiarios = this.beneficiarioService.list.subscribe(res => this.beneficiarios = res);
         this.subscription.push(beneficiarios);
@@ -144,10 +135,6 @@ export class FormComponent implements OnDestroy {
             .finally(() => this.loadingPais = false);
 
     }
-
-
-
-
 
     ngAfterViewInit(): void {
 
@@ -222,9 +209,10 @@ export class FormComponent implements OnDestroy {
             this.loadingBeneficiarios = true;
             
             await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
-                .then(async (res: any ) => {
+                .then(async (res: BeneficiarioRequest ) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
                     // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                    this.objeto.beneficiarioConta = res.conta;
                     
                     await lastValueFrom(this.bancoService.get(res.banco_Id))
                     .then(res => {

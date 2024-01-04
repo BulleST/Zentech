@@ -6,11 +6,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DeleteComponent } from './delete/delete.component';
 import { BeneficiarioRoutingModule } from './beneficiario.routing';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
     declarations: [

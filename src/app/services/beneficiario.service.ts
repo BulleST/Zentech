@@ -8,6 +8,7 @@ import { Table } from '../utils/table';
 
 import { Response } from '../helpers/request-response.interface';
 import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
+import { EmpresaService } from './empresa.service';
 
 
 
@@ -22,12 +23,13 @@ export class BeneficiarioService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
-
+        private empresaService: EmpresaService,
     ) { }
 
-    getList(loading: boolean = false) {
+    getList(/* empresaId?: number, */ loading: boolean = false) {
         this.table.loading.next(true);
-        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        // empresaId = empresaId ?? this.empresaService.empresaSelected.value.id ?? '' as unknown as number ;
+        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario` /*/list/${empresaId} */, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
                     list = list.map(x => {
@@ -36,28 +38,22 @@ export class BeneficiarioService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de beneficiários.')
 
             }));
     }
-
 
     get(id: number) {
         return this.http.get<BeneficiarioRequest>(`${this.url}/beneficiario/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
     }
 
-
-
     post(request: BeneficiarioRequest) {
+        request.empresa_Id = request.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
         return this.http.post<Response>(`${this.url}/beneficiario`, request);
     }
-
-
 
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/Beneficiario/${id}`);
     }
-
-
 }
 

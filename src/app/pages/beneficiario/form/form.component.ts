@@ -248,7 +248,7 @@ export class FormComponent implements OnDestroy {
             return false;
         }
 
-        if (!this.objeto.codigoRegistro || this.objeto.codigoRegistro == 0) {
+        if (!this.objeto.codigoRegistro || parseInt(this.objeto.codigoRegistro) == 0) {
             input.control.setErrors({ required: true });
             this.loadingCNPJ = false;
             return false;

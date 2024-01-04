@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label for="empresa_Id">Selecione a Empresa para carregar dados</label>
+    <p-dropdown [options]="empresas"
+                (ngModelChange)="empresaChange($event)"
+                [(ngModel)]="empresaSelected.id"
+                name="empresa_Id"
+                id="empresa_Id"
+                #empresa_Id="ngModel"
+                optionValue="id"
+                [filter]="true"
+                filterBy="nome"
+                [showClear]="false"
+                styleClass="form-control"
+                placeholder="Selecione uma empresa"
+                [required]="true">
+        <ng-template pTemplate="selectedItem">
+            <span *ngIf="empresaSelected.id">{{empresaSelected.empresa?.nome}}</span>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+            <p>{{ item.nome }}</p>
+            <p>{{ item.logo }}</p>
+        </ng-template>
+    </p-dropdown>
+</div>
+<!-- <p>{{empresaSelected|json}}</p> -->

@@ -30,6 +30,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
 
 
 
@@ -55,6 +56,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
         DeleteTipo,
         DeleteMoeda,
         DeleteRepresentante,
+        EmpresaSelectedComponent,
     ],
     imports: [
         CommonModule,
@@ -90,6 +92,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
         DeleteMoeda,
         FormRepresentante,
         DeleteRepresentante,
+        EmpresaSelectedComponent,
     ],
 })
 export class SharedModule {

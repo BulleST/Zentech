@@ -5,7 +5,7 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class InstituicaoFinanceiraList {
     id: number = 0;
     nome: string = '';
-    codigoRegistro: number = 0;
+    codigoRegistro: string = '';
     cidade: string = '';
     estado: string = '';
     pais: string = '';
@@ -14,7 +14,7 @@ export class InstituicaoFinanceiraList {
 export class InstituicaoFinanceiraRequest {
     id: number = 0;
     nome: string = '';
-    codigoRegistro: number = '' as unknown as number;
+    codigoRegistro: string = '';
     logradouro: string = '';
     numero: string = '';
     cep: number = '' as unknown as number;
