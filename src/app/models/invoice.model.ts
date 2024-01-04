@@ -9,6 +9,7 @@ export class Invoice {
     valor: number = '' as unknown as number;
     instituicaoFinanceira_Id: number = undefined as unknown as number;
     beneficiario_Id: number = undefined as unknown as number;
+    conta: string = '';
 }
 
 export class Invoice_List {
@@ -18,14 +19,14 @@ export class Invoice_List {
     valor: number = 0;
     nomeBeneficiario: string = '';
     nomeBanco: string = '';
-    filter: string = ''
+    filter: string = '';
+    conta: string = '';
 }
 
 
 export class InvoiceRequest {
     invoice: Invoice = new Invoice;
     contrato: Contrato = new Contrato();
-    beneficiarioConta: string = '';
 }
 
 
@@ -96,5 +97,16 @@ export var invoiceColumns: Column[] = [
         showMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
+        field: 'conta',
+        header: 'Conta',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        showAddButton: false,
+        showMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
     },
 ];

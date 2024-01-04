@@ -155,9 +155,8 @@ export class FormComponent implements OnDestroy {
                 lastValueFrom(this.invoiceService.get(this.objeto.invoice.id))
                     .then(async res => {
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-
+                        res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
@@ -212,7 +211,7 @@ export class FormComponent implements OnDestroy {
                 .then(async (res: BeneficiarioRequest ) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
                     // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
-                    this.objeto.beneficiarioConta = res.conta;
+                    this.objeto.invoice.conta = res.conta;
                     
                     await lastValueFrom(this.bancoService.get(res.banco_Id))
                     .then(res => {

@@ -200,7 +200,7 @@
                                                    id="conta"
                                                    name="conta"
                                                    #conta="ngModel"
-                                                   [(ngModel)]="objeto.beneficiarioConta"
+                                                   [(ngModel)]="objeto.invoice.conta"
                                                    [readonly]="!alterarConta"
                                                    required>
                                             <div *ngIf="conta.touched && conta.errors">
@@ -218,20 +218,20 @@
                                       </div> -->
                                         <!-- Código Swift -->
                                         <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                            <label for="codigoSwift">Código Swift: </label>
+                                            <label for="codigoSwift">Código Swift <small>(Banco)</small>: </label>
                                             <input type="text"
                                                    id="codigoSwift"
                                                    class="form-control"
-                                                   [value]="beneficiarioSelected?.codigoSwift ?? 'N/A'"
+                                                   [value]="bancoBeneficiarioSelected?.codigoSwift ?? 'N/A'"
                                                    readonly>
                                         </div>
                                     </div>
-                                    <!-- <div class="row">
+                                    <div class="row">
                                       <div>
                                           <small><b>Endereço do banco</b></small>
                                           <hr class="w-100">
                                       </div>
-                                  </div> -->
+                                  </div>
                                     <!-- Endereço do Banco -->
                                     <div class="row">
                                         <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 ">
