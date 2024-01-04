@@ -762,3 +762,8 @@ tr.selected td {
     height: 60px;
     color: #6d7277;
 }
+
+
+.exportar-pdf svg {
+    font-size: 19px;
+}
