@@ -11,7 +11,7 @@
         <div class="px-2">
             <div class="row">
                 <!-- Nome -->
-                <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-6 col-12"> 
+                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"> 
                     <label for="nome">Nome: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -26,23 +26,35 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                <!-- Código -->
-                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12">
-                    <label for="codigo">Código: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="codigo"
-                           id="codigo"
-                           #codigo="ngModel"
-                           [(ngModel)]="objeto.codigo"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.codigo = codigo.value.trim();"
-                           required>
-                    <div *ngIf="codigo.touched && codigo.errors">
-                        <p class="text-danger" *ngIf="codigo.errors['required']">Este campo é obrigatório.</p>
-                    </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                   <div>
+                        <label for="file" class="mb-0">Logo: <span class="text-danger">*</span></label>
+                        <label for="file" class="input-file-container" *ngIf="!fileUploaded">
+                            <p class="icon">
+                                <i class="pi pi-upload"></i>
+                            </p>
+                            <h3>Clique e arraste para selecionar uma imagem</h3>
+                            <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
+                            <input type="file"
+                                name="file"
+                                id="file"
+                                #file
+                                required
+                                accept="image/png, image/gif, image/jpeg, image/svg" 
+                                (input)="fileChange($event)" >
+                        </label>
+                        <div class="my-3">
+                            <button *ngIf="fileUploaded" (click)="importarNovamente(); " class="btn btn-dark  ">Refazer upload</button>
+                        </div>
+                        <div class="">
+                            <img [src]="fileSrc" *ngIf="fileSrc && fileUploaded" [alt]="fileName" class="logo">
+                        </div>
+                   </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col mt-3 mb-2 d-flex align-items-center">
                     <div *ngIf="erro || form.invalid" class="m-0">

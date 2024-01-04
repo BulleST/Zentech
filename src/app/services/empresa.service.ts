@@ -5,14 +5,15 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
-import { BancoList, BancoRequest } from '../models/banco.model';
+import { Empresa } from '../models/empresa.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class BancoService {
+export class EmpresaService {
     url = environment.url;
-    list = new BehaviorSubject<BancoList[]>([]);
+    list = new BehaviorSubject<Empresa[]>([]);
+
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -22,7 +23,7 @@ export class BancoService {
 
     getList(loading: boolean = false) {
         this.table.loading.next(true);
-        return this.http.get<BancoList[]>(`${this.url}/banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<Empresa[]>(`${this.url}/empresa`, { headers: new HttpHeaders({ 'loading': 'false' }) })
             .pipe(tap({
                 next: list => {
                     list = list.map(x => {
@@ -31,27 +32,27 @@ export class BancoService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de bancos.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.')
 
             }));
 
 
     }
     get(id: number) {
-        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
     }
 
 
-    create(request: BancoRequest) {
-        return this.http.post<Response>(`${this.url}/banco`, request);
+    create(request: Empresa) {
+        return this.http.post<Response>(`${this.url}/empresa`, request);
     }
 
-    edit(request: BancoRequest) {
-        return this.http.put<Response>(`${this.url}/banco`, request);
+    edit(request: Empresa) {
+        return this.http.put<Response>(`${this.url}/empresa`, request);
     }
 
     delete(id: number) {
-        return this.http.delete<Response>(`${this.url}/banco/${id}`);
+        return this.http.delete<Response>(`${this.url}/empresa/${id}`);
     }
 
 }

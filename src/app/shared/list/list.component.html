@@ -46,8 +46,9 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="me-3" [innerHTML]="col.header"></span>
                         <div>
-                            <p-sortIcon [field]="col.field" *ngIf="sortTable"></p-sortIcon>
+                            <p-sortIcon *ngIf="col.sort != false && sortTable" [field]="col.field"></p-sortIcon>
                             <p-columnFilter #filterEl
+                                            *ngIf="col.filterType != 'none'"
                                             [type]="col.filterType"
                                             [field]="col.field"
                                             [display]="col.filterDisplay"
@@ -159,6 +160,14 @@
                         <div *ngSwitchCase="maskType.percentage">
                             <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}}% </p>
                         </div>
+                        <div *ngSwitchCase="maskType.imageUrl">
+                            <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo" #targetEl (mouseenter)="closeOverlays(); overlayPanel.show($event, targetEl)">
+                            
+                            <p-overlayPanel #overlayPanel [styleClass]="'table-image-overlay-panel'" [showCloseIcon]="true"  >
+                                <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo">
+                            </p-overlayPanel>
+                        
+                        </div>
                         <div *ngSwitchDefault>
                             <span> {{item[col.field]}} </span>
                         </div>
@@ -209,3 +218,4 @@
 <ng-template #NA>
     <p>N/A</p>
 </ng-template>
+

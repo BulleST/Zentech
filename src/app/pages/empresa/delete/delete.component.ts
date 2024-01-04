@@ -6,7 +6,8 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { RepresentanteService } from 'src/app/services/representante.service';
+import { EmpresaService } from 'src/app/services/empresa.service';
+import { remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -28,7 +29,7 @@ export class DeleteComponent {
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
         private crypto: Crypto,
-        private representanteService: RepresentanteService,
+        private empresaService: EmpresaService,
     ) { 
 
     }
@@ -52,9 +53,9 @@ export class DeleteComponent {
         this.modal.title = 'Excluir registro';
 
         var params = this.activatedRoute.params.subscribe(p => {
-            if (p['representante_id']) {
-                this.id = this.crypto.decrypt(p['representante_id']);
-                this.modal = this.modalService.addModal(this.modal, 'representante');
+            if (p['empresa_id']) {
+                this.id = this.crypto.decrypt(p['empresa_id']);
+                this.modal = this.modalService.addModal(this.modal, 'empresa');
             } else {
                 this.voltar();
             }
@@ -74,11 +75,15 @@ export class DeleteComponent {
         this.loading = true;
         this.erro = '';
 
-        lastValueFrom(this.representanteService.delete(this.id))
+        lastValueFrom(this.empresaService.delete(this.id))
             .then(res => {
                 this.loading = false;
-                if (res.sucesso) {
-                    lastValueFrom(this.representanteService.getList());
+                if (res.sucesso == true) {
+                    if (res.objeto) {
+                        remove(this.empresaService, res.objeto)
+                    } else {
+                        lastValueFrom(this.empresaService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;

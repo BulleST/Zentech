@@ -5,22 +5,24 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { ListComponent } from './list/list.component';
 import { DropdownModule } from 'primeng/dropdown';
-import { RepresentanteRoutingModule } from './representante.routing';
+import { EmpresaRoutingModule } from './empresa.routing';
+import { FormComponent } from './form/form.component';
+import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
     declarations: [
         ListComponent,
-        // FormComponent,
-        // DeleteComponent,
+        FormComponent,
+        DeleteComponent,
     ],
     imports: [
         CommonModule,
-        RepresentanteRoutingModule,
+        EmpresaRoutingModule,
         FormsModule,
         FontAwesomeModule,
         SharedModule,
         DropdownModule
     ],
 })
-export class RepresentanteModule { }
+export class EmpresaModule { }

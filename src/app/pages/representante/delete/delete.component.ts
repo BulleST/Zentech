@@ -7,6 +7,7 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { RepresentanteService } from 'src/app/services/representante.service';
+import { remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -77,8 +78,12 @@ export class DeleteComponent {
         lastValueFrom(this.representanteService.delete(this.id))
             .then(res => {
                 this.loading = false;
-                if (res.sucesso) {
-                    lastValueFrom(this.representanteService.getList());
+                if (res.sucesso == true) {
+                    if (res.objeto) {
+                        remove(this.representanteService, res.objeto)
+                    } else {
+                        lastValueFrom(this.representanteService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;

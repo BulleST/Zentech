@@ -8,6 +8,7 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { Representante } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 
 @Component({
@@ -94,11 +95,14 @@ export class FormComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso == true) {
-                    lastValueFrom(this.representanteService.getList());
+                    if (res.objeto) {
+                        insertOrReplace(this.representanteService, res.objeto)
+                    } else {
+                        lastValueFrom(this.representanteService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
             })
             .catch(res => {

@@ -1,6 +1,7 @@
-import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, FilterDisplay, FilterType, MaskType } from 'src/app/helpers/column.interface';
@@ -45,6 +46,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     formatedList: any = [];
 
     @ViewChild('rowActions') rowActionsTemplate: TemplateRef<any>;
+    @ViewChildren('overlayPanel') logos: QueryList<OverlayPanel>;
 
     constructor(
         private table: Table,
@@ -181,6 +183,12 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     setDate(date: string) {
         return new Date(date) ?? 'N/A'
+    }
+
+    closeOverlays() {
+        this.logos.forEach(item => {
+            item.hide();
+        });
     }
     
 

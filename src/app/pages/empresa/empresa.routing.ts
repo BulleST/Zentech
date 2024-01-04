@@ -9,8 +9,8 @@ const routes: Routes = [
 
     { path: '', component: ListComponent, children: [
         { path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 } },
-        { path: 'editar/:representante_id', component: FormComponent, data: { modalOrder: 1 } },
-        { path: 'excluir/:representante_id', component: DeleteComponent, data: { modalOrder: 1 } },
+        { path: 'editar/:empresa_id', component: FormComponent, data: { modalOrder: 1 } },
+        { path: 'excluir/:empresa_id', component: DeleteComponent, data: { modalOrder: 1 } },
         MyAccountRouter,
     ] }
 ];
@@ -19,4 +19,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RepresentanteRoutingModule { }
+export class EmpresaRoutingModule { }

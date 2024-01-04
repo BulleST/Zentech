@@ -17,6 +17,7 @@ export interface Column {
     title?: string;
     filterValue?: any;
     values?: OptionValues[];
+    sort?: boolean;
 }
 
 export enum FilterType {
@@ -25,10 +26,12 @@ export enum FilterType {
     date = 'date',
     datetime = 'datetime',
     boolean = 'boolean',
+    none = 'none',
 }
 
 export enum FilterDisplay {
-    menu = 'menu'
+    menu = 'menu',
+    none = 'none',
 }
 
 export enum MaskType {
@@ -49,6 +52,7 @@ export enum MaskType {
     options = 'options',
     mask = 'mask',
     cep = 'cep',
+    imageUrl = 'imageUrl',
 }
 
 

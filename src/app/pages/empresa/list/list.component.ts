@@ -6,9 +6,8 @@ import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { ScreenWidth } from 'src/app/utils/mobile';
-import { Representante, representanteColumns } from 'src/app/models/representante.model';
-import { RepresentanteService } from 'src/app/services/representante.service';
+import { Empresa, empresaColumns } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
     selector: 'app-list',
@@ -18,21 +17,22 @@ import { RepresentanteService } from 'src/app/services/representante.service';
 export class ListComponent {
     faFilePdf = faFilePdf;
     maskType = MaskType;
-    list: Representante[] = []
+    list: Empresa[] = []
     tableLinks: MenuTableLink[] = [];
 
-    columns = representanteColumns;
+    columns = empresaColumns;
     subscription: Subscription[] = [];
-    screen: ScreenWidth = ScreenWidth.lg;
 
     constructor(
         private table: Table,
-        private representanteService: RepresentanteService,
+        private empresaService: EmpresaService,
     ) {
-        var list = this.representanteService.list.subscribe(res => this.list = res);
+        var list = this.empresaService.list.subscribe(res => {
+            this.list = res.map(x => JSON.parse(JSON.stringify(x)))
+        });
         this.subscription.push(list);
         
-        lastValueFrom(this.representanteService.getList());
+        lastValueFrom(this.empresaService.getList());
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {

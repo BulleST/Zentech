@@ -29,7 +29,7 @@ import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
-
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 
 
@@ -67,6 +67,7 @@ import { InputDateComponent } from './input-date/input-date.component';
         DropdownModule,
         CalendarModule,
         TabViewModule,
+        OverlayPanelModule  
     ],
     exports: [
         ListSharedComponent,

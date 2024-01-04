@@ -250,7 +250,6 @@ tr.selectable {
     color: #fff;
 }
 
-
 .flag.flag-text {
     display: inline-flex;
     align-items: center;
@@ -429,7 +428,6 @@ tr.selectable {
     cursor: pointer;
     background-color: rgb(var(--secondary));
 }
-
 
 .p-column-filter-overlay-menu .p-column-filter-operator {
     padding: 7px;
@@ -743,7 +741,6 @@ tr.selected td {
     background-color: #abcfdd !important;
 }
 
-
 .p-scroller {
     padding: 0px !important;
 }
@@ -763,7 +760,41 @@ tr.selected td {
     color: #6d7277;
 }
 
-
 .exportar-pdf svg {
     font-size: 19px;
+}
+
+.table tbody tr td img.logo {
+    height: 20px;
+    width: auto;
+}
+
+.table-image-overlay-panel {
+    box-sizing: border-box;
+}
+
+.table-image-overlay-panel .logo {
+    width: 250px;
+    height: auto;
+}
+
+.table-image-overlay-panel .p-overlaypanel-content {
+    padding: 30px 40px;
+    background-color: #fff;
+    box-shadow: 1px 2px 6px 1px #00000026;
+    box-sizing: border-box;
+}
+
+
+.p-overlaypanel-close {
+    position: absolute!important;
+    top: 0;
+    right: 0;
+    padding: 15px;
+    color: #878585;
+}
+
+.p-overlaypanel-close svg {
+    width: 16px;
+    height: 16px;
 }
