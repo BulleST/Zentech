@@ -20,6 +20,7 @@ import { Modal } from 'src/app/services/modal.service';
 import { NgForm } from '@angular/forms';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { DatePipe } from '@angular/common';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 
 @Component({
@@ -162,11 +163,14 @@ export class FormComponent implements OnDestroy {
         return lastValueFrom(this.contratoService.post(this.objeto))
             .then(async res => {
                 if (res.sucesso != false) {
-                    await lastValueFrom(this.contratoService.getList())
+                    if (res.objeto) {
+                        insertOrReplace(this.contratoService, res.objeto)
+                    } else {
+                        lastValueFrom(this.contratoService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
                 this.loading = false;
             })

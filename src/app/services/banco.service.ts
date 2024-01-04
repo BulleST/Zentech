@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
 import { BancoList, BancoRequest } from '../models/banco.model';
-import { Cidades } from '../models/cidade.model';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +13,6 @@ import { Cidades } from '../models/cidade.model';
 export class BancoService {
     url = environment.url;
     list = new BehaviorSubject<BancoList[]>([]);
-    cidades = new BehaviorSubject<Cidades[]>([]);
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -56,15 +54,5 @@ export class BancoService {
         return this.http.delete<Response>(`${this.url}/banco/${id}`);
     }
 
-    getCidade() {
-        return this.http.get<Cidades[]>(`${this.url}/cidade/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
-            .pipe(tap({
-                next: list => {
-                    this.cidades.next(list);
-                    return of(list);
-                },
-                error: res => this.toastr.error('Não foi possível carregar listagem de cidades.')
-            }));
-    }
 }
 

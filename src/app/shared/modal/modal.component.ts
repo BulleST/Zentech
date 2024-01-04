@@ -15,9 +15,7 @@ export class ModalComponent implements OnDestroy {
     constructor(
         private modalService: ModalService,
     ) {
-        var list = this.modalService.modalList.subscribe(res => {
-            this.modalList = res;
-        });
+        var list = this.modalService.modalList.subscribe(res => this.modalList = res);
         this.subscription.push(list);
     }
 

@@ -44,8 +44,6 @@ export class CreateComponent implements OnDestroy {
         private mobile: IsMobile,
     ) {
         this.mobile.value.subscribe(res => this.screen = res);
-        this.objeto.cpf = 53504763000
-        this.objeto.dataNascimento = '1942-04-29' as unknown as Date;
 
     }
     ngAfterViewInit(): void {
@@ -109,7 +107,6 @@ export class CreateComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingConsultaApi = false;
-                console.log('retorno api', res)
                 if (typeof(res) == 'object') {
                     var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
                     if (obj.ERRO == 'ERRO') {
@@ -160,7 +157,6 @@ export class CreateComponent implements OnDestroy {
                 }
             })
             .catch(res => {
-                console.log('retorno api erro', res)
                 this.loadingConsultaApi = false;
                 this.liberaNome = true;
                 this.erro = getError(res);

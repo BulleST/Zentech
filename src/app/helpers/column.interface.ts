@@ -9,14 +9,15 @@ export interface Column {
     moeda?: string
     filterType: FilterType;
     filterDisplay: FilterDisplay;
-    filterShowMatchMode?: boolean;
+    showMatchMode?: boolean;
     showOperator?: boolean;
-    filterShowAddButton?: boolean;
+    showAddButton?: boolean;
     filterMatchMode?: FilterMatchMode;
     substringLength?: number; // Masktype.substring
     title?: string;
     filterValue?: any;
     values?: OptionValues[];
+    sort?: boolean;
 }
 
 export enum FilterType {
@@ -25,10 +26,12 @@ export enum FilterType {
     date = 'date',
     datetime = 'datetime',
     boolean = 'boolean',
+    none = 'none',
 }
 
 export enum FilterDisplay {
-    menu = 'menu'
+    menu = 'menu',
+    none = 'none',
 }
 
 export enum MaskType {
@@ -49,6 +52,7 @@ export enum MaskType {
     options = 'options',
     mask = 'mask',
     cep = 'cep',
+    imageUrl = 'imageUrl',
 }
 
 

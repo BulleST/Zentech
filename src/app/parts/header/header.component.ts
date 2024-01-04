@@ -47,7 +47,7 @@ export class HeaderComponent implements AfterViewInit {
 
         this.router.events.subscribe(res => {
             if(res instanceof NavigationEnd)
-                this.homeActive = res.url == '/' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
+                this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
         })
 
         this.userLogado = this.accountService.accountValue;
@@ -107,6 +107,7 @@ export class HeaderComponent implements AfterViewInit {
 
     sair() {
         this.accountService.logout();
+        this.header.closeMenuMinhaConta();
     }
 
     minhaConta() {

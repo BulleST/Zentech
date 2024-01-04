@@ -21,13 +21,15 @@ import { FormComponent as FormContratoTipo } from '../pages/contrato-tipo/form/f
 import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
 import { FormComponent as FormInvoice } from '../pages/invoice/form/form.component';
 import { FormComponent as FormMoeda } from './../pages/moeda/form/form.component';
+import { FormComponent as FormRepresentante } from './../pages/representante/form/form.component';
 import { DeleteComponent as DeleteTipo } from '../pages/contrato-tipo/delete/delete.component';
 import { DeleteComponent as DeleteEvento } from '../pages/contrato-evento/delete/delete.component';
+import { DeleteComponent as DeleteRepresentante } from '../pages/representante/delete/delete.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
-
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 
 
@@ -48,9 +50,11 @@ import { InputDateComponent } from './input-date/input-date.component';
         FormInstituicaoFinanceira,
         FormInvoice,
         FormMoeda,
+        FormRepresentante,
         DeleteEvento,
         DeleteTipo,
-        DeleteMoeda
+        DeleteMoeda,
+        DeleteRepresentante,
     ],
     imports: [
         CommonModule,
@@ -63,6 +67,7 @@ import { InputDateComponent } from './input-date/input-date.component';
         DropdownModule,
         CalendarModule,
         TabViewModule,
+        OverlayPanelModule
     ],
     exports: [
         ListSharedComponent,
@@ -78,8 +83,13 @@ import { InputDateComponent } from './input-date/input-date.component';
         FormContratoEvento,
         FormContratoTipo,
         FormInstituicaoFinanceira,
-
-
+        FormInvoice,
+        FormMoeda,
+        DeleteEvento,
+        DeleteTipo,
+        DeleteMoeda,
+        FormRepresentante,
+        DeleteRepresentante,
     ],
 })
 export class SharedModule {

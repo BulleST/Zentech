@@ -1,4 +1,3 @@
-
 <p-table class="table table-striped"
          [class.mt-2]="saldos.length == 0"
          #dt
@@ -15,9 +14,7 @@
         <div class="d-flex flex-column-reverse flex-sm-row flex-wrap px-0 py-0 w-100">
             <div class="align-items-center col-12 col-lg-9 col-md-10 col-sm-9 col-xl-6 d-flex flex-column-reverse flex-sm-row flex-wrap justify-content-end mb-sm-0 ms-auto px-0">
                 <div class="mx-1 mb-2 me-md-2 col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12 px-0">
-                    <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['saldo/cadastrar']">
-                        Cadastrar Saldo
-                    </a>
+                    <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['saldo/cadastrar']"> Cadastrar Saldo </a>
                 </div>
                 <div class="p-input-icon-left col-xl-6 col-lg-4 col-md-5 col-sm-4 col-12 mb-2">
                     <i class="pi pi-search"></i>
@@ -32,13 +29,34 @@
     </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr class="grey" *ngIf="saldos.length > 0">
-            <th [pSortableColumn]="item.field" *ngFor="let item of columns">
+            <th [pSortableColumn]="col.field" *ngFor="let col of columns">
                 <div class="d-flex align-items-baseline justify-content-between">
-                    <span class="me-auto" [innerHTML]="item.header"></span>
-                    <p-sortIcon [field]="item.field"></p-sortIcon>
-                    <p-columnFilter [type]="item.filterType" [field]="item.field" [display]="item.filterDisplay" [matchMode]="item.filterMatchMode" [showOperator]="item.showOperator" [showMatchModes]="item.filterShowMatchMode" [showAddButton]="item.filterShowAddButton">
-                        <ng-template *ngIf="item.filterType == 'date'" pTemplate="filter" let-filter="filterCallback">
-                            <p-calendar [(ngModel)]="currentDateFilter" (onSelect)="filter($event);" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                    <span class="me-auto pe-4" [innerHTML]="col.header"></span>
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                    <p-columnFilter #filterEl
+                                    [type]="col.filterType"
+                                    [field]="col.field"
+                                    [display]="col.filterDisplay"
+                                    [matchMode]="col.filterMatchMode"
+                                    [showOperator]="col.showOperator"
+                                    [showMatchModes]="col.filterShowMatchMode"
+                                    [showAddButton]="col.filterShowAddButton">
+                        <ng-template *ngIf="col.filterType == 'date' || col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
+                            <p-calendar name="filter"
+                                        [styleClass]="col.showMatchMode ? 'mt-2' : ''"
+                                        (onSelect)="filterDate($event, filter, filterEl);"
+                                        [showIcon]="true"
+                                        [(ngModel)]="col.filterValue"
+                                        dateFormat="dd.mm.yy"></p-calendar>
+                        </ng-template>
+                        <ng-template *ngIf="col.filterType == 'numeric'" pTemplate="filter" let-filter="filterCallback">
+                            <input type="text"
+                                   [classList]="col.showMatchMode ? 'form-control mt-2' : 'form-control '"
+                                   [(ngModel)]="col.filterValue"
+                                   (change)="filterNumeric($event, filter, filterEl);"
+                                   mask="separator.2"
+                                   decimalMarker=","
+                                   thousandSeparator=".">
                         </ng-template>
                     </p-columnFilter>
                 </div>
@@ -49,36 +67,25 @@
     <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
         <tr>
             <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
-          
                 <div *ngSwitchCase="maskType.number">
-                    <p [class.text-danger]="item[col.field] < 0">
-                        {{item[col.field] | currency : 'BRL' : '' : col.decimal}}
-                    </p>
+                    <p [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}} </p>
                 </div>
                 <div *ngSwitchCase="maskType.money">
-                    <p [class.text-danger]="item[col.field] < 0">
-                        {{item[col.field] | currency : 'BRL' : col.moeda : col.decimal}}
-                    </p>
+                    <p [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : col.moeda : col.decimal}} </p>
                 </div>
                 <div *ngSwitchCase="maskType.percentage">
-                    <p [class.text-danger]="item[col.field] < 0">
-                        {{item[col.field] | currency : 'BRL' : '' : col.decimal}}%
-                    </p>
+                    <p [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}}% </p>
                 </div>
-
                 <div *ngSwitchDefault>
-                    <p >
-                        {{item[col.field]}}
-                    </p>
+                    <p> {{item[col.field]}} </p>
                 </div>
-
             </td>
             <td class="td-actions">
                 <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
             </td>
         </tr>
     </ng-template>
-    <ng-template pTemplate="footer" >
+    <ng-template pTemplate="footer">
         <tr>
             <td></td>
             <td>

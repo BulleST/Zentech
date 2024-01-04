@@ -18,7 +18,7 @@ export class HomeComponent implements OnDestroy, AfterViewInit {
         var e = this.router.events.subscribe(res => {
             if (res instanceof NavigationEnd) {
                 this.homeActive = false
-                this.homeActive = res.url == '/'
+                this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
                 
             }
         })

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faKey } from '@fortawesome/free-solid-svg-icons';
@@ -15,7 +15,7 @@ import { getError } from 'src/app/utils/error';
     templateUrl: './change-password.component.html',
     styleUrls: ['./change-password.component.css']
 })
-export class ChangePasswordComponent {
+export class ChangePasswordComponent implements OnDestroy {
     faKey= faKey;
     objeto: ChangePassword = new ChangePassword;
     loading = false;
@@ -24,7 +24,6 @@ export class ChangePasswordComponent {
     subscription: Subscription[] = [];
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-    routerBack: string[] = ['..'];
     modal: Modal = new Modal;
 
     constructor(
@@ -35,6 +34,22 @@ export class ChangePasswordComponent {
         private accountService: AccountService,
         private modalService: ModalService,
         ) { 
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
+
+    ngAfterViewInit(): void {
+        
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '400px' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../'];
+        this.modal.title = 'Alterar Senha'
 
         var account =  this.accountService.accountSubject.subscribe(res => {
             if (!res)
@@ -47,19 +62,6 @@ export class ChangePasswordComponent {
             }
         });
         this.subscription.push(account);
-
-    }
-
-    ngAfterViewInit(): void {
-        
-        this.modal.id = 0;
-        this.modal.template = this.template;
-        this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '400px', overflow: 'visible' };
-        this.modal.activatedRoute = this.activatedRoute;
-        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.routerBack = ['../'];
-        this.modal.title = 'Alterar Senha'
     }
 
     voltar() {

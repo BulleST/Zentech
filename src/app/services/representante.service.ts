@@ -1,0 +1,59 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, of, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { Table } from '../utils/table';
+import { Response } from '../helpers/request-response.interface';
+import { Representante } from '../models/representante.model';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class RepresentanteService {
+    url = environment.url;
+    list = new BehaviorSubject<Representante[]>([]);
+
+    constructor(
+        private table: Table,
+        private http: HttpClient,
+        private toastr: ToastrService,
+
+    ) { }
+
+    getList(loading: boolean = false) {
+        this.table.loading.next(true);
+        return this.http.get<Representante[]>(`${this.url}/representante`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+            .pipe(tap({
+                next: list => {
+                    list = list.map(x => {
+                        return x;
+                    })
+                    this.list.next(Object.assign([], list));
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de representante.')
+
+            }));
+
+
+    }
+    get(id: number) {
+        return this.http.get<Representante>(`${this.url}/representante/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+    }
+
+
+    create(request: Representante) {
+        return this.http.post<Response>(`${this.url}/representante`, request);
+    }
+
+    edit(request: Representante) {
+        return this.http.put<Response>(`${this.url}/representante`, request);
+    }
+
+    delete(id: number) {
+        return this.http.delete<Response>(`${this.url}/representante/${id}`);
+    }
+
+}
+

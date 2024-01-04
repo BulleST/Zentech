@@ -1,11 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, of, throwError } from 'rxjs';
 import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
-import { map, catchError, tap } from 'rxjs/operators';
-import { Role } from '../models/account-perfil.model';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -62,31 +61,25 @@ export class AccountService {
         );
     }
 
-    logout() {
-        this.http.post<any>(`${this.url}/accounts/revoke-token`, {token: this.accountValue?.refreshToken}, { withCredentials: true } /**/)
-            .subscribe({
-                next: res => {
-                },
-                error: error => {
-                    return throwError(() => new Error(error));
-                },
-                complete: () => {
-                    this.stopRefreshTokenTimer();
-                    this.setAccount(undefined);
-                    this.router.navigate(['account', 'login']);
-                    localStorage.clear();
-                },
-            });
+    async logout() {
+        await lastValueFrom(this.http.post<any>(`${this.url}/accounts/revoke-token`, {token: this.accountValue?.refreshToken}, { withCredentials: true } /**/))
+            .catch(error => {
+                console.log(error)
+            })
+            this.stopRefreshTokenTimer();
+            this.setAccount(undefined);
+            this.router.navigate(['account', 'login']);
+            localStorage.clear();
     } 
-    refreshToken() {
-        return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
-            .pipe(map((account) => {
-                this.setAccount(account);
-                this.startRefreshTokenTimer();
-                if (account.perfilAcesso_Id != Role.Admin) {
-                }
-                return account;
-            }));
+
+    async refreshToken() {
+        var account = await lastValueFrom( this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true }))
+            .catch(error => {
+                console.log(error)
+                return undefined;
+            })
+        this.setAccount(account);
+        this.startRefreshTokenTimer();
     }
 
     register(model: Register) {
@@ -125,7 +118,7 @@ export class AccountService {
             // set a timeout to refresh the token a minute before it expires
             const expires = new Date(jwtToken.exp * 1000);
             const timeout = expires.getTime() - Date.now() - (60 * 1000);
-            this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
+            this.refreshTokenTimeout = setTimeout(() => this.refreshToken(), timeout);
         }
     }
 
