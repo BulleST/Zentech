@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { MyAccountComponent } from 'src/app/shared/my-account/my-account.component';
 import { ChangePasswordComponent } from 'src/app/shared/change-password/change-password.component';
 
+
 const painelCPF = () => import('./../pessoa/pessoa.module').then(x => x.PessoaModule);
 const usuarios = () => import('./../usuarios/usuarios.module').then(x => x.UsuariosModule);
 const operacoes = () => import('./../operacoes/operacoes.module').then(x => x.OperacoesModule);
@@ -13,6 +14,7 @@ const contrato = () => import('../contrato/contrato.module').then(x => x.Contrat
 const instituicaoFinanceira = () => import('../instituicao-financeira/instituicao-financeira.module').then(x => x.InstituicaoFinanceiraModule);
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
+const log = () => import('../log/log.module').then(x => x.LogModule);
 const routes: Routes = [
     {
         path: '', component: InitialComponent, children: [
@@ -31,6 +33,7 @@ const routes: Routes = [
             { path: 'beneficiario', loadChildren: beneficiario },
             { path: 'contrato', loadChildren: contrato},
             { path: 'usuarios', loadChildren: usuarios},
+            { path: 'log', loadChildren: log},
         ]
     }
 ];
