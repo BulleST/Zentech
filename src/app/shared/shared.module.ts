@@ -69,7 +69,7 @@ import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.co
         DropdownModule,
         CalendarModule,
         TabViewModule,
-        OverlayPanelModule  
+        OverlayPanelModule
     ],
     exports: [
         ListSharedComponent,
