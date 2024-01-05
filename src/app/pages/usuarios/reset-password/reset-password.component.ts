@@ -88,11 +88,11 @@ export class ResetPasswordComponent {
     send() {
         
         this.loading = true;
-        lastValueFrom(this.accountService.forgotPassword(this.objeto.email))
+        lastValueFrom(this.usuarioService.resetPassword(this.objeto.id))
             .then(res => {
                 this.voltar();
                 this.toastr.success('Operação concluída com sucesso')
-                this.alertService.success(res['message']);
+                this.alertService.success('O usuário deve verificar a caixa de e-mail para seguir as instruções.');
                 if (this.objeto.email == this.userLogado?.email) {
                     this.accountService.logout();
                 }
