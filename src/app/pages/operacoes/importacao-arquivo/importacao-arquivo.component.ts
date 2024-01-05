@@ -7,7 +7,6 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { AlertService } from 'src/app/parts/alert/alert.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 
 
@@ -33,7 +32,6 @@ export class ImportacaoArquivoComponent {
     @ViewChild('form') form: NgForm;
 
     modal: Modal = new Modal;
-    salvo = false;
     mensagem = '';
 
     constructor(
@@ -82,7 +80,6 @@ export class ImportacaoArquivoComponent {
     }
 
     send() {
-        this.salvo = false;
         this.loading = true;
         this.mensagem = '';
         this.erro = '';
@@ -96,27 +93,18 @@ export class ImportacaoArquivoComponent {
                 lastValueFrom(this.operacaoService.getList());
                 this.loading = false;
                 if (res.sucesso) {
-                    this.salvo = true;
-                    if (res.mensagem) {
-                        this.alertService.info(res.mensagem)
-                    }
-                    // this.mensagem = res.mensagem;
+                    this.voltar();
+                        this.alertService.info(res.mensagem?? "Importação realizada com sucesso");
                 } else {
-                    this.salvo = false;
                     this.toastr.error('Erro ao salvar registros.');
-                    if (res.mensagem) {
-                        this.alertService.error(res.mensagem)
-                    }
-                    // this.erro = res.mensagem;
+                    this.alertService.error(res.mensagem ?? 'Erro ao salvar registros')
                 }
             })
             .catch(res => {
-                this.salvo = false;
                 this.loading = false;
                 this.erro = getError(res);
             })
 
     }
-
 
 }

@@ -22,6 +22,7 @@ import { Representante } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { insertOrReplace } from 'src/app/utils/service-list';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-form',
@@ -59,7 +60,7 @@ export class FormComponent implements OnDestroy {
     cepPreenchido = false;
     executaCEP: boolean = true;
     loadingCep = false;
-
+    podeExcluir = false;
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
@@ -72,7 +73,9 @@ export class FormComponent implements OnDestroy {
         private mask: MaskApplierService,
         private representanteService: RepresentanteService,
         private router: Router,
+        private accountService: AccountService,
     ) {
+        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1;
 
         lastValueFrom(this.bancoService.getList())
             .then(res => {

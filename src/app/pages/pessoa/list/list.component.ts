@@ -6,6 +6,7 @@ import { PessoaService } from 'src/app/services/pessoa.service';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-list',
@@ -22,6 +23,7 @@ export class ListComponent implements OnDestroy {
     constructor(
         private table: Table,
         private pessoaService: PessoaService,
+        private accountService: AccountService,
     ) { 
         var list = this.pessoaService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -33,8 +35,12 @@ export class ListComponent implements OnDestroy {
                     { label: 'Cadastrar Saldo', routePath: ['cadastrar-saldo'], paramsFieldName: ['id'] }, 
                     { label: 'Cadastrar Operação', routePath: ['cadastrar-operacao'], paramsFieldName: ['id'] }, 
                     { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];
+
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
+
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

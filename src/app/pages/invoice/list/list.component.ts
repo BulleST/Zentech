@@ -3,6 +3,7 @@ import { faFileInvoice } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Invoice_List, invoiceColumns } from 'src/app/models/invoice.model';
+import { AccountService } from 'src/app/services/account.service';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import { Table } from 'src/app/utils/table';
 
@@ -21,6 +22,7 @@ export class ListComponent {
     constructor(
         private table: Table,
         private invoiceService: InvoiceService,
+        private accountService: AccountService,
     ) { 
         var list = this.invoiceService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -30,8 +32,11 @@ export class ListComponent {
             if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] }, 
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] }, 
                 ];
+
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="ms-2">
                                     <a class="py-1 px-1 text-dark" (click)="editar(item, 'representante')" title="Editar"><fa-icon [icon]="faEdit"></fa-icon></a>
-                                    <a class="py-1 px-1 text-dark" (click)="excluir(item.id, 'representante')" title="Excluir"><fa-icon [icon]="faTrash"></fa-icon></a>
+                                    <a class="py-1 px-1 text-dark" *ngIf="podeExcluir" (click)="excluir(item.id, 'representante')" title="Excluir"><fa-icon [icon]="faTrash"></fa-icon></a>
                                 </div>
                             </div>
                         </ng-template>

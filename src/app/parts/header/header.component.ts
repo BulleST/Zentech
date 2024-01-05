@@ -62,14 +62,14 @@ export class HeaderComponent implements AfterViewInit {
                     this.nomeAbreviado = array[0] + ' ' + array[array.length - 1];
                 }
 
-                if (res.passwordReset == undefined && window.location.pathname.includes('my-account/change-password') == false) {
-                    this.alertService.info(`
-                        <h5>Atenção</h5>
-                        <h6>Sua conta não está protegida!</h6>
-                        <p>Após sua conta ter sido cadastrada a senha padrão não foi alterada, isso torna sua conta vulnerável à acessos não autorizados.</p>
-                        <p>Por favor, altere sua senha em <a href="./my-account/change-password">/my-account/change-password</a>.</p>
-                    `)
-                }
+                // if (res.passwordReset == undefined && window.location.pathname.includes('my-account/change-password') == false) {
+                //     this.alertService.info(`
+                //         <h5>Atenção</h5>
+                //         <h6>Sua conta não está protegida!</h6>
+                //         <p>Após sua conta ter sido cadastrada a senha padrão não foi alterada, isso torna sua conta vulnerável à acessos não autorizados.</p>
+                //         <p>Por favor, altere sua senha em <a href="./my-account/change-password">/my-account/change-password</a>.</p>
+                //     `)
+                // }
             }
         });
         this.subscription.push(account);

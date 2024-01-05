@@ -8,6 +8,7 @@ import { getError } from 'src/app/utils/error';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { insertOrReplace, remove } from 'src/app/utils/service-list';
 
 @Component({
   selector: 'app-delete-operacao',
@@ -86,12 +87,20 @@ export class DeleteOperacaoComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    lastValueFrom(this.pessoaService.getList());
-                    lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
-                    lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa_Id));
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        remove(this.pessoaOperacaoService, res.objeto['operacao']);
+                    } else {
+                        lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getList());
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+
+                    lastValueFrom(this.pessoaService.get(this.pessoa_Id));
                     this.voltar();
-                } else {
-                    this.erro = res.mensagem;
+                } 
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível excluir operação.`;
                 }
                 
             })

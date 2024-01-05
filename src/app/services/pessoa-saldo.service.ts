@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaSaldo, PessoaSaldoRequest } from '../models/pessoa-saldo.model';
 import { Response } from '../helpers/request-response.interface';
+import { PessoaList } from '../models/pessoa.model';
 
 @Injectable({
     providedIn: 'root'
@@ -40,7 +41,7 @@ export class PessoaSaldoService {
 
 
     create(request: PessoaSaldoRequest) {
-        return this.http.post(`${this.url}/pessoaSaldo`, request);
+        return this.http.post<Response>(`${this.url}/pessoaSaldo`, request);
     }
 
     delete(id: number) {

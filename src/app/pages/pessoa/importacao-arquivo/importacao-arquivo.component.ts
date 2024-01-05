@@ -28,7 +28,6 @@ export class ImportacaoArquivoComponent {
     subscription: Subscription[] = [];
     fileUpload?: File;
 
-    salvo = false;
     mensagem = '';
 
     @ViewChild('template') template: TemplateRef<any>
@@ -86,7 +85,6 @@ export class ImportacaoArquivoComponent {
 
 
     send() {
-        this.salvo = false;
         this.loading = true;
         this.mensagem = '';
         this.erro = '';
@@ -100,22 +98,14 @@ export class ImportacaoArquivoComponent {
                 lastValueFrom(this.pessoaService.getList());
                 this.loading = false;
                 if (res.sucesso) {
-                    this.salvo = true;
-                    if (res.mensagem) {
-                        this.alertService.info(res.mensagem)
-                    }
-                    // this.mensagem = res.mensagem;
+                    this.voltar();
+                        this.alertService.info(res.mensagem?? "Importação realizada com sucesso");
                 } else {
-                    this.salvo = false;
                     this.toastr.error('Erro ao salvar registros.');
-                    if (res.mensagem) {
-                        this.alertService.error(res.mensagem)
-                    }
-                    // this.erro = res.mensagem;
+                    this.alertService.error(res.mensagem ?? 'Erro ao salvar registros')
                 }
             })
             .catch(res => {
-                this.salvo = false;
                 this.loading = false;
                 this.erro = getError(res);
             })

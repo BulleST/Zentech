@@ -81,7 +81,7 @@
                 </div>
             </td>
             <td class="td-actions">
-                <a class="btn btn-dark" *ngIf="lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
+                <a class="btn btn-dark" *ngIf="podeExcluir && lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
             </td>
         </tr>
     </ng-template>

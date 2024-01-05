@@ -9,44 +9,45 @@ import { FormComponent as FormBeneficiario } from './../beneficiario/form/form.c
 import { FormComponent as FormMoeda } from './../moeda/form/form.component';
 import { DeleteComponent as DeleteMoeda } from '../moeda/delete/delete.component';
 import { MyAccountRouter } from 'src/app/utils/my-account-router';
+import { RoleGuard } from 'src/app/guards/role.guard';
+import { Role } from 'src/app/models/account-perfil.model';
 
 
 
 const routes: Routes = [
     {
-        path: '', component: ListComponent, children: [
+        path: '', component: ListComponent, title: 'Zentech - Invoices', children: [
             {
-                path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 }, children: [
+                path: 'cadastrar', component: FormComponent, title: 'Zentech - Cadastrar Invoice', data: { modalOrder: 1 }, children: [
 
-                    { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
-                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 } },
-                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 } },
-                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, data: { modalOrder: 2 } },
-                    { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, data: { modalOrder: 2 } },
+                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Cadastrar Moeda' },
+                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Editar Moeda' },
+                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, canActivate: [RoleGuard], data: { modalOrder: 2, roles: [Role.Admin] }, title: 'Zentech - Excluir Moeda' },
+
+                    { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, title: 'Zentech - Cadastrar Instituição Financeira', data: { modalOrder: 2 } },
                     {
-                        path: 'beneficiario', component: FormBeneficiario, data: { modalOrder: 2 }, children: [
-                            { path: 'banco', component: FormBanco, data: { modalOrder: 3 } },
+                        path: 'beneficiario', component: FormBeneficiario, title: 'Zentech - Cadastrar Beneficiário', data: { modalOrder: 2 }, children: [
+                            { path: 'banco', component: FormBanco, title: 'Zentech - Cadastrar Invoice', data: { modalOrder: 3 } },
                         ]
                     },
-                    { path: 'excluir/moeda/:moeda_id', component: DeleteMoeda},
-                    { path: 'editar/moeda/:moeda_id', component: FormMoeda},
                 ]
             },
             {
-                path: 'editar/:invoice_id', component: FormComponent, data: { modalOrder: 1 }, children: [
-                    { path: 'banco', component: FormBanco, data: { modalOrder: 2 } },
-                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 } },
-                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 } },
-                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, data: { modalOrder: 2 } },
-                    { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, data: { modalOrder: 2 } },
+                path: 'editar', component: FormComponent, title: 'Zentech - Editar Invoice', data: { modalOrder: 1 }, children: [
+
+                    { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Cadastrar Moeda' },
+                    { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Editar Moeda' },
+                    { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, canActivate: [RoleGuard], data: { modalOrder: 2, roles: [Role.Admin] }, title: 'Zentech - Excluir Moeda' },
+
+                    { path: 'instituicao-financeira', component: FormInstituicaoFinanceira, title: 'Zentech - Cadastrar Instituição Financeira', data: { modalOrder: 2 } },
                     {
-                        path: 'beneficiario', component: FormBeneficiario, data: { modalOrder: 2 }, children: [
-                            { path: 'banco', component: FormBanco, data: { modalOrder: 3 } },
+                        path: 'beneficiario', component: FormBeneficiario, title: 'Zentech - Cadastrar Beneficiário', data: { modalOrder: 2 }, children: [
+                            { path: 'banco', component: FormBanco, title: 'Zentech - Cadastrar Invoice', data: { modalOrder: 3 } },
                         ]
                     },
                 ]
             },
-            { path: 'excluir/:invoice_id', component: DeleteComponent, data: { modalOrder: 1 } },
+            { path: 'excluir/:invoice_id', component: DeleteComponent, title: 'Zentech - Excluir Invoice', canActivate: [RoleGuard], data: { modalOrder: 1, roles: [Role.Admin] }, },
             MyAccountRouter,
         ]
     }

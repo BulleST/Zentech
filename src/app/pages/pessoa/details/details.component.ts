@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faChevronCircleLeft, faDollarSign, faIdCard } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
@@ -63,61 +62,85 @@ export class DetailsComponent implements OnDestroy {
         this.activeIndex = parseInt(localStorage.getItem('tabIndex') ?? '0')
         this.tabChanged(this.activeIndex);
 
-        var object = this.pessoaService.object.subscribe(res => this.objeto = res);
-        this.subscription.push(object);
-
-        var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
-            this.saldos = res.map(x => {
-                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
-                x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
-                return x
-            }).sort((x, y) => x.id - y.id);
-            this.lastIdDeleteSaldo = res.length > 0 ? res[res.length - 1].id : 0;
-            this.calculaLimiteConcedido();
-        });
-        this.subscription.push(listSaldos);
-
-        var listOperacoes = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
-            this.operacoes = Object.assign([], res);
-            this.calculaLimiteUtilizado();
-        });
-        this.subscription.push(listOperacoes);
-
+        console.log('constructor')
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['pessoa_id']) {
                 this.loadingPessoa = true;
                 this.loadingSaldo = true;
                 this.objeto.id = this.crypto.decrypt(p['pessoa_id']);
+                console.log('pessoa id', this.objeto.id)
+                /**
+                 * Pessoa
+                 */
                 lastValueFrom(this.pessoaService.get(this.objeto.id))
                     .then(res => {
                         res.cpf = res.cpf.toString().padStart(11, '0') as unknown as number;
                         this.objeto = res;
+                        console.log('pessoa', res)
+
+                        var object = this.pessoaService.object.subscribe(res => {
+                            this.objeto = res;
+                            console.log('pessoa subscribe', res)
+                        });
+                        this.subscription.push(object);
+                        this.loadingPessoa = false;
                     })
                     .catch(res => {
+                        console.log('pessoa erro', res)
                         this.erroPessoa = getError(res);
+                        this.loadingPessoa = false;
                     })
-                    .finally(() => this.loadingPessoa = false);
 
+                /**
+                 * Saldos
+                 */
                 lastValueFrom(this.pessoaSaldoService.getList(this.objeto.id))
                     .then(res => {
                         this.saldos = res;
-                        this.calculaLimiteConcedido();
+                        console.log('saldos', res)
+                        var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
+                            this.saldos = res.map(x => {
+                                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
+                                x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
+                                return x
+                            }).sort((x, y) => x.id - y.id);
+                            this.lastIdDeleteSaldo = res.length > 0 ? res[res.length - 1].id : 0;
+                            
+                            console.log('saldos subscribe', res)
+                            this.calculaLimiteConcedido();
+                        });
+                        this.subscription.push(listSaldos);
+                        this.loadingSaldo = false;
+
                     })
                     .catch(res => {
+                        console.log('saldo erro', res)
                         this.erroSaldo = getError(res);
-                    })
-                    .finally(() => this.loadingSaldo = false);
+                        this.loadingSaldo = false;
+                    });
 
+                /**
+                 * Operação
+                 */
                 lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.id))
                     .then(res => {
                         this.operacoes = res;
-                        this.calculaLimiteUtilizado();
+                        console.log('operacoes', res)
+                        var listOperacoes = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {
+                            this.operacoes = Object.assign([], res);
+                            this.calculaLimiteUtilizado();
+                            console.log('operacoes subscribe', res)
+                        });
+                        this.subscription.push(listOperacoes);
+                        this.loadingOperacoes = false
                     })
                     .catch(res => {
+                        console.log('operacao erro', res)
                         this.erroOperacoes = getError(res);
-                    })
-                    .finally(() => this.loadingOperacoes = false);
+                        this.loadingOperacoes = false
+                    });
             } else {
+                this.router.navigate(['../../'], { relativeTo: this.activatedRoute })
             }
         });
         this.subscription.push(params);
@@ -177,13 +200,13 @@ export class DetailsComponent implements OnDestroy {
                             this.toastr.error('Não foi possível ler Data de Captação.')
                         }
                         try {
-                        this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
+                            this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
                         } catch (e) {
                             this.erro += `Não foi possível ler Hora de Captação. (${obj.HORA_CAP}) \n`;
                             this.toastr.error('Não foi possível ler Hora de Captação.')
                         }
                         try {
-                        this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
+                            this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
                         } catch (e) {
                             this.erro += `Não foi possível ler Data de Inscrição. (${obj.DATA_INSCRICAO}) \n`;
                             this.toastr.error('Não foi possível ler Data de Inscrição.')
@@ -196,7 +219,7 @@ export class DetailsComponent implements OnDestroy {
                         this.objeto.brConsulta_Status = obj.STATUS;
                     }
                 } else {
-                
+
                     this.objeto.brConsulta_Erro = res as string;
                     this.erro = res as string;
                     this.toastr.error(res as string)

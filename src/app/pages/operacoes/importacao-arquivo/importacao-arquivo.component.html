@@ -5,7 +5,7 @@
     </ng-template>
     <ng-template #template>
         <form #form="ngForm" (ngSubmit)="send()" class="needs-validation" enctype="multipart/form-data" >
-            <div *ngIf="!loading && !salvo">
+            <div>
                 <label for="file" class="input-file-container">
                     <p class="icon">
                         <i class="pi pi-upload"></i>
@@ -33,7 +33,7 @@
                     <p *ngIf="!erro  && !fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
                 </div>
 
-                <button class="btn btn-primary me-0 ms-auto" *ngIf="!salvo" [disabled]="form.invalid || loading">
+                <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                     <span>Salvar</span>
                 </button>

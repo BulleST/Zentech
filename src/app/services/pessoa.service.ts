@@ -71,7 +71,7 @@ export class PessoaService {
 
     getPessoa(cpf: number, dataNasc: Date) {
         var data = this.datepipe.transform(dataNasc, 'dd/MM/yyyy')
-        return this.http.post(`${this.url}/pessoa/consulta-pessoa`, {cpf, data});
+        return this.http.post<BRConsultaResponse | string>(`${this.url}/pessoa/consulta-pessoa`, {cpf, data});
     }
 
 

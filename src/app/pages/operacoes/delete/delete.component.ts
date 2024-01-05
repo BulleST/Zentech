@@ -7,6 +7,7 @@ import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service'
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { insertOrReplace, remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -77,18 +78,17 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    var list = this.pessoaOperacaoService.list.value;
-                    var index = list.findIndex(x => x.id == this.id)
-                    if (index != -1) {
-                        list.splice(index, 1);
-                        this.pessoaOperacaoService.list.next(list);
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        remove(this.pessoaOperacaoService, res.objeto['operacao']);
+                    } else {
+                        lastValueFrom(this.pessoaOperacaoService.getList());
+                        lastValueFrom(this.pessoaService.getList());
                     }
-
-                    lastValueFrom(this.pessoaService.getList());
-                    lastValueFrom(this.pessoaOperacaoService.getList());
                     this.voltar();
-                } else {
-                    this.erro = res.mensagem;
+                } 
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível excluir operação.`;
                 }
             })
             .catch(res => {

@@ -13,6 +13,7 @@ import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { instituicaoFinanceiraColumns } from 'src/app/models/instituicao-financeira.model';
 import * as dados from 'dados.json'
 import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
+import { AccountService } from 'src/app/services/account.service';
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -26,37 +27,26 @@ export class ListComponent {
 
     columns = instituicaoFinanceiraColumns;
     subscription: Subscription[] = [];
-    screen: ScreenWidth = ScreenWidth.lg;
-    dados: [
-      {
-      razaoSocial: "oi",
-     }
-
-    ]
-
 
     constructor(
         private table: Table,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
-        private isMobile: IsMobile
+        private accountService: AccountService,
     ) {
-        var list = this.instituicaoFinanceiraService.list.subscribe(res => {
-            this.list = Object.assign([], res)
-
-        });
+        var list = this.instituicaoFinanceiraService.list.subscribe(res => this.list = res);
         this.subscription.push(list);
-        var mob = this.isMobile.value.subscribe(res => this.screen = res);
-        this.subscription.push(mob);
 
         lastValueFrom(this.instituicaoFinanceiraService.getList());
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
+
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

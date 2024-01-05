@@ -9,6 +9,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { ScreenWidth } from 'src/app/utils/mobile';
 import { Representante, representanteColumns } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-list',
@@ -23,11 +24,11 @@ export class ListComponent {
 
     columns = representanteColumns;
     subscription: Subscription[] = [];
-    screen: ScreenWidth = ScreenWidth.lg;
 
     constructor(
         private table: Table,
         private representanteService: RepresentanteService,
+        private accountService: AccountService,
     ) {
         var list = this.representanteService.list.subscribe(res => this.list = res);
         this.subscription.push(list);
@@ -40,6 +41,11 @@ export class ListComponent {
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
                     { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
+
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
+
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

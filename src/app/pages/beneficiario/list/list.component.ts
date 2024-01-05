@@ -9,6 +9,7 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaSelected, EmpresaService } from 'src/app/services/empresa.service';
+import { AccountService } from 'src/app/services/account.service';
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -26,6 +27,7 @@ export class ListComponent {
     constructor(
         private table: Table,
         private beneficiarioService: BeneficiarioService,
+        private accountService: AccountService,
         // private empresaService: EmpresaService,
     ) {
         var list = this.beneficiarioService.list.subscribe(res => this.list = res);
@@ -44,8 +46,11 @@ export class ListComponent {
             if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
+
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

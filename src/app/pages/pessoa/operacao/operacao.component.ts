@@ -6,6 +6,7 @@ import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Pessoa } from 'src/app/models/pessoa.model';
 import { ListSharedComponent } from 'src/app/shared/list/list.component';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-operacao',
@@ -28,14 +29,17 @@ export class OperacaoComponent implements OnDestroy {
 
     constructor(
         private table: Table,
+        private accountService: AccountService,
     ) {
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
                     { label: 'Detalhes', routePath: ['operacao', 'detalhes'], paramsFieldName: ['id'] }, 
                     { label: 'Editar', routePath: ['operacao', 'editar'], paramsFieldName: ['id'] }, 
-                    { label: 'Excluir', routePath: ['operacao', 'excluir'], paramsFieldName: ['id'] }, 
                 ];
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['operacao', 'excluir'], paramsFieldName: ['id'] }, )
+                }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });

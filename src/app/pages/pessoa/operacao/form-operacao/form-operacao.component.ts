@@ -13,6 +13,7 @@ import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Moeda } from 'src/app/models/moeda.model';
 import { MoedaService } from 'src/app/services/moeda.service';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-form-operacao',
@@ -164,18 +165,23 @@ export class FormOperacaoComponent implements OnDestroy {
 
         this.request()
             .then(res => {
-                if (res.sucesso == true) {
-                    lastValueFrom(this.pessoaService.getList());
-                    lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
-                    lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
-                    lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
-                    lastValueFrom(this.pessoaOperacaoService.getList());
-                    this.voltar();
-                } else {
-                    this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
-                }
                 this.loading = false;
+                if (res.sucesso) {
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao']);
+                    } else {
+                        lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getList());
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+
+                    lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
+                    this.voltar();
+                } 
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível ${ (this.isEditPage ? "editar" : "cadastrar") } operação.`;
+                }
             })
             .catch(res => {
                 this.loading = false;

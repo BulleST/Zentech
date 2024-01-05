@@ -4,6 +4,7 @@ import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { PessoaSaldo, pessoaSaldoColumns } from 'src/app/models/pessoa-saldo.model';
+import { AccountService } from 'src/app/services/account.service';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -23,11 +24,13 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     @Input() limiteConcedido: number = 0;
     @Input() lastIdDelete: number = 0;
     subscription: Subscription[] = [];
-
+    podeExcluir = false;
 
     constructor(
         private table: Table,
+        private accountService: AccountService
     ) {
+        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1;
 
     }
     ngAfterViewChecked(): void {

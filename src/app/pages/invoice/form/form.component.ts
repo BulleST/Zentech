@@ -29,6 +29,7 @@ import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
 import { PaisesService } from 'src/app/services/paises.service';
 import { MaskApplierService } from 'ngx-mask';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-form',
@@ -76,6 +77,7 @@ export class FormComponent implements OnDestroy {
     loadingInstituicaoFinanceira = true;
 
     alterarConta = false;
+    podeExcluir = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -94,7 +96,10 @@ export class FormComponent implements OnDestroy {
         private modalService: ModalService,
         private loadingService: LoadingService,
         private router: Router,
+        private accountService: AccountService,
     ) {
+        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1;
+
 
         lastValueFrom(this.moedaService.getList())
             .then(res => this.moedas = res)

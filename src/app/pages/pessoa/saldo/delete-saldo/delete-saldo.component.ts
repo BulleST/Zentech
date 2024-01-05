@@ -7,6 +7,8 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { ToastrService } from 'ngx-toastr';
 import { Modal, ModalService } from 'src/app/services/modal.service';
+import { insertOrReplace, remove } from 'src/app/utils/service-list';
+import { PessoaService } from 'src/app/services/pessoa.service';
 
 @Component({
   selector: 'app-delete-saldo',
@@ -29,13 +31,12 @@ export class DeleteSaldoComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
         private pessoaSaldoService: PessoaSaldoService,
+        private pessoaService: PessoaService,
         private crypto: Crypto,
         private toastr: ToastrService,
     ) {
-
-
-
     }
+
     ngAfterViewInit(): void {
         this.modal.title = 'Excluir Saldo';
         this.modal.template = this.template;
@@ -91,10 +92,20 @@ export class DeleteSaldoComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        remove(this.pessoaSaldoService, res.objeto['saldo']);
+                    } else {
+                        lastValueFrom(this.pessoaSaldoService.getList(this.pessoa_Id));
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+
+                    lastValueFrom(this.pessoaService.get(this.pessoa_Id));
+                    
                     this.voltar();
-                } else {
-                    this.erro = res.mensagem;
+                } 
+                else {
+                    this.erro = res.mensagem ?? "Não foi possível excluir saldo.";
                 }
             })
             .catch(res => {

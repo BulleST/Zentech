@@ -9,6 +9,7 @@ import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-create-saldo',
@@ -78,12 +79,22 @@ export class CreateSaldoComponent implements OnDestroy {
 
         lastValueFrom(this.pessoaSaldoService.create(this.objeto))
             .then(res => {
-                lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
-                lastValueFrom(this.pessoaOperacaoService.getList());
-                lastValueFrom(this.pessoaService.getList());
-                lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
-                this.voltar();
                 this.loading = false;
+                if (res.sucesso) {
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        insertOrReplace(this.pessoaSaldoService, res.objeto['saldo']);
+                    } else {
+                        lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+
+                    lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
+                    this.voltar();
+                } 
+                else {
+                    this.erro = res.mensagem ?? "Não foi possível atribuir saldo.";
+                }
             })
             .catch(res => {
                 this.loading = false;

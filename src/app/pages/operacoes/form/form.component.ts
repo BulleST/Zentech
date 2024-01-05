@@ -17,6 +17,7 @@ import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { insertOrReplace } from 'src/app/utils/service-list';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -173,17 +174,21 @@ export class FormComponent implements OnDestroy {
 
         this.request()
             .then(res => {
-                if (res.sucesso == true) {
-                    lastValueFrom(this.pessoaService.getList());
-                    lastValueFrom(this.pessoaSaldoService.getList(this.objeto.pessoa_Id));
-                    lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
-                    lastValueFrom(this.pessoaOperacaoService.getList());
-                    this.voltar();
-                } else {
-                    this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
-                }
                 this.loading = false;
+                if (res.sucesso) {
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto['pessoa']);
+                        insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao']);
+                    } else {
+                        lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getList());
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+                    this.voltar();
+                }
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível ${(this.isEditPage ? "editar" : "cadastrar")} operação.`;
+                }
             })
             .catch(res => {
                 this.loading = false;
