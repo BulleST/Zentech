@@ -1,24 +1,26 @@
-import { ContratoRoutingModule } from './contrato.routing';
+import { LogRoutingModule } from './log.routing';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { FormComponent } from './form/form.component';
+import { ListComponent } from './list/list.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
+import { SharedModule } from 'src/app/shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
-import { ListComponent } from './list/list.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { FormComponent } from './form/form.component';
 
 @NgModule({
     declarations: [
         ListComponent,
-        // FormComponent,
+        FormComponent,
+
+
     ],
     imports: [
         CommonModule,
-        ContratoRoutingModule ,
+        LogRoutingModule,
         FontAwesomeModule,
         DropdownModule,
         FormsModule,
@@ -28,4 +30,4 @@ import { SharedModule } from 'src/app/shared/shared.module';
         CalendarModule,
     ],
 })
-export class ContratoModule { }
+export class LogModule { }

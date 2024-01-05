@@ -41,10 +41,6 @@ export class ContratoService {
         return this.http.post<Response>(`${this.url}/contrato`, request);
     }
 
-    delete(id: number) {
-        return this.http.delete<Response>(`${this.url}/contrato/${id}`);
-    }
-
     file(id: number) {
         return this.http.post(`${this.url}/contrato/exportar-pdf/${id}`, {}, { responseType: 'blob'})
             .pipe(tap({

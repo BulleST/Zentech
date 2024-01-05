@@ -3,6 +3,7 @@ import { FilterMatchMode } from "primeng/api";
 export interface Column {
     field: string;
     header: string;
+    colgroup?: string;
     maskType: MaskType,
     mask?: string;
     decimal?: string,

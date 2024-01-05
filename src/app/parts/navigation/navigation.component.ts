@@ -90,7 +90,7 @@ export class NavigationComponent implements OnDestroy {
                         routerLink: "/beneficiario",
                         paddingLeft: 10,
                         items: [
-                            { 
+                            {
                                 id: i++,
                                 label: 'Representantes',
                                 routerLink: "/representante",
@@ -132,6 +132,12 @@ export class NavigationComponent implements OnDestroy {
             //     routerLink: "/empresa",
             //     paddingLeft: 0,
             // },
+            {
+              id: i++,
+              label: 'Logs',
+              routerLink: "/log-acoes",
+              paddingLeft: 0,
+          },
             {
                 id: i++,
                 label: 'Usuários',

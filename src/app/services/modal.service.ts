@@ -33,7 +33,7 @@ subscription: Subscription[] =[];
             this.location.back();
         }
 
-        
+
     }
 
     addModal(modal: Modal, where: string) {
