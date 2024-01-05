@@ -60,7 +60,6 @@ export class DeleteComponent {
                         }, 300);
                     } else {
                         this.voltar();
-                        this.modal.routerBack = ['../../..'];
                     }
                 });
                 this.subscription.push(obj);

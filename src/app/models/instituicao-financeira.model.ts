@@ -5,7 +5,7 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class InstituicaoFinanceiraList {
     id: number = 0;
     nome: string = '';
-    cnpj: number = 0;
+    codigoRegistro: number = 0;
     cidade: string = '';
     estado: string = '';
     pais: string = '';
@@ -14,7 +14,7 @@ export class InstituicaoFinanceiraList {
 export class InstituicaoFinanceiraRequest {
     id: number = 0;
     nome: string = '';
-    cnpj: number = '' as unknown as number;
+    codigoRegistro: number = '' as unknown as number;
     logradouro: string = '';
     numero: string = '';
     cep: number = '' as unknown as number;
@@ -34,20 +34,21 @@ export var instituicaoFinanceiraColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
 
     },
     {
-        field: 'cnpj',
-        header: 'CNPJ',
-        maskType: MaskType.cnpj,
+        field: 'codigoRegistro',
+        header: 'Código de Registro',
+        // maskType: MaskType.cnpj,
+        maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
@@ -57,10 +58,10 @@ export var instituicaoFinanceiraColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'estado',
@@ -68,8 +69,8 @@ export var instituicaoFinanceiraColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: false,
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
     },
@@ -79,10 +80,10 @@ export var instituicaoFinanceiraColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
 
 ];

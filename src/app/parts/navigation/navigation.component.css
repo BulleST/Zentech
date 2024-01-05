@@ -143,7 +143,6 @@
 }
 
 .navigation-links-item .label-link-active {
-    background-color: rgb(var(--primary-dark));
     font-weight: 100;
     text-shadow: 0px 0px 0px white;
 }
@@ -247,6 +246,7 @@
 
 .link-container {
     width: 100%;
+    text-decoration: none;
 }
 
 ::ng-deep.p-panel-header:hover {
@@ -258,6 +258,6 @@
     background: #00000047;
 }
 
-::ng-deep.label-link-acive svg {
+::ng-deep.label-link-active svg {
     color: rgb(var(--primary));
 }

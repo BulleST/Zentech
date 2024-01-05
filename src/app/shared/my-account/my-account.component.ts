@@ -27,7 +27,6 @@ export class MyAccountComponent implements OnDestroy {
 
     @ViewChild('template') template: TemplateRef<any>
     @ViewChild('icon') icon: TemplateRef<any>
-    routerBack: string[] = ['..'];
     modal: Modal = new Modal;
 
 
@@ -39,6 +38,22 @@ export class MyAccountComponent implements OnDestroy {
         private accountService: AccountService
 
     ) {
+    }
+
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
+
+    ngAfterViewInit(): void {
+
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '800px' };
+        this.modal.activatedRoute = this.activatedRoute;
+        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
+        this.modal.routerBack = ['../'];
+        this.modal.title = 'Minha conta'
 
         var account = this.accountService.accountSubject.subscribe(res => {
             if (!res)
@@ -51,22 +66,6 @@ export class MyAccountComponent implements OnDestroy {
             }
         });
         this.subscription.push(account);
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.forEach(item => item.unsubscribe());
-    }
-
-    ngAfterViewInit(): void {
-
-        this.modal.id = 0;
-        this.modal.template = this.template;
-        this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '800px', overflow: 'visible' };
-        this.modal.activatedRoute = this.activatedRoute;
-        this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        this.modal.routerBack = ['../'];
-        this.modal.title = 'Minha conta'
 
 
     }

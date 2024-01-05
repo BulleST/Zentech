@@ -6,6 +6,7 @@ import { BancoService } from 'src/app/services/banco.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { remove } from 'src/app/utils/service-list';
 @Component({
     selector: 'app-delete',
     templateUrl: './delete.component.html',
@@ -73,7 +74,11 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    lastValueFrom(this.bancoService.getList());
+                    if (res.objeto) {
+                        remove(this.bancoService, res.objeto)
+                    } else {
+                        lastValueFrom(this.bancoService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;

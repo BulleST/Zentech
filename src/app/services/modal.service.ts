@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, TemplateRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -10,18 +10,19 @@ export class ModalService {
     modalList: BehaviorSubject<Modal[]> = new BehaviorSubject<Modal[]>([]);
     browserRefresh: boolean;
     lastModal: BehaviorSubject<Modal> = new BehaviorSubject<Modal>(new Modal);
-
+subscription: Subscription[] =[];
     constructor(
         private router: Router,
         private location: Location,
 
     ) {
         this.browserRefresh = !router.navigated;
-        this.router.events.subscribe(res => {
+       var events = this.router.events.subscribe(res => {
             if (res instanceof NavigationStart) {
                 this.browserRefresh = !router.navigated;
             }
         })
+
     }
 
 
@@ -31,6 +32,8 @@ export class ModalService {
         } else {
             this.location.back();
         }
+
+
     }
 
     addModal(modal: Modal, where: string) {

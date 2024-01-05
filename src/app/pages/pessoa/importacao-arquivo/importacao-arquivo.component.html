@@ -5,35 +5,35 @@
     </ng-template>
     <ng-template #template>
         <form #form="ngForm" (ngSubmit)="send()" class="needs-validation" enctype="multipart/form-data" >
-            <label for="file" class="input-file-container" *ngIf="!loading">
-                <p class="icon">
-                    <i class="pi pi-upload"></i>
+            <div *ngIf="!loading && !salvo">
+                <label for="file" class="input-file-container">
+                    <p class="icon">
+                        <i class="pi pi-upload"></i>
+                    </p>
+                    <h3>Clique e arraste para selecionar arquivo</h3>
+                    <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
+                    <!-- <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p> -->
+                    <p *ngIf="fileUpload"><strong>Nome do arquivo:</strong> {{fileUpload.name}}</p>
+                    <input type="file"
+                           name="file"
+                           id="file"
+                           #file
+                           required
+                           (input)="fileChange($event)"
+                           accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                </label>
+                <p class="text-info">
+                    <a href="assets/modelos/modelo-importacao-pessoa.xlsx" download="modelo-importacao-pessoa.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a>
                 </p>
-                <h3>Clique e arraste para selecionar arquivo</h3>
-                <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
-                <!-- <p><small>Você também pode copiar e colar as linhas aqui para importar os dados</small></p> -->
-                <p *ngIf="fileUpload"><strong>Nome do arquivo:</strong> {{fileUpload.name}}</p>
-                <input type="file"
-                       name="file"
-                       id="file"
-                       #file
-                       required
-                       (input)="fileChange($event)"
-                       accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-            </label>
-
+            </div>
             <div class="d-flex align-items-start flex-wrap p-0 mt-1">
                 <div class="me-3">
-                    <p class="text-info">
-                        <a href="assets/modelos/modelo-importacao-pessoa.xlsx" download="modelo-importacao-pessoa.xlsx">Clique aqui para saber como deve ser o arquivo XLSX</a>
-                    </p>
-                    <div *ngIf="erro || form.invalid " class="m-0">
-                        <p class="text-danger" *ngIf="erro" [innerHTML]="erro"></p>
-                    </div>
-                    <p *ngIf="!fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
+                    <div *ngIf="mensagem && !erro" [innerHTML]="mensagem"></div>
+                    <p class="text-danger" *ngIf="erro" [innerHTML]="erro"></p>
+                    <p *ngIf="!erro  && !fileUpload || (form.invalid && form.errors && form.errors['fileRequired'])" class="text-danger">Selecione um arquivo para enviar.</p>
                 </div>
 
-                <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
+                <button class="btn btn-primary me-0 ms-auto" *ngIf="!salvo" [disabled]="form.invalid || loading">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                     <span>Salvar</span>
                 </button>

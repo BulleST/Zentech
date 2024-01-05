@@ -5,30 +5,30 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 
 export class LogList {
     id: number = 0;
-    data: string = '';
+    data: Date = new Date;
     acao: string = '';
     objeto: string = '';
     entidade: string = '';
     usuarioNome: string = '';
     usuarioEmail: string = '';
-    empresa: string = '';
     usuario_Id: 0;
-    empresa_Id: 0;
 }
 
 
 export class LogRequest {
   id: number = 0;
-  data: string = '';
+  inputs: { key: string; value: unknown; class: string}[] = [];
+  data: Date = new Date;
   acao: string = '';
+
   objeto: string = '';
   entidade: string = '';
   usuarioNome: string = '';
   usuarioEmail: string = '';
-  empresa: string = '';
   usuario_Id: number = undefined as unknown as number;;
-  empresa_Id: number = undefined as unknown as number;;
 }
+
+
 
 
 export var logColumns: Column[] = [
@@ -38,8 +38,8 @@ export var logColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: true,
-        filterShowMatchMode: true,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
@@ -49,10 +49,10 @@ export var logColumns: Column[] = [
         maskType: MaskType.dateTime,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'acao',
@@ -60,10 +60,10 @@ export var logColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
         field: 'objeto',
@@ -71,10 +71,10 @@ export var logColumns: Column[] = [
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        filterShowAddButton: false,
-        filterShowMatchMode: false,
+        showAddButton: false,
+        showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
+        filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
       field: 'entidade',
@@ -82,10 +82,10 @@ export var logColumns: Column[] = [
       maskType: MaskType.undefined,
       filterType: FilterType.text,
       filterDisplay: FilterDisplay.menu,
-      filterShowAddButton: false,
-      filterShowMatchMode: false,
+      showAddButton: false,
+      showMatchMode: true,
       showOperator: false,
-      filterMatchMode: FilterMatchMode.EQUALS,
+      filterMatchMode: FilterMatchMode.CONTAINS,
   },
   {
     field: 'usuarioNome',
@@ -93,32 +93,22 @@ export var logColumns: Column[] = [
     maskType: MaskType.undefined,
     filterType: FilterType.text,
     filterDisplay: FilterDisplay.menu,
-    filterShowAddButton: false,
-    filterShowMatchMode: false,
+    showAddButton: false,
+    showMatchMode: true,
     showOperator: false,
-    filterMatchMode: FilterMatchMode.EQUALS,
+    filterMatchMode: FilterMatchMode.CONTAINS,
 },
 {
-  field: 'usuarioEmpresa',
-  header: 'Empresa',
+  field: 'usuarioEmail',
+  header: 'E-mail',
   maskType: MaskType.undefined,
   filterType: FilterType.text,
   filterDisplay: FilterDisplay.menu,
-  filterShowAddButton: false,
-  filterShowMatchMode: false,
+  showAddButton: false,
+  showMatchMode: true,
   showOperator: false,
-  filterMatchMode: FilterMatchMode.EQUALS,
+  filterMatchMode: FilterMatchMode.CONTAINS,
 },
-{
-  field: 'Empresa',
-  header: 'Empresa',
-  maskType: MaskType.undefined,
-  filterType: FilterType.text,
-  filterDisplay: FilterDisplay.menu,
-  filterShowAddButton: false,
-  filterShowMatchMode: false,
-  showOperator: false,
-  filterMatchMode: FilterMatchMode.EQUALS,
-},
+
 ];
 

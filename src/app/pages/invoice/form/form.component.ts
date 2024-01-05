@@ -63,8 +63,8 @@ export class FormComponent implements OnDestroy {
 
     beneficiarios: BeneficiarioList[] = [];
     loadingBeneficiarios = false;
-    beneficiarioSelected?: BeneficiarioRequest = new BeneficiarioRequest;
-    bancoBeneficiarioSelected?: BancoRequest = new BancoRequest;
+    beneficiarioSelected?: BeneficiarioRequest;
+    bancoBeneficiarioSelected?: BancoRequest;
 
 
     paises: Paises[] = []
@@ -114,12 +114,11 @@ export class FormComponent implements OnDestroy {
                 // Supondo que 'res' é uma matriz de objetos onde cada objeto tem uma propriedade 'cnpj' do tipo número
 
                 // Convertendo cada CNPJ para uma string e aplicando a máscara
-                this.beneficiarios = res.map(beneficiario => {
-
-
-                    beneficiario.cnpj = this.mask.applyMask(beneficiario.cnpj.toString(), '00.000.000/0000-00') as unknown as number
-                    return beneficiario;
-                });
+                this.beneficiarios = res
+                // .map(beneficiario => {
+                //     beneficiario.cnpj = this.mask.applyMask(beneficiario.cnpj.toString(), '00.000.000/0000-00') as unknown as number
+                //     return beneficiario;
+                // });
 
             })
         var beneficiarios = this.beneficiarioService.list.subscribe(res => this.beneficiarios = res);
@@ -225,19 +224,17 @@ export class FormComponent implements OnDestroy {
             await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
                 .then(async (res: any ) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-                    res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                    // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                     
                     await lastValueFrom(this.bancoService.get(res.banco_Id))
                     .then(res => {
                         res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-                        res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                        // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                         this.bancoBeneficiarioSelected = res;
                     })
                     .catch(res => {
                         this.toastr.error('Não foi possível carregar dados do banco.')
                     })
-
-
                     this.beneficiarioSelected = res;
                 })
                 .catch(res => {
@@ -245,6 +242,9 @@ export class FormComponent implements OnDestroy {
                 })
 
             this.loadingBeneficiarios = false;
+        } else {
+            delete this.beneficiarioSelected;
+            delete this.bancoBeneficiarioSelected;
         }
     }
 

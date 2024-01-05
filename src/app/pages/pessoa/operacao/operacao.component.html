@@ -18,13 +18,12 @@
                  [columns]="columns"
                  [tableLinks]="tableLinks"
                  [selectable]="true"></app-list-shared>
-
 <ng-template #tableFooter>
     <tr *ngIf="!loading">
         <td></td>
         <td></td>
         <td>
-            <p class="me-2 pe-5 text-right">Total:  <strong>{{limiteUtilizado | currency : 'BRL' : '' : '1.2' }} </strong></p>
+            <p class="me-2 pe-5 text-right">Total: <strong>{{limiteUtilizado | currency : 'BRL' : '' : '1.2' }} </strong></p>
         </td>
         <td></td>
         <td></td>

@@ -91,7 +91,6 @@ export class DetailsComponent implements OnDestroy {
                 lastValueFrom(this.pessoaService.get(this.objeto.id))
                     .then(res => {
                         res.cpf = res.cpf.toString().padStart(11, '0') as unknown as number;
-                        console.log(res)
                         this.objeto = res;
                     })
                     .catch(res => {
@@ -152,11 +151,9 @@ export class DetailsComponent implements OnDestroy {
 
         this.loadingConsultaApi = true;
         this.erro = '';
-        console.log(this.objeto.dataNascimento)
 
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
-                console.log('retorno api', res)
                 this.loadingConsultaApi = false;
                 if (typeof (res) == 'object') {
                     var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
@@ -206,7 +203,6 @@ export class DetailsComponent implements OnDestroy {
                 }
             })
             .catch(res => {
-                console.log('retorno api erro', res)
                 this.loadingConsultaApi = false;
                 this.erro = getError(res);
             })

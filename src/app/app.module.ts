@@ -1,4 +1,4 @@
-import { NgModule, DEFAULT_CURRENCY_CODE, LOCALE_ID } from '@angular/core';
+import { NgModule, DEFAULT_CURRENCY_CODE, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -20,6 +20,8 @@ import { LoadingComponent } from './parts/loading/loading.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
+import { AccountService } from './services/account.service';
+import { RouterStateSnapshot } from '@angular/router';
 
 registerLocaleData(localePt);
 
@@ -77,8 +79,8 @@ export class AppModule {
             lte: 'Menor que ou igual a', // Less Than or Equal to
             gt: 'Maior que', // Greater than
             gte: 'Maior que ou igual a', // Greater than or equal to
-            is: 'Igual',
-            isNot: 'Diferente',
+            is: 'Igual a',
+            isNot: 'Diferente de',
             before: 'Anterior a',
             after: 'Posterior a',
             dateIs: 'Data igual a',
@@ -87,8 +89,8 @@ export class AppModule {
             dateAfter: 'Data posterior a',
             clear: 'Limpar filtro',
             apply: 'Filtrar',
-            matchAll: 'Filtrar todos',
-            matchAny: 'Filtrar qualquer um',
+            matchAll: 'Filtrar todos que',
+            matchAny: 'Filtrar qualquer um que',
             addRule: 'Adicionar filtro',
             removeRule: 'Remover filtro',
             weak: 'Fraca',
@@ -110,6 +112,7 @@ export class AppModule {
             prevMonth: 'Anterior',
             nextMonth: 'Próximo',
         })
+
         this.config.filterMatchModeOptions = {
             text: [
                 FilterMatchMode.STARTS_WITH,

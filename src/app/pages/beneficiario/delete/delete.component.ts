@@ -6,6 +6,7 @@ import { BeneficiarioService } from 'src/app/services/beneficiario.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { insertOrReplace, remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -74,7 +75,11 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
-                    lastValueFrom(this.beneficiarioService.getList());
+                    if (res.objeto) {
+                        remove(this.beneficiarioService, res.objeto)
+                    } else {
+                        lastValueFrom(this.beneficiarioService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;

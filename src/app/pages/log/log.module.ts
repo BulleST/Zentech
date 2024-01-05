@@ -9,13 +9,13 @@ import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
-import { DeleteComponent } from './delete/delete.component';
+import { FormComponent } from './form/form.component';
 
 @NgModule({
     declarations: [
         ListComponent,
-        // FormComponent,
-        DeleteComponent
+        FormComponent,
+
 
     ],
     imports: [

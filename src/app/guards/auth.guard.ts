@@ -21,9 +21,13 @@ export class AuthGuard implements CanActivate {
         state: RouterStateSnapshot
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         const account = this.accountService.accountValue;
-        if (!account) {
+        
+         if (!account) 
+        {
             return this.voltar(state);
-        } else {
+        } 
+        else
+        {
             const jwtToken = JSON.parse(atob(account?.jwtToken.split('.')[1]));
             const expires = new Date(jwtToken.exp * 1000);
             // const timeout = expires.getTime() - Date.now() - (60 * 1000);
@@ -31,7 +35,7 @@ export class AuthGuard implements CanActivate {
                 return this.voltar(state);
             }
             return true;
-        }
+        } 
     }
 
     getDecodedAccessToken(token: string): any {

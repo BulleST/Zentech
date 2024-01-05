@@ -13,6 +13,7 @@ import { validateCEP } from 'src/app/utils/validate-cep';
 import { validateCNPJ } from 'src/app/utils/validate-cnpj';
 import { Paises } from 'src/app/models/pais.model';
 import { PaisesService } from 'src/app/services/paises.service';
+import { insertOrReplace } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-form',
@@ -34,10 +35,8 @@ export class FormComponent implements OnDestroy, AfterViewInit {
     paises: Paises[] = [];
 
     loadingCNPJ = false;
-
-
     @ViewChild('cnpj') cnpj: NgModel;
-
+    
     @ViewChild('cep') cep: NgModel;
     cepPreenchido = false;
     executaCEP: boolean = true;
@@ -77,8 +76,8 @@ export class FormComponent implements OnDestroy, AfterViewInit {
                 this.isEditPage = true;
                 lastValueFrom(this.instituicaoFinanceiraService.get(this.objeto.id))
                     .then(res => {
-                        res.cnpj = res.cnpj.toString().padStart(14, '0') as unknown as number;
-                        res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+                        // res.codigoRegistro = res.codigoRegistro.toString().padStart(14, '0') as unknown as number;
+                        // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                         this.objeto = res;
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'instituicao financeira');
@@ -189,19 +188,19 @@ export class FormComponent implements OnDestroy, AfterViewInit {
         this.erro = '';
         this.loadingCNPJ = true;
 
-        if (this.objeto.cnpj.toString().length < 14) {
+        if (this.objeto.codigoRegistro.toString().length < 14) {
             input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
             return false;
         }
 
-        if (!this.objeto.cnpj || this.objeto.cnpj == 0) {
+        if (!this.objeto.codigoRegistro || this.objeto.codigoRegistro == 0) {
             input.control.setErrors({ required: true });
             this.loadingCNPJ = false;
             return false;
         }
 
-        var valid = validateCNPJ(this.objeto.cnpj);
+        var valid = validateCNPJ(this.objeto.codigoRegistro);
         if (!valid) {
             input.control.setErrors({ invalid: true });
             this.loadingCNPJ = false;
@@ -224,25 +223,28 @@ export class FormComponent implements OnDestroy, AfterViewInit {
             return;
         }
 
-        if (!this.validaCNPJ(this.cnpj)) {
-            this.toastr.error('CNPJ inválido');
-            this.erro = 'CNPJ inválido';
-            return;
-        }
-        if (!this.validaCEP(this.cnpj)) {
-            this.toastr.error('CEP inválido');
-            this.erro = 'CEP inválido';
-            return;
-        }
+        // if (!this.validaCNPJ(this.cnpj)) {
+        //     this.toastr.error('CNPJ inválido');
+        //     this.erro = 'CNPJ inválido';
+        //     return;
+        // }
+        // if (!this.validaCEP(this.cep)) {
+        //     this.toastr.error('CEP inválido');
+        //     this.erro = 'CEP inválido';
+        //     return;
+        // }
 
         return lastValueFrom(this.instituicaoFinanceiraService.post(this.objeto))
             .then(res => {
                 if (res.sucesso != false) {
-                    lastValueFrom(this.instituicaoFinanceiraService.getList());
+                    if (res.objeto) {
+                        insertOrReplace(this.instituicaoFinanceiraService, res.objeto)
+                    } else {
+                        lastValueFrom(this.instituicaoFinanceiraService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
-                    this.toastr.error(res.mensagem);
                 }
                 this.loading = false;
             })

@@ -33,7 +33,7 @@ export class NavigationComponent implements OnDestroy {
     ) {
         var events = this.router.events.subscribe(res => {
             if (res instanceof NavigationEnd)
-                this.homeActive = res.url == '/' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
+                this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
         })
         this.subscription.push(events);
 
@@ -89,6 +89,14 @@ export class NavigationComponent implements OnDestroy {
                         label: 'Beneficiários',
                         routerLink: "/beneficiario",
                         paddingLeft: 10,
+                        items: [
+                            {
+                                id: i++,
+                                label: 'Representantes',
+                                routerLink: "/representante",
+                                paddingLeft: 25,
+                            }
+                        ]
                     },
                     {
                         id: i++,
@@ -118,6 +126,18 @@ export class NavigationComponent implements OnDestroy {
                     },
                 ]
             },
+            {
+                id: i++,
+                label: 'Empresas',
+                routerLink: "/empresa",
+                paddingLeft: 0,
+            },
+            {
+              id: i++,
+              label: 'Logs',
+              routerLink: "/log-acoes",
+              paddingLeft: 0,
+          },
             {
                 id: i++,
                 label: 'Usuários',

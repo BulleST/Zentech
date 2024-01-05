@@ -5,6 +5,7 @@ import { Table } from 'src/app/utils/table';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
+import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-list',

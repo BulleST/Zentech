@@ -6,6 +6,7 @@ import { ContratoService } from 'src/app/services/contrato.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -73,13 +74,17 @@ export class DeleteComponent {
 
         lastValueFrom(this.contratoService.delete(this.id))
             .then(res => {
-                this.loading = false;
-                if (res.sucesso) {
-                    lastValueFrom(this.contratoService.getList());
+                if (res.sucesso != false) {
+                    if (res.objeto) {
+                        remove(this.contratoService, res.objeto)
+                    } else {
+                        lastValueFrom(this.contratoService.getList());
+                    }
                     this.voltar();
                 } else {
                     this.erro = res.mensagem;
                 }
+                this.loading = false;
             })
             .catch(res => {
                 this.loading = false;
