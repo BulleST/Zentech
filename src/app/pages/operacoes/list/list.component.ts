@@ -5,9 +5,10 @@ import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
+import { PessoaOperacaoList, pessoaOperacaoAllColumns } from 'src/app/models/pessoa-operacao.model';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-list',
@@ -17,22 +18,18 @@ import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 export class ListComponent {
     faFilePdf = faFilePdf;
     maskType = MaskType;
-    list: PessoaList[] = [];
+    list: PessoaOperacaoList[] = [];
     tableLinks: MenuTableLink[] = [];
     columns = pessoaOperacaoAllColumns;
     subscription: Subscription[] = [];
-    screen: ScreenWidth = ScreenWidth.lg;
+
     constructor(
         private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
-        private isMobile: IsMobile
+        private accountService: AccountService,
     ) {
-        var list = this.pessoaOperacaoService.list.subscribe(res => {
-            this.list = Object.assign([], res)
-        });
+        var list = this.pessoaOperacaoService.list.subscribe(res => this.list = res);
         this.subscription.push(list);
-        var mob = this.isMobile.value.subscribe(res => this.screen = res);
-        this.subscription.push(mob);
 
         lastValueFrom(this.pessoaOperacaoService.getList());
 
@@ -41,8 +38,11 @@ export class ListComponent {
                 this.tableLinks = [
                     { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] },
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                }
+
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
         });
