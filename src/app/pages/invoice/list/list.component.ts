@@ -18,6 +18,7 @@ export class ListComponent {
     tableLinks: MenuTableLink[] = [];
     columns = invoiceColumns;
     subscription: Subscription[] = [];
+    loading = false;
     
     constructor(
         private table: Table,
@@ -27,7 +28,11 @@ export class ListComponent {
         var list = this.invoiceService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
-        lastValueFrom(this.invoiceService.getList());
+        var loading = this.invoiceService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+        
+        lastValueFrom(this.invoiceService.getList(true));
+        
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
@@ -46,5 +51,9 @@ export class ListComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
     }
+    getList() {
+        lastValueFrom(this.invoiceService.getList(true));
+    }
+
 
 }

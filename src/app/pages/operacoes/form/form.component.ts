@@ -9,6 +9,7 @@ import { Moeda } from 'src/app/models/moeda.model';
 import { Paises } from 'src/app/models/pais.model';
 import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
 import { Pessoa, PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
+import { LoadingService } from 'src/app/parts/loading/loading';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { MoedaService } from 'src/app/services/moeda.service';
 import { PaisesService } from 'src/app/services/paises.service';
@@ -52,15 +53,14 @@ export class FormComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
         private pessoaService: PessoaService,
-        private pessoaSaldoService: PessoaSaldoService,
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
-        private toastr: ToastrService,
         private mask: MaskApplierService,
         private currencyPipe: CurrencyPipe,
         private moedaService: MoedaService,
         private router: Router,
+        private loadingUtils: LoadingService,
     ) {
 
         lastValueFrom(this.pessoaOperacaoService.getStatus())
@@ -68,7 +68,6 @@ export class FormComponent implements OnDestroy {
                 this.loadingStatus = false;
                 this.status = res;
             });
-
 
         lastValueFrom(this.moedaService.getList())
             .then(res => this.moedas = res)
@@ -115,8 +114,11 @@ export class FormComponent implements OnDestroy {
 
                 if (this.pessoas.length == 0) {
                     this.loadingPessoa = true;
-                    await lastValueFrom(this.pessoaService.getList(true))
+                    this.loadingUtils.addLoadingRequest();
+                    this.loadingUtils.message.next('Carregando lista de pessoas')
+                    lastValueFrom(this.pessoaService.getList(true))
                         .then(res => {
+                            this.loadingUtils.removeLoadingRequest();
                             this.loadingPessoa = false;
                             this.pessoas = JSON.parse(JSON.stringify(res));
                             this.pessoas = this.pessoas.map(x => {

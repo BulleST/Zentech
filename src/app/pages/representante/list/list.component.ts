@@ -5,7 +5,7 @@ import { MaskType } from 'src/app/helpers/column.interface';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { ScreenWidth } from 'src/app/utils/mobile';
 import { Representante, representanteColumns } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
@@ -17,29 +17,31 @@ import { AccountService } from 'src/app/services/account.service';
     styleUrls: ['./list.component.css']
 })
 export class ListComponent {
-    faFilePdf = faFilePdf;
-    maskType = MaskType;
+    faUsers = faUsers;
     list: Representante[] = []
     tableLinks: MenuTableLink[] = [];
 
     columns = representanteColumns;
     subscription: Subscription[] = [];
+    loading = false;
 
     constructor(
         private table: Table,
         private representanteService: RepresentanteService,
         private accountService: AccountService,
     ) {
-        var list = this.representanteService.list.subscribe(res => this.list = res);
+        var list = this.representanteService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
-        
-        lastValueFrom(this.representanteService.getList());
+
+        var loading = this.representanteService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+
+        lastValueFrom(this.representanteService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
 
                 if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
@@ -56,5 +58,9 @@ export class ListComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
     }
+    getList() {
+        lastValueFrom(this.representanteService.getList(true));
+    }
+
 
 }

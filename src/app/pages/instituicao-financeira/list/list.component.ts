@@ -27,16 +27,20 @@ export class ListComponent {
 
     columns = instituicaoFinanceiraColumns;
     subscription: Subscription[] = [];
+    loading = false;
 
     constructor(
         private table: Table,
         private instituicaoFinanceiraService: InstituicaoFinanceiraService,
         private accountService: AccountService,
     ) {
-        var list = this.instituicaoFinanceiraService.list.subscribe(res => this.list = res);
+        var list = this.instituicaoFinanceiraService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
-        lastValueFrom(this.instituicaoFinanceiraService.getList());
+        var loading = this.instituicaoFinanceiraService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+
+        lastValueFrom(this.instituicaoFinanceiraService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
@@ -57,6 +61,10 @@ export class ListComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
     }
+    getList() {
+        lastValueFrom(this.instituicaoFinanceiraService.getList(true));
+    }
+
 
 
 

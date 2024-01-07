@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Table } from '../utils/table';
@@ -50,16 +50,19 @@ export class RequestInterceptor implements HttpInterceptor {
                 this.loadingUtils.addLoadingRequest();
             }
         }
+        
         this.table.resetSelection();
         return next.handle(request).pipe(
             tap({
                 next: (data: any) => {
+
                     if (data.type == 0) {
                         if (request.method == 'POST' || request.method == 'PUT' || request.method == 'PATCH' || request.method == 'DELETE') {
                             this.table.onRowUnselect();
                         }
                     }
-                    else if (data instanceof HttpResponse) {
+                    else 
+                    if (data instanceof HttpResponse) {
                         if ([200, 204, 201].includes(data.status)) {
                             if (data.body && (data.body.sucesso == false || data.body == false)) {
                                 if (notToastr.length == 0) {

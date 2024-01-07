@@ -7,6 +7,7 @@ import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service'
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
+import { insertOrReplace, remove } from 'src/app/utils/service-list';
 
 @Component({
     selector: 'app-delete',
@@ -30,18 +31,18 @@ export class DeleteComponent {
         private pessoaService: PessoaService,
         private pessoaOperacaoService: PessoaOperacaoService,
     ) { }
-    
+
     ngAfterViewInit(): void {
-        this.modal.id =  0;
-        this.modal.template =  this.template;
-        this.modal.icon =  this.icon;
-        this.modal.style =  { 'max-width': '400px' };
-        this.modal.activatedRoute =  this.activatedRoute;
+        this.modal.id = 0;
+        this.modal.template = this.template;
+        this.modal.icon = this.icon;
+        this.modal.style = { 'max-width': '400px' };
+        this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         this.modal.routerBack = ['../../'];
         this.modal.title = 'Excluir registro';
 
-        
+
         var params = this.activatedRoute.params.subscribe(p => {
             if (p['pessoa_id']) {
                 try {
@@ -49,7 +50,7 @@ export class DeleteComponent {
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'delete pessoa');
                     }, 200);
-                } catch(e) {
+                } catch (e) {
                     this.voltar();
                 }
             } else {
@@ -63,7 +64,7 @@ export class DeleteComponent {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
-   
+
     voltar() {
         this.modalService.removeModal(this.modal);
     }
@@ -77,19 +78,21 @@ export class DeleteComponent {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
+                    if (res.objeto) {
+                        remove(this.pessoaService, res.objeto);
+                        var operacoes = this.pessoaOperacaoService.list.value.filter(x => x.cpfCliente == res.objeto.cpf);
+                        operacoes.forEach(item => {
+                            remove(this.pessoaOperacaoService, item);
+                        });
 
-                    var list = this.pessoaService.list.value;
-                    var index = list.findIndex(x => x.id == this.id)
-                    if (index != -1) {
-                        list.splice(index, 1);
-                        this.pessoaService.list.next(list);
+                    } else {
+                        lastValueFrom(this.pessoaOperacaoService.getList());
+                        lastValueFrom(this.pessoaService.getList());
                     }
-
-                    lastValueFrom(this.pessoaService.getList());
-                    lastValueFrom(this.pessoaOperacaoService.getList());
                     this.voltar();
-                } else {
-                    this.erro = res.mensagem;
+                }
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível excluir pessoa.`;
                 }
             })
             .catch(res => {

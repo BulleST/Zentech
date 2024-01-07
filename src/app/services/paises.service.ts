@@ -12,6 +12,7 @@ import { Paises } from '../models/pais.model';
 export class PaisesService {
     url = environment.url;
     list = new BehaviorSubject<Paises[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private http: HttpClient,
@@ -19,8 +20,8 @@ export class PaisesService {
 
     ) { }
 
-    getList(loading: boolean = false) {
-        return this.http.get<Paises[]>(`${this.url}/pais/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+    getList() {
+        return this.http.get<Paises[]>(`${this.url}/pais/`)
             .pipe(tap({
                 next: list => {
                     this.list.next(list);

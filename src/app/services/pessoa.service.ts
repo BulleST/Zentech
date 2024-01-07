@@ -17,6 +17,7 @@ export class PessoaService {
     url = environment.url;
     list = new BehaviorSubject<PessoaList[]>([]);
     object = new BehaviorSubject<Pessoa>(new Pessoa);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -27,8 +28,9 @@ export class PessoaService {
     }
 
     getList(loading: boolean = false) {
-        this.table.loading.next(true);
-        return this.http.get<PessoaList[]>(`${this.url}/pessoa`, { headers: new HttpHeaders({ 'loading': loading.toString() })})
+       this.loading.next(loading);
+        this.table.loading.next(loading);
+        return this.http.get<PessoaList[]>(`${this.url}/pessoa`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -36,6 +38,7 @@ export class PessoaService {
                     return x;
                 });
                 this.list.next(Object.assign([], list));
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
@@ -61,7 +64,7 @@ export class PessoaService {
 
 
     create(request: Pessoa) {
-        return this.http.post<PessoaResponse>(`${this.url}/pessoa`, request);
+        return this.http.post<Response>(`${this.url}/pessoa`, request);
     }
 
     delete(id: number) {
@@ -69,16 +72,21 @@ export class PessoaService {
     }
 
 
-    getPessoa(cpf: number, dataNasc: Date) {
-        var data = this.datepipe.transform(dataNasc, 'dd/MM/yyyy')
-        return this.http.post<BRConsultaResponse | string>(`${this.url}/pessoa/consulta-pessoa`, {cpf, data});
+    getPessoa(cpf: number, data: Date) {
+        var dataNasc = this.datepipe.transform(data, 'dd/MM/yyyy')
+        return this.http.post<ConsultaResponse>(`${this.url}/pessoa/consulta-pessoa`, {cpf, dataNasc});
     }
 
 
 }
 
+export interface ConsultaResponse {
+    retorno: string | BRConsulta;
+    dados: any;
+}
 
-export class BRConsultaResponse  {
+
+export class BRConsulta  {
     CONTROLE: string = '';
     CPF: string = '';
     DATA_CAP: string = '';

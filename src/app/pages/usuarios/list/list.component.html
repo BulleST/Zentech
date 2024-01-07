@@ -6,6 +6,9 @@
         <div class="me-auto">
             <h3 class="page__header-title">Usuários</h3>
         </div>
+        <div class="ms-auto">
+            <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
+        </div>
     </div>
     <div class="page__body">
         <ng-template #topActions>

@@ -5,10 +5,7 @@ import { MaskType } from 'src/app/helpers/column.interface';
 import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
-import { Empresa } from 'src/app/models/empresa.model';
-import { EmpresaSelected, EmpresaService } from 'src/app/services/empresa.service';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { AccountService } from 'src/app/services/account.service';
 @Component({
     selector: 'app-list',
@@ -16,12 +13,13 @@ import { AccountService } from 'src/app/services/account.service';
     styleUrls: ['./list.component.css']
 })
 export class ListComponent {
-    faFilePdf = faFilePdf;
+    faUsers = faUsers;
     maskType = MaskType;
     list: BeneficiarioList[] = []
     tableLinks: MenuTableLink[] = [];
     columns = beneficiarioColumns;
     subscription: Subscription[] = [];
+    loading = false;
     // empresaSelected?: Empresa;
 
     constructor(
@@ -30,9 +28,11 @@ export class ListComponent {
         private accountService: AccountService,
         // private empresaService: EmpresaService,
     ) {
-        var list = this.beneficiarioService.list.subscribe(res => this.list = res);
+        var list = this.beneficiarioService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
         
+        var loading = this.beneficiarioService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
         // var empresa = this.empresaService.empresaSelected.subscribe(async res => {
         //     this.empresaSelected = res.empresa;
         //     console.log(this.empresaSelected)
@@ -41,6 +41,7 @@ export class ListComponent {
         //     }
         // });
         // this.subscription.push(empresa);
+        lastValueFrom(this.beneficiarioService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
@@ -59,5 +60,9 @@ export class ListComponent {
 
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
+    }
+
+    getList() {
+        lastValueFrom(this.beneficiarioService.getList(true));
     }
 }

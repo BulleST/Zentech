@@ -14,6 +14,8 @@ export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
     empresaSelected:  BehaviorSubject<EmpresaSelected>;
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -25,13 +27,12 @@ export class EmpresaService {
     }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Empresa[]>(`${this.url}/empresa`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<Empresa[]>(`${this.url}/empresa`)
             .pipe(tap({
                 next: list => {
-                    list = list.map(x => {
-                        return x;
-                    })
+                    this.loading.next(false);
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
@@ -42,7 +43,7 @@ export class EmpresaService {
 
     }
     get(id: number) {
-        return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
 
 

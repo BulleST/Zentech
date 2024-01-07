@@ -18,6 +18,7 @@ import { EmpresaService } from './empresa.service';
 export class BeneficiarioService {
     url = environment.url;
     list = new BehaviorSubject<BeneficiarioList[]>([])
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -27,14 +28,13 @@ export class BeneficiarioService {
     ) { }
 
     getList(/* empresaId?: number, */ loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
         // empresaId = empresaId ?? this.empresaService.empresaSelected.value.id ?? '' as unknown as number ;
-        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario` /*/list/${empresaId} */, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario` /*/list/${empresaId} */)
             .pipe(tap({
                 next: list => {
-                    list = list.map(x => {
-                        return x;
-                    })
+                    this.loading.next(false);
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
@@ -44,7 +44,7 @@ export class BeneficiarioService {
     }
 
     get(id: number) {
-        return this.http.get<BeneficiarioRequest>(`${this.url}/beneficiario/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<BeneficiarioRequest>(`${this.url}/beneficiario/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
 
     post(request: BeneficiarioRequest) {

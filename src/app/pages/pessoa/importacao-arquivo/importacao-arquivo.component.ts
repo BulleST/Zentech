@@ -99,10 +99,14 @@ export class ImportacaoArquivoComponent {
                 this.loading = false;
                 if (res.sucesso) {
                     this.voltar();
-                        this.alertService.info(res.mensagem?? "Importação realizada com sucesso");
+                    if (res.mensagem != 'Importação realizada com sucesso.') {
+                        this.alertService.info(res.mensagem, { classList: 'alert-big' });
+                    } else {
+                        this.alertService.success("Importação realizada com sucesso" );
+                    }
                 } else {
                     this.toastr.error('Erro ao salvar registros.');
-                    this.alertService.error(res.mensagem ?? 'Erro ao salvar registros')
+                    this.alertService.error(res.mensagem ?? 'Erro ao salvar registros', { classList: 'alert-big' })
                 }
             })
             .catch(res => {

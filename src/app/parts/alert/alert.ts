@@ -6,6 +6,7 @@ export class Alert {
     background: boolean = true;
     keepAfterRouteChange?: boolean = true;
     fade: boolean = false;
+    classList: string = '';
 
     constructor(init?:Partial<Alert>) {
         Object.assign(this, init);

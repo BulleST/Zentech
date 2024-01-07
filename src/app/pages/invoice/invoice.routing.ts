@@ -33,7 +33,7 @@ const routes: Routes = [
                 ]
             },
             {
-                path: 'editar', component: FormComponent, title: 'Zentech - Editar Invoice', data: { modalOrder: 1 }, children: [
+                path: 'editar/:invoice_id', component: FormComponent, title: 'Zentech - Editar Invoice', data: { modalOrder: 1 }, children: [
 
                     { path: 'moeda', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Cadastrar Moeda' },
                     { path: 'moeda/:moeda_id', component: FormMoeda, data: { modalOrder: 2 }, title: 'Zentech - Editar Moeda' },

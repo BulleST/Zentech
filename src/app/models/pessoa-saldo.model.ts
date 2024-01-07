@@ -41,7 +41,7 @@ export var pessoaSaldoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'usuarioCadastroNome',
+        field: 'usuarioCadastroEmail',
         header: 'Cadastrado Por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

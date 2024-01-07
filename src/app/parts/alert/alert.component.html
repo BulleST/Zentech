@@ -1,9 +1,35 @@
 <div *ngIf="alerts.length > 0" style="z-index: 3;position: relative;">
     <div *ngFor="let alert of alerts">
         <div [class.alert-bg]="alert.background" (click)="removeAlert(alert)"></div>
-        <div class="{{cssClasses(alert)}}">
+        <div class="{{cssClasses(alert)}} {{alert.classList}}">
             <a class="btn-close" (click)="removeAlert(alert)">&times;</a>
-            <div class="p-3">
+            <div class="mb-2">
+                <div *ngIf="alert.type == AlertType.Info" class="">
+                    <h5>
+                        <fa-icon [icon]="faInfoCircle" class="me-2"></fa-icon> 
+                        <span>Atenção</span>
+                    </h5>
+                </div> 
+                <div *ngIf="alert.type == AlertType.Error" class="text-danger">
+                    <h5>
+                        <fa-icon [icon]="faTimesCircle" class="me-2"></fa-icon> 
+                        <span>Atenção</span>
+                    </h5>
+                </div> 
+                <div *ngIf="alert.type == AlertType.Success" class="text-success">
+                    <h5>
+                        <fa-icon [icon]="faCheck" class="me-2"></fa-icon> 
+                        <span>Atenção</span>
+                    </h5>
+                </div> 
+                <div *ngIf="alert.type == AlertType.Warning" class="text-warning">
+                    <h5>
+                        <fa-icon [icon]="faWarning" class="me-2"></fa-icon> 
+                        <span>Atenção</span>
+                    </h5>
+                </div> 
+            </div>
+            <div class="pe-4">
                 <div [innerHTML]="alert.message"></div>
             </div>
             <div class="mt-3 d-flex">

@@ -18,6 +18,7 @@ export class PessoaOperacaoService {
     list = new BehaviorSubject<PessoaOperacaoList[]>([]);
     listOperacaoPorPessoa = new BehaviorSubject<PessoaOperacaoList[]>([]);
     status = new BehaviorSubject<PessoaOperacaoStatus[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -27,28 +28,27 @@ export class PessoaOperacaoService {
     ) { }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`)
         .pipe(tap({
             next: list => {
-                // list = list.map(x => {
-                //     x.dataCadastro = new Date(x.dataCadastro);
-                //     x.dataTransacao = new Date(x.dataTransacao);
-                //     return x
-                // })
                 this.list.next(list);
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de operações.')
         }));
     }
 
-    getListById(pessoa_Id: number, loading: boolean = false) {
+        getListById(pessoa_Id: number, loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/pessoa/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/pessoa/${pessoa_Id}`)
         .pipe(tap({
             next: list => {
                 this.listOperacaoPorPessoa.next(list);
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de operações.')
@@ -56,7 +56,7 @@ export class PessoaOperacaoService {
     }
 
     getStatus() {
-        return this.http.get<PessoaOperacaoStatus[]>(`${this.url}/operacaoStatus/`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaOperacaoStatus[]>(`${this.url}/operacaoStatus/`)
         .pipe(tap({
             next: list => {
                 this.status.next(list);
@@ -67,7 +67,7 @@ export class PessoaOperacaoService {
     }
 
     get(id: number) {
-        return this.http.get<PessoaOperacaoRequest>(`${this.url}/operacao/${id}`, { headers: new HttpHeaders({ 'loading': 'false' })});
+        return this.http.get<PessoaOperacaoRequest>(`${this.url}/operacao/${id}`, { headers: new HttpHeaders({ 'loading': 'true' })});
     }
 
     create(request: PessoaOperacaoRequest ) {

@@ -7,6 +7,9 @@
             <h3 class="page__header-title">Pessoas</h3>
             <p>Painel CPF</p>
         </div>
+        <div class="ms-auto">
+            <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
+        </div>
     </div>
     <div class="page__body">
             <ng-template #topActions>

@@ -24,21 +24,20 @@ export class ListComponent {
     tableLinks: MenuTableLink[] = [];
     columns = bancoColumns;
     subscription: Subscription[] = [];
-
-
-
+    loading = false;
+    
     constructor(
         private table: Table,
         private bancoService: BancoService,
         private accountService: AccountService,
     ) {
-        var list = this.bancoService.list.subscribe(res => {
-            this.list = Object.assign([], res)
-
-        });
+        var list = this.bancoService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
-        lastValueFrom(this.bancoService.getList());
+        var loading = this.bancoService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+
+        lastValueFrom(this.bancoService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
@@ -60,6 +59,8 @@ export class ListComponent {
         this.subscription.forEach(x => x.unsubscribe());
     }
 
-
+    getList() {
+        lastValueFrom(this.bancoService.getList(true));
+    }
 
 }

@@ -15,6 +15,7 @@ export class InvoiceService {
     url = environment.url;
     list = new BehaviorSubject<Invoice_List[]>([]);
     object = new BehaviorSubject<Invoice>(new Invoice);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -25,8 +26,9 @@ export class InvoiceService {
     }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Invoice_List[]>(`${this.url}/invoice`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<Invoice_List[]>(`${this.url}/invoice`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -34,6 +36,7 @@ export class InvoiceService {
                     return x;
                 })
                 this.list.next(Object.assign([], list));
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de invoices.')

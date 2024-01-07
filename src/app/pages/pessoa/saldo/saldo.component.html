@@ -13,10 +13,10 @@
     <ng-template pTemplate="caption">
         <div class="d-flex flex-column-reverse flex-sm-row flex-wrap px-0 py-0 w-100">
             <div class="align-items-center col-12 col-lg-9 col-md-10 col-sm-9 col-xl-6 d-flex flex-column-reverse flex-sm-row flex-wrap justify-content-end mb-sm-0 ms-auto px-0">
-                <div class="mx-1 mb-2 me-md-2 col-xl-3 col-lg-4 col-md-4 col-sm-12 col-12 px-0">
+                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 col-12 mb-2 me-md-2 mx-0 mx-sm-1 px-0">
                     <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center" [routerLink]="['saldo/cadastrar']"> Cadastrar Saldo </a>
                 </div>
-                <div class="p-input-icon-left col-xl-6 col-lg-4 col-md-5 col-sm-4 col-12 mb-2">
+                <div class="p-input-icon-left col-xl-6 col-lg-4 col-md-5 col-sm-7 col-12 mb-2">
                     <i class="pi pi-search"></i>
                     <input pInputText type="search" class="form-control "
                            (input)="dt.filterGlobal(filter.value , 'contains')"

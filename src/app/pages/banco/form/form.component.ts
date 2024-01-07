@@ -72,7 +72,7 @@ export class FormComponent implements OnDestroy {
                 lastValueFrom(this.bancoService.get(this.objeto.id))
                     .then(res => {
                         this.objeto = res;
-                        this.objeto.cep = this.objeto.cep.toString().padStart(8, '0') as unknown as number;
+                        // this.objeto.cep = this.objeto.cep.toString().padStart(8, '0') as unknown as number;
 
                         this.paisChange();
 
@@ -129,6 +129,11 @@ export class FormComponent implements OnDestroy {
             input.control.setErrors(null);
             this.cepPreenchido = false
 
+            if (!this.objeto.cep) {
+                input.control.setErrors({ required: true });
+                this.loadingCep = false;
+                return;
+            }
 
             if (!this.validaCEP(input)) {
                 this.toastr.error('CEP inválido.');
@@ -162,7 +167,12 @@ export class FormComponent implements OnDestroy {
 
     validaCEP(input: NgModel) {
         this.loadingCep = true;
-        if (!this.objeto.cep.toString().trim()) {
+        if (!this.objeto.cep) {
+            input.control.setErrors({ required: true });
+            this.loadingCep = false;
+            return false
+        }
+        else if (!this.objeto.cep.toString().trim()) {
             input.control.setErrors({ required: true });
             this.loadingCep = false;
             return false

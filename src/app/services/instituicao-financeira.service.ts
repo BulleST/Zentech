@@ -12,8 +12,8 @@ import { InstituicaoFinanceiraList, InstituicaoFinanceiraRequest } from '../mode
 })
 export class InstituicaoFinanceiraService {
     url = environment.url;
-    list = new BehaviorSubject<InstituicaoFinanceiraList[]>([
-    ]);
+    list = new BehaviorSubject<InstituicaoFinanceiraList[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -23,25 +23,23 @@ export class InstituicaoFinanceiraService {
     ) { }
 
     getList(loading: boolean = false) {
-      this.table.loading.next(true);
-      return this.http.get<InstituicaoFinanceiraList[]>(`${this.url}/instituicaoFinanceira`, { headers: new HttpHeaders({ 'loading': 'false' })})
-      .pipe(tap({
-          next: list => {
-              list = list.map(x => {
-                  return x;
-              })
-              this.list.next(Object.assign([], list));
-              return of(list);
-          },
-          error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+        this.loading.next(loading);
+        this.table.loading.next(true);
+        return this.http.get<InstituicaoFinanceiraList[]>(`${this.url}/instituicaoFinanceira`)
+            .pipe(tap({
+                next: list => {
+                    this.loading.next(false);
+                    this.list.next(Object.assign([], list));
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
 
-      }));
+            }));
     }
 
-
     get(id: number) {
-      return this.http.get<InstituicaoFinanceiraRequest>(`${this.url}/instituicaoFinanceira/${id}`, { headers: new HttpHeaders({ 'loading': 'false' })});
-  }
+        return this.http.get<InstituicaoFinanceiraRequest>(`${this.url}/instituicaoFinanceira/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
+    }
 
 
 
@@ -52,8 +50,8 @@ export class InstituicaoFinanceiraService {
 
 
     delete(id: number) {
-      return this.http.delete<Response>(`${this.url}/InstituicaoFinanceira/${id}`);
-  }
+        return this.http.delete<Response>(`${this.url}/InstituicaoFinanceira/${id}`);
+    }
 
 
 

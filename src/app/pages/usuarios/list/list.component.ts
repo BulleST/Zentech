@@ -20,22 +20,25 @@ export class ListComponent {
 
     columns = userColumns;
     subscription: Subscription[] = [];
+    loading = false;
 
     constructor(
         private table: Table,
         private userService: UsuarioService,
         private accountService: AccountService,
     ) {
-        var list = this.userService.list.subscribe(res => this.list = res);
+        var list = this.userService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
-        lastValueFrom(this.userService.getList());
+        var loading = this.userService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+
+        lastValueFrom(this.userService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                     { label: (res.ativo ? 'Desabilitar' : 'Habilitar'), routePath: [ (res.ativo ? 'desabilitar' : 'habilitar') ], paramsFieldName: ['id'] },
                     { label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] },
                 ];
@@ -52,6 +55,10 @@ export class ListComponent {
 
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
+    }
+
+    getList() {
+        lastValueFrom(this.userService.getList(true));
     }
 
 

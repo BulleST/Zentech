@@ -6,30 +6,30 @@ import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.i
 export class BancoList {
     id: number = 0;
     nome: string = '';
-    cidade: string = '';
-    cep: string = '';
-    numero: string = '';
-    logradouro: string = '';
-    pais: string = '';
-    bairro: string = '';
-    complemento: string = '';
     codigoSwift: string = '';
-    estado: string = '';
+    cep?: number;
+    logradouro?: string;
+    numero?: string;
+    bairro?: string;
+    cidade?: string;
+    estado?: string;
+    pais?: string;
+    complemento?: string;
 }
 
 
 export class BancoRequest {
     id: number = 0;
     nome: string = '';
-    cidade:string = '';
-    cep: number = '' as unknown as number;
-    numero: string = '';
-    logradouro: string = '';
-    pais_Id:number = undefined as unknown as number;
     codigoSwift: string = '';
-    bairro: string = '';
-    complemento: string = '';
-    estado: string = '';
+    cep?: number;
+    logradouro?: string;
+    numero?: string;
+    bairro?: string;
+    cidade?: string;
+    estado?: string;
+    pais_Id: number = undefined as unknown as number;
+    complemento?: string;
 }
 
 

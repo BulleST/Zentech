@@ -24,6 +24,9 @@
                     <p *ngIf="!loading && formatedList.length > 0 && showResultLength">
                         <small> {{ formatedList.length }} resultado(s) </small>
                     </p>
+                    <p *ngIf="loading && formatedList.length > 0" class="mb-2">
+                        <span class="spinner-border spinner-border-sm me-1"></span>
+                    </p>
                 </div>
                 <div
                      class="col-xl-9 col-lg-9 col-md-10 col-sm-10 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
@@ -33,9 +36,13 @@
                     </div>
                     <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf=" filterTable">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" class="form-control "
+                        <input pInputText 
+                                type="text" 
+                                class="form-control "
                                (input)="dt.filterGlobal(filter.value , 'contains')"
-                               #filter placeholder="Pesquisar" />
+                               #filter 
+                               placeholder="Pesquisar"
+                               [disabled]="formatedList.length == 0" />
                     </div>
                 </div>
             </div>
@@ -134,7 +141,7 @@
                 <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
                     <div  >
                         <!-- *ngIf="item[col.field] != '' && item[col.field] != undefined && item[col.field] != null ; else NA" -->
-                        <div *ngSwitchCase="maskType.options" style="max-width: 70px;">
+                        <div *ngSwitchCase="maskType.options">
                             <span [classList]="'flag ' + getOptionValue(item, col, 'class')">{{getOptionValue(item, col, 'output')}}</span>
                         </div>
                         <div *ngSwitchCase="maskType.cpf">
@@ -177,14 +184,15 @@
                     <div class="d-flex align-items-center">
                         <ng-template #rowActions *ngIf="rowActions" [ngTemplateOutlet]="rowActions"></ng-template>
                         <div class="actions" *ngIf="item.showMenuOption != false && menuTable">
-                            <button class="actions__toggle" [class.active]="item == selected">
-                                <span class="icon icon-ellipsis" (click)="onRowSelect(item)">
+                            <button class="actions__toggle" [class.active]="item == selected" *ngIf="!loading">
+                                <span class="icon icon-ellipsis">
                                     <fa-icon [icon]="faEllipsisV"></fa-icon>
                                 </span>
-                                <span class="icon icon-times" (click)="onRowUnselect(item)">
+                                <span class="icon icon-times">
                                     <fa-icon [icon]="faTimes"></fa-icon>
                                 </span>
                             </button>
+                            <span class="spinner-border spinner-border-sm me-1" *ngIf="loading"></span>
                         </div>
                     </div>
                 </td>

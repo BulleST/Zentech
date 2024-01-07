@@ -9,7 +9,7 @@
 </ng-template>
 <ng-template #template>
     <form #form="ngForm" (ngSubmit)="send(form)">
-        <div class="px-3">
+        <div class="px-2">
             <div class="my-3 row">
                 <div class="d-flex align-items-center">
                     <button type="button" class="btn btn-dark" [disabled]="objeto.id == 0" (click)="contratoDownload()">Baixar PDF</button>
@@ -326,7 +326,7 @@
                 </textarea>
                 </div>
             </div>
-            <div class="row mt-2 mb-2">
+            <div class="row  mt-2 mb-1">
                 <div class="d-flex align-items-center">
                     <div *ngIf="erro || form.invalid" class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>

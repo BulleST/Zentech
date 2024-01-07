@@ -24,7 +24,6 @@ export class EmpresaSelectedComponent implements OnDestroy {
     ) {
 
         var empresa = this.empresaService.empresaSelected.subscribe(res => {
-            console.log('empresaSelected changed', this.empresaSelected)
             this.empresaSelected = res;
         });
         this.subscription.push(empresa);

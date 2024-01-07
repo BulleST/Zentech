@@ -13,6 +13,8 @@ import { BancoList, BancoRequest } from '../models/banco.model';
 export class BancoService {
     url = environment.url;
     list = new BehaviorSubject<BancoList[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    
     constructor(
         private table: Table,
         private http: HttpClient,
@@ -21,26 +23,23 @@ export class BancoService {
     ) { }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<BancoList[]>(`${this.url}/banco`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<BancoList[]>(`${this.url}/banco`)
             .pipe(tap({
                 next: list => {
-                    list = list.map(x => {
-                        return x;
-                    })
+                    this.loading.next(false);
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de bancos.')
 
             }));
-
-
     }
+
     get(id: number) {
-        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<BancoRequest>(`${this.url}/banco/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
-
 
     create(request: BancoRequest) {
         return this.http.post<Response>(`${this.url}/banco`, request);

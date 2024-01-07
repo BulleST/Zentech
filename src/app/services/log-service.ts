@@ -13,6 +13,7 @@ import { LogList, LogRequest} from '../models/log-model';
 export class LogService {
   url = environment.url;
   list = new BehaviorSubject<LogList[]>([]);
+  loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
       private table: Table,
@@ -21,12 +22,14 @@ export class LogService {
   ) { }
 
   getList(loading: boolean = false) {
+    this.loading.next(loading);
       this.table.loading.next(true);
-      return this.http.get<LogList[]>(`${this.url}/log-acoes`, { headers: new HttpHeaders({ 'loading': loading.toString() }) })
+      return this.http.get<LogList[]>(`${this.url}/log-acoes` )
           .pipe(
               tap(
-                  list => {
-                      this.list.next(list); // Atualiza o BehaviorSubject diretamente
+                  res => {
+                      this.list.next(res); // Atualiza o BehaviorSubject diretamente
+                      this.loading.next(false);
                   },
                   error => {
                       this.toastr.error('Não foi possível carregar listagem de logs.');
@@ -36,6 +39,6 @@ export class LogService {
   }
 
   get(id: number) {
-      return this.http.get<LogRequest>(`${this.url}/log-acoes/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+      return this.http.get<LogRequest>(`${this.url}/log-acoes/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
   }
 }

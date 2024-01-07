@@ -5,18 +5,19 @@
     top: 50%;
     transform: translate(-50%, -50%) scale(0);
     position: fixed;
-    /* float: revert; */
     background: #fff;
     box-shadow: 2px 2px 6px #00000057;
     width: max-content;
-    max-width: 90%;
+    max-width: 340px;
     height: max-content;
     max-height: 90vh;
     overflow: auto;
     border: none;
     border-radius: 0;
 }
-
+.alert-big {
+    max-width: 800px;
+}
 .alert-dark {
     color: #ffffff;
     background-color: #272626;
@@ -73,4 +74,9 @@
 
 .alert-danger p {
     color: #ab0404;
+}
+
+.alert-info {
+    background-color: #fff;
+    color: #211e1e;
 }

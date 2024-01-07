@@ -14,20 +14,18 @@
         <p-tabView (activeIndexChange)="tabChanged($event)" [activeIndex]="activeIndex">
             <p-tabPanel>
                 <ng-template pTemplate="header">
-                    <!-- <fa-icon [icon]="faIdCard"></fa-icon> -->
                     <span>Invoice</span>
                 </ng-template>
                 <div class="px-4">
                     <form #invoice="ngForm">
                         <div class="mb-3 row">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0" (click)="invoiceDownload()">Baixar PDF</button>
-                                <span class="ms-2 text-danger mt-1" *ngIf="objeto.invoice.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <button type="button" class="btn btn-dark mb-2" [disabled]="objeto.invoice.id == 0" (click)="invoiceDownload()">Baixar PDF</button>
+                                <span class="text-danger ms-0 ms-sm-2" *ngIf="objeto.invoice.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
                             </div>
                         </div>
                         <div class="row">
-                            <!-- Número Invoice -->
-                            <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
+                            <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12"> <!-- Número Invoice -->
                                 <label for="id">Nº: <span class="text-danger">*</span> <small>(automático)</small></label>
                                 <input type="text"
                                        class="form-control"
@@ -38,8 +36,7 @@
                                        [(ngModel)]="objeto.invoice.id"
                                        readonly>
                             </div>
-                            <!-- Data Invoice -->
-                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Data Invoice -->
                                 <label for="data">Data Invoice: <span class="text-danger">*</span></label>
                                 <app-input-date [valueInput]="objeto.invoice.data"
                                                 (valueChanges)="objeto.invoice.data = $event;"
@@ -48,8 +45,7 @@
                                                 [required]="true"
                                                 type="datetime-local"></app-input-date>
                             </div>
-                            <!-- Moeda -->
-                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                            <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Moeda -->
                                 <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
                                 <p-dropdown [options]="moedas"
                                             [(ngModel)]="objeto.invoice.moeda_Id"
@@ -87,8 +83,8 @@
                                     <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <!-- Valor -->
-                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                           
+                            <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Valor -->
                                 <label for="valor">Valor: <span class="text-danger">*</span></label>
                                 <app-input-number [valueInput]="objeto.invoice.valor"
                                                   (valueChanges)="objeto.invoice.valor = $event;"
@@ -101,8 +97,8 @@
                                                   [min]="0.1"
                                                   [max]="999999999"></app-input-number>
                             </div>
-                            <!-- Instituição Financeira -->
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                           
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Instituição Financeira -->
                                 <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
                                 <p-dropdown [styleClass]="'form-control ' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
                                             [showClear]="true"
@@ -133,8 +129,8 @@
                                     <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                            <!-- Beneficiário -->
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                           
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Beneficiário -->
                                 <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
                                 <p-dropdown
                                             [options]="beneficiarios"
@@ -168,6 +164,7 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Dados do Beneficiário -->
                         <div class="row">
                             <div class="form-group mt-3">
                                 <div class="col-sm-12 card py-3 px-4">
@@ -183,8 +180,7 @@
                                        </div>
                                     </div>
                                     <div class="row">
-                                        <!-- Banco -->
-                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Banco -->
                                             <label for="nomeBanco">Banco: </label>
                                             <input type="text"
                                                    id="nomeBanco"
@@ -192,8 +188,7 @@
                                                    [value]="bancoBeneficiarioSelected?.nome ?? 'N/A'"
                                                    readonly>
                                         </div>
-                                        <!-- Conta -->
-                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Conta -->
                                             <label for="conta">Conta: </label>
                                             <input type="text"
                                                     class="form-control"
@@ -207,17 +202,7 @@
                                                 <p class="text-danger" *ngIf="conta.errors['required']">Este campo é obrigatório.</p>
                                             </div>
                                         </div>
-                                        <!-- Representante -->
-                                        <!-- <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                          <label for="representante">Representante:</label>
-                                          <input type="text"
-                                                 id="representante"
-                                                 class="form-control"
-                                                 [value]="beneficiarioSelected?.representante ?? 'N/A'"
-                                                 readonly>
-                                      </div> -->
-                                        <!-- Código Swift -->
-                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Código Swift -->
                                             <label for="codigoSwift">Código Swift <small>(Banco)</small>: </label>
                                             <input type="text"
                                                    id="codigoSwift"
@@ -234,32 +219,33 @@
                                   </div>
                                     <!-- Endereço do Banco -->
                                     <div class="row">
-                                        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 ">
-                                            <label for="logradouro">Endereço: </label> <!-- Endereço -->
-                                            <input type="text"
+                                        <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 "> <!-- Endereço -->
+                                            <label for="logradouro">Endereço: </label>
+                                            <textarea rows="1"
                                                    class="form-control"
                                                    id="logradouro"
                                                    [value]="bancoBeneficiarioSelected?.logradouro ?? 'N/A'"
                                                    disabled>
+                                                </textarea>
                                         </div>
-                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 ">
-                                            <label for="cidade">Cidade: </label> <!-- Cidade -->
+                                        <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12 "> <!-- Cidade -->
+                                            <label for="cidade">Cidade: </label>
                                             <input type="text"
                                                    class="form-control"
                                                    id="cidade"
                                                    [value]="bancoBeneficiarioSelected?.cidade ?? 'N/A'"
                                                    disabled>
                                         </div>
-                                        <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12 ">
-                                            <label for="estado">UF: </label> <!-- UF -->
+                                        <div class="form-group col-xl-2 col-lg-2 col-md-2 col-sm-4 col-12 "> <!-- UF -->
+                                            <label for="estado">UF: </label>
                                             <input type="text"
                                                    class="form-control"
                                                    id="estado"
                                                    [value]="bancoBeneficiarioSelected?.estado ?? 'N/A'"
                                                    disabled>
                                         </div>
-                                        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 ">
-                                            <label for="pais_Id">País: </label> <!-- UF -->
+                                        <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12 "> <!-- País -->
+                                            <label for="pais_Id">País: </label>
                                             <input type="text"
                                                    class="form-control"
                                                    id="pais_Id"
@@ -267,57 +253,6 @@
                                                    disabled>
                                         </div>
                                     </div>
-                                    <!-- <div class="row">
-                                      <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                          <label for="cep">Código Postal:</label>
-                                          <input type="text"
-                                                 id="cep"
-                                                 class="form-control"
-                                                 [ngModel]="bancoBeneficiarioSelected?.cep ?? '' "
-                                                 [mask] ="'00000-000'"
-                                                 readonly>
-                                      </div>
-                                      <div class="form-group col-xl-7 col-lg-7 col-md-6 col-sm-6 col-12">
-                                          <label for="logradouro">Logradouro:</label>
-                                          <input type="text"
-                                                 id="logradouro"
-                                                 class="form-control"
-                                                 [value]="bancoBeneficiarioSelected?.logradouro ?? 'N/A'"
-                                                 readonly>
-                                      </div>
-                                      <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12">
-                                          <label for="numero">Número:</label>
-                                          <input type="text"
-                                                 id="numero"
-                                                 class="form-control"
-                                                 [value]="bancoBeneficiarioSelected?.numero ?? 'N/A'"
-                                                 readonly>
-                                      </div>
-                                      <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                          <label for="complemento">Complemento:</label>
-                                          <input type="text"
-                                                 id="complemento"
-                                                 class="form-control"
-                                                 [value]="bancoBeneficiarioSelected?.complemento ?? 'N/A'"
-                                                 readonly>
-                                      </div>
-                                      <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                          <label for="cidade">Cidade:</label>
-                                          <input type="text"
-                                                 id="cidade"
-                                                 class="form-control"
-                                                 [value]="bancoBeneficiarioSelected?.cidade ?? 'N/A'"
-                                                 readonly>
-                                      </div>
-                                      <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                          <label for="pais">País:</label>
-                                          <input type="text"
-                                                 id="pais"
-                                                 class="form-control"
-                                                 [value]="bancoBeneficiarioSelected?.pais_Id ?? 'N/A'"
-                                                 readonly>
-                                      </div>
-                                  </div> -->
                                 </div>
                             </div>
                         </div>
@@ -326,15 +261,14 @@
             </p-tabPanel>
             <p-tabPanel>
                 <ng-template pTemplate="header">
-                    <!-- <fa-icon [icon]="faDollarSign"></fa-icon> -->
                     <span>Contrato</span>
                 </ng-template>
                 <div class="px-4">
                     <form #contrato="ngForm">
                         <div class="mb-3 row">
-                            <div class="d-flex align-items-center">
-                                <button type="button" class="btn btn-dark" [disabled]="objeto.contrato.id == 0" (click)="contratoDownload()">Baixar PDF</button>
-                                <span class="ms-2 text-danger mt-1" *ngIf="objeto.contrato.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <button type="button" class="btn btn-dark mb-2" [disabled]="objeto.invoice.id == 0" (click)="contratoDownload()">Baixar PDF</button>
+                                <span class="text-danger ms-0 ms-sm-2" *ngIf="objeto.invoice.id == 0">Você deve primeiro salvar os dados para baixar o PDF</span>
                             </div>
                         </div>
                         <div class="row">
@@ -669,7 +603,7 @@
             </p-tabPanel>
         </p-tabView>
         <div class="d-flex align-items-stretch flex-wrap p-0 mt-3 ">
-            <div *ngIf="erro || invoice.invalid || contrato.invalid" class="m-0 me-3">
+            <div *ngIf="erro || invoice.invalid || contrato.invalid" class="m-0 me-3 mb-0">
                 <p class="text-danger" *ngIf="erro">{{erro}}</p>
                 <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para salvar.</p>
                 <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>

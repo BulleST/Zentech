@@ -90,7 +90,6 @@ export class DetailsComponent implements OnDestroy {
 
 
     voltar() {
-        console.log('voltar')
         this.modalService.removeModal(this.modal);
     }
 

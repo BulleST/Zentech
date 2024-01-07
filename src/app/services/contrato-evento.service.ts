@@ -21,7 +21,7 @@ export class ContratoEventoService {
     ) { }
     
     getList(loading: boolean = false) {
-        return this.http.get<ContratoEvento[]>(`${this.url}/contrato_Evento/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<ContratoEvento[]>(`${this.url}/contrato_Evento/`)
             .pipe(tap({
                 next: list => {
                     this.list.next(list);

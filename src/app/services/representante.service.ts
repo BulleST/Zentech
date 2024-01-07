@@ -13,6 +13,7 @@ import { Representante } from '../models/representante.model';
 export class RepresentanteService {
     url = environment.url;
     list = new BehaviorSubject<Representante[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -22,14 +23,13 @@ export class RepresentanteService {
     ) { }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Representante[]>(`${this.url}/representante`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<Representante[]>(`${this.url}/representante`)
             .pipe(tap({
                 next: list => {
-                    list = list.map(x => {
-                        return x;
-                    })
                     this.list.next(Object.assign([], list));
+                    this.loading.next(false);
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de representante.')
@@ -39,7 +39,7 @@ export class RepresentanteService {
 
     }
     get(id: number) {
-        return this.http.get<Representante>(`${this.url}/representante/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<Representante>(`${this.url}/representante/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
 
 

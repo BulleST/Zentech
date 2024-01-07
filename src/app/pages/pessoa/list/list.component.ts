@@ -19,6 +19,7 @@ export class ListComponent implements OnDestroy {
     tableLinks: MenuTableLink[] = [];
     columns = pessoaColumns;
     subscription: Subscription[] = [];
+    loading = false;
     
     constructor(
         private table: Table,
@@ -27,8 +28,12 @@ export class ListComponent implements OnDestroy {
     ) { 
         var list = this.pessoaService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
+        var loading = this.pessoaService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
 
-        lastValueFrom(this.pessoaService.getList());
+        if (this.pessoaService.list.value.length == 0) {
+            lastValueFrom(this.pessoaService.getList(true));
+        }
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
@@ -54,6 +59,9 @@ export class ListComponent implements OnDestroy {
         this.subscription.forEach(x => x.unsubscribe());
     }
 
+    getList() {
+        lastValueFrom(this.pessoaService.getList(true));
+    }
 
 
 }

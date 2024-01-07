@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCheck, faInfo, faInfoCircle, faTimes, faTimesCircle, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Alert, AlertType } from 'src/app/parts/alert/alert';
 import { AlertService } from 'src/app/parts/alert/alert.service';
@@ -10,6 +12,10 @@ import { AlertService } from 'src/app/parts/alert/alert.service';
     styleUrls: ['./alert.component.css']
 })
 export class AlertComponent implements OnInit {
+    faInfoCircle = faInfoCircle;
+    faTimesCircle = faTimesCircle;
+    faCheck = faCheck;
+    faWarning = faWarning;
 
     @Input() id = 'default-alert';
     @Input() fade = true;
@@ -18,6 +24,8 @@ export class AlertComponent implements OnInit {
     alertSubscription: Subscription = new Subscription;
     routeSubscription: Subscription = new Subscription;
     AlertType = AlertType;
+
+    
     constructor(
         private router: Router,
         private alertService: AlertService

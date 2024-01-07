@@ -14,6 +14,7 @@ export class MoedaService {
     url = environment.url;
     list = new BehaviorSubject<Moeda[]>([]);
     object = new BehaviorSubject<Moeda>(new Moeda);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -23,7 +24,7 @@ export class MoedaService {
     ) { }
 
     getList(loading: boolean = false) {
-        return this.http.get<Moeda[]>(`${this.url}/moeda/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+        return this.http.get<Moeda[]>(`${this.url}/moeda/`)
             .pipe(tap({
                 next: list => {
                     this.list.next(list);

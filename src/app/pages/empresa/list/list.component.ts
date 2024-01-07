@@ -22,17 +22,19 @@ export class ListComponent {
 
     columns = empresaColumns;
     subscription: Subscription[] = [];
+    loading = false;
 
     constructor(
         private table: Table,
         private empresaService: EmpresaService,
     ) {
-        var list = this.empresaService.list.subscribe(res => {
-            this.list = res.map(x => JSON.parse(JSON.stringify(x)))
-        });
+        var list = this.empresaService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
         
-        lastValueFrom(this.empresaService.getList());
+        var loading = this.empresaService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+
+        lastValueFrom(this.empresaService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
@@ -50,5 +52,9 @@ export class ListComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
     }
+    getList() {
+        lastValueFrom(this.empresaService.getList(true));
+    }
+
 
 }

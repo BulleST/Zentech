@@ -184,7 +184,7 @@ export var pessoaColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'usuarioCadastroNome',
+        field: 'usuarioCadastroEmail',
         header: 'Cadastrado por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

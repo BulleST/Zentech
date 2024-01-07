@@ -5,11 +5,13 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Pessoa } from 'src/app/models/pessoa.model';
-import { BRConsultaResponse, PessoaService } from 'src/app/services/pessoa.service';
+import { BRConsulta, PessoaService } from 'src/app/services/pessoa.service';
 import { getError } from 'src/app/utils/error';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { validateCPF } from 'src/app/utils/validate-cpf';
+import { insertOrReplace } from 'src/app/utils/service-list';
+import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 
 @Component({
     selector: 'app-create',
@@ -41,6 +43,7 @@ export class CreateComponent implements OnDestroy {
         private toastr: ToastrService,
         private modalService: ModalService,
         private pessoaService: PessoaService,
+        private pessoaOperacaoService: PessoaOperacaoService,
         private mobile: IsMobile,
     ) {
         this.mobile.value.subscribe(res => this.screen = res);
@@ -109,8 +112,8 @@ export class CreateComponent implements OnDestroy {
                 this.loadingConsultaApi = false;
                 console.log(res)
                 console.log(typeof res)
-                if (typeof(res) == 'object') {
-                    var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
+                if (typeof(res.retorno) == 'object') {
+                    var obj = JSON.parse(JSON.stringify(res.retorno)) as BRConsulta;
                     if (obj.ERRO == 'ERRO') {
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
@@ -153,9 +156,9 @@ export class CreateComponent implements OnDestroy {
                     this.liberaNome = false;
                 } else {
                     this.liberaNome = true;
-                    this.objeto.brConsulta_Erro = res as string;
-                    this.erro = res as string;
-                    this.toastr.error(res as string)
+                    this.objeto.brConsulta_Erro = res.retorno as string;
+                    this.erro = res.retorno as string;
+                    this.toastr.error(res.retorno as string)
                 }
             })
             .catch(res => {
@@ -174,10 +177,16 @@ export class CreateComponent implements OnDestroy {
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {
+                    if (res.objeto) {
+                        insertOrReplace(this.pessoaService, res.objeto);
+                    } else {
+                        lastValueFrom(this.pessoaService.getList());
+                    }
+
                     this.voltar();
-                    lastValueFrom(this.pessoaService.getList());
-                } else {
-                    this.erro = res.detalhes;
+                } 
+                else {
+                    this.erro = res.mensagem ?? `Não foi possível cadastrar pessoa.`;
                 }
             })
             .catch(res => {

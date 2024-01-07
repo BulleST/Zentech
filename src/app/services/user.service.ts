@@ -19,6 +19,7 @@ export class UsuarioService {
     objeto = new BehaviorSubject<Usuario | undefined>(undefined);
     account: Account = new Account;
     perfilAcesso = new BehaviorSubject<PerfilAcesso[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -44,8 +45,9 @@ export class UsuarioService {
     }
 
     getList(loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Usuario[]>(`${this.url}/usuario`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<Usuario[]>(`${this.url}/usuario`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -53,6 +55,7 @@ export class UsuarioService {
                     return x;
                 });
                 this.list.next(list);
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar usuários.')

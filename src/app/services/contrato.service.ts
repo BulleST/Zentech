@@ -14,6 +14,7 @@ export class ContratoService {
     url = environment.url;
     list = new BehaviorSubject<Contrato_List[]>([]);
     object = new BehaviorSubject<Contrato>(new Contrato());
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private http: HttpClient,
@@ -22,10 +23,11 @@ export class ContratoService {
 
     ) { }
 
-    getList() {
-        return this.http.get<Contrato_List[]>(`${this.url}/contrato/`, { headers: new HttpHeaders({ 'loading': 'false' }) })
+    getList(loading: boolean = false) {
+        return this.http.get<Contrato_List[]>(`${this.url}/contrato/`)
             .pipe(tap({
                 next: list => {
+                    this.loading.next(false);
                     this.list.next(list);
                     return of(list);
                 },
@@ -34,7 +36,7 @@ export class ContratoService {
     }
 
     get(id: number) {
-        return this.http.get<Contrato>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'false' }) });
+        return this.http.get<Contrato>(`${this.url}/contrato/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
 
     post(request: Contrato) {
@@ -53,10 +55,6 @@ export class ContratoService {
                     link.download = `Contrato_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
                     // this is necessary as link.click() does not work on the latest firefox
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
-
-                    // var url = URL.createObjectURL(res);
-                    // window.open(url, '_blank');
-                    // URL.revokeObjectURL(url);
                 }
             }));
     }

@@ -9,6 +9,7 @@ import { PessoaOperacaoList, pessoaOperacaoAllColumns } from 'src/app/models/pes
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { AccountService } from 'src/app/services/account.service';
+import { PessoaService } from 'src/app/services/pessoa.service';
 
 @Component({
     selector: 'app-list',
@@ -22,16 +23,24 @@ export class ListComponent {
     tableLinks: MenuTableLink[] = [];
     columns = pessoaOperacaoAllColumns;
     subscription: Subscription[] = [];
+    loading = false;
 
     constructor(
         private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
+        private pessoaService: PessoaService,
         private accountService: AccountService,
     ) {
-        var list = this.pessoaOperacaoService.list.subscribe(res => this.list = res);
+        var list = this.pessoaOperacaoService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
-        lastValueFrom(this.pessoaOperacaoService.getList());
+        var loading = this.pessoaOperacaoService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
+        
+        if (this.pessoaService.list.value.length == 0) {
+            lastValueFrom(this.pessoaService.getList(true));
+        }
+        lastValueFrom(this.pessoaOperacaoService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
@@ -40,7 +49,7 @@ export class ListComponent {
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
                 ];
                 if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
-                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
+                    this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] })
                 }
 
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
@@ -54,6 +63,9 @@ export class ListComponent {
         this.subscription.forEach(x => x.unsubscribe());
     }
 
+    getList() {
+        lastValueFrom(this.pessoaOperacaoService.getList(true));
+    }
 
 
 }

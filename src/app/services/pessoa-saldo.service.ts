@@ -14,6 +14,7 @@ import { PessoaList } from '../models/pessoa.model';
 export class PessoaSaldoService {
     url = environment.url;
     list = new BehaviorSubject<PessoaSaldo[]>([]);
+    loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
         private table: Table,
@@ -24,8 +25,9 @@ export class PessoaSaldoService {
 
 
     getList(pessoa_Id: number, loading: boolean = false) {
+       this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<PessoaSaldo[]>(`${this.url}/pessoaSaldo/${pessoa_Id}`, { headers: new HttpHeaders({ 'loading': 'false' })})
+        return this.http.get<PessoaSaldo[]>(`${this.url}/pessoaSaldo/${pessoa_Id}`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -33,6 +35,7 @@ export class PessoaSaldoService {
                     return x;
                 })
                 this.list.next(list);
+                this.loading.next(false);
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de saldos.')

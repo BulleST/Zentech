@@ -74,20 +74,8 @@ export var pessoaOperacaoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
-        field: 'num_Op',
-        header: 'Nº Operação',
-        maskType: MaskType.mask,
-        mask: '0000',
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: false,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.EQUALS,
-    },
-    {
         field: 'valorOperacao',
-        header: 'Valor da Operação',
+        header: 'Valor',
         maskType: MaskType.number,
         filterType: FilterType.numeric,
         decimal: '1.2',
@@ -99,7 +87,7 @@ export var pessoaOperacaoColumns: Column[] = [
     },
     {
         field: 'statusOperacao',
-        header: 'Status da Operação',
+        header: 'Status',
         maskType: MaskType.options,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
@@ -114,6 +102,18 @@ export var pessoaOperacaoColumns: Column[] = [
         ]
     },
     {
+        field: 'num_Op',
+        header: 'Nº Operação',
+        maskType: MaskType.mask,
+        mask: '0000',
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        showAddButton: false,
+        showMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
+    {
         field: 'dataCadastro',
         header: 'Data de Cadastro',
         maskType: MaskType.dateTime,
@@ -125,7 +125,7 @@ export var pessoaOperacaoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.DATE_IS,
     },
     {
-        field: 'usuarioCadastroNome',
+        field: 'usuarioCadastroEmail',
         header: 'Cadastrado Por',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
@@ -163,7 +163,7 @@ pessoaOperacaoAllColumns.unshift(
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
 );
-pessoaOperacaoAllColumns.splice(6, 0,
+pessoaOperacaoAllColumns.splice(5, 0,
     {
         field: 'limiteConcedido',
         header: 'Limite Concedido',

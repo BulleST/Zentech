@@ -20,30 +20,24 @@ export class ListComponent {
     tableLinks: MenuTableLink[] = [];
     columns = contratoColumns;
     subscription: Subscription[] = [];
-    screen: ScreenWidth = ScreenWidth.lg;
-
+    loading = false;
 
     constructor(
         private table: Table,
         private contratoService: ContratoService,
-        private isMobile: IsMobile
     ) {
-        var list = this.contratoService.list.subscribe(res => {
-            this.list = Object.assign([], res)
-
-        });
+        var list = this.contratoService.list.subscribe(res =>  this.list = res);
         this.subscription.push(list);
-        var mob = this.isMobile.value.subscribe(res => this.screen = res);
-        this.subscription.push(mob);
+        
+        var loading = this.contratoService.loading.subscribe(res => this.loading = res);
+        this.subscription.push(loading);
 
-        lastValueFrom(this.contratoService.getList());
+        lastValueFrom(this.contratoService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
                 this.tableLinks = [
-
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
-                    // { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
                 this.tableLinks = this.table.encryptParams(this.tableLinks);
             }
@@ -54,6 +48,10 @@ export class ListComponent {
 
     ngOnDestroy(): void {
         this.subscription.forEach(x => x.unsubscribe());
+    }
+
+    getList() {
+        lastValueFrom(this.contratoService.getList(true));
     }
 
 

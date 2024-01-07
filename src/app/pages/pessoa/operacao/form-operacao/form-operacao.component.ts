@@ -43,11 +43,9 @@ export class FormOperacaoComponent implements OnDestroy {
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
         private pessoaService: PessoaService,
-        private pessoaSaldoService: PessoaSaldoService,
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
-        private toastr: ToastrService,
         private router: Router,
         private moedaService: MoedaService,
     ) {
@@ -169,7 +167,7 @@ export class FormOperacaoComponent implements OnDestroy {
                 if (res.sucesso) {
                     if (res.objeto) {
                         insertOrReplace(this.pessoaService, res.objeto['pessoa']);
-                        insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao']);
+                        insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao'], 'listOperacaoPorPessoa');
                     } else {
                         lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
                         lastValueFrom(this.pessoaOperacaoService.getList());

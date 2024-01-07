@@ -127,26 +127,6 @@ export class FormComponent implements OnDestroy {
         }
     }
 
-    async carregarImagem(url: string) {
-        if (url) {
-            var res = await fetch(url);
-            var blob = await res.blob();
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                var reader = new FileReader();
-                reader.onloadend = function(e) {
-                    console.log(e)
-                }
-                reader.readAsDataURL(xhr.response);
-            };
-            xhr.open('GET', url);
-            xhr.responseType = 'blob';
-            xhr.send();
-
-        } else {
-            this.toastr.error('Insira uma url válida para carregar.')
-        }
-    }
     importarNovamente() {
         this.fileUploaded = false;
         this.fileSrc = '';

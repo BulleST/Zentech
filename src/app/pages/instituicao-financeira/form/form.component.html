@@ -11,8 +11,7 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
         <div class="px-2">
             <div class="row">
-                <!-- Nome -->
-                <div class="form-group col-xl-5 col-lg-5 col-md-4 col-sm-6 col-12">
+                <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-6 col-12"> <!-- Nome -->
                     <label for="nome">Nome: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -27,8 +26,7 @@
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-                
-                <div class="form-group col-xl-3 col-lg-4 col-md-4 col-sm-6 col-12"><!-- Código de Registro -->
+                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12"> <!-- Código de Registro -->
                     <label for="codigoRegistro">Código de Registro:</label>
                     <input type="text"
                            class="form-control"
@@ -46,8 +44,45 @@
                         <!-- <p class="text-danger" *ngIf="cnpj.errors['mask'] || cnpj.errors['invalid']">CNPJ inválido.</p> -->
                     </div>
                 </div>
+            </div>
+            <!-- Endereço -->
+            <div class="row">
+                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <label for="logradouro">Endereço: </label>
+                    <textarea rows="1"
+                           class="form-control"
+                           name="logradouro"
+                           id="logradouro"
+                           #logradouro="ngModel"
+                           [(ngModel)]="objeto.logradouro"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.logradouro = logradouro.value.trim();">
+                    </textarea>
+                </div>
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12 ">
+                    <label for="cidade">Cidade: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.cidade = cidade.value.trim();">
+                </div>
+                <div class="form-group col-xl-2 col-lg-2 col-md-2 col-sm-4 col-12 ">
+                    <label for="estado">UF: </label>
+                    <input type="text"
+                           class="form-control"
+                           name="estado"
+                           id="estado"
+                           #estado="ngModel"
+                           [(ngModel)]="objeto.estado"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.estado = estado.value.trim();">
+                </div>
                 <!-- País -->
-                <div class="form-group col-xl-4 col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12">
                     <label for="pais_Id">País: <span class="text-danger">*</span></label>
                     <p-dropdown [styleClass]="'form-control ' + (loadingPaises ? 'form-control-loading' : '')"
                                 [options]="paises"
@@ -62,160 +97,15 @@
                                 [required]="true"
                                 [filter]="true"
                                 filterBy="nome"
-                                [showClear]="true"
-                                (onChange)="paisChange(); limpaEndereco();">
+                                [showClear]="true">
                     </p-dropdown>
                     <div *ngIf="pais_Id.touched && pais_Id.errors">
                         <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Endereço -->
             <div class="row">
-                <div class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-12 col-12 ">
-                    <label for="logradouro">Endereço: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="logradouro"
-                           id="logradouro"
-                           #logradouro="ngModel"
-                           [(ngModel)]="objeto.logradouro"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.logradouro = logradouro.value.trim();">
-                </div>
-                <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-6 col-12 ">
-                    <label for="cidade">Cidade: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="cidade"
-                           id="cidade"
-                           #cidade="ngModel"
-                           [(ngModel)]="objeto.cidade"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.cidade = cidade.value.trim();">
-                </div>
-                <div class="form-group col-xl-2 col-lg-2 col-md-3 col-sm-6 col-12 ">
-                    <label for="estado">UF: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="estado"
-                           id="estado"
-                           #estado="ngModel"
-                           [(ngModel)]="objeto.estado"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.estado = estado.value.trim();">
-                </div>
-            </div>
-            <!-- <div class="row">
-                <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12">
-                    <label for="cep">Código Postal: </label>
-                    <input
-                           type="text"
-                           class="form-control"
-                           name="cep"
-                           id="cep"
-                           #cep="ngModel"
-                           [(ngModel)]="objeto.cep"
-                           [mask]="objeto.pais_Id == 30 ? '00000-000' : '0*'"
-                           [placeholder]="objeto.pais_Id == 30 ? '00000-000' : ''"
-                           (ngModelChange)="buscaCEP(cep)"
-                           [disabled]="loadingCep" />
-                    <div *ngIf="cep.touched && cep.errors">
-                        <p class="text-danger" *ngIf="cep.errors['required']">Este campo é obrigatório.</p>
-                        <p class="text-danger" *ngIf="cep.errors['mask'] || cep.errors['invalid']">CEP inválido.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-7 col-sm-9 col-12">
-                    <label for="logradouro">Endereço: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="logradouro"
-                           id="logradouro"
-                           #logradouro="ngModel"
-                           [(ngModel)]="objeto.logradouro"
-                           [disabled]="loadingCep ||cepPreenchido"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.logradouro = logradouro.value.trim();">
-                    <div *ngIf="logradouro.touched && logradouro.errors">
-                        <p class="text-danger" *ngIf="logradouro.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-2 col-sm-4 col-12">
-                    <label for="numero">N°: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="numero"
-                           id="numero"
-                           #numero="ngModel"
-                           [(ngModel)]="objeto.numero"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.numero = numero.value.trim();">
-                    <div *ngIf="numero.touched && numero.errors">
-                        <p class="text-danger" *ngIf="numero.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-6 col-sm-8 col-12">
-                    <label for="complemento">Complemento:</label>
-                    <input type="text"
-                           class="form-control"
-                           name="complemento"
-                           id="complemento"
-                           #complemento="ngModel"
-                           [(ngModel)]="objeto.complemento"
-                           [disabled]="loadingCep"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.complemento = complemento.value.trim();">
-                    <div *ngIf="complemento.touched && complemento.errors">
-                        <p class="text-danger" *ngIf="complemento.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
-                    <label for="bairro">Bairro:</label>
-                    <input type="text"
-                           class="form-control"
-                           name="bairro"
-                           id="bairro"
-                           #bairro="ngModel"
-                           [(ngModel)]="objeto.bairro"
-                           [disabled]="loadingCep || cepPreenchido"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.bairro = bairro.value.trim();">
-                    <div *ngIf="bairro.touched && bairro.errors">
-                        <p class="text-danger" *ngIf="bairro.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-6 col-sm-5 col-12">
-                    <label for="cidade">Cidade: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="cidade"
-                           id="cidade"
-                           #cidade="ngModel"
-                           [(ngModel)]="objeto.cidade"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.numero = cidade.value.trim();">
-                    <div *ngIf="cidade.touched && cidade.errors">
-                        <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-                <div class="form-group col-xl- col-lg col-md-6 col-sm-2 col-12">
-                    <label for="estado">UF: </label>
-                    <input type="text"
-                           class="form-control"
-                           name="estado"
-                           id="estado"
-                           #estado="ngModel"
-                           [(ngModel)]="objeto.estado"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.numero = estado.value.trim();">
-                    <div *ngIf="estado.touched && estado.errors">
-                        <p class="text-danger" *ngIf="estado.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-            </div> -->
-            <div class="row">
-                <div class="d-flex align-items-center mt-1">
+                <div class="d-flex align-items-center mt-2 mb-1">
                     <div *ngIf="erro || form.invalid" class="m-0">
                         <p class="text-danger" *ngIf="erro">{{erro}}</p>
                         <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>

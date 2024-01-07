@@ -4,7 +4,7 @@ import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icon
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
-import { Column, FilterDisplay, FilterType, MaskType } from 'src/app/helpers/column.interface';
+import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Table } from 'src/app/utils/table';
@@ -30,6 +30,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() columns: Column[] = [];
     @Input() tableLinks: MenuTableLink[] = [];
     @Input() showResultLength = true;
+    @Input() loading: boolean;
 
     @Input() topActions: TemplateRef<any>;
     @Input() tableFooter: TemplateRef<any>;
@@ -38,7 +39,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     selected?: any;
     filters: string[] = [];
     routeRow: string[] = [];
-    loading = false;
     Role = Role;
 
     subscription: Subscription[] = [];
@@ -54,14 +54,13 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     ) {
         this.table.currentPage.next(1);
 
-        var loading = this.table.loading.subscribe(res => this.loading = res);
+        var loading = this.table.loading.subscribe(res => this.loading = !!res);
         this.subscription.push(loading);
 
         if (this.selectable) {
             var selected = this.table.selected.subscribe(res => this.selected = res);
             this.subscription.push(selected);
         }
-
     }
 
     ngOnDestroy(): void {
@@ -91,6 +90,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['tableFooter']) this.tableFooter = changes['tableFooter'].currentValue;
         if (changes['rowActions']) this.rowActions = changes['rowActions'].currentValue;
         if (changes['showResultLength']) this.showResultLength = changes['showResultLength'].currentValue;
+        if (changes['loading']) this.loading = changes['loading'].currentValue;
     }
 
     ngAfterViewInit(): void { }

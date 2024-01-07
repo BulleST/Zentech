@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import { Representante } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
 import { insertOrReplace } from 'src/app/utils/service-list';
+import { faUserTie } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { insertOrReplace } from 'src/app/utils/service-list';
     styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
+    faUserTie = faUserTie;
     objeto: Representante = new Representante;
     erro: string = '';
     loading = false;

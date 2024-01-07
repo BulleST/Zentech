@@ -7,20 +7,19 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
-import { BeneficiarioList, BeneficiarioRequest } from 'src/app/models/beneficiario.model';
+import { BeneficiarioRequest } from 'src/app/models/beneficiario.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { BancoList, BancoRequest } from 'src/app/models/banco.model';
 import { CepService } from 'src/app/services/cep-service.service';
 import { BancoService } from 'src/app/services/banco.service';
 import { NgForm, NgModel } from '@angular/forms';
 import { Paises } from 'src/app/models/pais.model';
-import { Cidades } from 'src/app/models/cidade.model';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { validateCNPJ } from 'src/app/utils/validate-cnpj';
 import { MaskApplierService } from 'ngx-mask';
 import { Representante } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { insertOrReplace } from 'src/app/utils/service-list';
 import { AccountService } from 'src/app/services/account.service';
 
@@ -30,6 +29,8 @@ import { AccountService } from 'src/app/services/account.service';
     styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnDestroy {
+
+    faUser = faUser;
     faEdit = faEdit;
     faTrash = faTrash;
 
@@ -108,7 +109,7 @@ export class FormComponent implements OnDestroy {
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '900px', overflow: 'visible' };
+        this.modal.style = { 'max-width': '700px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
         var params = this.activatedRoute.params.subscribe(x => {

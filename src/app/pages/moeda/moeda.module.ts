@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { MoedaRoutingModule } from './moeda.routing';
-import { ListComponent } from './list/list.component';
+// import { ListComponent } from './list/list.component';
 // import { FormComponent } from './form/form.component';
 // import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -13,7 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
     declarations: [
-        ListComponent,
+        // ListComponent,
         // FormComponent,
         // DeleteComponent,
     ],

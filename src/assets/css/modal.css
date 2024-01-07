@@ -67,14 +67,23 @@
 .modal__header .icon {
     margin-right: 6px;
     color: rgb(var(--primary));
+    display: inline-flex;
+    translate: 0px -2px;
 }
-
-.modal__header .icon>svg {
+.modal__header .icon svg {
     font-size: 16px;
-    width: 26px;
+    width: 25px;
+    height: 25px;
     line-height: 1;
 }
-
+.modal__header .icon .title-icon svg {
+    width: 25px;
+    height: 25px;
+}
+.modal__header .icon .fa-trash {
+    width: 14px;
+    height: 16px;
+}
 .modal__header h3 img {
     max-width: 30px;
 }

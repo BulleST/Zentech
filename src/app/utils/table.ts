@@ -68,7 +68,9 @@ export class Table {
         let tr = $(td).parent('tr');
         let btnActions: JQuery<HTMLElement> = $(tr).find('.actions__toggle')
         if (tr && td && btnActions) {
-            let top = ($(tr).offset()?.top ?? 0) + 5;
+            let height = $(tr).height() ?? 0
+            let trTop = ($(tr).offset()?.top ?? 0); 
+            let top = trTop + height - (height * 0.1);
             setTimeout(() => {
                 let left = ($(btnActions).offset()?.left ?? 0) - ($('.actions-nav').width() ?? 0) + 10;
                 $('.actions-nav').css({

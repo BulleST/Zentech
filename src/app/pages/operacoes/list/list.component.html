@@ -12,17 +12,14 @@
             <h3 class="page__header-title">Operações</h3>
             <p>Painel CPF</p>
         </div>
+        <div class="ms-auto">
+            <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
+        </div>
     </div>
     <div class="page__body">
         <ng-template #topActions>
             <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 mx-md-1 mb-2 px-0 ng-star-inserted">
                 <a class="btn btn-dark exportar-pdf d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['exportar']">
-                    <!-- <span class="me-2">
-                        <svg style="filter: drop-shadow(0px 0px 0px white);" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
-                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                          </svg>
-                    </span> -->
                     <span class="me-2">
                         <fa-icon [icon]="faFilePdf"></fa-icon>
                     </span>

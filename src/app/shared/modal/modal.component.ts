@@ -15,7 +15,21 @@ export class ModalComponent implements OnDestroy {
     constructor(
         private modalService: ModalService,
     ) {
-        var list = this.modalService.modalList.subscribe(res => this.modalList = res);
+        var list = this.modalService.modalList.subscribe(res => {
+            this.modalList = res;
+            if (res.length == 0) {
+                $('body').css({
+                    'overflow': 'auto',
+                    'height': 'auto'
+                });
+
+            } else {
+                $('body').css({
+                    'overflow': 'hidden',
+                    'height': '100vh'
+                });
+            }
+        });
         this.subscription.push(list);
     }
 
