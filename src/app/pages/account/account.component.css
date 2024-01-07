@@ -34,7 +34,7 @@
     background: #f7f7f7;
     align-items: center;
     justify-content: center;
-    width: 80%;
+    width: 100%;
 }
 
 .account-inner {
@@ -93,7 +93,7 @@
 }
 
 .account-bg {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -165,4 +165,9 @@
 
 .link {
     color: #4069fd;
+}
+
+.account.account-register .account-inner {
+    padding: 10px 20px;
+    scale: 0.9;
 }

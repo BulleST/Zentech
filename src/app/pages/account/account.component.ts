@@ -1,12 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-account',
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+    selector: 'app-account',
+    templateUrl: './account.component.html',
+    styleUrls: ['./account.component.css']
 })
-export class AccountComponent  {
+export class AccountComponent {
 
-  constructor() { }
+    route = ''
+    constructor(
+        private router: Router
+    ) {
+
+        this.router.events.subscribe(res => {
+            if (res instanceof NavigationEnd) {
+                console.log(res)
+                var a = res.url;
+                var b = a.split('/')
+                var c = b[2].split('?')[0]
+                this.route = c;
+            }
+        })
+    }
 
 }
