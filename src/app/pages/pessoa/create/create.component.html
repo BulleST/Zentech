@@ -126,7 +126,7 @@
         </div>
         <div class="row mt-1 mt-2">
             <div class="d-flex align-items-start justify-content-end">
-                <div *ngIf="erro || form.invalid" class="col-12 mb-2 me-3 px-0">
+                <div *ngIf="erro || form.invalid" class="col-10 mb-2 me-3 px-0">
                     <p class="text-danger" *ngIf="erro">{{erro }}</p>
                     <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
                 </div>

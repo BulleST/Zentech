@@ -8,7 +8,7 @@ export class Pessoa {
     situacao: string = '';
     dataInscricao: Date = new Date;
     digito: string = '';
-    dataNascimento: Date = '' as unknown as Date;
+    dataNascimento?: Date;
     nomeMae: string = '';
     anoObito: number = 0;
     telefone: string = '';

@@ -14,7 +14,7 @@ export class InputDateComponent implements OnChanges, AfterViewInit {
 
     @Input() type: 'date' | 'datetime-local';
 
-    @Input() valueInput: Date;
+    @Input() valueInput: Date | undefined;
     @Input() inputId: string = '';
     @Input() min?: string = '1900-01-01';
     @Input() max?: string ;
@@ -70,26 +70,35 @@ export class InputDateComponent implements OnChanges, AfterViewInit {
 
 
     validate( ) {
-        var valueDate = new Date(this.valueInput);
-        var min = this.min ? new Date(this.min) : undefined;
-        var max = this.max ? new Date(this.max) : undefined;
-        var valid = true;
-
-        if (this.required == true && !this.valueInput.toString().trim()) {
+        if (!this.valueInput && this.required ) {
             this.data.control.setErrors(Object.assign({}, { required: true }));
             valid = false;
+            return valid;
+        } else {
+            if (this.valueInput) {
+                var valueDate = new Date(this.valueInput);
+                var min = this.min ? new Date(this.min) : undefined;
+                var max = this.max ? new Date(this.max) : undefined;
+                var valid = true;
+                if (this.required == true && !this.valueInput.toString().trim()) {
+                    this.data.control.setErrors(Object.assign({}, { required: true }));
+                    valid = false;
+                }
+                else if (max != undefined && (valueDate > max)) {
+                    this.toastrService.error('O valor máximo é ' + this.max);
+                    this.data.control.setErrors(Object.assign({}, { max: true }));
+                    valid = false;
+                }
+                else if (min != undefined && (valueDate < min)) {
+                    this.toastrService.error('O valor mínimo é ' + this.min);
+                    this.data.control.setErrors(Object.assign({}, { min: true }));
+                    valid = false;
+                }
+                return valid;
+            }
+            
         }
-        else if (max != undefined && (valueDate > max)) {
-            this.toastrService.error('O valor máximo é ' + this.max);
-            this.data.control.setErrors(Object.assign({}, { max: true }));
-            valid = false;
-        }
-        else if (min != undefined && (valueDate < min)) {
-            this.toastrService.error('O valor mínimo é ' + this.min);
-            this.data.control.setErrors(Object.assign({}, { min: true }));
-            valid = false;
-        }
-        return valid;
+        return true;
     }
 
 
