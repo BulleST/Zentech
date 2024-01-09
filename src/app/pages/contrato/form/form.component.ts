@@ -21,6 +21,7 @@ import { NgForm } from '@angular/forms';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { DatePipe } from '@angular/common';
 import { insertOrReplace } from 'src/app/utils/service-list';
+import { BeneficiarioRequest } from 'src/app/models/beneficiario.model';
 
 
 @Component({
@@ -51,9 +52,6 @@ export class FormComponent implements OnDestroy {
     instituicoes: InstituicaoFinanceiraList[] = []
     loadingInstituicao = true;
 
-    paises: Paises[] = []
-    loadingPais = true;
-
     loadingContratoFile = false;
 
 
@@ -63,17 +61,11 @@ export class FormComponent implements OnDestroy {
         private contratoService: ContratoService,
         private crypto: Crypto,
         private toastr: ToastrService,
-        private paisesService: PaisesService,
         private loadingService: LoadingService,
         private contratoTipoService: ContratoTipoService,
         private contratoEventoService: ContratoEventoService,
         private datepipe: DatePipe,
     ) {
-        lastValueFrom(this.paisesService.getList())
-            .then(res => {
-                this.loadingPais = false;
-                this.paises = res;
-            });
         lastValueFrom(this.contratoTipoService.getList())
             .then(res => {
                 this.tipos = res;
@@ -133,7 +125,6 @@ export class FormComponent implements OnDestroy {
     voltar() {
         this.modalService.removeModal(this.modal);
     }
-
     async contratoDownload() {
         if (this.objeto.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')

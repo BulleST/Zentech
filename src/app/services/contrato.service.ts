@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Contrato, Contrato_List } from '../models/contrato.model';
 import { Response } from '../helpers/request-response.interface';
 import { DatePipe } from '@angular/common';
+import { Table } from '../utils/table';
 
 @Injectable({
     providedIn: 'root'
@@ -20,10 +21,13 @@ export class ContratoService {
         private http: HttpClient,
         private toastr: ToastrService,
         private datePipe: DatePipe,
+        private table: Table,
 
     ) { }
 
     getList(loading: boolean = false) {
+        this.loading.next(loading);
+        this.table.loading.next(true);
         return this.http.get<Contrato_List[]>(`${this.url}/contrato/`)
             .pipe(tap({
                 next: list => {

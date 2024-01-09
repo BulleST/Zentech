@@ -66,7 +66,7 @@ export var userColumns: Column[] = [
         header: 'Telefone/Celular',
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
-        maskType: MaskType.telefoneCelular,
+        maskType: MaskType.undefined,
         showAddButton: false,
         showMatchMode: false,
         showOperator: false,

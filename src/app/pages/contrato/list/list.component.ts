@@ -4,7 +4,6 @@ import { Table } from 'src/app/utils/table';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
-import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { ContratoService } from './../../../services/contrato.service';
 import { contratoColumns } from './../../../models/contrato.model';
 import { Contrato_List } from 'src/app/models/contrato.model';

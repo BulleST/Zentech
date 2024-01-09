@@ -45,7 +45,6 @@ export class CreateAccountComponent implements OnDestroy {
 
     send(form: NgForm) {
         this.loadingUtils.loading.next(true);
-        this.objeto.telefoneCelular = parseInt(this.objeto.telefoneCelular.toString());
         this.objeto.acceptTerms = true;
         lastValueFrom(this.accountService.register(this.objeto))
         .then(res => {

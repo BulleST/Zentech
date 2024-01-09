@@ -180,7 +180,6 @@ export class FormComponent implements OnDestroy {
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
-                this.objeto.contrato.pais_Id = 30;
                 this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 this.objeto.contrato.dataLiquidacao = this.datepipe.transform(this.objeto.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                 this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
