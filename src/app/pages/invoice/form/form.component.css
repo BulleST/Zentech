@@ -26,6 +26,7 @@
     z-index: 1;
     margin-bottom: -1px;
 }
+
 ::ng-deep .p-tabview-nav {
     display: flex;
     flex-flow: row;
@@ -73,7 +74,6 @@
     margin-bottom: 0px;
 }
 
-
 .swift {
     border-radius: 5px;
     border: 2px rgb(var(--primary)) dashed;
@@ -87,4 +87,42 @@
 
 .flag {
     min-width: unset;
+}
+
+.btn-step {
+    background-color: rgb(var(--grey));
+    color: #fff;
+    border: 2px rgb(var(--grey)) solid;
+    padding: 3px 12px 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-step:hover {
+    background: rgb(var(--grey));
+    padding: 3px 12px 3px;
+    color: #fff;
+    position: static;
+    background: #fff;
+    color: rgb(var(--grey));
+}
+
+.btn.btn-step.disabled,
+.btn.btn-step:disabled {
+    pointer-events: none !important;
+}
+
+.modal__header .icon svg {
+    width: 42px;
+    height: 40px;
+    transform: translateY(9px);
+}
+
+.modal__header h3 {
+    display: flex;
+    align-items: center;
 }

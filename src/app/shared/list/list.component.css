@@ -2,11 +2,9 @@ tr {
     cursor: default !important;
 }
 
-
 tr.selectable {
     cursor: pointer !important;
 }
-
 
 @media (max-width: 430px) {
     ::ng-deep .p-paginator-current {
@@ -18,5 +16,218 @@ tr.selectable {
     ::ng-deep .p-paginator {
         align-items: center !important;
         justify-content: center !important;
+    }
+}
+
+.scroll-icon-desktop {
+    --parent-width: 150px;
+    position: relative;
+    width: var(--parent-width);
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    justify-items: stretch;
+}
+
+.scroll-icon-desktop .icon {
+    background: #ffffff57;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.scroll-icon {
+    width: 30px;
+    height: 40px;
+    border: 3px #3b3a3a solid;
+    border-radius: 60px;
+    position: relative;
+}
+
+.scroll-icon .wheel {
+    position: absolute;
+    width: 8px;
+    height: 15px;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    border-radius: 60px;
+}
+
+.scroll-icon .wheel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 7px;
+    bottom: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 8px;
+    background: #FFC107;
+    animation: desktop-wheel 1s linear infinite alternate-reverse;
+    /*alternate*/
+}
+
+.swipe {
+    --parent-width: 100px;
+    position: relative;
+    width: var(--parent-width);
+    height: 80px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.table-s {
+    --width: 100px;
+    position: relative;
+    height: 70px;
+    z-index: 0;
+    width: var(--width);
+    overflow: hidden;
+    margin: 12px auto 0;
+    z-index: 0;
+}
+
+.scroll-icon-desktop .table-s {
+    --width: 130px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+.table-s .table {
+    border-color: black;
+    height: 100%;
+    margin-bottom: 0;
+    width: auto;
+    transform: translateX(0);
+    animation: tableS 2s linear infinite;
+}
+
+.table-s .table thead th,
+.table-s .table tbody td {
+    border: 1px #343a40 solid;
+}
+
+.table-s .table thead th {
+    background: #343a40;
+    padding: 6px 10px;
+}
+
+.table-s .table tbody td {
+    padding: 0 10px;
+    vertical-align: middle;
+}
+
+.table-s .table thead th span,
+.table-s .table tbody td span {
+    display: block;
+    width: 20px;
+    height: 3px;
+    background-color: #343a40;
+}
+
+.table-s .table thead th span {
+    background-color: #fff;
+}
+
+.hand-icon {
+    position: absolute;
+    background-image: url('./../../../assets/img/pointer.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100px;
+    height: 100px;
+    animation: hand-icon 2s infinite;
+    transform-origin: 52% 62%;
+    transform: rotate(30deg);
+    margin-left: 20px;
+}
+.path {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background: #ffc40070;
+    border-radius: 40px;
+    top: 8px;
+    right: 9px;
+    animation: path 2s infinite;
+}
+
+
+
+@keyframes hand-icon {
+    0% {
+        transform: rotate(30deg);
+        margin-left: 20px;
+    }
+
+    50% {
+        transform: rotate(-15deg);
+        margin-left: -20px;
+    }
+
+    100% {
+        transform: rotate(30deg);
+        margin-left: 20px;
+    }
+}
+
+@keyframes desktop-wheel {
+    0% {
+        opacity: .8;
+        height: 8px;
+        top: 7px;
+    }
+
+    50% {
+        opacity: 1;
+        height: 15px;
+        top: 7px;
+    }
+
+    100% {
+        opacity: 0.8;
+        height: 8px;
+        top: 13px;
+    }
+}
+@keyframes path {
+    0% {
+        width: 20px;
+        right: 9px;
+    }
+
+    50% {
+        width: 95px;
+        right: 75px;
+        transform: translateX(75px)
+    }
+
+    100% {
+        width: 20px;
+        right: 9px;
+    }
+}
+
+@keyframes tableS {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(calc(100% * -1 + ( var(--width) ) ));
+    }
+
+    100% {
+        transform: translateX(0);
     }
 }

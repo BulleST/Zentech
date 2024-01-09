@@ -148,7 +148,7 @@ export var pessoaColumns: Column[] = [
         showAddButton: false,
         showMatchMode: true,
         showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
+        filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
         field: 'dataCadastro',

@@ -31,8 +31,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
-
-
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
     declarations: [
@@ -69,7 +68,8 @@ import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.co
         DropdownModule,
         CalendarModule,
         TabViewModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+        DialogModule
     ],
     exports: [
         ListSharedComponent,
