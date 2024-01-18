@@ -83,13 +83,13 @@
                                     <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                           
+
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Valor -->
                                 <label for="valor">Valor: <span class="text-danger">*</span></label>
                                 <app-input-number [valueInput]="objeto.invoice.valor"
                                                   (valueChanges)="objeto.invoice.valor = $event;"
                                                   [inputId]="'valor'"
-                                                  [mask]="'separator.2'"
+                                                  [mask]="'separator.4'"
                                                   [showErrorMessage]="true"
                                                   [allowNegativeNumbers]="false"
                                                   [required]="true"
@@ -97,7 +97,7 @@
                                                   [min]="0.1"
                                                   [max]="999999999"></app-input-number>
                             </div>
-                           
+
                             <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Instituição Financeira -->
                                 <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
                                 <p-dropdown [styleClass]="'form-control ' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
@@ -129,7 +129,7 @@
                                     <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-                           
+
                             <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Beneficiário -->
                                 <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
                                 <p-dropdown
@@ -270,7 +270,7 @@
                     </form>
                 </div>
             </p-tabPanel>
-            <p-tabPanel [disabled]="invoice.invalid == true"> 
+            <p-tabPanel [disabled]="invoice.invalid == true">
                 <ng-template pTemplate="header">
                     <span>Contrato</span>
                 </ng-template>
@@ -387,7 +387,7 @@
                                 <app-input-number [valueInput]="objeto.contrato.valorNacional"
                                                   (valueChanges)="objeto.contrato.valorNacional = $event;"
                                                   [inputId]="'valorNacional'"
-                                                  [mask]="'separator.2'"
+                                                  [mask]="'separator.4'"
                                                   [showErrorMessage]="true"
                                                   [allowNegativeNumbers]="false"
                                                   [required]="true"
@@ -608,7 +608,7 @@
                 <p class="text-danger" *ngIf="erro">{{erro}}</p>
                 <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para salvar.</p>
                 <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
-           
+
             </div>
             <button (click)="kitDownload()" class="btn btn-dark me-1 ms-auto" [disabled]="loading || loadingSwiftFile || loadingContratoFile || loadingInvoiceFile">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
