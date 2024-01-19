@@ -28,7 +28,6 @@ import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
 import { PaisesService } from 'src/app/services/paises.service';
-import { MaskApplierService } from 'ngx-mask';
 import { AccountService } from 'src/app/services/account.service';
 
 @Component({
@@ -211,13 +210,13 @@ export class FormComponent implements OnDestroy {
     async beneficiarioChange() {
         if (this.objeto.invoice.beneficiario_Id) {
             this.loadingBeneficiarios = true;
-            
+
             await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
                 .then(async (res: BeneficiarioRequest ) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
                     // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                     this.objeto.invoice.conta = res.conta;
-                    
+
                     await lastValueFrom(this.bancoService.get(res.banco_Id))
                     .then(res => {
                         res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
@@ -300,7 +299,7 @@ export class FormComponent implements OnDestroy {
 
     //     this.loading = false;
     // }
-    
+
     async kitDownload() {
         if (this.objeto.invoice.id == 0) {
             this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')

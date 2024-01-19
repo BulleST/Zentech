@@ -11,7 +11,8 @@ import { ContratoEventoService } from 'src/app/services/contrato-evento.service'
 import { PaisesService } from 'src/app/services/paises.service';
 import { MoedaService } from 'src/app/services/moeda.service';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
-import { MaskApplierService } from 'ngx-mask';
+import { NgxMaskService } from 'ngx-mask';
+
 
 @Component({
     selector: 'app-form',
@@ -41,7 +42,7 @@ export class FormComponent implements OnDestroy {
         private contratoEventoService: ContratoEventoService,
         private paisService: PaisesService,
         private moedaService: MoedaService,
-        private mask: MaskApplierService,
+        private mask: NgxMaskService,
     ) {
         lastValueFrom(this.paisService.getList());
         lastValueFrom(this.contratoTipoService.getList());

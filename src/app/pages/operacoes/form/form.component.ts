@@ -2,7 +2,6 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Moeda } from 'src/app/models/moeda.model';
@@ -20,6 +19,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { insertOrReplace } from 'src/app/utils/service-list';
 import { Table } from 'src/app/utils/table';
+import { NgxMaskService } from 'ngx-mask';
 
 @Component({
     selector: 'app-form',
@@ -56,7 +56,7 @@ export class FormComponent implements OnDestroy {
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
-        private mask: MaskApplierService,
+        private mask: NgxMaskService,
         private currencyPipe: CurrencyPipe,
         private moedaService: MoedaService,
         private router: Router,

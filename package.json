@@ -30,7 +30,7 @@
     "crypto-js": "^4.1.1",
     "jquery": "^3.7.1",
     "jwt-decode": "^3.1.2",
-    "ngx-mask": "^14.0.3",
+    "ngx-mask": "^14.3.3",
     "ngx-toastr": "^17.0.2",
     "primeicons": "^6.0.1",
     "primeng": "^16.9.1",

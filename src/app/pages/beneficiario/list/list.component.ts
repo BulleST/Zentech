@@ -30,7 +30,7 @@ export class ListComponent {
     ) {
         var list = this.beneficiarioService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
-        
+
         var loading = this.beneficiarioService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
         // var empresa = this.empresaService.empresaSelected.subscribe(async res => {

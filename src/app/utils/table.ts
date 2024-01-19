@@ -4,7 +4,7 @@ import * as $ from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import { Crypto } from './crypto';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MaskApplierService } from 'ngx-mask';
+import { NgxMaskService } from 'ngx-mask';
 import { Column, FilterType, MaskType } from '../helpers/column.interface';
 import { MenuTableLink } from '../helpers/menu-links.interface';
 
@@ -24,7 +24,7 @@ export class Table {
         private toastr: ToastrService,
         private crypto: Crypto,
         private currency: CurrencyPipe,
-        private mask: MaskApplierService,
+        private mask:  NgxMaskService,
         private datePipe: DatePipe,
     ) { }
 
@@ -69,7 +69,7 @@ export class Table {
         let btnActions: JQuery<HTMLElement> = $(tr).find('.actions__toggle')
         if (tr && td && btnActions) {
             let height = $(tr).height() ?? 0
-            let trTop = ($(tr).offset()?.top ?? 0); 
+            let trTop = ($(tr).offset()?.top ?? 0);
             let top = trTop + height - (height * 0.1);
             setTimeout(() => {
                 let left = ($(btnActions).offset()?.left ?? 0) - ($('.actions-nav').width() ?? 0) + 10;
@@ -88,7 +88,7 @@ export class Table {
         var value = this.getCellValue(row, col);
         // try {
             if (col.maskType && value != undefined && value.toString().trim()) {
-     
+
      /*
                 if (col.maskType == MaskType.number) {
                     var number = JSON.parse(JSON.stringify(value));

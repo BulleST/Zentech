@@ -8,7 +8,7 @@ import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
 import { Response } from '../helpers/request-response.interface';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MaskApplierService } from 'ngx-mask';
+
 
 @Injectable({
     providedIn: 'root'

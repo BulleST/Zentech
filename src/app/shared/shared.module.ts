@@ -6,7 +6,6 @@ import { NgModule } from "@angular/core";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { TableModule } from "primeng/table";
 import { ToastrModule } from "ngx-toastr";
-import { NgxMaskModule } from "ngx-mask";
 import { DeleteComponent as DeleteMoeda } from '../pages/moeda/delete/delete.component';
 import { ListSharedComponent } from "./list/list.component";
 import { ModalComponent } from './modal/modal.component';
@@ -31,8 +30,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
-
-
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
     declarations: [
@@ -64,9 +63,9 @@ import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.co
         RouterModule,
         FontAwesomeModule,
         TableModule,
-        NgxMaskModule.forChild(),
         ToastrModule,
         DropdownModule,
+NgxMaskModule,
         CalendarModule,
         TabViewModule,
         OverlayPanelModule
@@ -94,6 +93,9 @@ import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.co
         DeleteRepresentante,
         EmpresaSelectedComponent,
     ],
+    providers: [
+
+    ]
 })
 export class SharedModule {
 

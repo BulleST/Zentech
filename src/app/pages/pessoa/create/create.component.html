@@ -5,7 +5,7 @@
     <form #form="ngForm" (ngSubmit)="send(form)" class="px-2">
         <div class="row">
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
-                <label for="nome">Nome Completo: <span class="text-danger">*</span> <small *ngIf="!liberaNome">(automático)</small> <small *ngIf="liberaNome">(manual)</small> </label>
+                <label for="nome">Nome Completo: <span class="text-danger">*</span>  </label>
                 <input type="text"
                        class="form-control"
                        name="nome"
@@ -15,7 +15,7 @@
                        required
                        pattern="\S(.*\S)?"
                        (change)="objeto.nome = nome.value.trim(); "
-                       [readonly]="!liberaNome">
+                       >
                 <div *ngIf="nome.touched && nome.errors">
                     <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="nome.errors['pattern']">
@@ -39,7 +39,7 @@
                        required
                        pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
                        (change)="validaCPF(cpf, cpf.value);"
-                       [readonly]="loadingConsultaApi">
+               >
                 <div *ngIf="cpf.touched && cpf.errors">
                     <p class="text-danger" *ngIf="cpf.errors['required']">Este campo é obrigatório.</p>
                     <p class="text-danger" *ngIf="cpf.errors['mask'] || cpf.errors['invalid']">CPF inválido.</p>
@@ -53,23 +53,11 @@
                                 [inputId]="'dataNascimento'"
                                 [showErrorMessage]="true"
                                 [required]="true"
-                                [readonly]="cpf.errors != null || loadingConsultaApi"
                                 type="date"
                                 [max]="'hoje'"></app-input-date>
                 <ng-template #erroCPF>
                     <p class="text-danger" *ngIf="cpf.touched && (cpf.invalid || cpf.errors)">Preencha CPF corretamente.</p>
                 </ng-template>
-            </div>
-            <div class="form-group col-lg-3 col-md-3 col-sm-12 col-12">
-                <button type="button"
-                        class="btn btn-dark w-100"
-                        [class.mt-4]="screen == 'lg' || screen == 'xl' || screen == 'md'"
-                        [class.mt-2]="screen == 'sm'" style="height: 35px;"
-                        (click)="consultaPessoa(cpf)"
-                        [disabled]="cpf.errors || !this.objeto.dataNascimento">
-                    <span *ngIf="loadingConsultaApi" class="spinner-border spinner-border-sm me-1"></span>
-                    <span>Consultar API</span>
-                </button>
             </div>
         </div>
         <div class="row" *ngIf="loadingConsultaApi">
@@ -126,7 +114,7 @@
         </div>
         <div class="row mt-1 mt-2">
             <div class="d-flex align-items-start justify-content-end">
-                <div *ngIf="erro || form.invalid" class="col-12 mb-2 me-3 px-0">
+                <div *ngIf="erro || form.invalid" class="col-10 mb-2 me-3 px-0">
                     <p class="text-danger" *ngIf="erro">{{erro }}</p>
                     <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
                 </div>

@@ -12,13 +12,14 @@ import { ChartAnoComponent } from './chart-ano/chart-ano.component';
   declarations: [
     AnaliseComponent,
     ChartDataComponent,
-    ChartAnoComponent
+    ChartAnoComponent,
   ],
   imports: [
     CommonModule,
     AnaliseRoutingModule,
     FontAwesomeModule,
     ChartModule,
+
 
   ]
 })
