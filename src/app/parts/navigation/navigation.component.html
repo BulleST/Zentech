@@ -1,62 +1,63 @@
 <aside class="navigation" [class.open]="menuOpen" [class.navigation-home]="homeActive">
-    <div class="navigation-toggle-content" (click)="toggleAside()">
-        <button class="navigation-toggle">
-            <span></span><span></span><span></span>
-        </button>
-    </div>
-    <div class="navigation-content">
-        <div class="navigation-logo">
-            <img src="assets/img/logo-icon-colorful.png" alt="Logo ToComply">
-        </div>
-        <div class="navigation-links">
-            <p class="text-thin text-light">Navegação</p>
-            <div class="navigation-links-item" *ngFor="let item of items">
-                <ng-container [ngTemplateOutlet]="menuItem"
-                              [ngTemplateOutletContext]="{item: item}">
-                </ng-container>
-            </div>
-        </div>
-    </div>
+  <div class="navigation-toggle-content" (click)="toggleAside()">
+      <button class="navigation-toggle">
+          <span></span><span></span><span></span>
+      </button>
+  </div>
+  <div class="navigation-content">
+      <div class="navigation-logo" routerLink="/">
+          <img src="assets/img/logo-icon-colorful.png" alt="Logo Zentech">
+      </div>
+      <div class="navigation-links">
+          <p class="text-thin text-light">Navegação</p>
+          <i class="pi pi-check"></i>
+          <div class="navigation-links-item" *ngFor="let item of items">
+              <ng-container [ngTemplateOutlet]="menuItem"
+                            [ngTemplateOutletContext]="{item: item}">
+              </ng-container>
+          </div>
+      </div>
+  </div>
 </aside>
 <!-- aaaaaaaaaaa -->
 <ng-template #menuItem let-item="item">
-    <p-panel [toggleable]="item.items && item.items.length > 0"
-             toggler="header"
-             [collapsed]="true"
-             [collapseIcon]="'pi pi-chevron-down'"
-             [expandIcon]="'pi pi-chevron-right'"
-             #item>
-        <ng-template pTemplate="header">
-            <ng-container
-                          [ngTemplateOutlet]="header"
-                          [ngTemplateOutletContext]="{item: item}">
-            </ng-container>
-        </ng-template>
-        <ng-template pTemplate="content">
-            <div *ngIf="item.items && item.items.length > 0" class="navigation-submenu">
-                <div class="navigation-links-item" *ngFor="let subitem of item.items">
-                    <ng-container
-                                  [ngTemplateOutlet]="menuItem"
-                                  [ngTemplateOutletContext]="{item: subitem}">
-                    </ng-container>
-                </div>
-            </div>
-        </ng-template>
-    </p-panel>
+  <p-panel [toggleable]="item.items && item.items.length > 0"
+           toggler="header"
+           [collapsed]="true"
+           [collapseIcon]="'pi pi-chevron-up'"
+           [expandIcon]="'pi pi-chevron-down'"
+           #item>
+      <ng-template pTemplate="header">
+          <ng-container
+                        [ngTemplateOutlet]="header"
+                        [ngTemplateOutletContext]="{item: item}">
+          </ng-container>
+      </ng-template>
+      <ng-template pTemplate="content">
+          <div *ngIf="item.items && item.items.length > 0" class="navigation-submenu">
+              <div class="navigation-links-item" *ngFor="let subitem of item.items">
+                  <ng-container
+                                [ngTemplateOutlet]="menuItem"
+                                [ngTemplateOutletContext]="{item: subitem}">
+                  </ng-container>
+              </div>
+          </div>
+      </ng-template>
+  </p-panel>
 </ng-template>
 
 <ng-template #header let-item="item">
-    <a class="link-container" 
-                [routerLink]="item.routerLink"
-                routerLinkActive="label-link-active"
-                [title]="item.routerLink ? 'Ir para ' + item.label : ''">
-        <p class="d-flex justify-content-between"
-           [ngStyle]="{marginLeft: item.paddingLeft + 'px'}">
-            <span>{{item.label}}</span>
-            <a *ngIf="item.routerLink"
-               class="link-label-action text-white">
-                <fa-icon [icon]="faLink"></fa-icon>
-            </a>
-        </p>
-    </a>
+  <a class="link-container"
+              [routerLink]="item.routerLink"
+              routerLinkActive="label-link-active"
+              [title]="item.routerLink ? 'Ir para ' + item.label : ''">
+      <p class="d-flex justify-content-between"
+         [ngStyle]="{marginLeft: item.paddingLeft + 'px'}">
+          <span>{{item.label}}</span>
+          <a *ngIf="item.routerLink"
+             class="link-label-action text-white">
+              <fa-icon [icon]="faLink"></fa-icon>
+          </a>
+      </p>
+  </a>
 </ng-template>

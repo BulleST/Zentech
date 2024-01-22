@@ -1,15 +1,15 @@
 <main class="main" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
-    <aside style="position: relative; z-index: 2;">
-        <app-navigation></app-navigation>
-    </aside>
-    <div class="main-content" [class.navigation-open]="navigationOpen">
-        <header style="position: relative; z-index: 1;">
-            <app-header></app-header>
-        </header>
-        <router-outlet></router-outlet>
-    </div>
+  <aside style="position: relative; z-index: 2;">
+      <app-navigation></app-navigation>
+  </aside>
+  <div class="main-content" [class.navigation-open]="navigationOpen">
+      <header style="position: relative; z-index: 1;">
+          <app-header></app-header>
+      </header>
+      <router-outlet></router-outlet>
+  </div>
 </main>
 
 <div style="position: relative; z-index: 2;">
-    <app-modal></app-modal>
+  <app-modal></app-modal>
 </div>
