@@ -11,8 +11,8 @@ export class Contrato {
     taxa: number = '' as unknown as number;
     valorNacional: number = '' as unknown as number;
     numContrato: string = '';
-    pais_Id?: number = '' as unknown as number; // Pais pagador recebedor no exterior
-    pagRecExterior: string = '';
+    paisPagRecExterior?: number = '' as unknown as number; // Pais do Pagador/Recebedor no exterior
+    pagRecExterior?: string = ''; // Pagador/Recebedor no exterior
     percentualAdiantamento?: number = '' as unknown as number;
     vet?: number = '' as unknown as number;
     rde?: string;
@@ -39,7 +39,7 @@ export class Contrato {
             this.taxa = model.taxa;
             this.valorNacional = model.valorNacional;
             this.numContrato = model.numContrato;
-            this.pais_Id = model.pais_Id;
+            this.paisPagRecExterior = model.paisPagRecExterior;
             this.pagRecExterior = model.pagRecExterior;
             this.percentualAdiantamento = model.percentualAdiantamento;
             this.vet = model.vet;
@@ -113,17 +113,6 @@ export var contratoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'beneficiario',
-        header: 'Beneficiário',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
         field: 'banco',
         header: 'Banco',
         maskType: MaskType.undefined,
@@ -170,7 +159,7 @@ export var contratoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'pagRecExterior',
+        field: 'beneficiario',
         header: 'Pagador/Recebedor no Exterior',
         maskType: MaskType.undefined,
         filterType: FilterType.text,

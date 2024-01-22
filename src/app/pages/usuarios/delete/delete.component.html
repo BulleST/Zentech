@@ -8,7 +8,7 @@
           <p class="text-info">Obs.: Se esse usuário estiver relacionado a um outro registro, não poderá ser excluído.</p>
 
           <div *ngIf="erro" class="m-0  mt-1">
-              <p class="text-danger" >{{erro}}</p>
+              <p class="text-danger" [innerHTML]="erro"></p>
           </div>
   
           <button class="btn btn-grey ms-auto d-flex mt-2" (click)="send()">

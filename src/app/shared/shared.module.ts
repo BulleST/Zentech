@@ -30,9 +30,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { InputDateComponent } from './input-date/input-date.component';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { DialogModule } from 'primeng/dialog';
 import { NgxMaskModule } from 'ngx-mask';
-
 @NgModule({
     declarations: [
         ListSharedComponent,
@@ -65,10 +64,11 @@ import { NgxMaskModule } from 'ngx-mask';
         TableModule,
         ToastrModule,
         DropdownModule,
-NgxMaskModule,
+        NgxMaskModule,
         CalendarModule,
         TabViewModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+        DialogModule
     ],
     exports: [
         ListSharedComponent,

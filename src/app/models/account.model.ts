@@ -8,7 +8,7 @@ export class Login {
 export class Register {
     name: string = '';
     email: string = '';
-    telefoneCelular: number = '' as unknown as number;
+    telefoneCelular: string = '';
     password: string = '';
     confirmPassword: string = '';
     acceptTerms: boolean = false;
@@ -17,7 +17,7 @@ export class Register {
 export interface Account {
     id: number;
     name: string;
-    telefoneCelular: number;
+    telefoneCelular: string;
     email: string;
     created: Date;
     updated?: Date;
@@ -33,7 +33,7 @@ export interface Account {
 export class Account {
     id: number = 0;
     name: string = '';
-    telefoneCelular: number = 0;
+    telefoneCelular: string = '';
     email: string = '';
     role?: Role;
     created: Date = new Date;
@@ -59,7 +59,7 @@ export class ChangePassword {
 
 export class UpdateAccount {
     name: string = '';
-    telefoneCelular: number = 0;
+    telefoneCelular: string = '';
     email: string = '';
 }
 

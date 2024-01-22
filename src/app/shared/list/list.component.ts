@@ -1,14 +1,15 @@
-import { AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnDestroy, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
-import { faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Role } from 'src/app/models/account-perfil.model';
+import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Table } from 'src/app/utils/table';
-
+import { Table as TablePrime } from 'primeng/table';
 @Component({
     selector: 'app-list-shared',
     templateUrl: './list.component.html',
@@ -19,6 +20,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     faFilter = faFilter;
     faTimes = faTimes;
     faEllipsisV = faEllipsisV;
+    faBell = faBell;
 
     @Input() list: any[] = [];
     @Input() filterLink = true;
@@ -47,15 +49,28 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     @ViewChild('rowActions') rowActionsTemplate: TemplateRef<any>;
     @ViewChildren('overlayPanel') logos: QueryList<OverlayPanel>;
+    @ViewChild('scrollTipBtn') scrollTipBtn: ElementRef;
+
+    visible = false;
+    position: 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright' = 'bottomleft';
+
+    screen = ScreenWidth.lg;
 
     constructor(
         private table: Table,
         private router: Router,
+        private isMobile: IsMobile
     ) {
         this.table.currentPage.next(1);
 
         var loading = this.table.loading.subscribe(res => this.loading = !!res);
         this.subscription.push(loading);
+
+        var screen = this.isMobile.value.subscribe(res => {
+            this.screen = res;
+
+        });
+        this.subscription.push(screen);
 
         if (this.selectable) {
             var selected = this.table.selected.subscribe(res => this.selected = res);
@@ -93,7 +108,23 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['loading']) this.loading = changes['loading'].currentValue;
     }
 
-    ngAfterViewInit(): void { }
+    ngAfterViewInit(): void {
+        this.getVisible();
+    }
+
+    setVisible() {
+        this.visible = !this.visible;
+        localStorage.setItem('tip', this.visible.toString());
+    }
+
+    getVisible() {
+        var visible = localStorage.getItem('tip') ;
+        console.log('visible', visible)
+        if (!visible) {
+            this.visible = true;
+            localStorage.setItem('tip', this.visible.toString());
+        }
+    }
 
     ngAfterViewChecked(): void {
         this.table.currentPageChange();
@@ -190,7 +221,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
             item.hide();
         });
     }
-    
+
+    clear(table: TablePrime) {
+        table.clear();
+    }
 
 }
 

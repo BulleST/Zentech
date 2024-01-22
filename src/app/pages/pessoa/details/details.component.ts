@@ -164,15 +164,26 @@ export class DetailsComponent implements OnDestroy {
         lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
             .then(res => {
                 this.loadingConsultaApi = false;
-                console.log(res)
-                if(typeof res.retorno == 'object')  {
-                    var obj = JSON.parse(JSON.stringify(res.retorno)) as BRConsulta;
-                    if (obj.ERRO == 'ERRO') {
+
+                var obj: any;
+                try {
+                    obj = JSON.parse(JSON.parse(JSON.stringify(res.retorno))) as BRConsulta;
+                    console.log('try', typeof obj)
+                } catch (e) {
+                    obj = res.retorno;
+                    console.log('catch', e)
+                }
+
+                console.log(obj)
+                if(typeof obj == 'object')  {
+                    if ((obj.ERRO && obj.ERRO != '') || obj.RETORNO == 'ERRO') {
+                        console.log('if')
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
                         this.erro = obj.ERRO;
                         this.toastr.error(obj.ERRO)
                     } else if (!obj.ERRO) {
+                        console.log('else if')
                         try {
                             this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
                         } catch (e) {
@@ -203,74 +214,21 @@ export class DetailsComponent implements OnDestroy {
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.situacao = obj.SITUACAO;
                         this.objeto.brConsulta_Status = obj.STATUS;
+                        this.objeto.brConsulta_Erro = '';
                     }
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
                 } else {
+                    console.log('else')
                     this.objeto.brConsulta_Erro = res.retorno as string;
                     this.erro = res.retorno as string;
                     this.toastr.error(res.retorno as string)
+                    this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
                 }
             })
             .catch(res => {
                 this.loadingConsultaApi = false;
                 this.erro = getError(res);
-            })
-
-        // lastValueFrom(this.pessoaService.getPessoa(this.objeto.cpf, this.objeto.dataNascimento))
-        //     .then(res => {
-        //         this.loadingConsultaApi = false;
-        //         if (typeof (res) == 'object') {
-        //             var obj = JSON.parse(JSON.stringify(res)) as BRConsultaResponse;
-        //             this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
-        //             if (obj.ERRO && obj.ERRO != '') {
-        //                 this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
-        //                 this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
-        //                 this.erro = obj.ERRO;
-        //                 this.toastr.error(obj.ERRO)
-        //             } else if (!obj.ERRO) {
-        //                 try {
-        //                     this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
-        //                 } catch (e) {
-        //                     this.erro += `Não foi possível ler Data de Nascimento. (${obj.DATA_NASC}) \n`;
-        //                     this.toastr.error('Não foi possível ler Data de Nascimento.')
-        //                 }
-        //                 try {
-        //                     this.objeto.brConsulta_Data_Cap = this.formataData(obj.DATA_CAP) as unknown as Date;
-        //                 } catch (e) {
-        //                     this.erro += `Não foi possível ler Data de Captação. (${obj.DATA_CAP}) \n`;
-        //                     this.toastr.error('Não foi possível ler Data de Captação.')
-        //                 }
-        //                 try {
-        //                     this.objeto.brConsulta_Hora_Cap = this.formataData(obj.DATA_CAP, obj.HORA_CAP) as unknown as Date;
-        //                 } catch (e) {
-        //                     this.erro += `Não foi possível ler Hora de Captação. (${obj.HORA_CAP}) \n`;
-        //                     this.toastr.error('Não foi possível ler Hora de Captação.')
-        //                 }
-        //                 try {
-        //                     this.objeto.dataInscricao = this.formataData(obj.DATA_INSCRICAO) as unknown as Date;
-        //                 } catch (e) {
-        //                     this.erro += `Não foi possível ler Data de Inscrição. (${obj.DATA_INSCRICAO}) \n`;
-        //                     this.toastr.error('Não foi possível ler Data de Inscrição.')
-        //                 }
-        //                 this.objeto.nome = obj.NOME;
-        //                 this.objeto.digito = obj.DIGITO;
-        //                 this.objeto.brConsulta_Controle = obj.CONTROLE;
-        //                 this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
-        //                 this.objeto.situacao = obj.SITUACAO;
-        //                 this.objeto.brConsulta_Status = obj.STATUS;
-        //             }
-        //         } else {
-
-        //             this.objeto.brConsulta_Erro = res as string;
-        //             this.erro = res as string;
-        //             this.toastr.error(res as string)
-        //         }
-        //     })
-        //     .catch(res => {
-        //         this.loadingConsultaApi = false;
-        //         this.erro = getError(res);
-        //     })
-
+            });
     }
 
     formataData(dataString: string, horaString?: string, where?: string) {

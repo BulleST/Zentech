@@ -528,6 +528,58 @@ export class FormComponent implements OnDestroy {
                 label = 'Situação CPF';
                 break;
 
+            case 'ID_CONSULTA':
+                label = 'Id da Consulta';
+                break;
+
+            case 'ERRO':
+                label = 'Erro';
+                break;
+
+            case 'RETORNO':
+                label = 'Retorno';
+                break;
+
+            case 'NOME':
+                label = 'Nome';
+                break;
+
+            case 'CPF':
+                campo = value != null ? this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00') ?? 'N/A' : 'N/A';
+                break;
+
+            case 'DATA_NASC':
+                label = 'Data de Nascimento';
+                break;
+
+            case 'SITUACAO':
+                label = 'Situação';
+                break;
+
+            case 'DATA_INSCRICAO':
+                label = 'Data de Inscrição';
+                break;
+
+            case 'DIGITO':
+                label = 'Dígito';
+                break;
+
+            case 'CONTROLE':
+                label = 'Controle';
+                break;
+
+            case 'DATA_CAP':
+                label = 'Data de Captação';
+                break;
+
+            case 'HORA_CAP':
+                label = 'Hora de Captação';
+                break;
+
+            case 'STATUS':
+                label = 'Status';
+                break;
+
             default:
                 label = key;
                 campo = (value != null && value != '') ? value : 'N/A'
@@ -542,16 +594,25 @@ export class FormComponent implements OnDestroy {
     insereDados(objeto: any) {
         for (const [key, value] of Object.entries(objeto)) {
 
-            var a = objeto[key];
+            var a: any;
+            try {
+                a = JSON.parse(JSON.parse(JSON.stringify(objeto[key])));
+            } 
+            catch(e) {
+                a = objeto[key];
+            }
+
             if (a != null && typeof a == 'object' && key != 'PerfilAcesso') {
                 this.insereDados(a)
             } else {
                 var [label, campo, insere] = this.formataCampos(key, value as string);
                 if (insere) {
-                    this.values.push([label, campo]);
+                    var existe = this.values.find(x => x[0] == label) 
+                    if (!existe) {
+                        this.values.push([label, campo]);
+                    }
                 }
             }
-
         }
     }
 
@@ -560,7 +621,11 @@ export class FormComponent implements OnDestroy {
         var order: any = [];
         switch (this.obj.entidade) {
             case 'Pessoa': {
-                order = ['Id', 'Nome', 'CPF', 'Data de Nascimento', 'Data de Cadastro', 'Situação CPF', 'Saldo Atual', 'Status Saldo', 'Nome da Mãe', 'Situação', 'Telefone', 'E-mail', 'Observações', 'Nome do Usuário de Cadastro', 'E-mail do Usuário de Cadastro', 'Excel - Data de Inscrição', 'Excel - Dígito', 'Excel - Ano Óbito', 'Excel - Status', 'Excel - Data de Captação', 'Excel - Hora de Captação', 'Excel - Id Num', 'Excel - Controle', 'Excel - Tipo Erro', 'Excel - Lote Id', 'Excel - PEP', 'Data de Atualização pelo Excel', 'BR Consulta - Status', 'BR Consulta - Data de Captação', 'BR Consulta - Hora de Captação', 'BR Consulta - Id Consulta', 'BR Consulta - Controle', 'BR Consulta - Erro', 'Data de Atualização pelo BR Consulta']
+                if (this.obj.acao == 'BR Consulta') {
+                    order = ['Id da Consulta', 'Nome', 'CPF', 'Data de Nascimento',  'Situação', 'Data de Inscrição', 'Dígito', 'Controle' , 'Status', 'Data de Captação', 'Hora de Captação', 'Retorno', 'Erro'];                    
+                } else {
+                    order = ['Id', 'Nome', 'CPF', 'Data de Nascimento', 'Data de Cadastro', 'Situação CPF', 'Saldo Atual', 'Status Saldo', 'Nome da Mãe', 'Situação', 'Telefone', 'E-mail', 'Observações', 'Nome do Usuário de Cadastro', 'E-mail do Usuário de Cadastro', 'Excel - Data de Inscrição', 'Excel - Dígito', 'Excel - Ano Óbito', 'Excel - Status', 'Excel - Data de Captação', 'Excel - Hora de Captação', 'Excel - Id Num', 'Excel - Controle', 'Excel - Tipo Erro', 'Excel - Lote Id', 'Excel - PEP', 'Data de Atualização pelo Excel', 'BR Consulta - Status', 'BR Consulta - Data de Captação', 'BR Consulta - Hora de Captação', 'BR Consulta - Id Consulta', 'BR Consulta - Controle', 'BR Consulta - Erro', 'Data de Atualização pelo BR Consulta']
+                }
                 break
             };
             case 'Operação': {
@@ -601,7 +666,7 @@ export class FormComponent implements OnDestroy {
             };
         }
 
-        this.values = this.values.sort(function (a, b) {
+        this.values = this.values.sort((a, b) => {
             return order.indexOf(a[0]) - order.indexOf(b[0]);
         });
         return this.values;

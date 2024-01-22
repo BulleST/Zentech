@@ -1,3 +1,10 @@
+<div class="mb-2">
+    <button type="button" #scrollTipBtn class="btn btn-scrollTip btn-dark" (click)="setVisible()" title="Dica">
+        <fa-icon [icon]="faBell"></fa-icon>
+    </button>
+
+    <button pButton label="Limpar filtro" class="btn btn-dark ms-2" icon="pi pi-filter-slash me-2" (click)="clear(dt)"></button>
+</div>
 <div class="content">
     <p-table class="table table-striped"
              [class.mt-2]="formatedList.length == 0"
@@ -28,19 +35,19 @@
                         <span class="spinner-border spinner-border-sm me-1"></span>
                     </p>
                 </div>
-                <div
-                     class="col-xl-9 col-lg-9 col-md-10 col-sm-10 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
+                <div class="col-xl-9 col-lg-9 col-md-10 col-sm-10 col-12 d-flex align-items-center justify-content-end flex-wrap flex-sm-row flex-column-reverse px-0 mb-sm-0">
+                 
                     <div class="col d-flex flex-wrap ng-star-inserted px-0 justify-content-end"
                          *ngIf="topActions != undefined">
                         <ng-template [ngTemplateOutlet]="topActions"></ng-template>
                     </div>
                     <div class="p-input-icon-left col-lg-4 col-md-4 col-sm-4 col-12 mb-2" *ngIf=" filterTable">
                         <i class="pi pi-search"></i>
-                        <input pInputText 
-                                type="text" 
-                                class="form-control "
+                        <input pInputText
+                               type="text"
+                               class="form-control "
                                (input)="dt.filterGlobal(filter.value , 'contains')"
-                               #filter 
+                               #filter
                                placeholder="Pesquisar"
                                [disabled]="formatedList.length == 0" />
                     </div>
@@ -51,7 +58,7 @@
             <tr class="grey">
                 <th [pSortableColumn]="col.field" *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="me-3" [innerHTML]="col.header"></span>
+                        <span class="me-3" [class.text-center]="col.maskType == 'options'" [innerHTML]="col.header"></span>
                         <div>
                             <p-sortIcon *ngIf="col.sort != false && sortTable" [field]="col.field"></p-sortIcon>
                             <p-columnFilter #filterEl
@@ -62,10 +69,11 @@
                                             [matchMode]="col.filterMatchMode"
                                             [showOperator]="col.showOperator"
                                             [showMatchModes]="col.showMatchMode"
-                                            [showAddButton]="col.showAddButton" >
-                                <ng-template *ngIf="col.maskType == 'options' && col.values" pTemplate="filter" let-filter="filterCallback">
-                                    <p-dropdown [(ngModel)]="col.filterValue"
-                                    [styleClass]="col.showMatchMode ? 'mt-2' : ''"
+                                            [showAddButton]="col.showAddButton">
+                                <!-- Options -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.maskType == 'options' && col.values">
+                                    <p-dropdown [ngModel]="value"
+                                                [styleClass]="col.showMatchMode ? 'mt-2' : ''"
                                                 [options]="col.values"
                                                 placeholder="Todos"
                                                 optionLabel="output"
@@ -80,52 +88,58 @@
                                         </ng-template>
                                     </p-dropdown>
                                 </ng-template>
-                                <ng-template *ngIf="col.maskType == 0" pTemplate="filter" let-filter="filterCallback">
+                                <!-- Texto -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.maskType == 0">
                                     <input type="text" pInputText
-                                            [classList]="col.showMatchMode ? 'form-control mt-2' : 'form-control '"
-                                           #value="ngModel"
+                                           [classList]="col.showMatchMode ? 'form-control mt-2' : 'form-control '"
+                                           #text="ngModel"
                                            ngModel
-                                           (change)="filterCol(value.value, filter, filterEl);"
-                                           [(ngModel)]="col.filterValue" />
+                                           (change)="filterCol(text.value, filter, filterEl);"
+                                           [ngModel]="value" />
                                 </ng-template>
-                                <ng-template *ngIf="col.maskType == 'cpf'" pTemplate="filter" let-filter="filterCallback">
+                                <!-- CPF -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.maskType == 'cpf'">
                                     <input type="text" pInputText
-                                            [classList]="col.showMatchMode ? 'mt-2' : ''"
+                                           class="w-100"
+                                           [classList]="col.showMatchMode ? 'mt-2' : ''"
                                            [mask]="'000.000.000-00'"
                                            [dropSpecialCharacters]="false"
                                            #cpf="ngModel"
                                            ngModel
                                            (change)="filterCol(cpf.value, filter, filterEl);"
-                                           [(ngModel)]="col.filterValue"
+                                           [ngModel]="value"
                                            placeholder="000.000.000-00" />
                                 </ng-template>
-                                <ng-template *ngIf="col.maskType == 'cnpj'" pTemplate="filter" let-filter="filterCallback">
+                                <!-- CNPJ -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.maskType == 'cnpj'">
                                     <input type="text" pInputText
-                                            [classList]="col.showMatchMode ? 'mt-2' : ''"
+                                           class="w-100"
+                                           [classList]="col.showMatchMode ? 'mt-2' : ''"
                                            [mask]="'00.000.000/0000-00'"
                                            [dropSpecialCharacters]="false"
-                                           #cpf="ngModel"
-                                           ngModel
-                                           (change)="filterCol(cpf.value, filter, filterEl);"
-                                           [(ngModel)]="col.filterValue"
+                                           #cnpj="ngModel"
+                                           (change)="filterCol(cnpj.value, filter, filterEl);"
+                                           [ngModel]="value"
                                            placeholder="00.000.000/0000-00" />
                                 </ng-template>
-                                <ng-template *ngIf="col.filterType == 'date' || col.filterType == 'datetime'" pTemplate="filter" let-filter="filterCallback">
+                                <!-- Data -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.filterType == 'date' || col.filterType == 'datetime'">
                                     <p-calendar name="filter"
-                                    [styleClass]="col.showMatchMode ? 'mt-2' : ''"
+                                                [styleClass]="col.showMatchMode ? 'mt-2' : ''"
                                                 (onSelect)="filterDate($event, filter, filterEl);"
                                                 [showIcon]="true"
-                                                [(ngModel)]="col.filterValue"
+                                                [ngModel]="value"
                                                 dateFormat="dd.mm.yy"></p-calendar>
                                 </ng-template>
-                                <ng-template *ngIf="col.filterType == 'numeric'" pTemplate="filter" let-filter="filterCallback">
+                                <!-- Número -->
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback" *ngIf="col.filterType == 'numeric'">
                                     <input type="text"
-                                         [classList]="col.showMatchMode ? 'form-control mt-2' : 'form-control '"
-                                            [(ngModel)]="col.filterValue"
-                                            (change)="filterNumeric($event, filter, filterEl);"
-                                            mask="separator.2"
-                                            decimalMarker=","
-                                            thousandSeparator=".">
+                                           [classList]="col.showMatchMode ? 'form-control mt-2' : 'form-control '"
+                                           [ngModel]="value"
+                                           (change)="filterNumeric($event, filter, filterEl);"
+                                           mask="separator.2"
+                                           decimalMarker=","
+                                           thousandSeparator=".">
                                 </ng-template>
                             </p-columnFilter>
                         </div>
@@ -139,7 +153,7 @@
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
                 <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
-                    <div  >
+                    <div>
                         <!-- *ngIf="item[col.field] != '' && item[col.field] != undefined && item[col.field] != null ; else NA" -->
                         <div *ngSwitchCase="maskType.options">
                             <span [classList]="'flag ' + getOptionValue(item, col, 'class')">{{getOptionValue(item, col, 'output')}}</span>
@@ -157,7 +171,7 @@
                             <p> {{ (setDate(item[col.field])) | date : 'dd/MM/yyyy HH:mm' }} </p>
                         </div>
                         <div *ngSwitchCase="maskType.number">
-                            <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0"> 
+                            <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0">
                                 <span *ngIf="item[col.field] != null; else NA">{{item[col.field] | currency : 'BRL' : '' : col.decimal}}</span>
                             </p>
                         </div>
@@ -169,11 +183,9 @@
                         </div>
                         <div *ngSwitchCase="maskType.imageUrl">
                             <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo" #targetEl (mouseenter)="closeOverlays(); overlayPanel.show($event, targetEl)">
-                            
-                            <p-overlayPanel #overlayPanel [styleClass]="'table-image-overlay-panel'" [showCloseIcon]="true"  >
+                            <p-overlayPanel #overlayPanel [styleClass]="'table-image-overlay-panel'" [showCloseIcon]="true">
                                 <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo">
                             </p-overlayPanel>
-                        
                         </div>
                         <div *ngSwitchDefault>
                             <span> {{item[col.field]}} </span>
@@ -226,4 +238,71 @@
 <ng-template #NA>
     <p>N/A</p>
 </ng-template>
+<p-dialog header="Dica"
+          [(visible)]="visible"
+          [position]="position"
+          [draggable]="false"
+          [resizable]="false">
+    <div>
+        <p>Para rolamento horizontal da tabela:</p>
+        <div *ngIf="screen == 'xl' || screen == 'lg'">
+            <div class=" mt-3">
+                <div class="scroll-icon-desktop">
+                    <div class="icon d-flex align-items-center justify-content-center">
+                        <h5 class="me-2">Shift + </h5>
+                        <div class="scroll-icon">
+                            <span class="wheel"></span>
+                        </div>
+                    </div>
+                    <ng-template [ngTemplateOutlet]="tableAnimation" ></ng-template>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center justify-content-center mt-3" *ngIf="screen == 'md' || screen == 'sm'">
+            <div class="swipe">
+                <ng-template [ngTemplateOutlet]="tableAnimation" ></ng-template>
+                <div class="path"></div>
+                <div class="hand-icon"></div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
 
+<ng-template #tableAnimation>
+    <div class="table-s">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><span></span></th>
+                    <th><span></span></th>
+                    <th><span></span></th>
+                    <th><span></span></th>
+                    <th><span></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                </tr>
+                <tr>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                </tr>
+                <tr>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                    <td><span></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

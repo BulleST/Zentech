@@ -23,7 +23,7 @@ import { tabChanged } from 'src/app/utils/tabview';
 import { ContratoTipo } from 'src/app/models/contrato-tipo.model';
 import { ContratoEvento } from 'src/app/models/contrato-evento.model';
 import { Paises } from 'src/app/models/pais.model';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
@@ -38,7 +38,8 @@ import { AccountService } from 'src/app/services/account.service';
 export class FormComponent implements OnDestroy {
     faEdit = faEdit;
     faTrash = faTrash;
-
+    faArrowRight = faArrowRight;
+    faArrowLeft = faArrowLeft;
     objeto: InvoiceRequest = new InvoiceRequest;
     erro: string = '';
     loading = false;
@@ -178,7 +179,6 @@ export class FormComponent implements OnDestroy {
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
-                this.objeto.contrato.pais_Id = 30;
                 this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                 this.objeto.contrato.dataLiquidacao = this.datepipe.transform(this.objeto.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                 this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;

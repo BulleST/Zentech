@@ -1,7 +1,4 @@
-export class
-Paises {
-  id: number = 0;
-  nome: string = ''
+export class Paises {
+    id: number = 0;
+    nome: string = ''
 }
-
-

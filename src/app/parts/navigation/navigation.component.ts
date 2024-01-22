@@ -50,106 +50,106 @@ export class NavigationComponent implements OnDestroy {
     this.header.toggleMenuAside();
   }
 
-  setMenu() {
-    var i = 1;
-    this.items = [{
-      id: i++,
-      label: 'Tela inicial',
-      paddingLeft: 0,
-      routerLink: '/'
-    },
-    {
-      id: i++,
-      label: 'Painel CPF',
-      paddingLeft: 0,
-      items: [
-        {
-          id: i++,
-          label: 'New Clickk Buyers',
-          routerLink: "/painel-cpf/pessoas",
-          paddingLeft: 10,
+    setMenu() {
+        var i = 1;
+        this.items = [{
+            id: i++,
+            label: 'Tela inicial',
+            paddingLeft: 0,
+            routerLink: '/'
         },
         {
-          id: i++,
-          label: 'Pró Câmbio',
-          routerLink: "/painel-cpf/operacoes",
-          paddingLeft: 10,
-        },
-      ]
-    },
-    {
-      id: i++,
-      label: 'Painel de Documentos',
-      paddingLeft: 0,
-      items: [
-        {
-          id: i++,
-          label: 'Bancos',
-          routerLink: "/banco",
-          paddingLeft: 10,
-        },
-        {
-          id: i++,
-          label: 'Beneficiários',
-          routerLink: "/beneficiario",
-          paddingLeft: 10,
-          items: [
-            {
-              id: i++,
-              label: 'Representantes',
-              routerLink: "/representante",
-              paddingLeft: 25,
-            }
-          ]
+            id: i++,
+            label: 'Painel CPF',
+            paddingLeft: 0,
+            items: [
+                {
+                    id: i++,
+                    label: 'New Clickk Buyers',
+                    routerLink: "/painel-cpf/pessoas",
+                    paddingLeft: 10,
+                },
+                {
+                    id: i++,
+                    label: 'Pró Câmbio',
+                    routerLink: "/painel-cpf/operacoes",
+                    paddingLeft: 10,
+                },
+            ]
         },
         {
-          id: i++,
-          label: 'Instituições Financeiras',
-          routerLink: "/instituicao-financeira",
-          paddingLeft: 10,
+            id: i++,
+            label: 'Painel de Documentos',
+            paddingLeft: 0,
+            items: [
+                {
+                    id: i++,
+                    label: 'Bancos',
+                    routerLink: "/banco",
+                    paddingLeft: 10,
+                },
+                {
+                    id: i++,
+                    label: 'Beneficiários',
+                    routerLink: "/beneficiario",
+                    paddingLeft: 10,
+                    items: [
+                        {
+                            id: i++,
+                            label: 'Representantes',
+                            routerLink: "/representante",
+                            paddingLeft: 25,
+                        }
+                    ]
+                },
+                {
+                    id: i++,
+                    label: 'Instituições Financeiras',
+                    routerLink: "/instituicao-financeira",
+                    paddingLeft: 10,
+                },
+                {
+                    id: i++,
+                    label: 'Invoice',
+                    routerLink: "/invoice",
+                    paddingLeft: 10,
+                    items: [
+                        // {
+                        //     id: i++,
+                        //     label: 'Swift',
+                        //     routerLink: "/swift",
+                        //     paddingLeft: 25,
+                        // },
+                        {
+                            id: i++,
+                            label: 'Contratos',
+                            routerLink: "/contrato",
+                            paddingLeft: 25,
+                        },
+                    ]
+                },
+            ]
+        },
+        // {
+        //     id: i++,
+        //     label: 'Empresas',
+        //     routerLink: "/empresa",
+        //     paddingLeft: 0,
+        // },
+        {
+            id: i++,
+            label: 'Logs',
+            routerLink: "/log-acoes",
+            paddingLeft: 0,
         },
         {
-          id: i++,
-          label: 'Invoice',
-          routerLink: "/invoice",
-          paddingLeft: 10,
-          items: [
-            // {
-            //     id: i++,
-            //     label: 'Swift',
-            //     routerLink: "/swift",
-            //     paddingLeft: 25,
-            // },
-            {
-              id: i++,
-              label: 'Contratos',
-              routerLink: "/contrato",
-              paddingLeft: 25,
-            },
-          ]
+            id: i++,
+            label: 'Usuários',
+            routerLink: "/usuarios",
+            paddingLeft: 0,
         },
-      ]
-    },
-    // {
-    //     id: i++,
-    //     label: 'Empresas',
-    //     routerLink: "/empresa",
-    //     paddingLeft: 0,
-    // },
-    {
-      id: i++,
-      label: 'Logs',
-      routerLink: "/log-acoes",
-      paddingLeft: 0,
-    },
-    {
-      id: i++,
-      label: 'Usuários',
-      routerLink: "/usuarios",
-      paddingLeft: 0,
-    },
-    ];
-  }
+        ];
+    }
 
   addPadding() {
     this.padding = parseInt(this.padding.toString()) + 5
