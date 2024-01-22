@@ -218,7 +218,7 @@ tr.selectable {
     border-radius: 3px;
     text-align: center;
     text-transform: capitalize;
-    min-width: 100%;
+    margin: 0 auto;
 }
 
 .flag.flag-dark {
