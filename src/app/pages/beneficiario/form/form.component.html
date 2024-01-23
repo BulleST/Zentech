@@ -31,7 +31,7 @@
                            id="codigoRegistro"
                            #codigoRegistro="ngModel"
                            [(ngModel)]="objeto.codigoRegistro">
-                    <!-- 
+                    <!--
                            required
                            (ngModelChange)="validaCNPJ(cnpj)"
                            mask="00.000.000/0000-00"
@@ -97,7 +97,7 @@
                                 [styleClass]="'form-control ' + (loadingBanco ? 'form-control-loading' : '')"
                                 [showClear]="true"
                                 [filter]="true"
-                                [filterFields]="['nome', 'cidade']"
+                                [filterFields]="['nome', 'cidade', 'codigoSwift']"
                                 (ngModelChange)="preencheBanco()"
                                 filterBy="nome, cidade"
                                 optionLabel="nome"
@@ -109,6 +109,7 @@
                             <div>
                                 <p>{{item.nome}}</p>
                                 <p>{{item.cidade}}</p>
+                                <p class="text-ellipsis"><strong>Código Swift:</strong> {{item.codigoSwift}}</p>
                             </div>
                         </ng-template>
                         <ng-template pTemplate="footer">
@@ -205,7 +206,7 @@
                             </div>
                         </div>
 
-                        
+
                        <div class="row">
                             <div class="form-group col-xl- col-lg col-md-3 col-sm-3 col-12">
                                 <label for="cep">Código Postal: </label>
