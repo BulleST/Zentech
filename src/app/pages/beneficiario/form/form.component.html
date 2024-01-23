@@ -99,7 +99,7 @@
                                 [filter]="true"
                                 [filterFields]="['nome', 'cidade', 'codigoSwift']"
                                 (ngModelChange)="preencheBanco()"
-                                filterBy="nome, cidade"
+                                filterBy="nome, cidade, codigoSwift"
                                 optionLabel="nome"
                                 optionValue="id"
                                 placeholder="Selecione um banco"
@@ -108,6 +108,7 @@
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <p>{{item.nome}}</p>
+
                                 <p class="text-ellipsis"><strong>Código Swift:</strong> {{item.codigoSwift}}</p>
                             </div>
                         </ng-template>
