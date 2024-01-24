@@ -167,6 +167,9 @@ export class FormComponent implements OnDestroy {
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
 
+                        this.calculaMoedaNacional();
+                        this.calculaVET();
+
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'invoice');
                         }, 200);
@@ -321,8 +324,8 @@ export class FormComponent implements OnDestroy {
 
     calculaVET() {
         if (this.objeto.invoice.valor && this.objeto.contrato.valorNacional) {
-            // VET = ( Valor Moeda Nacional * 0.38 ) / Valor Invoice
-            this.objeto.contrato.vet = (this.objeto.contrato.valorNacional * 0.38) / this.objeto.invoice.valor;
+            // VET = (Valor Moeda Nacional + ( Valor Moeda Nacional * 0.38 )) / Valor Invoice
+            this.objeto.contrato.vet = (this.objeto.contrato.valorNacional + (this.objeto.contrato.valorNacional * (0.38 / 100))) / this.objeto.invoice.valor;
         } 
     }
 

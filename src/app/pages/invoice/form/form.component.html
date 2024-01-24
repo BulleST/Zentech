@@ -369,7 +369,7 @@
                                 <app-input-number [valueInput]="objeto.contrato.taxa"
                                                   (valueChanges)="objeto.contrato.taxa = $event; calculaMoedaNacional(); calculaVET();"
                                                   [inputId]="'taxa'"
-                                                  [mask]="'separator.10'"
+                                                  [mask]="'separator.4'"
                                                   [showErrorMessage]="true"
                                                   [allowNegativeNumbers]="false"
                                                   [required]="true"
@@ -388,14 +388,13 @@
                                     #valorNacional="ngModel"
                                     #valorNacionalEl
                                     [(ngModel)]="objeto.contrato.valorNacional"
-                                    pattern="\S(.*\S)?"
                                     [readOnly]="true"
                                     (focus)="valorNacionalObs.show($event, valorNacionalEl)"
                                     (blur)="valorNacionalObs.hide()"
                                     (mouseenter)="valorNacionalObs.show($event, valorNacionalEl)"
                                     (mouseleave)="valorNacionalObs.hide()"
                                     prefix="R$ "
-                                    [mask]="'separator.4'"
+                                    [mask]="'separator.2'"
                                     thousandSeparator="."
                                     decimalMarker=","
                                     [min]="0.1"
@@ -441,12 +440,14 @@
                                        #vet="ngModel"
                                        #vetEl
                                        [(ngModel)]="objeto.contrato.vet"
-                                       pattern="\S(.*\S)?"
                                        [readOnly]="true"
                                        (focus)="vetObs.show($event, vetEl)"
                                        (blur)="vetObs.hide()"
                                        (mouseenter)="vetObs.show($event, vetEl)"
-                                       (mouseleave)="vetObs.hide()">
+                                       (mouseleave)="vetObs.hide()"
+                                       [mask]="'separator.4'"
+                                       thousandSeparator="."
+                                       decimalMarker=",">
                             </div>
                             <!-- Descrição da Forma de Entrega da moeda estrangeira -->
                             <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
@@ -630,7 +631,9 @@
 <router-outlet></router-outlet>
 <p-overlayPanel #vetObs>
     <p class="text-danger">Cálculo</p>
-    VET = Valor Moeda Nacional * 0,38 / Valor Invoice
+    <p>IOF = 0,38</p>
+    <p>R$ IOF = Valor Moeda Nacional * 0,38%</p>
+    <p>VET = (Valor Moeda Nacional +  R$ IOF) / Valor Invoice</p>
 </p-overlayPanel>
 <p-overlayPanel #valorNacionalObs>
     <p class="text-danger">Cálculo</p>
