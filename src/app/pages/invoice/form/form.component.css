@@ -126,3 +126,23 @@
     display: flex;
     align-items: center;
 }
+
+::ng-deep .p-overlaypanel {
+    padding: 10px 15px;
+    background: white;
+    box-shadow: 2px 1px 3px -1px #7f7d7d;
+    margin-top: 12px;
+}
+
+::ng-deep .p-overlaypanel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 15px;
+    height: 11px;
+    background: white;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    transform: translate(0, -100%);
+    z-index: 2;
+}

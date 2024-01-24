@@ -87,7 +87,7 @@
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Valor -->
                                 <label for="valor">Valor: <span class="text-danger">*</span></label>
                                 <app-input-number [valueInput]="objeto.invoice.valor"
-                                                  (valueChanges)="objeto.invoice.valor = $event;"
+                                                  (valueChanges)="objeto.invoice.valor = $event; calculaMoedaNacional(); calculaVET();"
                                                   [inputId]="'valor'"
                                                   [mask]="'separator.4'"
                                                   [showErrorMessage]="true"
@@ -261,7 +261,7 @@
                                 <div *ngIf="invoice.invalid">
                                     <p *ngIf="invoice.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para continuar.</p>
                                 </div>
-                                <button type="button" (click)="activeIndex = 1" class="btn btn-step btn-step-next ms-auto " [disabled]="invoice.invalid">
+                                <button type="button" (click)="tabChanged(1)" class="btn btn-step btn-step-next ms-auto " [disabled]="invoice.invalid">
                                     <span class="btn-step-text me-2 mb-1">Próximo</span>
                                    <fa-icon [icon]="faArrowRight"></fa-icon>
                                 </button>
@@ -295,19 +295,16 @@
                             </div>
                             <!-- Nº do Contrato de Câmbio -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
-                                <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                                <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span><small>(automático)</small></label>
                                 <input type="text"
                                        class="form-control"
                                        name="numContrato"
                                        id="numContrato"
                                        #numContrato="ngModel"
                                        [(ngModel)]="objeto.contrato.numContrato"
-                                       required
-                                       pattern="\S(.*\S)?"
-                                       (change)="objeto.contrato.numContrato = numContrato.value.trim();">
-                                <div *ngIf="numContrato.touched && numContrato.errors">
-                                    <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigatório.</p>
-                                </div>
+                                       readonly
+                                       mask="0*">
+                           
                             </div>
                             <!-- Tipos -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Tipos">
@@ -370,7 +367,7 @@
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Taxa Cambial">
                                 <label for="taxa">Taxa Cambial: <small>(USD)</small>&nbsp;<span class="text-danger">*</span> </label>
                                 <app-input-number [valueInput]="objeto.contrato.taxa"
-                                                  (valueChanges)="objeto.contrato.taxa = $event;"
+                                                  (valueChanges)="objeto.contrato.taxa = $event; calculaMoedaNacional(); calculaVET();"
                                                   [inputId]="'taxa'"
                                                   [mask]="'separator.10'"
                                                   [showErrorMessage]="true"
@@ -384,17 +381,24 @@
                             <!-- Valor Moeda Nacional -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
                                 <label for="valorNacional">Valor Moeda Nacional: <small>(R$)</small>&nbsp;<span class="text-danger">*</span></label>
-                                <app-input-number [valueInput]="objeto.contrato.valorNacional"
-                                                  (valueChanges)="objeto.contrato.valorNacional = $event;"
-                                                  [inputId]="'valorNacional'"
-                                                  [mask]="'separator.4'"
-                                                  [showErrorMessage]="true"
-                                                  [allowNegativeNumbers]="false"
-                                                  [required]="true"
-                                                  prefix="R$ "
-                                                  [autoReplaceValue]="false"
-                                                  [min]="0.1"
-                                                  [max]="999999999"></app-input-number>
+                                <input type="text"
+                                    class="form-control"
+                                    name="valorNacional"
+                                    id="valorNacional"
+                                    #valorNacional="ngModel"
+                                    #valorNacionalEl
+                                    [(ngModel)]="objeto.contrato.valorNacional"
+                                    pattern="\S(.*\S)?"
+                                    [readOnly]="true"
+                                    (focus)="valorNacionalObs.show($event, valorNacionalEl)"
+                                    (blur)="valorNacionalObs.hide()"
+                                    (mouseenter)="valorNacionalObs.show($event, valorNacionalEl)"
+                                    (mouseleave)="valorNacionalObs.hide()"
+                                    prefix="R$ "
+                                    [mask]="'separator.4'"
+                                    [min]="0.1"
+                                    [max]="999999999">
+                                    
                             </div>
                             <!-- Percentual de Adiantamento -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Percentual de Adiantamento">
@@ -433,14 +437,14 @@
                                        name="vet"
                                        id="vet"
                                        #vet="ngModel"
+                                       #vetEl
                                        [(ngModel)]="objeto.contrato.vet"
-                                       pattern="\S(.*\S)?">
-                                <!--
-                                      mask="0.000000000000"
-                                      placeholder="0.000000000000" -->
-                                <div *ngIf="vet.errors && vet.touched">
-                                    <p class="text-danger" *ngIf="vet.errors['mask']">Valor inválido</p>
-                                </div>
+                                       pattern="\S(.*\S)?"
+                                       [readOnly]="true"
+                                       (focus)="vetObs.show($event, vetEl)"
+                                       (blur)="vetObs.hide()"
+                                       (mouseenter)="vetObs.show($event, vetEl)"
+                                       (mouseleave)="vetObs.hide()">
                             </div>
                             <!-- Descrição da Forma de Entrega da moeda estrangeira -->
                             <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
@@ -572,14 +576,14 @@
                         </div>
                         <div class="row mt-2">
                             <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                                <button type="button" (click)="activeIndex = 0" class="btn btn-step btn-step-next">
+                                <button type="button" (click)="tabChanged(0)" class="btn btn-step btn-step-next">
                                     <fa-icon [icon]="faArrowLeft"></fa-icon>
                                     <span class="btn-step-text ms-2 mb-1">Anterior</span>
                                 </button>
                                 <div *ngIf="contrato.invalid">
                                     <p *ngIf="contrato.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
                                 </div>
-                                <button type="button" *ngIf="isEditPage" (click)="activeIndex = 2" class="btn btn-step btn-step-next ms-auto " [disabled]="invoice.invalid">
+                                <button type="button" *ngIf="isEditPage" (click)="tabChanged(2)" class="btn btn-step btn-step-next ms-auto " [disabled]="invoice.invalid">
                                     <span class="btn-step-text me-2 mb-1">Próximo</span>
                                    <fa-icon [icon]="faArrowRight"></fa-icon>
                                 </button>
@@ -622,3 +626,11 @@
     </div>
 </ng-template>
 <router-outlet></router-outlet>
+<p-overlayPanel #vetObs>
+    <p class="text-danger">Cálculo</p>
+    VET = Valor Moeda Nacional * 0,38 / Valor Invoice
+</p-overlayPanel>
+<p-overlayPanel #valorNacionalObs>
+    <p class="text-danger">Cálculo</p>
+    Valor Moeda Nacional = Valor Invoice * Taxa Cambial
+</p-overlayPanel>

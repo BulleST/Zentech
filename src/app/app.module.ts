@@ -13,16 +13,13 @@ import { RequestInterceptor } from './helpers/request.interceptor';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
-import {  NgxMaskModule } from 'ngx-mask';
-import { NgxMaskPipe } from 'ngx-mask';
+import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { AlertComponent } from './parts/alert/alert.component';
 import { LoadingComponent } from './parts/loading/loading.component';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
-import { AccountService } from './services/account.service';
-import { RouterStateSnapshot } from '@angular/router';
 
 registerLocaleData(localePt);
 
@@ -49,7 +46,7 @@ registerLocaleData(localePt);
     ],
     providers: [
         CurrencyPipe,
-        NgxMaskPipe,
+        MaskPipe,
         DatePipe,
         { provide: LOCALE_ID, useValue: 'pt-BR' },
         { provide: DEFAULT_CURRENCY_CODE, useValue: 'BRL' },

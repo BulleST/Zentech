@@ -32,6 +32,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
 import { DialogModule } from 'primeng/dialog';
 import { NgxMaskModule } from 'ngx-mask';
+
+
 @NgModule({
     declarations: [
         ListSharedComponent,

@@ -19,7 +19,7 @@ import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { insertOrReplace } from 'src/app/utils/service-list';
 import { Table } from 'src/app/utils/table';
-import { NgxMaskService } from 'ngx-mask';
+import { MaskApplierService } from 'ngx-mask';
 
 @Component({
     selector: 'app-form',
@@ -56,7 +56,7 @@ export class FormComponent implements OnDestroy {
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
-        private mask: NgxMaskService,
+        private mask: MaskApplierService,
         private currencyPipe: CurrencyPipe,
         private moedaService: MoedaService,
         private router: Router,

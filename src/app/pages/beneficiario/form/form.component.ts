@@ -16,7 +16,7 @@ import { NgForm, NgModel } from '@angular/forms';
 import { Paises } from 'src/app/models/pais.model';
 import { validateCEP } from 'src/app/utils/validate-cep';
 import { validateCNPJ } from 'src/app/utils/validate-cnpj';
-import { NgxMaskService } from 'ngx-mask';
+import { MaskApplierService } from 'ngx-mask';
 import { Representante } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
 import { faEdit, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
@@ -71,7 +71,7 @@ export class FormComponent implements OnDestroy {
         private cepService: CepService,
         private bancoService: BancoService,
         private paisesService: PaisesService,
-        private mask: NgxMaskService,
+        private mask: MaskApplierService,
         private representanteService: RepresentanteService,
         private router: Router,
         private accountService: AccountService,

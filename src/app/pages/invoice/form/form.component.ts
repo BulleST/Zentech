@@ -162,6 +162,7 @@ export class FormComponent implements OnDestroy {
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
+                        res.contrato.numContrato = res.invoice.id.toString();
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
@@ -204,6 +205,7 @@ export class FormComponent implements OnDestroy {
     }
 
     tabChanged(index: number) {
+        this.activeIndex = index;
         tabChanged(index)
     }
 
@@ -311,7 +313,21 @@ export class FormComponent implements OnDestroy {
         this.loading = false;
     }
 
-    send(invoice: NgForm, contrato: NgForm) {
+    calculaMoedaNacional() {
+        if (this.objeto.invoice.valor && this.objeto.contrato.taxa) {
+            this.objeto.contrato.valorNacional = this.objeto.invoice.valor * this.objeto.contrato.taxa;
+        } 
+    }
+
+    calculaVET() {
+        if (this.objeto.invoice.valor && this.objeto.contrato.valorNacional) {
+            // VET = ( Valor Moeda Nacional * 0.38 ) / Valor Invoice
+            this.objeto.contrato.vet = (this.objeto.contrato.valorNacional * 0.38) / this.objeto.invoice.valor;
+        } 
+    }
+
+
+    async send(invoice: NgForm, contrato: NgForm) {
         this.loading = false;
         this.erro = '';
         if (invoice.invalid) {
@@ -328,12 +344,18 @@ export class FormComponent implements OnDestroy {
         if (!this.isEditPage) {
             this.objeto.contrato.invoice_Id = 0;
         }
-        this.request()
+        return await this.request()
             .then(async res => {
                 if (res.sucesso == true) {
                     this.objeto.contrato.id = res.objeto.contrato.id;
-                    this.objeto.contrato.invoice_Id = res.objeto.contrato.invoice_Id;
+                    this.objeto.contrato.invoice_Id = res.objeto.invoice.id;
                     this.objeto.invoice.id = res.objeto.invoice.id;
+                    this.objeto.contrato.numContrato = this.objeto.invoice.id.toString();
+
+
+                    if (!this.isEditPage) {
+                        await lastValueFrom(this.invoiceService.edit(this.objeto));
+                    }
 
                     var a = this.crypto.encrypt(this.objeto.invoice.id);
                     if (!this.isEditPage) {

@@ -1,7 +1,7 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgxMaskService } from 'ngx-mask';
+import { MaskApplierService } from 'ngx-mask';
 import { ToastrService } from 'ngx-toastr';
 import { IConfig } from 'ngx-mask';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -36,7 +36,7 @@ export class ExportacaoComponent implements OnDestroy {
         private toastr: ToastrService,
         private datePipe: DatePipe,
         private modalService: ModalService,
-        private mask: NgxMaskService,
+        private mask: MaskApplierService,
         private currencyPipe: CurrencyPipe,
     ) {
         var list = this.pessoaService.list.subscribe(res => this.pessoas = res)
