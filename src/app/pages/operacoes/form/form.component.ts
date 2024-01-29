@@ -2,24 +2,21 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ToastrService } from 'ngx-toastr';
+import { NgxMaskService } from 'ngx-mask';
+import { NgxMaskApplierService } from 'ngx-mask/lib/ngx-mask-applier.service';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { Moeda } from 'src/app/models/moeda.model';
-import { Paises } from 'src/app/models/pais.model';
 import { PessoaOperacaoList, PessoaOperacaoRequest, PessoaOperacaoStatus } from 'src/app/models/pessoa-operacao.model';
-import { Pessoa, PessoaList, pessoaColumns } from 'src/app/models/pessoa.model';
+import { PessoaList } from 'src/app/models/pessoa.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { MoedaService } from 'src/app/services/moeda.service';
-import { PaisesService } from 'src/app/services/paises.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { insertOrReplace } from 'src/app/utils/service-list';
-import { Table } from 'src/app/utils/table';
-import { MaskApplierService } from 'ngx-mask';
+// import { MaskApplierService } from 'ngx-mask';
 
 @Component({
     selector: 'app-form',
@@ -56,7 +53,7 @@ export class FormComponent implements OnDestroy {
         private pessoaOperacaoService: PessoaOperacaoService,
         private crypto: Crypto,
         private datepipe: DatePipe,
-        private mask: MaskApplierService,
+        private mask: NgxMaskService,
         private currencyPipe: CurrencyPipe,
         private moedaService: MoedaService,
         private router: Router,

@@ -59,7 +59,7 @@ export var invoiceColumns: Column[] = [
         maskType: MaskType.number,
         filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
-        decimal: '1.4',
+        decimal: '1.2',
         showAddButton: false,
         showMatchMode: true,
         showOperator: false,

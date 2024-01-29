@@ -9,7 +9,7 @@ import { PessoaComponent } from './pessoa.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgxMaskModule } from 'ngx-mask';
+// import { NgxMaskModule } from 'ngx-mask';
 import { FormsModule } from '@angular/forms';
 
 import { AccordionModule } from 'primeng/accordion';
@@ -28,6 +28,7 @@ import { FormOperacaoComponent } from './operacao/form-operacao/form-operacao.co
 import { DeleteOperacaoComponent } from './operacao/delete-operacao/delete-operacao.component';
 import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes-operacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 registerLocaleData(localePt);
 @NgModule({
@@ -55,17 +56,20 @@ registerLocaleData(localePt);
         FontAwesomeModule,
         DropdownModule,
         FormsModule,
-        NgxMaskModule.forChild(),
+        // NgxMaskModule.forChild(),
         AccordionModule,
         SharedModule,
         TagModule,
         InputTextModule,
         CalendarModule,
         TabViewModule,
+        NgxMaskDirective, 
+        NgxMaskPipe,
     ],
     providers: [
         DatePipe,
+        provideNgxMask(),
         { provide: LOCALE_ID, useValue: 'pt-BR' },
-    ]
+    ],
 })
 export class PessoaModule { }

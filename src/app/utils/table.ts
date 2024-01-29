@@ -4,9 +4,11 @@ import * as $ from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import { Crypto } from './crypto';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MaskApplierService } from 'ngx-mask';
+// // import { MaskApplierService } from 'ngx-mask';
 import { Column, FilterType, MaskType } from '../helpers/column.interface';
 import { MenuTableLink } from '../helpers/menu-links.interface';
+import { NgxMaskApplierService } from 'ngx-mask/lib/ngx-mask-applier.service';
+import { NgxMaskService } from 'ngx-mask';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +26,7 @@ export class Table {
         private toastr: ToastrService,
         private crypto: Crypto,
         private currency: CurrencyPipe,
-        private mask:  MaskApplierService,
+        private mask:  NgxMaskService,
         private datePipe: DatePipe,
     ) { }
 

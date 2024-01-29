@@ -11,6 +11,7 @@
        [decimalMarker]="decimalMarker"
        [suffix]="suffix ? suffix : ''"
        [prefix]="prefix ? prefix : ''"
+       [leadZero]="leadZero"
        [allowNegativeNumbers]="allowNegativeNumbers ?? false"
        (keyup.arrowup)="arrowControls ? arrowUp(input.value) : undefined"
        (keyup.arrowdown)="arrowControls ? arrowDown(input.value) : undefined"

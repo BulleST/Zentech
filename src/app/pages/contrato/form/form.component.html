@@ -122,17 +122,25 @@
                 <!-- Valor Moeda Nacional -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
                     <label for="valorNacional">Valor Moeda Nacional: <small>(R$)</small>&nbsp;<span class="text-danger">*</span></label>
-                    <app-input-number [valueInput]="objeto.valorNacional"
-                                      (valueChanges)="objeto.valorNacional = $event;"
-                                      [inputId]="'valorNacional'"
-                                      [mask]="'separator.2'"
-                                      [showErrorMessage]="true"
-                                      [allowNegativeNumbers]="false"
-                                      [required]="true"
-                                      prefix="R$ "
-                                      [min]="0.1"
-                                      [max]="999999999" 
-                                      [autoReplaceValue]="false"></app-input-number>
+                    <input type="text"
+                    class="form-control"
+                    name="valorNacional"
+                    id="valorNacional"
+                    #valorNacional="ngModel"
+                    #valorNacionalEl
+                    [(ngModel)]="objeto.valorNacional"
+                    [readOnly]="true"
+                    (focus)="valorNacionalObs.show($event, valorNacionalEl)"
+                    (blur)="valorNacionalObs.hide()"
+                    (mouseenter)="valorNacionalObs.show($event, valorNacionalEl)"
+                    (mouseleave)="valorNacionalObs.hide()"
+                    prefix="R$ "
+                    [mask]="'separator.2'"
+                    thousandSeparator="."
+                    decimalMarker=","
+                    [min]="0.1"
+                    [max]="999999999"
+                    [leadZero]="true">
                 </div>
                 <!-- Percentual de Adiantamento -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Percentual de Adiantamento">
@@ -147,7 +155,8 @@
                                       [autoReplaceValue]="false"
                                       [min]="0"
                                       [max]="100" 
-                                      [suffix]="'%'"></app-input-number>
+                                      [suffix]="'%'"
+                                      [leadZero]="true"></app-input-number>
                 </div>
                 <!-- RDE -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="RDE">
@@ -171,14 +180,17 @@
                         name="vet"
                         id="vet"
                         #vet="ngModel"
+                        #vetEl
                         [(ngModel)]="objeto.vet"
-                        pattern="\S(.*\S)?">
-                        <!--
-                        mask="0.000000000000"
-                        placeholder="0.000000000000" -->
-                    <div *ngIf="vet.errors && vet.touched">
-                         <p class="text-danger" *ngIf="vet.errors['mask']">Valor inválido</p>
-                    </div>
+                        [readOnly]="true"
+                        (focus)="vetObs.show($event, vetEl)"
+                        (blur)="vetObs.hide()"
+                        (mouseenter)="vetObs.show($event, vetEl)"
+                        (mouseleave)="vetObs.hide()"
+                        [mask]="'separator.4'"
+                        thousandSeparator="."
+                        decimalMarker=","
+                        [leadZero]="true">
                 </div>
                 <!-- Descrição da Forma de Entrega da moeda estrangeira -->
                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
@@ -218,7 +230,8 @@
                                       [allowNegativeNumbers]="false"
                                       [required]="false"
                                       [readonly]="true"
-                                      [autoReplaceValue]="false"></app-input-number>
+                                      [autoReplaceValue]="false"
+                                      [leadZero]="false"></app-input-number>
                 </div>
                 <!-- Descrição da Natureza do Fato -->
                 <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">
@@ -324,3 +337,14 @@
         </div>
     </form>
 </ng-template>
+
+<p-overlayPanel #vetObs>
+    <p class="text-danger">Cálculo</p>
+    <p>IOF = 0,38</p>
+    <p>R$ IOF = Valor Moeda Nacional * 0,38%</p>
+    <p>VET = (Valor Moeda Nacional +  R$ IOF) / Valor Invoice</p>
+</p-overlayPanel>
+<p-overlayPanel #valorNacionalObs>
+    <p class="text-danger">Cálculo</p>
+    Valor Moeda Nacional = Valor Invoice * Taxa Cambial
+</p-overlayPanel>

@@ -83,17 +83,17 @@
                                     <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
                                 </div>
                             </div>
-
                             <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Valor -->
                                 <label for="valor">Valor: <span class="text-danger">*</span></label>
                                 <app-input-number [valueInput]="objeto.invoice.valor"
                                                   (valueChanges)="objeto.invoice.valor = $event; calculaMoedaNacional(); calculaVET();"
                                                   [inputId]="'valor'"
-                                                  [mask]="'separator.4'"
+                                                  [mask]="'separator.2'"
                                                   [showErrorMessage]="true"
                                                   [allowNegativeNumbers]="false"
                                                   [required]="true"
                                                   [autoReplaceValue]="false"
+                                                  [leadZero]="true"
                                                   [min]="0.1"
                                                   [max]="999999999"></app-input-number>
                             </div>
@@ -376,7 +376,8 @@
                                                   suffix=" USD"
                                                   [autoReplaceValue]="false"
                                                   [min]="0.1"
-                                                  [max]="999999999"></app-input-number>
+                                                  [max]="999999999"
+                                                  [leadZero]="true"></app-input-number>
                             </div>
                             <!-- Valor Moeda Nacional -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
@@ -398,7 +399,8 @@
                                     thousandSeparator="."
                                     decimalMarker=","
                                     [min]="0.1"
-                                    [max]="999999999">
+                                    [max]="999999999"
+                                    [leadZero]="true">
                                     
                             </div>
                             <!-- Percentual de Adiantamento -->
@@ -414,7 +416,8 @@
                                                   [autoReplaceValue]="false"
                                                   [suffix]="'%'"
                                                   [min]="0"
-                                                  [max]="100"></app-input-number>
+                                                  [max]="100"
+                                                  [leadZero]="true"></app-input-number>
                             </div>
                             <!-- RDE -->
                             <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="RDE">
@@ -447,7 +450,8 @@
                                        (mouseleave)="vetObs.hide()"
                                        [mask]="'separator.4'"
                                        thousandSeparator="."
-                                       decimalMarker=",">
+                                       decimalMarker=","
+                                       [leadZero]="true">
                             </div>
                             <!-- Descrição da Forma de Entrega da moeda estrangeira -->
                             <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
@@ -486,7 +490,8 @@
                                                   [allowNegativeNumbers]="false"
                                                   [required]="false"
                                                   [readonly]="true"
-                                                  [autoReplaceValue]="false"></app-input-number>
+                                                  [autoReplaceValue]="false"
+                                                  [leadZero]="false"></app-input-number>
                             </div>
                             <!-- Descrição da Natureza do Fato -->
                             <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">

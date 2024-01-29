@@ -30,6 +30,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
     @Input() readonly = false;
     @Input() disabled = false;
     @Input() autoReplaceValue = false;
+    @Input() leadZero = false;
     @Input() error: ValidationErrors | null;
 
     @Output() valueChanges: EventEmitter<number> = new EventEmitter<number>();
@@ -60,6 +61,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['disabled']) this.disabled = changes['disabled'].currentValue;
         if (changes['autoReplaceValue']) this.autoReplaceValue = changes['autoReplaceValue'].currentValue;
+        if (changes['leadZero']) this.leadZero = changes['leadZero'].currentValue;
 
 
     }
@@ -107,7 +109,7 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
     inputChanged() {
         this.valueChanges.emit(this.valueInput);
-        this.ngModelChanged.emit(this.input)
+        this.ngModelChanged.emit(this.input);
     }
 
     arrowUp(value: number, skip = 1, min = undefined, max = undefined, allowNegativeNumbers = this.allowNegativeNumbers) {

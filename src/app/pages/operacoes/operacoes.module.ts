@@ -8,13 +8,14 @@ import { DeleteComponent } from './delete/delete.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { NgxMaskModule } from 'ngx-mask';
+// import { NgxMaskModule } from 'ngx-mask';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { DetailsComponent } from './details/details.component';
 import { ExportacaoComponent } from './exportacao/exportacao.component';
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 // registerLocaleData(localePt);
 
 @NgModule({
@@ -32,10 +33,15 @@ import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arqu
         FontAwesomeModule,
         DropdownModule,
         FormsModule,
-        NgxMaskModule.forChild(),
+        // NgxMaskModule.forChild(),
         SharedModule,
         TableModule,
         CalendarModule,
+        NgxMaskDirective, 
+        NgxMaskPipe,
+    ],
+    providers: [
+        provideNgxMask()
     ]
 })
 export class OperacoesModule { }
