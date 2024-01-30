@@ -46,6 +46,17 @@ export var bancoColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
+        field: 'codigoSwift',
+        header: 'Código Swift',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        showAddButton: false,
+        showMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    },
+    {
         field: 'cidade',
         header: 'Cidade',
         maskType: MaskType.undefined,
