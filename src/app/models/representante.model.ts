@@ -11,17 +11,6 @@ export class Representante {
 
 export var representanteColumns: Column[] = [
     {
-        field: 'id',
-        header: 'Id',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
-    {
         field: 'codigo',
         header: 'Código',
         maskType: MaskType.undefined,
