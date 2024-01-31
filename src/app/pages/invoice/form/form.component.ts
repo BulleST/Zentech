@@ -317,12 +317,17 @@ export class FormComponent implements OnDestroy {
     }
 
     calculaMoedaNacional() {
+        console.log('taxa', this.objeto.contrato.taxa);
+        console.log('valor invoice', this.objeto.invoice.valor);
         if (this.objeto.invoice.valor && this.objeto.contrato.taxa) {
             this.objeto.contrato.valorNacional = this.objeto.invoice.valor * this.objeto.contrato.taxa;
         } 
     }
-
+    
     calculaVET() {
+        console.log('taxa', this.objeto.contrato.taxa);
+        console.log('valor invoice', this.objeto.invoice.valor);
+        console.log('valor nacional', this.objeto.contrato.valorNacional);
         if (this.objeto.invoice.valor && this.objeto.contrato.valorNacional) {
             // VET = (Valor Moeda Nacional + ( Valor Moeda Nacional * 0.38 )) / Valor Invoice
             this.objeto.contrato.vet = (this.objeto.contrato.valorNacional + (this.objeto.contrato.valorNacional * (0.38 / 100))) / this.objeto.invoice.valor;

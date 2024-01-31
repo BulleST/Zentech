@@ -108,8 +108,11 @@ export class InputNumberComponent implements OnChanges, AfterViewInit {
 
 
     inputChanged() {
-        this.valueChanges.emit(this.valueInput);
+        this.valueInput = parseFloat(this.valueInput);
+        this.valueChanges.emit(parseFloat(this.valueInput));
         this.ngModelChanged.emit(this.input);
+
+        console.log(this.valueInput)
     }
 
     arrowUp(value: number, skip = 1, min = undefined, max = undefined, allowNegativeNumbers = this.allowNegativeNumbers) {

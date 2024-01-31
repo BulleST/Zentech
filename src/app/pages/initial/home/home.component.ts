@@ -26,7 +26,7 @@ export class HomeComponent implements OnDestroy, AfterViewInit {
     }
 
    async ngAfterViewInit() {
-        $('.home').append(`<div class="home__background" style="background-image: url(assets/img/logo-animation.gif)" ></div>`)
+        // $('.home').append(`<div class="home__background" style="background-image: url(assets/img/logo-newclick-white.png)" ></div>`)
     }
 
     ngOnDestroy(): void {
