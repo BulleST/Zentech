@@ -96,9 +96,9 @@ export var pessoaOperacaoColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.EQUALS,
         values: [
-            { value: 'Liberado', output: 'Liberado', class: 'flag-green' },
-            { value: 'Bloqueado', output: 'Bloqueado', class: 'flag-danger' },
-            { value: 'Chargeback', output: 'Chargeback', class: 'flag-warning' },
+            { value: 'LIBERADO', output: 'Liberado', class: 'flag-green' },
+            { value: 'BLOQUEADO', output: 'Bloqueado', class: 'flag-danger' },
+            { value: 'CHARGEBACK', output: 'Chargeback', class: 'flag-warning' },
         ]
     },
     {
