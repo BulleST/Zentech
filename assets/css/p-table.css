@@ -799,3 +799,14 @@ tr.selected td {
     width: 16px;
     height: 16px;
 }
+
+.td-percentage p, 
+.td-percentage div div p, 
+.td-number p, 
+.td-number div div p,
+.td-money p, 
+.td-money div div p {
+    text-align: right;
+    padding-right: 26px;
+    margin-right: 25px;
+}
