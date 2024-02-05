@@ -810,3 +810,8 @@ tr.selected td {
     padding-right: 26px;
     margin-right: 25px;
 }
+
+.content .table td.td-options, .td-options {
+    padding-left: 6px;
+    padding-right: 45px;
+}
