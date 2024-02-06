@@ -67,6 +67,7 @@
     <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
         <tr>
             <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
+                <!-- <p *ngIf="i == 0">{{item | json}}</p> -->
                 <div *ngSwitchCase="maskType.number">
                     <p [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}} </p>
                 </div>

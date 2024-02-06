@@ -29,7 +29,7 @@
                 </div>
                 <!-- Nº do Contrato de Câmbio -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
-                    <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span></label>
+                    <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span><small>(automático)</small></label>
                     <input type="text"
                            class="form-control"
                            name="numContrato"
@@ -38,6 +38,7 @@
                            [(ngModel)]="objeto.numContrato"
                            required
                            pattern="\S(.*\S)?"
+                           [readonly]="true"
                            (change)="objeto.numContrato = numContrato.value.trim();">
                     <div *ngIf="numContrato.touched && numContrato.errors">
                         <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigató rio.</p>
@@ -110,14 +111,15 @@
                     <app-input-number [valueInput]="objeto.taxa"
                                       (valueChanges)="objeto.taxa = $event;"
                                       [inputId]="'taxa'"
-                                      [mask]="'separator.2'"
+                                      [mask]="'separator.4'"
                                       [showErrorMessage]="true"
                                       [allowNegativeNumbers]="false"
                                       [required]="true"
                                       suffix=" USD"
                                       [min]="0.1"
                                       [max]="999999999" 
-                                      [autoReplaceValue]="false"></app-input-number>
+                                      [autoReplaceValue]="false"
+                                      [leadZero]="true"></app-input-number>
                 </div>
                 <!-- Valor Moeda Nacional -->
                 <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">

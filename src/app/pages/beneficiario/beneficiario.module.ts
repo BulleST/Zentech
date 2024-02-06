@@ -12,11 +12,10 @@ import { DeleteComponent } from './delete/delete.component';
 import { BeneficiarioRoutingModule } from './beneficiario.routing';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-
+import { FileUploadModule } from 'primeng/fileupload';
 @NgModule({
     declarations: [
         ListComponent,
-        // FormComponent,
         DeleteComponent
     ],
     imports: [
@@ -25,12 +24,12 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
         FontAwesomeModule,
         DropdownModule,
         FormsModule,
-        // NgxMaskModule.forChild(),
         SharedModule,
         TableModule,
         CalendarModule,
         NgxMaskDirective, 
         NgxMaskPipe,
+        FileUploadModule
     ],
     providers: [
         provideNgxMask()

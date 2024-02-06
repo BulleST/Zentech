@@ -60,4 +60,5 @@ export class OperacaoComponent implements OnDestroy {
         this.subscription.forEach(item => item.unsubscribe());
     }
 
+
 }

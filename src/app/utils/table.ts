@@ -89,78 +89,79 @@ export class Table {
     formatCellData(row: any, col: Column): any {
         var value = this.getCellValue(row, col);
         // try {
-            if (col.maskType && value != undefined && value.toString().trim()) {
+        // return value ?? 'N/A';
+    //         if (col.maskType && value != undefined && value.toString().trim()) {
 
-     /*
-                if (col.maskType == MaskType.number) {
-                    var number = JSON.parse(JSON.stringify(value));
-                    value = number < 0 ? `<span class="text-danger">` : '';
-                    value += this.currency.transform(number, 'BRL', '', col.decimal);
-                    value = number < 0 ? `</span>` : '';
-                }
-                else if (col.maskType == MaskType.percentage) {
-                    var number = JSON.parse(JSON.stringify(value));
-                    value = number < 0 ? `<span class="text-danger">` : '';
-                    value += this.currency.transform(number, 'BRL', '', col.decimal) + '%';;
-                    value = number < 0 ? `</span>` : '';
-                }
-                else if (col.maskType == MaskType.money) {
-                    var number = JSON.parse(JSON.stringify(value));
-                    value = number < 0 ? `<span class="text-danger">` : '';
-                    value += this.currency.transform(number, 'BRL', col.moeda, col.decimal)
-                    value = number < 0 ? `</span>` : '';
-                }
-                else
-                 */
-                if (col.maskType == MaskType.mask && col.mask) {
-                    value = value.toString().padStart( col.mask.length, '0');
-                    value = this.mask.applyMask(value, col.mask);
-                }
-                // else if (col.maskType == MaskType.cnpj) {
-                //     value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
-                // }
-                // else if (col.maskType == MaskType.cpf) {
-                //     value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
-                // }
-                // else if (col.maskType == MaskType.cep) {
-                //     value = this.mask.applyMask(value.toString().padStart(8, '0'), '00000-000');
-                // }
-                // else if (col.maskType == MaskType.cpfcnpj) {
-                //     var pj = row['pj'];
-                //     value = value.toString().padStart(pj ? 14 : 11);
-                //     value = this.mask.applyMask(value, pj ? '00.000.000/0000-00' : '000.000.000-00');
-                // }
-                // else if (col.maskType == MaskType.rg) {
-                //     value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
-                // }
-                else if (col.maskType == MaskType.any && col.mask) {
-                    value = this.mask.applyMask(value, col.mask);
-                }
-                // else if (col.maskType == MaskType.date) {
-                //     value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC', 'pt-BR');
-                // }
-                // else if (col.maskType == MaskType.dateTime) {
-                //     value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', 'UTC', 'pt-BR');
-                // }
-                else if (col.maskType == MaskType.telefoneCelular) {
-                    value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
-                }
-                else if (col.maskType == MaskType.substring) {
-                    if (col.substringLength && value.length > col.substringLength) {
-                        value = value.substring(0, col.substringLength) + '...'
-                    }
-                }
-                else if (col.maskType == MaskType.options && col.values && col.values.length) {
-                    var opt = col.values.find(x => x.value == value);
-                    // value = opt!.output;
-                    // row['optionValue'] = opt
-                }
-                else {
-                    return value ?? 'N/A';
-                }
+    //  /*
+    //             if (col.maskType == MaskType.number) {
+    //                 var number = JSON.parse(JSON.stringify(value));
+    //                 value = number < 0 ? `<span class="text-danger">` : '';
+    //                 value += this.currency.transform(number, 'BRL', '', col.decimal);
+    //                 value = number < 0 ? `</span>` : '';
+    //             }
+    //             else if (col.maskType == MaskType.percentage) {
+    //                 var number = JSON.parse(JSON.stringify(value));
+    //                 value = number < 0 ? `<span class="text-danger">` : '';
+    //                 value += this.currency.transform(number, 'BRL', '', col.decimal) + '%';;
+    //                 value = number < 0 ? `</span>` : '';
+    //             }
+    //             else if (col.maskType == MaskType.money) {
+    //                 var number = JSON.parse(JSON.stringify(value));
+    //                 value = number < 0 ? `<span class="text-danger">` : '';
+    //                 value += this.currency.transform(number, 'BRL', col.moeda, col.decimal)
+    //                 value = number < 0 ? `</span>` : '';
+    //             }
+    //             else
+    //              */
+    //             if (col.maskType == MaskType.mask && col.mask) {
+    //                 value = value.toString().padStart( col.mask.length, '0');
+    //                 value = this.mask.applyMask(value, col.mask);
+    //             }
+    //             // else if (col.maskType == MaskType.cnpj) {
+    //             //     value = this.mask.applyMask(value.toString().padStart(14, '0'), '00.000.000/0000-00');
+    //             // }
+    //             // else if (col.maskType == MaskType.cpf) {
+    //             //     value = this.mask.applyMask(value.toString().padStart(11, '0'), '000.000.000-00');
+    //             // }
+    //             // else if (col.maskType == MaskType.cep) {
+    //             //     value = this.mask.applyMask(value.toString().padStart(8, '0'), '00000-000');
+    //             // }
+    //             // else if (col.maskType == MaskType.cpfcnpj) {
+    //             //     var pj = row['pj'];
+    //             //     value = value.toString().padStart(pj ? 14 : 11);
+    //             //     value = this.mask.applyMask(value, pj ? '00.000.000/0000-00' : '000.000.000-00');
+    //             // }
+    //             // else if (col.maskType == MaskType.rg) {
+    //             //     value = this.mask.applyMask(value.toString().padStart(9, '0'), '00.000.000-0');
+    //             // }
+    //             else if (col.maskType == MaskType.any && col.mask) {
+    //                 value = this.mask.applyMask(value, col.mask);
+    //             }
+    //             // else if (col.maskType == MaskType.date) {
+    //             //     value = this.datePipe.transform(value, 'dd/MM/yyyy', 'UTC', 'pt-BR');
+    //             // }
+    //             // else if (col.maskType == MaskType.dateTime) {
+    //             //     value = this.datePipe.transform(new Date(value), 'dd/MM/yyyy HH:mm', 'UTC', 'pt-BR');
+    //             // }
+    //             else if (col.maskType == MaskType.telefoneCelular) {
+    //                 value = this.mask.applyMask(value.toString(), (value.toString().length == 10 ? '(00)  0000-0000' : '(00) 0.0000-0000'))
+    //             }
+    //             else if (col.maskType == MaskType.substring) {
+    //                 if (col.substringLength && value.length > col.substringLength) {
+    //                     value = value.substring(0, col.substringLength) + '...'
+    //                 }
+    //             }
+    //             else if (col.maskType == MaskType.options && col.values && col.values.length) {
+    //                 var opt = col.values.find(x => x.value.toUpperCase() == value.toUpperCase());
+    //                 // value = opt!.output;
+    //                 // row['optionValue'] = opt
+    //             }
+    //             else {
+    //                 return value ?? 'N/A';
+    //             }
 
-            }
-            return value ?? 'N/A';
+    //         }
+    //         return value ?? 'N/A';
         // } catch(e) {
         //     return value
         // }
@@ -168,20 +169,12 @@ export class Table {
 
     getCellValue(row: any, col: Column) {
         const nestedProperties: string[] = col.field.split('.');
-
-      [
-        { dados: {
-            pessoa: {
-                nome: '',
-                cpf: '',
-            }
-        }}
-    ]
-
         let value: any = row;
         for (const prop of nestedProperties) {
             value = value ? value[prop] ?? undefined : undefined;
         }
+
+        value = value ?? ''
         return value;
     }
 

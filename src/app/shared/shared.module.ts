@@ -32,8 +32,10 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
 import { DialogModule } from 'primeng/dialog';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-// import { NgxMaskDirective, NgxMaskModule, NgxMaskPipe } from 'ngx-mask';
 
+import { FieldsetModule } from 'primeng/fieldset';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     declarations: [
@@ -67,7 +69,6 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
         TableModule,
         ToastrModule,
         DropdownModule,
-        // NgxMaskModule,
         CalendarModule,
         TabViewModule,
         OverlayPanelModule,
@@ -75,6 +76,9 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
         
         NgxMaskDirective, 
         NgxMaskPipe,
+        FieldsetModule,
+        FileUploadModule,
+        ToastModule
     ],
     exports: [
         ListSharedComponent,

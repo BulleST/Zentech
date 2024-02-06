@@ -58,17 +58,17 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     formata() {
         this.table.loading.next(true);
         var list = JSON.parse(JSON.stringify(this.saldos));
-        list.every((row: any) => {
-            this.columns.every(col => {
-                try {
-                    row[col.field] = this.table.formatCellData(row, col);
-                } catch (e) {
-                    console.error(e);
-                }
-                return col;
-            })
-            return row;
-        })
+        // list.every((row: any) => {
+        //     this.columns.every(col => {
+        //         try {
+        //             row[col.field] = this.table.formatCellData(row, col);
+        //         } catch (e) {
+        //             console.error(e);
+        //         }
+        //         return col;
+        //     })
+        //     return row;
+        // })
 
         this.saldos = Object.assign([], list);
         this.table.loading.next(false);

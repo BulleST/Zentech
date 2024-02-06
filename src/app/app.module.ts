@@ -1,8 +1,6 @@
 import { NgModule, DEFAULT_CURRENCY_CODE, LOCALE_ID, APP_INITIALIZER } from '@angular/core';
-// import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-
 import { CurrencyPipe, DatePipe, registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 
@@ -10,14 +8,11 @@ import { AppRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { RequestInterceptor } from './helpers/request.interceptor';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
-// import { MaskPipe, NgxMaskModule } from 'ngx-mask';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { AlertComponent } from './parts/alert/alert.component';
 import { LoadingComponent } from './parts/loading/loading.component';
-// import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ChartModule } from 'primeng/chart';
 import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask, provideNgxMask } from 'ngx-mask';

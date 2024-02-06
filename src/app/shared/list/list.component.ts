@@ -118,8 +118,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     }
 
     getVisible() {
-        var visible = localStorage.getItem('tip') ;
-        console.log('visible', visible)
+        var visible = localStorage.getItem('tip');
         if (!visible) {
             this.visible = true;
             localStorage.setItem('tip', this.visible.toString());
@@ -133,20 +132,20 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     formata() {
         this.table.loading.next(true);
-        var list = JSON.parse(JSON.stringify(this.formatedList));
-        list.every((row: any) => {
-            this.columns.every(col => {
-                try {
-                    row[col.field] = this.formatCellData(row, col);
-                } catch (e) {
-                    console.error(e);
-                }
-                return col;
-            })
-            return row;
-        })
+        // var list = JSON.parse(JSON.stringify(this.formatedList));
+        // list.every((row: any) => {
+        //     this.columns.every(col => {
+        //         try {
+        //             row[col.field] = this.formatCellData(row, col);
+        //         } catch (e) {
+        //             console.error(e);
+        //         }
+        //         return col;
+        //     })
+        //     return row;
+        // })
 
-        this.formatedList = Object.assign([], list);
+        // this.formatedList = Object.assign([], list);
         this.table.loading.next(false);
     }
 
@@ -201,8 +200,12 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     getOptionValue(row: any, col: Column, field: string) {
         if (col.values) {
             var value = this.table.getCellValue(row, col);
-            var opt = col.values.find(x => x.value == value) as any;
-            return opt[field];
+            var opt = col.values.find(x => x.value.toString().toUpperCase() == value.toString().toUpperCase()) as any;
+            if (opt) {
+                return opt[field];
+            } else {
+                return '';
+            }
         }
         return null;
     }
@@ -226,5 +229,17 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         table.clear();
     }
 
+
+    validateNullUndefinedEmpty(item: any) {
+        if (item == null) {
+            return false;
+        } else if (item == undefined) {
+            return false;
+        } else if (item.toString().trim() == '') {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 

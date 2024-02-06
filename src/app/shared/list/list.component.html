@@ -152,43 +152,43 @@
             <tr [class.selected]="item == selected" [class.selectable]="item.canSelect != false && selectable"
                 [pSelectableRow]="item.canSelect != false && selectable? item : null"
                 [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
-                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" [ngSwitch]="col.maskType">
-                    <div>
-                        <!-- *ngIf="item[col.field] != '' && item[col.field] != undefined && item[col.field] != null ; else NA" -->
+                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" class="td-{{col.maskType}}">
+                    <input type="hidden" [value]="getCellValue(item, col)" #value>
+                    <div *ngIf="value.value; else NA" [ngSwitch]="col.maskType">
                         <div *ngSwitchCase="maskType.options">
                             <span [classList]="'flag ' + getOptionValue(item, col, 'class')">{{getOptionValue(item, col, 'output')}}</span>
                         </div>
                         <div *ngSwitchCase="maskType.cpf">
-                            <p> {{item[col.field] | mask : '000.000.000-00' }} </p>
+                            <p> {{value.value | mask : '000.000.000-00' }} </p>
                         </div>
                         <div *ngSwitchCase="maskType.cnpj">
-                            <p> {{item[col.field] | mask : '00.000.000/0000-00' }} </p>
+                            <p> {{value.value | mask : '00.000.000/0000-00' }} </p>
                         </div>
                         <div *ngSwitchCase="maskType.date">
-                            <p> {{ (setDate(item[col.field])) | date : 'dd/MM/yyyy' }} </p>
+                            <p>  {{ (setDate(value.value)) | date : 'dd/MM/yyyy' }} </p>
                         </div>
                         <div *ngSwitchCase="maskType.dateTime">
-                            <p> {{ (setDate(item[col.field])) | date : 'dd/MM/yyyy HH:mm' }} </p>
+                            <p>  {{ (setDate(value.value)) | date : 'dd/MM/yyyy HH:mm' }} </p>
                         </div>
                         <div *ngSwitchCase="maskType.number">
-                            <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0">
-                                <span *ngIf="item[col.field] != null; else NA">{{item[col.field] | currency : 'BRL' : '' : col.decimal}}</span>
+                            <p [class.text-danger]="item[col.field] < 0">
+                                <span>{{value.value | currency : 'BRL' : '' : col.decimal}}</span>
                             </p>
                         </div>
                         <div *ngSwitchCase="maskType.money">
-                            <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : col.moeda : col.decimal}} </p>
+                            <p [class.text-danger]="value.value < '0'"> {{value.value | currency : 'BRL' : col.moeda : col.decimal}} </p>
                         </div>
                         <div *ngSwitchCase="maskType.percentage">
-                            <p class="text-right pe-5 me-2" [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}}% </p>
+                            <p [class.text-danger]="value.value < '0'">{{value.value | currency : 'BRL' : '' : col.decimal}}%</p>
                         </div>
                         <div *ngSwitchCase="maskType.imageUrl">
-                            <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo" #targetEl (mouseenter)="closeOverlays(); overlayPanel.show($event, targetEl)">
+                            <img [src]="value.value" *ngIf="value.value" class="logo" #targetEl (mouseenter)="closeOverlays(); overlayPanel.show($event, targetEl)">
                             <p-overlayPanel #overlayPanel [styleClass]="'table-image-overlay-panel'" [showCloseIcon]="true">
-                                <img [src]="item[col.field]" *ngIf="item[col.field]" class="logo">
+                                <img [src]="value.value" *ngIf="value.value" class="logo">
                             </p-overlayPanel>
                         </div>
                         <div *ngSwitchDefault>
-                            <span> {{item[col.field]}} </span>
+                            <span> {{value.value}} </span>
                         </div>
                     </div>
                 </td>

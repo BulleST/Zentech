@@ -21,6 +21,7 @@ import { RepresentanteService } from 'src/app/services/representante.service';
 import { faEdit, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { insertOrReplace } from 'src/app/utils/service-list';
 import { AccountService } from 'src/app/services/account.service';
+import { UploadEvent } from 'primeng/fileupload';
 
 @Component({
     selector: 'app-form',
@@ -61,6 +62,11 @@ export class FormComponent implements OnDestroy {
     executaCEP: boolean = true;
     loadingCep = false;
     podeExcluir = false;
+    
+    assinaturaUploadedFile?: File;
+    assinaturaDataUri?: string;
+    assinaturaIsUploaded = false;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
@@ -125,7 +131,10 @@ export class FormComponent implements OnDestroy {
                     .then(res => {
                         // res.codigoRegistro = res.codigoRegistro.toString().padStart(14, '0') as unknown as number;
                         // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
+
                         this.objeto = res;
+                        this.assinaturaDataUri = res.assinaturaRepresentanteLegal;
+
                         this.representanteChanged(res.representante_Id);
                         this.preencheBanco();
                         setTimeout(() => {
@@ -290,6 +299,41 @@ export class FormComponent implements OnDestroy {
     excluir(id: number, router: string) {
         var idEncrypted = this.crypto.encrypt(id);
         this.router.navigate([router, 'excluir', idEncrypted], { relativeTo: this.activatedRoute })
+    }
+  
+    fileChange(event: any) {
+        var file = event.target.files[0] as File;
+        this.assinaturaUploadedFile = file;
+        this.importarNovamente();
+
+        if (file) {
+            var reader = new FileReader();
+            var c = this;
+            reader.onload = function(e) {
+                var src = e.target?.result as string;
+                c.assinaturaDataUri = src;
+                c.assinaturaIsUploaded = true;
+            }
+            reader.onerror = function(e) {
+                c.toastr.error('Não foi possível realizar upload');
+            }
+            var a = reader.readAsDataURL(file)
+
+        } else {
+            this.toastr.error('Selecione uma imagem para salvar.')
+        }
+    }
+
+    importarNovamente() {
+        this.assinaturaIsUploaded = false;
+        this.assinaturaDataUri = '';
+        delete this.assinaturaUploadedFile;
+    }
+
+    assinaturaDesfazerAlteracao() {
+        this.assinaturaDataUri = this.objeto.assinaturaRepresentanteLegal;
+        this.assinaturaIsUploaded = false;
+        delete this.assinaturaUploadedFile;
     }
 
     send(form: NgForm) {

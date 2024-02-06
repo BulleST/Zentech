@@ -92,7 +92,7 @@ export class FormComponent implements OnDestroy {
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
                         res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
-                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.dataTransacao = this.datepipe.transform(res.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
 
                         this.objeto = res;
@@ -119,7 +119,7 @@ export class FormComponent implements OnDestroy {
                             this.loadingPessoa = false;
                             this.pessoas = JSON.parse(JSON.stringify(res));
                             this.pessoas = this.pessoas.map(x => {
-                                x.dataCadastro = this.datepipe.transform(x.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                                x.dataCadastro = this.datepipe.transform(x.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                                 x.saldoAtual = this.currencyPipe.transform(x.saldoAtual, 'BRL', '', '1.2') as unknown as number;
                                 x.cpf = this.mask.applyMask(x.cpf.toString().padStart(11, '0'), '000.000.000-00');
                                 return x
@@ -133,7 +133,7 @@ export class FormComponent implements OnDestroy {
 
                 this.isEditPage = false;
 
-                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                 this.objeto.dataTransacao = this.datepipe.transform(this.objeto.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
 
                 setTimeout(() => {

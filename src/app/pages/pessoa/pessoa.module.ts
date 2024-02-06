@@ -30,7 +30,6 @@ import { DetalhesOperacaoComponent } from './operacao/detalhes-operacao/detalhes
 import { ImportacaoArquivoComponent } from './importacao-arquivo/importacao-arquivo.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
-registerLocaleData(localePt);
 @NgModule({
     declarations: [
         PessoaComponent,
@@ -67,9 +66,7 @@ registerLocaleData(localePt);
         NgxMaskPipe,
     ],
     providers: [
-        DatePipe,
         provideNgxMask(),
-        { provide: LOCALE_ID, useValue: 'pt-BR' },
     ],
 })
 export class PessoaModule { }

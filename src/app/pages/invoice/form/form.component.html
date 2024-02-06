@@ -302,7 +302,7 @@
                                        id="numContrato"
                                        #numContrato="ngModel"
                                        [(ngModel)]="objeto.contrato.numContrato"
-                                       readonly
+                                       [readonly]="true"
                                        mask="0*">
                            
                             </div>
@@ -604,16 +604,30 @@
                     </form>
                 </div>
             </p-tabPanel>
-            <p-tabPanel *ngIf="isEditPage"> <!---->
-                <ng-template pTemplate="header">
-                    <span>Swift</span>
-                </ng-template>
-                <div class="px-2">
-                    <div class="swift">
-                        <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0" (click)="swiftDownload()">Baixar Documento Swift</button>
+                <p-tabPanel *ngIf="isEditPage">
+                    <ng-template pTemplate="header">
+                        <span>Contrato - Cláusulas</span>
+                    </ng-template>
+                    <div class="px-2">
+                        <form action="">
+                            <div class="row">
+                                <div class="form-group">
+                                    
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </div>
-            </p-tabPanel>
+                </p-tabPanel>
+                <p-tabPanel *ngIf="isEditPage">
+                    <ng-template pTemplate="header">
+                        <span>Swift</span>
+                    </ng-template>
+                    <div class="px-2">
+                        <div class="swift">
+                            <button type="button" class="btn btn-dark" [disabled]="objeto.invoice.id == 0" (click)="swiftDownload()">Baixar Documento Swift</button>
+                        </div>
+                    </div>
+                </p-tabPanel>
         </p-tabView>
         <div class="d-flex align-items-stretch flex-wrap p-0 mt-3 " *ngIf="isEditPage">
             <div *ngIf="erro || invoice.invalid || contrato.invalid" class="m-0 me-3 mb-0">

@@ -65,7 +65,7 @@ export class DetalhesOperacaoComponent implements OnDestroy {
 
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(operacao => {
-                        operacao.dataCadastro = this.datepipe.transform(operacao.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        operacao.dataCadastro = this.datepipe.transform(operacao.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         operacao.dataTransacao = this.datepipe.transform(operacao.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                         this.objeto = operacao;
                         setTimeout(() => {

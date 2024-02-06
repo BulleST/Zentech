@@ -23,12 +23,17 @@ export class Contrato {
     descricaoFormaEntrega?: string = '65 - Teletransmissão';
     codigoNatureza?: number = '3405209N0590' as unknown as number ;
     codigoVinculoPagRecExterior?: string = '50-Demais';
+    
+    nomeRepresentanteLegal?: string;
+    codigoRepresentanteLegal?: string;
+    assinaturaRepresentanteLegal?: string;
 
     constructor(model?: Contrato) {
         this.descricaoNaturezaFato = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
         this.descricaoFormaEntrega = '65 - Teletransmissão';
         this.codigoNatureza = '3405209N0590' as unknown as number ;
         this.codigoVinculoPagRecExterior = '50-Demais';
+        
         if (model) {
             this.id = model.id;
             this.evento_Id = model.evento_Id;
@@ -47,6 +52,10 @@ export class Contrato {
             this.clausulas = model.clausulas;
             this.especificacoes = model.especificacoes;
             this.instrucoesRecebimentoPagamento = model.instrucoesRecebimentoPagamento;
+
+            this.nomeRepresentanteLegal = model.nomeRepresentanteLegal;
+            this.codigoRepresentanteLegal = model.codigoRepresentanteLegal;
+            this.assinaturaRepresentanteLegal = model.assinaturaRepresentanteLegal;
         }
     }
 }
@@ -127,7 +136,7 @@ export var contratoColumns: Column[] = [
         field: 'taxa',
         header: 'Taxa',
         maskType: MaskType.number,
-        decimal: '1.0-10',
+        decimal: '1.4',
         filterType: FilterType.numeric,
         filterDisplay: FilterDisplay.menu,
         showAddButton: false,

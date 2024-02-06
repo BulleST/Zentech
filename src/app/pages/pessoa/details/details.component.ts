@@ -90,6 +90,7 @@ export class DetailsComponent implements OnDestroy {
                 lastValueFrom(this.pessoaSaldoService.getList(this.objeto.id))
                     .then(res => {
                         this.saldos = res;
+                        console.log(res)
                         var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
                             this.saldos = res.map(x => {
                                 x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
@@ -150,7 +151,7 @@ export class DetailsComponent implements OnDestroy {
     }
 
     calculaLimiteUtilizado() {
-        var liberados = this.operacoes.filter(x => x.statusOperacao == 'Liberado');
+        var liberados = this.operacoes.filter(x => x.statusOperacao.toUpperCase() == 'LIBERADO');
         this.limiteUtilizado = liberados.length > 0 ? liberados.map(x => x.valorOperacao).reduce((x, y) => x + y) : 0;
     }
 

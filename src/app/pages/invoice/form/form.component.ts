@@ -159,8 +159,8 @@ export class FormComponent implements OnDestroy {
 
                 lastValueFrom(this.invoiceService.get(this.objeto.invoice.id))
                     .then(async res => {
-                        res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
-                        res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                        res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                         res.contrato.numContrato = res.invoice.id.toString();
                         this.objeto = res;
@@ -183,9 +183,9 @@ export class FormComponent implements OnDestroy {
                 this.modal.routerBack = ['../'];
 
                 this.isEditPage = false;
-                this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                 this.objeto.contrato.dataLiquidacao = this.datepipe.transform(this.objeto.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
-                this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'invoice');
                 }, 200);

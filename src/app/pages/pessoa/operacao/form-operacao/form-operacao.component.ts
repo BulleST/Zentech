@@ -102,7 +102,7 @@ export class FormOperacaoComponent implements OnDestroy {
                 lastValueFrom(this.pessoaOperacaoService.get(this.objeto.id))
                     .then(res => {
                         this.loading = false;
-                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                        res.dataCadastro = this.datepipe.transform(res.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.dataTransacao = this.datepipe.transform(res.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                         res.num_Op = (res.num_Op ? res.num_Op.toString().padStart(4, '0') : '') as unknown as number;
                         this.objeto = res;
@@ -119,7 +119,7 @@ export class FormOperacaoComponent implements OnDestroy {
                 this.modal.title = 'Cadastrar Operação';
                 this.modal.routerBack = ['../../'];
                 this.isEditPage = false;
-                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddThh:mm') as unknown as Date;
+                this.objeto.dataCadastro = this.datepipe.transform(this.objeto.dataCadastro, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                 this.objeto.dataTransacao = this.datepipe.transform(this.objeto.dataTransacao, 'yyyy-MM-dd') as unknown as Date;
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'moeda');
@@ -174,6 +174,7 @@ export class FormOperacaoComponent implements OnDestroy {
                         lastValueFrom(this.pessoaService.getList());
                     }
 
+                    console.log(this.objeto.pessoa_Id)
                     lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                     this.voltar();
                 } 
