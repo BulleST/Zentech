@@ -27,6 +27,12 @@ export class Contrato {
     nomeRepresentanteLegal?: string;
     codigoRepresentanteLegal?: string;
     assinaturaRepresentanteLegal?: string;
+    dataAssinaturaRepresentanteLegal?: Date;
+    ipAssinaturaRepresentanteLegal?: string;
+    
+    controleProCambio?: string;
+    dataAssinaturaIntermediadora?: Date;
+    dataCertificadoAssinatura?: Date;
 
     constructor(model?: Contrato) {
         this.descricaoNaturezaFato = 'Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens';
@@ -56,6 +62,12 @@ export class Contrato {
             this.nomeRepresentanteLegal = model.nomeRepresentanteLegal;
             this.codigoRepresentanteLegal = model.codigoRepresentanteLegal;
             this.assinaturaRepresentanteLegal = model.assinaturaRepresentanteLegal;
+            this.dataAssinaturaRepresentanteLegal = model.dataAssinaturaRepresentanteLegal;
+            this.ipAssinaturaRepresentanteLegal = model.ipAssinaturaRepresentanteLegal;
+            this.assinaturaRepresentanteLegal = model.assinaturaRepresentanteLegal;
+            this.controleProCambio = model.controleProCambio;
+            this.dataAssinaturaIntermediadora = model.dataAssinaturaIntermediadora;
+            this.dataCertificadoAssinatura = model.dataCertificadoAssinatura;
         }
     }
 }

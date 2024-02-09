@@ -15,6 +15,9 @@ export class BeneficiarioList {
     nomePais: string = '';
     codigoRegistro: string = '';
     empresa_Id: number = 0;
+    nomeRepresentanteLegal?: string;
+    codigoRepresentanteLegal?: string;
+    assinaturaRepresentanteLegal?: string;
 }
 
 export class BeneficiarioRequest {

@@ -23,7 +23,7 @@ import { tabChanged } from 'src/app/utils/tabview';
 import { ContratoTipo } from 'src/app/models/contrato-tipo.model';
 import { ContratoEvento } from 'src/app/models/contrato-evento.model';
 import { Paises } from 'src/app/models/pais.model';
-import { faArrowLeft, faArrowRight, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight, faCheck, faEdit, faPenClip, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
 import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
@@ -40,12 +40,15 @@ export class FormComponent implements OnDestroy {
     faTrash = faTrash;
     faArrowRight = faArrowRight;
     faArrowLeft = faArrowLeft;
+    faPenClip = faPenClip;
+    faCheck = faCheck;
     objeto: InvoiceRequest = new InvoiceRequest;
     erro: string = '';
     loading = false;
     loadingInvoiceFile = false;
     loadingContratoFile = false;
     loadingSwiftFile = false;
+    loadingContratoBicolunadoFile = false;
 
     subscription: Subscription[] = [];
 
@@ -54,7 +57,7 @@ export class FormComponent implements OnDestroy {
 
     modal: Modal = new Modal;
     isEditPage = true;
-    activeIndex = 0;
+    activeIndex = 2;
 
     tipos: ContratoTipo[] = []
     loadingTipo = true;
@@ -79,6 +82,15 @@ export class FormComponent implements OnDestroy {
     alterarConta = false;
     podeExcluir = false;
 
+    assinaturaUploadedFile?: File;
+    assinaturaIsUploaded = false;
+    alterarRepresentanteLegal = false;
+
+
+    assinadoRepresentanteLegal = false;
+    assinadoIntermediadora = false;
+    certificadoAssinaturaIncluido = false;
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
@@ -98,7 +110,7 @@ export class FormComponent implements OnDestroy {
         private router: Router,
         private accountService: AccountService,
     ) {
-        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1;
+        this.podeExcluir = this.accountService.accountValue?.perfilAcesso_Id == 1;
 
 
         lastValueFrom(this.moedaService.getList())
@@ -159,10 +171,19 @@ export class FormComponent implements OnDestroy {
 
                 lastValueFrom(this.invoiceService.get(this.objeto.invoice.id))
                     .then(async res => {
+                        res.contrato.numContrato = res.invoice.id.toString();
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
-                        res.contrato.numContrato = res.invoice.id.toString();
+                      
+                        res.contrato.dataAssinaturaRepresentanteLegal = this.datepipe.transform(res.contrato.dataAssinaturaRepresentanteLegal, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                        res.contrato.dataAssinaturaIntermediadora = this.datepipe.transform(res.contrato.dataAssinaturaIntermediadora, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                        res.contrato.dataCertificadoAssinatura = this.datepipe.transform(res.contrato.dataCertificadoAssinatura, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                       
+                        this.assinadoRepresentanteLegal = res.contrato.dataAssinaturaRepresentanteLegal != null && res.contrato.dataAssinaturaRepresentanteLegal != undefined;
+                        this.assinadoIntermediadora = res.contrato.dataAssinaturaIntermediadora != null && res.contrato.dataAssinaturaIntermediadora != undefined;
+                        this.certificadoAssinaturaIncluido = res.contrato.dataCertificadoAssinatura != null && res.contrato.dataCertificadoAssinatura != undefined;
+
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
                         await this.beneficiarioChange();
@@ -217,25 +238,24 @@ export class FormComponent implements OnDestroy {
             this.loadingBeneficiarios = true;
 
             await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
-                .then(async (res: BeneficiarioRequest ) => {
+                .then(async (res: BeneficiarioRequest) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-                    // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
                     this.objeto.invoice.conta = res.conta;
 
-                    await lastValueFrom(this.bancoService.get(res.banco_Id))
-                    .then(res => {
-                        res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
-                        // res.cep = res.cep.toString().padStart(8, '0') as unknown as number;
-                        this.bancoBeneficiarioSelected = res;
-                    })
-                    .catch(res => {
-                        this.toastr.error('Não foi possível carregar dados do banco.')
-                    })
+                    this.objeto.contrato.nomeRepresentanteLegal = res.nomeRepresentanteLegal;
+                    this.objeto.contrato.codigoRepresentanteLegal = res.codigoRepresentanteLegal;
+                    this.objeto.contrato.assinaturaRepresentanteLegal = res.assinaturaRepresentanteLegal;
+
                     this.beneficiarioSelected = res;
+
+                    await lastValueFrom(this.bancoService.get(res.banco_Id))
+                        .then(res => {
+                            res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
+                            this.bancoBeneficiarioSelected = res;
+                        })
+                        .catch(res => this.toastr.error('Não foi possível carregar dados do banco.'));
                 })
-                .catch(res => {
-                    this.toastr.error('Não foi possível carregar dados do beneficiário.')
-                })
+                .catch(res => this.toastr.error('Não foi possível carregar dados do beneficiário.'));
 
             this.loadingBeneficiarios = false;
         } else {
@@ -274,7 +294,7 @@ export class FormComponent implements OnDestroy {
         }
         this.loadingContratoFile = true;
         this.loadingService.message.next('Carregando Contrato.')
-        await lastValueFrom(this.contratoService.file(this.objeto.contrato.id))
+        await lastValueFrom(this.contratoService.contrato(this.objeto.contrato.id))
         this.loadingContratoFile = false;
         this.loadingService.message.next('');
     }
@@ -291,19 +311,17 @@ export class FormComponent implements OnDestroy {
         this.loadingService.message.next('');
     }
 
-    // async kitDownload() {
-    //     if (this.objeto.invoice.id == 0) {
-    //         this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
-    //         return
-    //     }
-
-    //     this.loading = true;
-    //     await this.invoiceDownload();
-    //     await this.contratoDownload();
-    //     await this.swiftDownload();
-
-    //     this.loading = false;
-    // }
+    async contratoBicolunadoDownload() {
+        if (this.objeto.contrato.id == 0) {
+            this.toastr.error('Você deve primeiro salvar os dados para fazer o download.')
+            return
+        }
+        this.loadingContratoBicolunadoFile = true;
+        this.loadingService.message.next('Carregando Contrato Bicolunado.')
+        await lastValueFrom(this.contratoService.contratoBicolunado(this.objeto.contrato.id))
+        this.loadingContratoBicolunadoFile = false;
+        this.loadingService.message.next('');
+    }
 
     async kitDownload() {
         if (this.objeto.invoice.id == 0) {
@@ -317,21 +335,122 @@ export class FormComponent implements OnDestroy {
     }
 
     calculaMoedaNacional() {
-        console.log('taxa', this.objeto.contrato.taxa);
-        console.log('valor invoice', this.objeto.invoice.valor);
         if (this.objeto.invoice.valor && this.objeto.contrato.taxa) {
             this.objeto.contrato.valorNacional = this.objeto.invoice.valor * this.objeto.contrato.taxa;
-        } 
+        }
     }
-    
+
     calculaVET() {
-        console.log('taxa', this.objeto.contrato.taxa);
-        console.log('valor invoice', this.objeto.invoice.valor);
-        console.log('valor nacional', this.objeto.contrato.valorNacional);
         if (this.objeto.invoice.valor && this.objeto.contrato.valorNacional) {
             // VET = (Valor Moeda Nacional + ( Valor Moeda Nacional * 0.38 )) / Valor Invoice
             this.objeto.contrato.vet = (this.objeto.contrato.valorNacional + (this.objeto.contrato.valorNacional * (0.38 / 100))) / this.objeto.invoice.valor;
-        } 
+        }
+    }
+
+
+    fileChange(event: any) {
+        var file = event.target.files[0] as File;
+        this.assinaturaUploadedFile = file;
+        console.log(file)
+
+        if (file) {
+            var reader = new FileReader();
+            var c = this;
+            reader.onload = function (e) {
+                var src = e.target?.result as string;
+                c.objeto.contrato.assinaturaRepresentanteLegal = src;
+                c.assinaturaIsUploaded = true;
+            }
+            reader.onerror = function (e) {
+                c.toastr.error('Não foi possível realizar upload');
+            }
+            var a = reader.readAsDataURL(file)
+
+        } else {
+            this.toastr.error('Selecione uma imagem para salvar.')
+        }
+    }
+
+
+    alterarDadosRepresentanteLegal() {
+        this.alterarRepresentanteLegal = !this.alterarRepresentanteLegal;
+
+        if (!this.alterarRepresentanteLegal) { 
+            this.objeto.contrato.assinaturaRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.assinaturaRepresentanteLegal : '';
+            this.objeto.contrato.nomeRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.nomeRepresentanteLegal : '';
+            this.objeto.contrato.codigoRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.codigoRepresentanteLegal : '';
+            this.assinaturaIsUploaded = false;
+            delete this.assinaturaUploadedFile;
+        }
+    }
+
+
+    readonlyRepresentanteLegal() {
+        var camposPreenchidos = false;
+        if (this.objeto.contrato.nomeRepresentanteLegal && this.objeto.contrato.codigoRepresentanteLegal && this.objeto.contrato.assinaturaRepresentanteLegal) {
+            camposPreenchidos = true;
+        }
+        var eReadOnly = (camposPreenchidos && !this.alterarRepresentanteLegal) || !this.alterarRepresentanteLegal;
+        return eReadOnly;
+    }
+
+    async assinarRepresentanteLegal() {
+        if (!this.objeto.contrato.assinaturaRepresentanteLegal) {
+            this.toastr.error('Inclua uma assinatura válida para assinar.')
+            return;
+        }
+        if (!this.beneficiarioSelected) {
+            this.toastr.error('Selecione um beneficiário para assinar.')
+            return;
+        }
+        this.loading = true;
+        await lastValueFrom(this.contratoService.assinarRepresentanteLegal(this.objeto.contrato.id))
+        .then(res => {
+            if (res.sucesso) {
+                this.assinadoRepresentanteLegal = true;
+                this.objeto.contrato = res.objeto;
+            } else {
+                this.erro = res.mensagem;
+            }
+        })
+        .catch(res => {
+            this.erro = getError(res);
+        })
+        this.loading = false;
+    }
+
+    async assinarMAC() {
+        this.loading = true;
+        await lastValueFrom(this.contratoService.assinarMAC(this.objeto.contrato.id))
+        .then(res => {
+            if (res.sucesso) {
+                this.assinadoIntermediadora = true;
+                this.objeto.contrato = res.objeto;
+            } else {
+                this.erro = res.mensagem;
+            }
+        })
+        .catch(res => {
+            this.erro = getError(res);
+        })
+        this.loading = false;
+    }
+
+    async certificadoAssinatura() {
+        this.loading = true;
+        await lastValueFrom(this.contratoService.certificadoAssinatura(this.objeto.contrato.id))
+        .then(res => {
+            if (res.sucesso) {
+                this.certificadoAssinaturaIncluido = true;
+                this.objeto.contrato = res.objeto;
+            } else {
+                this.erro = res.mensagem;
+            }
+        })
+        .catch(res => {
+            this.erro = getError(res);
+        })
+        this.loading = false;
     }
 
 
@@ -355,6 +474,9 @@ export class FormComponent implements OnDestroy {
         return await this.request()
             .then(async res => {
                 if (res.sucesso == true) {
+
+                    this.alterarRepresentanteLegal = false;
+
                     this.objeto.contrato.id = res.objeto.contrato.id;
                     this.objeto.contrato.invoice_Id = res.objeto.invoice.id;
                     this.objeto.invoice.id = res.objeto.invoice.id;

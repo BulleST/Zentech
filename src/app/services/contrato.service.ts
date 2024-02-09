@@ -47,7 +47,7 @@ export class ContratoService {
         return this.http.post<Response>(`${this.url}/contrato`, request);
     }
 
-    file(id: number) {
+    contrato(id: number) {
         return this.http.post(`${this.url}/contrato/exportar-pdf/${id}`, {}, { responseType: 'blob'})
             .pipe(tap({
                 next: res => {
@@ -61,6 +61,33 @@ export class ContratoService {
                     link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
                 }
             }));
+    }
+    contratoBicolunado(id: number) {
+        return this.http.post(`${this.url}/contrato/exportar-pdf-clausulas/${id}`, {}, { responseType: 'blob'})
+            .pipe(tap({
+                next: res => {
+                    var blob = new Blob([res], { type: 'application/pdf' })
+                    const data = window.URL.createObjectURL(blob);
+
+                    var link = document.createElement('a');
+                    link.href = data;
+                    link.download = `Contrato_Bicolunado_${this.datePipe.transform(new Date(), 'yyyyMMddHHmmss')}`;
+                    // this is necessary as link.click() does not work on the latest firefox
+                    link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+                }
+            }));
+    }
+
+    assinarRepresentanteLegal(id: number) {
+        return this.http.patch<Response>(`${this.url}/contrato/assinatura-contratante/${id}`, {});
+    }
+    
+    assinarMAC(id: number) {
+        return this.http.patch<Response>(`${this.url}/contrato/assinatura-intermediadora/${id}`, {});
+    }
+    
+    certificadoAssinatura(id: number, ) {
+        return this.http.patch<Response>(`${this.url}/contrato/certificado-assinatura/${id}`, {});
     }
 
 }

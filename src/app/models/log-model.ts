@@ -90,6 +90,9 @@ export var logColumns: Column[] = [
             { value: 'Importação de Pessoas', output: 'Importação de Pessoas', class: 'flag-dark' },
             { value: 'Verificação de Conta', output: 'Verificação de Conta', class: 'flag-dark' },
             { value: 'Esqueci minha senha', output: 'Esqueci minha senha', class: 'flag-dark' },
+            { value: 'Assinatura Contratante', output: 'Assinatura Contratante', class: 'flag-dark' },
+            { value: 'Assinatura Intermediadora', output: 'Assinatura Intermediadora', class: 'flag-dark' },
+            { value: 'Certificado Assinatura', output: 'Certificado Assinatura', class: 'flag-dark' },
         ]
     },
     {

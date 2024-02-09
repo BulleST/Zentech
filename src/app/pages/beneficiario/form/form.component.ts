@@ -356,6 +356,7 @@ export class FormComponent implements OnDestroy {
         //     return;
         // }
 
+        this.objeto.assinaturaRepresentanteLegal = this.assinaturaDataUri;
         return lastValueFrom(this.beneficiarioService.post(this.objeto))
             .then(res => {
                 if (res.sucesso != false) {

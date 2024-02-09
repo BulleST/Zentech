@@ -29,7 +29,6 @@ export class InvoiceRequest {
     contrato: Contrato = new Contrato();
 }
 
-
 export var invoiceColumns: Column[] = [
     {
         field: 'id',

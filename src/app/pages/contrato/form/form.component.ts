@@ -132,7 +132,7 @@ export class FormComponent implements OnDestroy {
         }
         this.loadingContratoFile = true;
         this.loadingService.message.next('Carregando Contrato.')
-        await lastValueFrom(this.contratoService.file(this.objeto.id))
+        await lastValueFrom(this.contratoService.contrato(this.objeto.id))
             .then(res => {
                 this.loadingContratoFile = false;
             })
