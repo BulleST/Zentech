@@ -16,7 +16,7 @@ const instituicaoFinanceira = () => import('../instituicao-financeira/instituica
 const banco = () => import('./../banco/banco.module').then(x => x.BancoModule);
 const beneficiario = () => import('../beneficiario/beneficiario.module').then(x => x.BeneficiarioModule);
 const representante = () => import('../representante/representante.module').then(x => x.RepresentanteModule);
-// const empresa = () => import('../empresa/empresa.module').then(x => x.EmpresaModule);
+const empresa = () => import('../empresa/empresa.module').then(x => x.EmpresaModule);
 const log = () => import('../log/log.module').then(x => x.LogModule);
 
 const routes: Routes = [
@@ -40,7 +40,7 @@ const routes: Routes = [
             { path: 'contrato', loadChildren: contrato },
             { path: 'representante', loadChildren: representante },
             { path: 'usuarios', loadChildren: usuarios },
-            // { path: 'empresa', loadChildren: empresa },
+            { path: 'empresa', loadChildren: empresa },
             { path: 'log-acoes', loadChildren: log},
         ]
     }

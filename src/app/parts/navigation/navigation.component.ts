@@ -6,49 +6,49 @@ import { Role } from 'src/app/models/account-perfil.model';
 import { Header } from 'src/app/utils/header';
 
 @Component({
-  selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.css']
+    selector: 'app-navigation',
+    templateUrl: './navigation.component.html',
+    styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnDestroy {
-  Role = Role;
-  faHandHoldingDollar = faHandHoldingDollar;
-  faMagnifyingGlass = faMagnifyingGlass;
-  faUsers = faUsers;
-  faPercent = faPercent;
-  faCity = faCity;
-  faIdCard = faIdCard;
-  faLink = faLink;
-  menuOpen: boolean = false;
-  subscription: Subscription[] = [];
-  items: any[] = [];
-  homeActive = true;
-  padding = 0;
+    Role = Role;
+    faHandHoldingDollar = faHandHoldingDollar;
+    faMagnifyingGlass = faMagnifyingGlass;
+    faUsers = faUsers;
+    faPercent = faPercent;
+    faCity = faCity;
+    faIdCard = faIdCard;
+    faLink = faLink;
+    menuOpen: boolean = false;
+    subscription: Subscription[] = [];
+    items: any[] = [];
+    homeActive = true;
+    padding = 0;
 
 
-  constructor(
-    private header: Header,
-    private router: Router,
-  ) {
-    var events = this.router.events.subscribe(res => {
-      if (res instanceof NavigationEnd)
-        this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
-    })
-    this.subscription.push(events);
+    constructor(
+        private header: Header,
+        private router: Router,
+    ) {
+        var events = this.router.events.subscribe(res => {
+            if (res instanceof NavigationEnd)
+                this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
+        })
+        this.subscription.push(events);
 
-    this.menuOpen = this.header.menuAsideOpen.value;
-    var open = this.header.menuAsideOpen.subscribe(res => this.menuOpen = res);
-    this.subscription.push(open);
-    this.setMenu();
-  }
+        this.menuOpen = this.header.menuAsideOpen.value;
+        var open = this.header.menuAsideOpen.subscribe(res => this.menuOpen = res);
+        this.subscription.push(open);
+        this.setMenu();
+    }
 
-  ngOnDestroy(): void {
-    this.subscription.forEach(item => item.unsubscribe());
-  }
+    ngOnDestroy(): void {
+        this.subscription.forEach(item => item.unsubscribe());
+    }
 
-  toggleAside() {
-    this.header.toggleMenuAside();
-  }
+    toggleAside() {
+        this.header.toggleMenuAside();
+    }
 
     setMenu() {
         var i = 1;
@@ -114,12 +114,6 @@ export class NavigationComponent implements OnDestroy {
                     routerLink: "/invoice",
                     paddingLeft: 10,
                     items: [
-                        // {
-                        //     id: i++,
-                        //     label: 'Swift',
-                        //     routerLink: "/swift",
-                        //     paddingLeft: 25,
-                        // },
                         {
                             id: i++,
                             label: 'Contratos',
@@ -130,12 +124,12 @@ export class NavigationComponent implements OnDestroy {
                 },
             ]
         },
-        // {
-        //     id: i++,
-        //     label: 'Empresas',
-        //     routerLink: "/empresa",
-        //     paddingLeft: 0,
-        // },
+        {
+            id: i++,
+            label: 'Empresas',
+            routerLink: "/empresa",
+            paddingLeft: 0,
+        },
         {
             id: i++,
             label: 'Logs',
@@ -151,9 +145,9 @@ export class NavigationComponent implements OnDestroy {
         ];
     }
 
-  addPadding() {
-    this.padding = parseInt(this.padding.toString()) + 5
-    return this.padding;
-  }
+    addPadding() {
+        this.padding = parseInt(this.padding.toString()) + 5
+        return this.padding;
+    }
 
 }
