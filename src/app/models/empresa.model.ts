@@ -7,6 +7,11 @@ export class Empresa {
     id: number = 0;
     nome: string = '';
     logoDataUri: string = '';
+    endereco: string = ''
+    codigoRegistro: string = '';
+    socioDiretor: string = '';
+    rgSocioDiretor: string = '';
+    cpfSocioDiretor: string = '';
 }
 
 export var empresaColumns: Column[] = [

@@ -97,7 +97,7 @@
                                                   [min]="0.1"
                                                   [max]="999999999"></app-input-number>
                             </div>
-                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Instituição Financeira -->
+                            <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 my-8"> <!-- Instituição Financeira -->
                                 <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
                                 <p-dropdown [styleClass]="'form-control ' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
                                             [showClear]="true"
@@ -632,8 +632,8 @@
                                                         class="btn btn-dark me-2"
                                                         (click)="send(invoice, contrato)"
                                                         [disabled]="loading || !(objeto.contrato.nomeRepresentanteLegal && objeto.contrato.codigoRepresentanteLegal && objeto.contrato.assinaturaRepresentanteLegal)">
-                                                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span> 
-                                                    <span>Salvar dados</span> 
+                                                    <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                                                    <span>Salvar dados</span>
                                                 </button>
                                                 <button type="button"
                                                         class="btn btn-dark"
@@ -721,10 +721,10 @@
                                     <div class="row mb-2">
                                         <div class="d-flex align-items-center justify-content-between flex-wrap">
                                             <h6 class="my-2 me-3">Assinatura Intermediadora</h6>
-                                            <button type="button" 
+                                            <button type="button"
                                                     *ngIf="!assinadoIntermediadora"
-                                                    class="btn btn-dark" 
-                                                    (click)="assinarMAC()" 
+                                                    class="btn btn-dark"
+                                                    (click)="assinarMAC()"
                                                     [disabled]="loading">
                                                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                                                 <span class="me-1">Assinar </span>
@@ -774,8 +774,8 @@
                                             <div class="d-flex align-items-center justify-content-between flex-wrap">
                                                 <h6 class="my-2">Certificado de Assinatura</h6>
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <button type="button" 
-                                                            *ngIf="!certificadoAssinaturaIncluido" 
+                                                    <button type="button"
+                                                            *ngIf="!certificadoAssinaturaIncluido"
                                                             class="btn btn-dark"
                                                             [disabled]="loading || !assinadoRepresentanteLegal"
                                                             (click)="certificadoAssinatura()">

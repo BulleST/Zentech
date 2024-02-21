@@ -1,72 +1,170 @@
 <ng-template #icon class="align-items-center">
-    <span class="title-icon ">
-        <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"
-             fill="currentColor"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
-            <path d="M243.4 2.6l-224 96c-14 6-21.8 21-18.7 35.8S16.8 160 32 160v8c0 13.3 10.7 24 24 24H456c13.3 0 24-10.7 24-24v-8c15.2 0 28.3-10.7 31.3-25.6s-4.8-29.9-18.7-35.8l-224-96c-8-3.4-17.2-3.4-25.2 0zM128 224H64V420.3c-.6 .3-1.2 .7-1.8 1.1l-48 32c-11.7 7.8-17 22.4-12.9 35.9S17.9 512 32 512H480c14.1 0 26.5-9.2 30.6-22.7s-1.1-28.1-12.9-35.9l-48-32c-.6-.4-1.2-.7-1.8-1.1V224H384V416H344V224H280V416H232V224H168V416H128V224zM256 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
-        </svg>
-    </span>
+  <span class="title-icon ">
+    <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"
+         fill="currentColor"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+      <path
+            d="M243.4 2.6l-224 96c-14 6-21.8 21-18.7 35.8S16.8 160 32 160v8c0 13.3 10.7 24 24 24H456c13.3 0 24-10.7 24-24v-8c15.2 0 28.3-10.7 31.3-25.6s-4.8-29.9-18.7-35.8l-224-96c-8-3.4-17.2-3.4-25.2 0zM128 224H64V420.3c-.6 .3-1.2 .7-1.8 1.1l-48 32c-11.7 7.8-17 22.4-12.9 35.9S17.9 512 32 512H480c14.1 0 26.5-9.2 30.6-22.7s-1.1-28.1-12.9-35.9l-48-32c-.6-.4-1.2-.7-1.8-1.1V224H384V416H344V224H280V416H232V224H168V416H128V224zM256 64a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+    </svg>
+  </span>
 </ng-template>
 <ng-template #template>
-    <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
-        <div class="px-2">
-            <div class="row">
-                <!-- Nome -->
-                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"> 
-                    <label for="nome">Nome: <span class="text-danger">*</span></label>
-                    <input type="text"
-                           class="form-control"
-                           name="nome"
-                           id="nome"
-                           #nome="ngModel"
-                           [(ngModel)]="objeto.nome"
-                           pattern="\S(.*\S)?"
-                           (change)="objeto.nome = nome.value.trim();"
-                           required>
-                    <div *ngIf="nome.touched && nome.errors">
-                        <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                   <div>
-                        <label for="file" class="mb-0">Logo: <span class="text-danger">*</span></label>
-                        <label for="file" class="input-file-container" *ngIf="!fileUploaded">
-                            <p class="icon">
-                                <i class="pi pi-upload"></i>
-                            </p>
-                            <h3>Clique e arraste para selecionar uma imagem</h3>
-                            <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
-                            <input type="file"
-                                name="file"
-                                id="file"
-                                #file
-                                required
-                                accept="image/png, image/gif, image/jpeg, image/svg" 
-                                (input)="fileChange($event)" >
-                        </label>
-                        <div class="my-3">
-                            <button *ngIf="fileUploaded" (click)="importarNovamente(); " class="btn btn-dark  ">Refazer upload</button>
-                        </div>
-                        <div class="">
-                            <img [src]="fileSrc" *ngIf="fileSrc && fileUploaded" [alt]="fileName" class="input-file-image">
-                        </div>
-                   </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col mt-3 mb-2 d-flex align-items-center">
-                    <div *ngIf="erro || form.invalid" class="m-0">
-                        <p class="text-danger" *ngIf="erro">{{erro}}</p>
-                        <p *ngIf="form.invalid && !erro"    class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar.</p>
-                    </div>
-                    <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
-                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                        <span>Salvar</span>
-                    </button>
-                </div>
-            </div>
+  <form #form="ngForm" (ngSubmit)="send(form)" class="needs-validation">
+    <div class="px-2">
+      <div class="row">
+        <!-- Nome -->
+        <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-8 col-12">
+          <label for="nome">Nome: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="nome"
+                 id="nome"
+                 #nome="ngModel"
+                 [(ngModel)]="objeto.nome"
+                 pattern="\S(.*\S)?"
+                 (change)="objeto.nome = nome.value.trim();"
+                 required>
+          <div *ngIf="nome.touched && nome.errors">
+            <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
+          </div>
         </div>
-    </form>
+        <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-4 col-12">
+          <label for="codigoRegistro">Código do Registro: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="codigoRegistro"
+                 id="codigoRegistro"
+                 #codigoRegistro="ngModel"
+                 [(ngModel)]="objeto.codigoRegistro"
+                 pattern="\S(.*\S)?"
+                 (change)="objeto.codigoRegistro = codigoRegistro.value.trim();"
+                 required>
+          <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
+            <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Endereço -->
+        <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+          <label for="endereco">Endereço: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="endereco"
+                 id="endereco"
+                 #endereco="ngModel"
+                 [(ngModel)]="objeto.endereco"
+                 pattern="\S(.*\S)?"
+                 (change)="objeto.endereco = endereco.value.trim();"
+                 required>
+          <div *ngIf="endereco.touched && endereco.errors">
+            <p class="text-danger" *ngIf="endereco.errors['required']">Este campo é obrigatório.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+             <!-- Sócio Diretor -->
+             <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <label for="socioDiretor">Sócio Diretor: <span class="text-danger">*</span></label>
+              <input type="text"
+                     class="form-control"
+                     name="socioDiretor"
+                     id="socioDiretor"
+                     #socioDiretor="ngModel"
+                     [(ngModel)]="objeto.socioDiretor"
+                     pattern="\S(.*\S)?"
+                     (change)="objeto.socioDiretor = socioDiretor.value.trim();"
+                     required>
+              <div *ngIf="socioDiretor.touched && socioDiretor.errors">
+                <p class="text-danger" *ngIf="socioDiretor.errors['required']">Este campo é obrigatório.</p>
+              </div>
+            </div>
+      </div>
+      <div class="row">
+        <!-- Código Registro -->
+        <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label for="rgSocioDiretor">RG do Sócio Diretor: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="rgSocioDiretor"
+                 id="rgSocioDiretor"
+                 #rgSocioDiretor="ngModel"
+                 [(ngModel)]="objeto.rgSocioDiretor"
+                 mask="00.000.000-0"
+                 placeholder="00.000.000-0"
+                 required
+                 pattern="\d{2}\.?\d{3}\.?\d{3}-?\d{1}"
+                 (change)="validaRG(rgSocioDiretor, rgSocioDiretor.value);"
+         >
+          <div *ngIf="rgSocioDiretor.touched && rgSocioDiretor.errors">
+              <p class="text-danger" *ngIf="rgSocioDiretor.errors['required']">Este campo é obrigatório.</p>
+              <p class="text-danger" *ngIf="rgSocioDiretor.errors['mask'] || rgSocioDiretor.errors['invalid']">ring_volume inválido.</p>
+              <p class="text-danger" *ngIf="rgSocioDiretor.errors['jaCadastrado']">RG já cadastrado</p>
+          </div>
+        </div>
+        <!-- Código Registro -->
+        <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+          <label for="cpfSocioDiretor">CPF do Sócio Diretor: <span class="text-danger">*</span></label>
+          <input type="text"
+                 class="form-control"
+                 name="cpfSocioDiretor"
+                 id="cpfSocioDiretor"
+                 #cpfSocioDiretor="ngModel"
+                 [(ngModel)]="objeto.cpfSocioDiretor"
+                 mask="000.000.000-00"
+                 placeholder="000.000.000-00"
+                 required
+                 pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+                 (change)="validaCPF(cpfSocioDiretor, cpfSocioDiretor.value);"
+         >
+          <div *ngIf="cpfSocioDiretor.touched && cpfSocioDiretor.errors">
+              <p class="text-danger" *ngIf="cpfSocioDiretor.errors['required']">Este campo é obrigatório.</p>
+              <p class="text-danger" *ngIf="cpfSocioDiretor.errors['mask'] || cpfSocioDiretor.errors['invalid']">CPF inválido.</p>
+              <p class="text-danger" *ngIf="cpfSocioDiretor.errors['jaCadastrado']">CPF já cadastrado</p>
+          </div>
+      </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div>
+            <label for="file" class="mb-0">Logo: <span class="text-danger">*</span></label>
+            <label for="file" class="input-file-container" *ngIf="!fileUploaded">
+              <p class="icon">
+                <i class="pi pi-upload"></i>
+              </p>
+              <h3>Clique e arraste para selecionar uma imagem</h3>
+              <p>ou <label for="file" class="link">clique aqui</label> para abrir explorador de arquivos</p>
+              <input type="file"
+                     name="file"
+                     id="file"
+                     #file
+                     required
+                     accept="image/png, image/gif, image/jpeg, image/svg"
+                     (input)="fileChange($event)">
+            </label>
+            <div class="my-3">
+              <button *ngIf="fileUploaded" (click)="importarNovamente(); " class="btn btn-dark  ">Refazer
+                upload</button>
+            </div>
+            <div class="">
+              <img [src]="fileSrc" *ngIf="fileSrc && fileUploaded" [alt]="fileName" class="input-file-image">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col mt-3 mb-2 d-flex align-items-center">
+          <div *ngIf="erro || form.invalid" class="m-0">
+            <p class="text-danger" *ngIf="erro">{{erro}}</p>
+            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente
+              para salvar.</p>
+          </div>
+          <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <span>Salvar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
 </ng-template>

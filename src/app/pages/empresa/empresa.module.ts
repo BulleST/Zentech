@@ -9,6 +9,7 @@ import { EmpresaRoutingModule } from './empresa.routing';
 import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
         FormsModule,
         FontAwesomeModule,
         SharedModule,
-        DropdownModule
+        DropdownModule,
+        NgxMaskDirective,
+        NgxMaskPipe,
+    ],
+    providers: [
+        provideNgxMask(),
     ],
 })
 export class EmpresaModule { }

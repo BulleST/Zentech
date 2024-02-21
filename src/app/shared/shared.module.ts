@@ -33,6 +33,7 @@ import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.co
 import { DialogModule } from 'primeng/dialog';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
+import { NgxMaskService } from 'ngx-mask';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ToastModule } from 'primeng/toast';
@@ -73,12 +74,11 @@ import { ToastModule } from 'primeng/toast';
         TabViewModule,
         OverlayPanelModule,
         DialogModule,
-        
-        NgxMaskDirective, 
-        NgxMaskPipe,
         FieldsetModule,
         FileUploadModule,
-        ToastModule
+        ToastModule,
+        NgxMaskDirective,
+        NgxMaskPipe
     ],
     exports: [
         ListSharedComponent,

@@ -1,3 +1,4 @@
+import { validateCPF } from 'src/app/utils/validate-cpf';
 import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -9,6 +10,8 @@ import { NgForm } from '@angular/forms';
 import { Empresa } from 'src/app/models/empresa.model';
 import { EmpresaService } from 'src/app/services/empresa.service';
 import { insertOrReplace } from 'src/app/utils/service-list';
+import { NgModel } from '@angular/forms';
+import { validateRG } from 'src/app/utils/validate-rg';
 
 
 @Component({
@@ -126,6 +129,63 @@ export class FormComponent implements OnDestroy {
             this.toastr.error('Selecione uma imagem para salvar.')
         }
     }
+
+
+    validaCPF(input: NgModel, doc: number) {
+      if (!input) {
+          return;
+      }
+      if (!doc || doc == 0) {
+          input.control.setErrors({ required: true });
+          return;
+      }
+
+      if (input.name == 'cpfSocioDiretor') {
+          var valid = validateCPF(doc)
+          if (!valid) {
+              input.control.setErrors({ invalid: true });
+              return;
+          }
+      }
+
+      var lista: any[] = []
+      var existe = lista.filter(x => x.cpf == doc);
+      if (existe.length > 0) {
+          input.control.setErrors({ jaCadastrado: true });
+          return;
+      }
+
+      input.control.setErrors(null);
+  }
+
+
+  validaRG(input: NgModel, doc: number) {
+    if (!input) {
+        return;
+    }
+    if (!doc || doc == 0) {
+        input.control.setErrors({ required: true });
+        return;
+    }
+
+    if (input.name == 'rgSocioDiretor') { // Supondo que o nome do campo para o RG seja 'rgSocioDiretor'
+        var valid = validateRG(doc); // Assumindo que você tenha uma função chamada validateRG para validar o RG
+        if (!valid) {
+            input.control.setErrors({ invalid: true });
+            return;
+        }
+    }
+
+    var lista: any[] = []; // Supondo que esta lista contenha os registros existentes
+    var existe = lista.filter(x => x.rg == doc);
+    if (existe.length > 0) {
+        input.control.setErrors({ jaCadastrado: true });
+        return;
+    }
+
+    input.control.setErrors(null);
+}
+
 
     importarNovamente() {
         this.fileUploaded = false;
