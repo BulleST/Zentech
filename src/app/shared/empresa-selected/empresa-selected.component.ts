@@ -34,19 +34,6 @@ export class EmpresaSelectedComponent implements OnDestroy {
 
         var list = this.empresaService.list.subscribe(res => this.empresas = res);
         this.subscription.push(list);
-
-        if (this.accountService.accountValue && this.accountService.accountValue?.perfilAcesso_Id == 1) {
-            lastValueFrom(this.empresaService.getList())
-            .then(res => {
-                if (res.length > 0) {
-                    var e = res[0];
-                    this.empresaService.empresaSelected.next({
-                        empresa: e,
-                        id: e.id
-                    });
-                }
-            });
-        }
     }
 
     ngOnDestroy(): void {

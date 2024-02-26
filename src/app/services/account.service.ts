@@ -6,6 +6,7 @@ import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount 
 import { Crypto } from '../utils/crypto';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,7 @@ export class AccountService {
         private activatedRoute: ActivatedRoute,
         private http: HttpClient,
         private crypto: Crypto,
+        private empresaService: EmpresaService,
     ) {
         this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
@@ -45,12 +47,23 @@ export class AccountService {
     }
 
     login(model: Login) {
+
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
-            tap((account) => {
+            tap(async (account) => {
                 this.setAccount(account);
                 const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
                 this.router.navigateByUrl(returnUrl);
                 this.startRefreshTokenTimer();
+
+                this.empresaService.empresaSelected.next({
+                    id: account.empresa_Id,
+                    empresa: account.empresa
+                })
+                if (account.perfilAcesso_Id == 1) {
+                    await lastValueFrom(this.empresaService.getList());
+                }
+
+
                 return of(account);
             }),
             catchError((err => {
@@ -75,11 +88,20 @@ export class AccountService {
     async refreshToken() {
         var account = await lastValueFrom( this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true }))
             .catch(error => {
-                console.log(error)
                 return undefined;
             })
         this.setAccount(account);
         this.startRefreshTokenTimer();
+        if (account) {
+            this.empresaService.empresaSelected.next({
+                id: account.empresa_Id,
+                empresa: account.empresa
+            })
+            if (account.perfilAcesso_Id == 1) {
+                await lastValueFrom(this.empresaService.getList());
+            }
+        }
+
     }
 
     register(model: Register) {

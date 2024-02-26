@@ -98,6 +98,8 @@ export var logColumns: Column[] = [
             { value: 'Edição Representante Legal', output: 'Edição Representante Legal', class: 'flag-dark' },
             { value: 'Edição Conta', output: 'Edição Conta', class: 'flag-dark' },
             { value: 'Edição Campo Conta', output: 'Edição Campo Conta', class: 'flag-dark' },
+            { value: 'Habilitar Empresa', output: 'Habilitar Empresa', class: 'flag-dark' },
+            { value: 'Desabilitar Empresa', output: 'Desabilitar Empresa', class: 'flag-dark' },
         ]
     },
     {
