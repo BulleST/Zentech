@@ -32,8 +32,12 @@ export class EmpresaService {
         return this.http.get<Empresa[]>(`${this.url}/empresa`)
             .pipe(tap({
                 next: list => {
+                    list = list.map(x => {
+                        x.ativo = !x.dataDesativado;
+                        return x;
+                    });
                     this.loading.next(false);
-                    this.list.next(Object.assign([], list));
+                    this.list.next(list);
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.'),

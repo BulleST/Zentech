@@ -35,7 +35,6 @@ export class ListComponent {
         var loading = this.logService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
-        lastValueFrom(this.logService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {

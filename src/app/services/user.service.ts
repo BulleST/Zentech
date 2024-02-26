@@ -57,7 +57,6 @@ export class UsuarioService {
                     x.ativo = !x.dataDesativado;
                     return x;
                 });
-                console.log('service', list)
                 this.list.next(list);
                 this.loading.next(false);
                 return of(list);
