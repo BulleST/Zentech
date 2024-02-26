@@ -113,7 +113,7 @@ export class DetailsComponent implements OnDestroy {
                 /**
                  * Operação
                  */
-                lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.id))
+                lastValueFrom(this.pessoaOperacaoService.getListByPessoaId(this.objeto.id))
                     .then(res => {
                         this.operacoes = res;
                         var listOperacoes = this.pessoaOperacaoService.listOperacaoPorPessoa.subscribe(res => {

@@ -42,7 +42,8 @@ export class InvoiceService {
                 this.loading.next(false);
                 return of(list);
             },
-            error: res => this.toastr.error('Não foi possível carregar listagem de invoices.')
+            error: res => this.toastr.error('Não foi possível carregar listagem de invoices.'),
+            finalize: () => this.loading.next(false),
         }));
     }
 

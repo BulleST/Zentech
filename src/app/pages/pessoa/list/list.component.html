@@ -6,10 +6,16 @@
         <div class="me-auto">
             <h3 class="page__header-title">Pessoas</h3>
             <p>Painel CPF</p>
+            <p class="page__header-subtitle" *ngIf="empresaSelected">
+                <small>Pessoas cadastradas em 
+                    <strong>{{empresaSelected.nome || "Empresa X"}}</strong>
+                </small>
+            </p>
         </div>
-        <div class="ms-auto">
+        <div class="ms-auto mt-auto" style="margin-bottom: 7px;">
             <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
         </div>
+        <app-empresa-selected></app-empresa-selected> 
     </div>
     <div class="page__body">
             <ng-template #topActions>

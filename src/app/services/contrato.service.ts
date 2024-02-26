@@ -38,7 +38,8 @@ export class ContratoService {
                     this.list.next(list);
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de contratos.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de contratos.'),
+                finalize: () => this.loading.next(false),
             }));
     }
 

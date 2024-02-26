@@ -37,7 +37,8 @@ export class BeneficiarioService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de beneficiários.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de beneficiários.'),
+                finalize: () => this.loading.next(false),
 
             }));
     }

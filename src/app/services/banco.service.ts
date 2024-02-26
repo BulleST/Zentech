@@ -35,7 +35,8 @@ export class BancoService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de bancos.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de bancos.'),
+                finalize: () => this.loading.next(false),
 
             }));
     }

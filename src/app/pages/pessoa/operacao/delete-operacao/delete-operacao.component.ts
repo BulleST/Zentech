@@ -91,7 +91,7 @@ export class DeleteOperacaoComponent implements OnDestroy {
                         insertOrReplace(this.pessoaService, res.objeto['pessoa']);
                         remove(this.pessoaOperacaoService, res.objeto['operacao'], 'listOperacaoPorPessoa');
                     } else {
-                        lastValueFrom(this.pessoaOperacaoService.getListById(this.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getListByPessoaId(this.pessoa_Id));
                         lastValueFrom(this.pessoaOperacaoService.getList());
                         lastValueFrom(this.pessoaService.getList());
                     }

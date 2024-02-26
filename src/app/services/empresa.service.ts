@@ -36,7 +36,8 @@ export class EmpresaService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.'),
+                finalize: () => this.loading.next(false),
 
             }));
 
