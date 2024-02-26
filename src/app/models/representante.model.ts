@@ -7,9 +7,21 @@ export class Representante {
     id: number = 0;
     nome: string = '';
     codigo: string = '';
+    empresa_Id: number = 0;
 }
 
 export var representanteColumns: Column[] = [
+    {
+        field: 'nome',
+        header: 'Nome',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        showAddButton: false,
+        showMatchMode: true,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.CONTAINS,
+    },
     {
         field: 'codigo',
         header: 'Código',
@@ -21,16 +33,5 @@ export var representanteColumns: Column[] = [
         showOperator: false,
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
-    {
-        field: 'nome',
-        header: 'Nome',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    }
 ];
 

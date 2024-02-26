@@ -256,7 +256,7 @@ export class DetailsComponent implements OnDestroy {
         this.loading = true;
         this.erro = '';
 
-        lastValueFrom(this.pessoaService.create(this.objeto))
+        lastValueFrom(this.pessoaService.post(this.objeto))
             .then(res => {
                 this.loading = false;
                 if (res.sucesso) {

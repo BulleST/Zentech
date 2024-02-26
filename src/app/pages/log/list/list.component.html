@@ -1,15 +1,21 @@
 <section class="page">
     <div class="page__header">
-        <span class="title-icon align-items-center">
-          <fa-icon [icon]="faClock"></fa-icon>
-        </span>
-        <div class="me-auto">
-            <h3 class="page__header-title">Logs</h3>
-        </div>
-        <div class="ms-auto">
-            <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
-        </div>
-    </div>
+      <span class="title-icon align-items-center">
+        <fa-icon [icon]="faClock"></fa-icon>
+      </span>
+      <div class="me-auto">
+          <h3 class="page__header-title">Logs</h3>
+          <p class="page__header-subtitle" *ngIf="empresaSelected">
+              <small>Logs cadastrados em
+                  <strong>{{empresaSelected.nome || "Empresa X"}}</strong>
+              </small>
+          </p>
+      </div>
+      <div class="ms-auto mt-auto" style="margin-bottom: 7px;">
+          <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
+      </div>
+      <app-empresa-selected></app-empresa-selected>
+  </div>
     <div class="page__body">
         <app-list-shared
             [list]="list"

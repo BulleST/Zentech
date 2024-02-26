@@ -9,6 +9,7 @@ import { Table } from '../utils/table';
 import { AccountService } from './account.service';
 import { Account } from '../models/account.model';
 import { PerfilAcesso, Role } from '../models/account-perfil.model';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -27,6 +28,7 @@ export class UsuarioService {
         private toastr: ToastrService,
         private crypto: Crypto,
         private accountService: AccountService,
+        private empresaService: EmpresaService,
     ) {
         this.accountService.account.subscribe(res => this.account = res ?? new Account);
     }
@@ -47,7 +49,8 @@ export class UsuarioService {
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Usuario[]>(`${this.url}/usuario`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<Usuario[]>(`${this.url}/usuario/list/${empresaId}`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -79,10 +82,12 @@ export class UsuarioService {
     }
 
     create(request: Usuario) {
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Usuario>(`${this.url}/usuario`, request);
     }
 
     edit(request: Usuario) {
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.put<Usuario>(`${this.url}/usuario`, request);
     }
 

@@ -7,7 +7,6 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 
 import { Response } from '../helpers/request-response.interface';
-import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
 import { EmpresaService } from './empresa.service';
 
 
@@ -27,10 +26,10 @@ export class BeneficiarioService {
         private empresaService: EmpresaService,
     ) { }
 
-    getList( loading: boolean = false) {
-       this.loading.next(loading);
+    getList(loading: boolean = false) {
+        this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number ;
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
         return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario/list/${empresaId}` /*/list/${empresaId} */)
             .pipe(tap({
                 next: list => {
@@ -48,7 +47,7 @@ export class BeneficiarioService {
     }
 
     post(request: BeneficiarioRequest) {
-        request.empresa_Id = request.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Response>(`${this.url}/beneficiario`, request);
     }
 

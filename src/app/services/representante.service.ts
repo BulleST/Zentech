@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
 import { Representante } from '../models/representante.model';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,13 +20,15 @@ export class RepresentanteService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private empresaService: EmpresaService,
 
     ) { }
 
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Representante[]>(`${this.url}/representante`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<Representante[]>(`${this.url}/representante/list/${empresaId}`)
             .pipe(tap({
                 next: list => {
                     this.list.next(Object.assign([], list));
@@ -44,6 +47,8 @@ export class RepresentanteService {
 
 
     create(request: Representante) {
+        console.log(this.empresaService.empresaSelected.value)
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Response>(`${this.url}/representante`, request);
     }
 

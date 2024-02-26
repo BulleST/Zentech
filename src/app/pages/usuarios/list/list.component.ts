@@ -7,7 +7,8 @@ import { AccountService } from 'src/app/services/account.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { Table } from 'src/app/utils/table';
-
+import { Empresa } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -21,11 +22,12 @@ export class ListComponent {
     columns = userColumns;
     subscription: Subscription[] = [];
     loading = false;
-
+    empresaSelected?: Empresa;
     constructor(
         private table: Table,
         private userService: UsuarioService,
         private accountService: AccountService,
+        private empresaService: EmpresaService
     ) {
         var list = this.userService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -33,6 +35,15 @@ export class ListComponent {
         var loading = this.userService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
+
+
+        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+          this.empresaSelected = res.empresa;
+          if (res && res.id) {
+            await lastValueFrom(this.userService.getList(true));
+          }
+        });
+        this.subscription.push(empresa);
         lastValueFrom(this.userService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
@@ -50,6 +61,8 @@ export class ListComponent {
             }
         });
         this.subscription.push(selected);
+
+
 
     }
 

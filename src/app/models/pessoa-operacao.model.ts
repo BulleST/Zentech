@@ -16,6 +16,7 @@ export class PessoaOperacaoList {
     limiteAtual: number = 0;
     usuarioCadastroNome: string = '';
     usuarioCadastroEmail: string = '';
+    empresa_Id: number = 0;
 }
 
 export class PessoaOperacaoRequest {

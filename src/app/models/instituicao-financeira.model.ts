@@ -9,6 +9,7 @@ export class InstituicaoFinanceiraList {
     cidade: string = '';
     estado: string = '';
     pais: string = '';
+    empresa_Id: number = 0;
 }
 
 export class InstituicaoFinanceiraRequest {
@@ -23,6 +24,7 @@ export class InstituicaoFinanceiraRequest {
     cidade:string = '';
     estado: string = '';
     pais_Id: number = undefined as unknown as number;
+    empresa_Id: number = 0;
 }
 
 export var instituicaoFinanceiraColumns: Column[] = [

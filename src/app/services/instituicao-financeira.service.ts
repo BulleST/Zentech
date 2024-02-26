@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
 import { InstituicaoFinanceiraList, InstituicaoFinanceiraRequest } from '../models/instituicao-financeira.model';
+import { EmpresaService } from './empresa.service';
 @Injectable({
     providedIn: 'root'
 })
@@ -19,13 +20,15 @@ export class InstituicaoFinanceiraService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private empresaService: EmpresaService,
 
     ) { }
 
     getList(loading: boolean = false) {
         this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<InstituicaoFinanceiraList[]>(`${this.url}/instituicaoFinanceira`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<InstituicaoFinanceiraList[]>(`${this.url}/instituicaoFinanceira/list/${empresaId}`)
             .pipe(tap({
                 next: list => {
                     this.loading.next(false);
@@ -44,6 +47,7 @@ export class InstituicaoFinanceiraService {
 
 
     post(request: InstituicaoFinanceiraRequest) {
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Response>(`${this.url}/instituicaoFinanceira`, request);
     }
 

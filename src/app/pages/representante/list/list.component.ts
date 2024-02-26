@@ -10,6 +10,8 @@ import { ScreenWidth } from 'src/app/utils/mobile';
 import { Representante, representanteColumns } from 'src/app/models/representante.model';
 import { RepresentanteService } from 'src/app/services/representante.service';
 import { AccountService } from 'src/app/services/account.service';
+import { Empresa } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
     selector: 'app-list',
@@ -24,11 +26,13 @@ export class ListComponent {
     columns = representanteColumns;
     subscription: Subscription[] = [];
     loading = false;
+    empresaSelected?: Empresa;
 
     constructor(
         private table: Table,
         private representanteService: RepresentanteService,
         private accountService: AccountService,
+        private empresaService: EmpresaService,
     ) {
         var list = this.representanteService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -36,7 +40,14 @@ export class ListComponent {
         var loading = this.representanteService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
-        lastValueFrom(this.representanteService.getList(true));
+
+        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+            this.empresaSelected = res.empresa;
+            if (res && res.id) {
+                await lastValueFrom(this.representanteService.getList(true));
+            }
+        });
+        this.subscription.push(empresa);
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {

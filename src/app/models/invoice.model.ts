@@ -10,6 +10,7 @@ export class Invoice {
     instituicaoFinanceira_Id: number = undefined as unknown as number;
     beneficiario_Id: number = undefined as unknown as number;
     conta: string = '';
+    empresa_Id: number = 0;
 }
 
 export class Invoice_List {
@@ -21,6 +22,7 @@ export class Invoice_List {
     nomeBanco: string = '';
     filter: string = '';
     conta: string = '';
+    empresa_Id: number = 0;
 }
 
 
