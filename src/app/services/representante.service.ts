@@ -35,7 +35,8 @@ export class RepresentanteService {
                     this.loading.next(false);
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de representante.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de representante.'),
+                finalize: () => this.loading.next(false),
 
             }));
 

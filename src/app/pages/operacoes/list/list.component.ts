@@ -10,6 +10,8 @@ import { faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
 import { AccountService } from 'src/app/services/account.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
+import { Empresa } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
     selector: 'app-list',
@@ -24,12 +26,14 @@ export class ListComponent {
     columns = pessoaOperacaoAllColumns;
     subscription: Subscription[] = [];
     loading = false;
+    empresaSelected?: Empresa;
 
     constructor(
         private table: Table,
         private pessoaOperacaoService: PessoaOperacaoService,
         private pessoaService: PessoaService,
         private accountService: AccountService,
+        private empresaService: EmpresaService,
     ) {
         var list = this.pessoaOperacaoService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -40,7 +44,13 @@ export class ListComponent {
         if (this.pessoaService.list.value.length == 0) {
             lastValueFrom(this.pessoaService.getList(true));
         }
-        lastValueFrom(this.pessoaOperacaoService.getList(true));
+        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+            this.empresaSelected = res.empresa;
+            if (res && res.id) {
+                await lastValueFrom(this.pessoaOperacaoService.getList(true));
+            }
+        });
+        this.subscription.push(empresa);
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {

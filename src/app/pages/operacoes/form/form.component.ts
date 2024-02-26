@@ -112,7 +112,9 @@ export class FormComponent implements OnDestroy {
                 if (this.pessoas.length == 0) {
                     this.loadingPessoa = true;
                     this.loadingUtils.addLoadingRequest();
-                    this.loadingUtils.message.next('Carregando lista de pessoas')
+                    this.loadingUtils.message.next('Carregando lista de pessoas');
+
+
                     lastValueFrom(this.pessoaService.getList(true))
                         .then(res => {
                             this.loadingUtils.removeLoadingRequest();
@@ -124,6 +126,10 @@ export class FormComponent implements OnDestroy {
                                 x.cpf = this.mask.applyMask(x.cpf.toString().padStart(11, '0'), '000.000.000-00');
                                 return x
                             });
+                        })
+                        .catch(res => {
+                            this.loadingUtils.removeLoadingRequest();
+                            this.loadingPessoa = false;
                         });
                 }
 
@@ -179,7 +185,7 @@ export class FormComponent implements OnDestroy {
                         insertOrReplace(this.pessoaService, res.objeto['pessoa']);
                         insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao']);
                     } else {
-                        lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getListByPessoaId(this.objeto.pessoa_Id));
                         lastValueFrom(this.pessoaOperacaoService.getList());
                         lastValueFrom(this.pessoaService.getList());
                     }

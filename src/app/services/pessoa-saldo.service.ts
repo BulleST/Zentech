@@ -38,7 +38,8 @@ export class PessoaSaldoService {
                 this.loading.next(false);
                 return of(list);
             },
-            error: res => this.toastr.error('Não foi possível carregar listagem de saldos.')
+            error: res => this.toastr.error('Não foi possível carregar listagem de saldos.'),
+            finalize: () => this.loading.next(false),
         }));
     }
 

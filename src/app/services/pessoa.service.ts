@@ -33,7 +33,7 @@ export class PessoaService {
        this.loading.next(loading);
         this.table.loading.next(loading);
         var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
-        return this.http.get<PessoaList[]>(`${this.url}/pessoa/list/${empresaId}`)
+        return this.http.get<PessoaList[]>(`${this.url}/pessoa/list/empresa/${empresaId}`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -44,7 +44,8 @@ export class PessoaService {
                 this.loading.next(false);
                 return of(list);
             },
-            error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+            error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.'),
+            finalize: () => this.loading.next(false),
         }));
     }
 

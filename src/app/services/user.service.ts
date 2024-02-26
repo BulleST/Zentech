@@ -62,7 +62,8 @@ export class UsuarioService {
                 this.loading.next(false);
                 return of(list);
             },
-            error: res => this.toastr.error('Não foi possível carregar usuários.')
+            error: res => this.toastr.error('Não foi possível carregar usuários.'),
+            finalize: () => this.loading.next(false),
         }));
     }
 

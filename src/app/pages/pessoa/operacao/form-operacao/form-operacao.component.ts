@@ -169,7 +169,7 @@ export class FormOperacaoComponent implements OnDestroy {
                         insertOrReplace(this.pessoaService, res.objeto['pessoa']);
                         insertOrReplace(this.pessoaOperacaoService, res.objeto['operacao'], 'listOperacaoPorPessoa');
                     } else {
-                        lastValueFrom(this.pessoaOperacaoService.getListById(this.objeto.pessoa_Id));
+                        lastValueFrom(this.pessoaOperacaoService.getListByPessoaId(this.objeto.pessoa_Id));
                         lastValueFrom(this.pessoaOperacaoService.getList());
                         lastValueFrom(this.pessoaService.getList());
                     }

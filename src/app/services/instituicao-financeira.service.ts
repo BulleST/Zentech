@@ -35,7 +35,8 @@ export class InstituicaoFinanceiraService {
                     this.list.next(Object.assign([], list));
                     return of(list);
                 },
-                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.')
+                error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.'),
+                finalize: () => this.loading.next(false),
 
             }));
     }

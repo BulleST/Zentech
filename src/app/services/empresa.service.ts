@@ -27,23 +27,22 @@ export class EmpresaService {
     }
 
     getList(loading: boolean = false) {
-      this.loading.next(loading);
-       this.table.loading.next(true);
-       return this.http.get<Empresa[]>(`${this.url}/empresa`)
-       .pipe(tap({
-           next: list => {
-               list = list.map(x => {
-                   x.ativo = !x.dataDesativado;
-                   return x;
-               });
-               console.log('service', list)
-               this.list.next(list);
-               this.loading.next(false);
-               return of(list);
-           },
-           error: res => this.toastr.error('Não foi possível carregar usuários.')
-       }));
-   }
+       this.loading.next(loading);
+        this.table.loading.next(true);
+        return this.http.get<Empresa[]>(`${this.url}/empresa`)
+            .pipe(tap({
+                next: list => {
+                    this.loading.next(false);
+                    this.list.next(Object.assign([], list));
+                    return of(list);
+                },
+                error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.'),
+                finalize: () => this.loading.next(false),
+
+            }));
+
+
+    }
     get(id: number) {
         return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
