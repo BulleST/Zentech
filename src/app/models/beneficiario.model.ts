@@ -36,10 +36,10 @@ export class BeneficiarioRequest {
     banco_Id: number = undefined as unknown as number;
     pais_Id:number = undefined as unknown as number;
     representante_Id: number = undefined as unknown as number;
-    empresa_Id: number = 0;
     nomeRepresentanteLegal?: string;
     codigoRepresentanteLegal?: string;
     assinaturaRepresentanteLegal?: string;
+    empresa_Id: number = 0;
 }
 
 export var beneficiarioColumns: Column[] = [

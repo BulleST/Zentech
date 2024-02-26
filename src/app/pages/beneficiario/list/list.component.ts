@@ -7,6 +7,8 @@ import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import { AccountService } from 'src/app/services/account.service';
+import { EmpresaService } from 'src/app/services/empresa.service';
+import { Empresa } from 'src/app/models/empresa.model';
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -20,28 +22,27 @@ export class ListComponent {
     columns = beneficiarioColumns;
     subscription: Subscription[] = [];
     loading = false;
-    // empresaSelected?: Empresa;
+    empresaSelected?: Empresa;
 
     constructor(
         private table: Table,
         private beneficiarioService: BeneficiarioService,
         private accountService: AccountService,
-        // private empresaService: EmpresaService,
+        private empresaService: EmpresaService,
     ) {
         var list = this.beneficiarioService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
 
         var loading = this.beneficiarioService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
-        // var empresa = this.empresaService.empresaSelected.subscribe(async res => {
-        //     this.empresaSelected = res.empresa;
-        //     console.log(this.empresaSelected)
-        //     if (res && res.id) {
-        //         await lastValueFrom(this.beneficiarioService.getList(res.id));
-        //     }
-        // });
-        // this.subscription.push(empresa);
-        lastValueFrom(this.beneficiarioService.getList(true));
+        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+            this.empresaSelected = res.empresa;
+            if (res && res.id) {
+                await lastValueFrom(this.beneficiarioService.getList(true));
+            }
+        });
+        this.subscription.push(empresa);
+        // lastValueFrom(this.beneficiarioService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
