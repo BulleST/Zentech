@@ -13,7 +13,7 @@ import { Empresa } from '../models/empresa.model';
 export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
-    empresaSelected:  BehaviorSubject<EmpresaSelected>;
+    empresaSelected: BehaviorSubject<EmpresaSelected>;
     loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     objeto = new BehaviorSubject<Empresa | undefined>(undefined);
     constructor(
@@ -27,7 +27,7 @@ export class EmpresaService {
     }
 
     getList(loading: boolean = false) {
-       this.loading.next(loading);
+        this.loading.next(loading);
         this.table.loading.next(true);
         return this.http.get<Empresa[]>(`${this.url}/empresa`)
             .pipe(tap({
@@ -44,9 +44,8 @@ export class EmpresaService {
                 finalize: () => this.loading.next(false),
 
             }));
-
-
     }
+
     get(id: number) {
         return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
@@ -57,8 +56,8 @@ export class EmpresaService {
     }
 
     deactivated(id: number, ativo?: boolean) {
-      return this.http.patch<Empresa>(`${this.url}/empresa/${id}/${ativo}`, {});
-  }
+        return this.http.patch<Empresa>(`${this.url}/empresa/${id}/${ativo}`, {});
+    }
 
     edit(request: Empresa) {
         return this.http.put<Response>(`${this.url}/empresa`, request);
