@@ -27,11 +27,11 @@ export class BeneficiarioService {
         private empresaService: EmpresaService,
     ) { }
 
-    getList(/* empresaId?: number, */ loading: boolean = false) {
+    getList( loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        // empresaId = empresaId ?? this.empresaService.empresaSelected.value.id ?? '' as unknown as number ;
-        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario` /*/list/${empresaId} */)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number ;
+        return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario/list/${empresaId}` /*/list/${empresaId} */)
             .pipe(tap({
                 next: list => {
                     this.loading.next(false);

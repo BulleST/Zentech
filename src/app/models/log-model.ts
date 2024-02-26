@@ -93,6 +93,9 @@ export var logColumns: Column[] = [
             { value: 'Assinatura Contratante', output: 'Assinatura Contratante', class: 'flag-dark' },
             { value: 'Assinatura Intermediadora', output: 'Assinatura Intermediadora', class: 'flag-dark' },
             { value: 'Certificado Assinatura', output: 'Certificado Assinatura', class: 'flag-dark' },
+            { value: 'Edição Representante Legal', output: 'Edição Representante Legal', class: 'flag-dark' },
+            { value: 'Edição Conta', output: 'Edição Conta', class: 'flag-dark' },
+            { value: 'Edição Campo Conta', output: 'Edição Campo Conta', class: 'flag-dark' },
         ]
     },
     {
