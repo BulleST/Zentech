@@ -70,7 +70,7 @@ export class FormComponent {
         this.modal.style = { 'max-width': '900px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
-        
+
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['usuario_id']) {
                 this.objeto.id = this.crypto.decrypt(x['usuario_id']);
@@ -113,19 +113,20 @@ export class FormComponent {
         this.modalService.removeModal(this.modal);
     }
 
-    send(form: NgForm) {   
+    send(form: NgForm) {
         this.loading = true;
         this.erro = '';
         this.request()
             .then(async res => {
                 await lastValueFrom(this.usuarioService.getList());
                 this.voltar();
-              
+
             })
             .catch(res => {
                 this.erro = getError(res);
             })
             .finally(() => this.loading = false);
+            console.log(this.objeto)
     }
 
 

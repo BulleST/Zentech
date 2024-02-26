@@ -25,13 +25,14 @@ export class ListComponent {
     columns = bancoColumns;
     subscription: Subscription[] = [];
     loading = false;
-    
+
     constructor(
         private table: Table,
         private bancoService: BancoService,
         private accountService: AccountService,
     ) {
         var list = this.bancoService.list.subscribe(res => this.list = Object.assign([], res));
+
         this.subscription.push(list);
 
         var loading = this.bancoService.loading.subscribe(res => this.loading = res);

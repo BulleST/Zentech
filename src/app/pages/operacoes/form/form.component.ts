@@ -183,6 +183,7 @@ export class FormComponent implements OnDestroy {
                         lastValueFrom(this.pessoaOperacaoService.getList());
                         lastValueFrom(this.pessoaService.getList());
                     }
+                    console.log(lastValueFrom(this.pessoaService.getList()))
                     this.voltar();
                 }
                 else {

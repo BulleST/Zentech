@@ -15,33 +15,35 @@ export class EmpresaService {
     list = new BehaviorSubject<Empresa[]>([]);
     empresaSelected:  BehaviorSubject<EmpresaSelected>;
     loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-
+    objeto = new BehaviorSubject<Empresa | undefined>(undefined);
     constructor(
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
 
-    ) { 
+    ) {
         this.empresaSelected = new BehaviorSubject<EmpresaSelected>(new EmpresaSelected);
-    
+
     }
 
     getList(loading: boolean = false) {
-       this.loading.next(loading);
-        this.table.loading.next(true);
-        return this.http.get<Empresa[]>(`${this.url}/empresa`)
-            .pipe(tap({
-                next: list => {
-                    this.loading.next(false);
-                    this.list.next(Object.assign([], list));
-                    return of(list);
-                },
-                error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.')
-
-            }));
-
-
-    }
+      this.loading.next(loading);
+       this.table.loading.next(true);
+       return this.http.get<Empresa[]>(`${this.url}/empresa`)
+       .pipe(tap({
+           next: list => {
+               list = list.map(x => {
+                   x.ativo = !x.dataDesativado;
+                   return x;
+               });
+               console.log('service', list)
+               this.list.next(list);
+               this.loading.next(false);
+               return of(list);
+           },
+           error: res => this.toastr.error('Não foi possível carregar usuários.')
+       }));
+   }
     get(id: number) {
         return this.http.get<Empresa>(`${this.url}/empresa/${id}`, { headers: new HttpHeaders({ 'loading': 'true' }) });
     }
@@ -50,6 +52,10 @@ export class EmpresaService {
     create(request: Empresa) {
         return this.http.post<Response>(`${this.url}/empresa`, request);
     }
+
+    deactivated(id: number, ativo?: boolean) {
+      return this.http.patch<Empresa>(`${this.url}/empresa/${id}/${ativo}`, {});
+  }
 
     edit(request: Empresa) {
         return this.http.put<Response>(`${this.url}/empresa`, request);

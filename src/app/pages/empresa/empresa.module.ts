@@ -10,12 +10,14 @@ import { FormComponent } from './form/form.component';
 import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { DeactivatedComponent } from './deactivated/deactivated.component';
 
 @NgModule({
     declarations: [
         ListComponent,
         FormComponent,
         DeleteComponent,
+        DeactivatedComponent
     ],
     imports: [
         CommonModule,

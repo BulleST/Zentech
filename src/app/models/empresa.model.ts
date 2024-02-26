@@ -2,7 +2,7 @@
 import { FilterMatchMode } from "primeng/api";
 import { Column, FilterDisplay, FilterType, MaskType } from "../helpers/column.interface";
 
-
+import { PerfilAcesso } from "./account-perfil.model";
 export class Empresa {
     id: number = 0;
     nome: string = '';
@@ -12,20 +12,24 @@ export class Empresa {
     socioDiretor: string = '';
     rgSocioDiretor: string = '';
     cpfSocioDiretor: string = '';
+    dataDesativado?: Date;
+    ativo?: boolean;
+    perfilAcesso_Id: number = undefined as unknown as number;
+    perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
 }
 
 export var empresaColumns: Column[] = [
-    {
-        field: 'id',
-        header: 'Id',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
-        filterDisplay: FilterDisplay.menu,
-        showAddButton: false,
-        showMatchMode: true,
-        showOperator: false,
-        filterMatchMode: FilterMatchMode.CONTAINS,
-    },
+    // {
+    //     field: 'id',
+    //     header: 'Id',
+    //     maskType: MaskType.undefined,
+    //     filterType: FilterType.text,
+    //     filterDisplay: FilterDisplay.menu,
+    //     showAddButton: false,
+    //     showMatchMode: true,
+    //     showOperator: false,
+    //     filterMatchMode: FilterMatchMode.CONTAINS,
+    // },
     {
         field: 'nome',
         header: 'Nome',
@@ -91,6 +95,21 @@ export var empresaColumns: Column[] = [
   showMatchMode: true,
   showOperator: false,
   filterMatchMode: FilterMatchMode.CONTAINS,
+},
+{
+  field: 'ativo',
+  header: 'Ativo',
+  maskType: MaskType.options,
+  filterType: FilterType.text,
+  filterDisplay: FilterDisplay.menu,
+  showAddButton: false,
+  showMatchMode: false,
+  showOperator: false,
+  filterMatchMode: FilterMatchMode.EQUALS,
+  values: [
+      { value: true, output: 'Ativo', class: 'flag-green' },
+      { value: false, output: 'Inativo', class: 'flag-danger' },
+  ]
 },
 
 ];
