@@ -35,6 +35,7 @@ export class ListComponent {
 
         var loading = this.beneficiarioService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
+
         var empresa = this.empresaService.empresaSelected.subscribe(async res => {
             this.empresaSelected = res.empresa;
             if (res && res.id) {
@@ -42,7 +43,6 @@ export class ListComponent {
             }
         });
         this.subscription.push(empresa);
-        // lastValueFrom(this.beneficiarioService.getList(true));
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
