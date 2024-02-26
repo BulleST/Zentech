@@ -9,6 +9,7 @@ import { Response } from '../helpers/request-response.interface';
 import { Filtro } from '../pages/operacoes/exportacao/exportacao.component';
 import { DatePipe } from '@angular/common';
 import { getError } from '../utils/error';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -25,12 +26,14 @@ export class PessoaOperacaoService {
         private http: HttpClient,
         private toastr: ToastrService,
         private datePipe: DatePipe,
+        private empresaService: EmpresaService,
     ) { }
 
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/list/${empresaId}`)
         .pipe(tap({
             next: list => {
                 this.list.next(list);

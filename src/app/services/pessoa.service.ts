@@ -8,6 +8,7 @@ import { PessoaList, PessoaResponse } from '../models/pessoa.model';
 import { Pessoa} from '../models/pessoa.model';
 import { Response } from '../helpers/request-response.interface';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { EmpresaService } from './empresa.service';
 
 
 @Injectable({
@@ -24,13 +25,15 @@ export class PessoaService {
         private http: HttpClient,
         private toastr: ToastrService,
         private datepipe: DatePipe,
+        private empresaService: EmpresaService,
     ) {
     }
 
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(loading);
-        return this.http.get<PessoaList[]>(`${this.url}/pessoa`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<PessoaList[]>(`${this.url}/pessoa/list/${empresaId}`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -59,11 +62,13 @@ export class PessoaService {
     importarArquivo(file: File){
         var data = new FormData();
         data.append('file', file);
-        return this.http.post<Response>(`${this.url}/pessoa/importa-excel`, data);
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.post<Response>(`${this.url}/pessoa/importa-excel/${empresaId}`, data);
     }
 
 
-    create(request: Pessoa) {
+    post(request: Pessoa) {
+        request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Response>(`${this.url}/pessoa`, request);
     }
 

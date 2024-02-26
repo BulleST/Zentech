@@ -5,6 +5,7 @@ import { BehaviorSubject, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { LogList, LogRequest} from '../models/log-model';
+import { EmpresaService } from './empresa.service';
 
 
 @Injectable({
@@ -18,13 +19,15 @@ export class LogService {
   constructor(
       private table: Table,
       private http: HttpClient,
-      private toastr: ToastrService
+      private toastr: ToastrService,
+      private empresaService: EmpresaService,
   ) { }
 
   getList(loading: boolean = false) {
     this.loading.next(loading);
       this.table.loading.next(true);
-      return this.http.get<LogList[]>(`${this.url}/log-acoes` )
+      var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+      return this.http.get<LogList[]>(`${this.url}/log-acoes/list/${empresaId}` )
           .pipe(
               tap(
                   res => {

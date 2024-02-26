@@ -7,6 +7,7 @@ import { Table } from '../utils/table';
 import { Invoice, InvoiceRequest, Invoice_List } from '../models/invoice.model';
 import { Response } from '../helpers/request-response.interface';
 import { DatePipe } from '@angular/common';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -22,13 +23,15 @@ export class InvoiceService {
         private http: HttpClient,
         private toastr: ToastrService,
         private datePipe: DatePipe,
+        private empresaService: EmpresaService,
     ) {
     }
 
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        return this.http.get<Invoice_List[]>(`${this.url}/invoice`)
+        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        return this.http.get<Invoice_List[]>(`${this.url}/invoice/list/${empresaId}`)
         .pipe(tap({
             next: list => {
                 list = list.map(x => {
@@ -55,10 +58,12 @@ export class InvoiceService {
     
 
     create(request: InvoiceRequest) {
+        request.invoice.empresa_Id = request.invoice.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
         return this.http.post<Response>(`${this.url}/invoice`, request);
     }
     
     edit(request: InvoiceRequest) {
+        request.invoice.empresa_Id = request.invoice.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
         return this.http.put<Response>(`${this.url}/invoice`, request);
     }
 

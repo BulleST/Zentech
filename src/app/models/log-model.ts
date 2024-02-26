@@ -12,6 +12,7 @@ export class LogList {
     usuarioNome: string = '';
     usuarioEmail: string = '';
     usuario_Id: 0;
+    empresa_Id: number = 0;
 }
 
 
@@ -25,7 +26,8 @@ export class LogRequest {
     entidade: string = '';
     usuarioNome: string = '';
     usuarioEmail: string = '';
-    usuario_Id: number = undefined as unknown as number;;
+    usuario_Id: number = undefined as unknown as number;
+    empresa_Id: number = 0;
 }
 
 

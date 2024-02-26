@@ -11,6 +11,7 @@ export class Usuario {
     telefoneCelular: string = '';
     dataDesativado?: Date;
     ativo?: boolean;
+    empresa_Id: number = 0;
 }
 
 export class UsuarioRequest {

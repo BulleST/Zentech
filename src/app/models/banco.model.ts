@@ -15,6 +15,7 @@ export class BancoList {
     estado?: string;
     pais?: string;
     complemento?: string;
+    empresa_Id: number = undefined as unknown as number;
 }
 
 
@@ -30,6 +31,7 @@ export class BancoRequest {
     estado?: string;
     pais_Id: number = undefined as unknown as number;
     complemento?: string;
+    empresa_Id: number = undefined as unknown as number;
 }
 
 

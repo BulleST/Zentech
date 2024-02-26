@@ -12,6 +12,8 @@ import { BancoList } from 'src/app/models/banco.model';
 import { bancoColumns } from 'src/app/models/banco.model';
 import { BancoService } from 'src/app/services/banco.service';
 import { AccountService } from 'src/app/services/account.service';
+import { Empresa } from 'src/app/models/empresa.model';
+import { EmpresaService } from 'src/app/services/empresa.service';
 @Component({
     selector: 'app-list',
     templateUrl: './list.component.html',
@@ -25,11 +27,13 @@ export class ListComponent {
     columns = bancoColumns;
     subscription: Subscription[] = [];
     loading = false;
+    empresaSelected?: Empresa;
     
     constructor(
         private table: Table,
         private bancoService: BancoService,
         private accountService: AccountService,
+        private empresaService: EmpresaService,
     ) {
         var list = this.bancoService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
@@ -37,7 +41,14 @@ export class ListComponent {
         var loading = this.bancoService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
-        lastValueFrom(this.bancoService.getList(true));
+
+        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+            this.empresaSelected = res.empresa;
+            if (res && res.id) {
+                await lastValueFrom(this.bancoService.getList(true));
+            }
+        });
+        this.subscription.push(empresa);
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {
