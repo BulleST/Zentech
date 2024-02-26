@@ -36,7 +36,7 @@ export class ListComponent {
         var empresa = this.empresaService.empresaSelected.subscribe(async res => {
           this.empresaSelected = res.empresa;
           if (res && res.id) {
-            await lastValueFrom(this.empresaService.getList(true));
+            await lastValueFrom(this.invoiceService.getList(true));
           }
         });
         this.subscription.push(empresa);
