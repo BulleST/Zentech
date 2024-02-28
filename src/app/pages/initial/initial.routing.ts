@@ -5,6 +5,8 @@ import { HomeComponent } from './home/home.component';
 import { MyAccountComponent } from 'src/app/shared/my-account/my-account.component';
 import { ChangePasswordComponent } from 'src/app/shared/change-password/change-password.component';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { RoleGuard } from 'src/app/guards/role.guard';
+import { Role } from 'src/app/models/account-perfil.model';
 
 
 const painelCPF = () => import('./../pessoa/pessoa.module').then(x => x.PessoaModule);
@@ -29,8 +31,6 @@ const routes: Routes = [
                     ] },
                 ]
             },
-
-
             { path: 'painel-cpf/pessoas', loadChildren: painelCPF  },
             { path: 'painel-cpf/operacoes', loadChildren: operacoes  },
             { path: 'invoice', loadChildren: invoice  },
@@ -40,7 +40,7 @@ const routes: Routes = [
             { path: 'contrato', loadChildren: contrato },
             { path: 'representante', loadChildren: representante },
             { path: 'usuarios', loadChildren: usuarios },
-            { path: 'empresa', loadChildren: empresa },
+            { path: 'empresa', loadChildren: empresa, canActivate: [RoleGuard], data: { roles: [Role.Admin] } },
             { path: 'log-acoes', loadChildren: log},
         ]
     }

@@ -59,12 +59,10 @@ export class InvoiceService {
     
 
     create(request: InvoiceRequest) {
-        request.invoice.empresa_Id = request.invoice.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
         return this.http.post<Response>(`${this.url}/invoice`, request);
     }
     
     edit(request: InvoiceRequest) {
-        request.invoice.empresa_Id = request.invoice.empresa_Id ?? this.empresaService.empresaSelected.value.id ?? undefined;
         return this.http.put<Response>(`${this.url}/invoice`, request);
     }
 

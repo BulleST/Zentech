@@ -39,12 +39,9 @@ export class AccountService {
     public get accountValue() {
         var account = localStorage.getItem('account') as string;
         if (!this.accountSubject.value) {
-            console.log('oi')
             var accountObj = this.crypto.decrypt(account) as Account;
-            console.log('accountObj', accountObj)
             this.accountSubject.next(accountObj);
         }
-        console.log(this.accountSubject.value)
         return this.accountSubject.value;
     }
 
@@ -87,22 +84,26 @@ export class AccountService {
             localStorage.clear();
     } 
 
-    async refreshToken() {
-        var account = await lastValueFrom( this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true }))
-            .catch(error => {
-                return undefined;
-            })
-        this.setAccount(account);
-        this.startRefreshTokenTimer();
-        if (account) {
-            this.empresaService.empresaSelected.next({
-                id: account.empresa_Id,
-                empresa: account.empresa
-            })
-            if (account.perfilAcesso_Id == 1) {
-                await lastValueFrom(this.empresaService.getList());
-            }
-        }
+    refreshToken() {
+       return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
+           .pipe(tap({
+            next: async account => {
+                console.log('oi', account)
+                this.setAccount(account);
+                this.startRefreshTokenTimer();
+                this.empresaService.empresaSelected.next({
+                    id: account.empresa_Id,
+                    empresa: account.empresa
+                })
+                if (account.perfilAcesso_Id == 1) {
+                    await lastValueFrom(this.empresaService.getList());
+                }
+            },
+            error: (err) => {
+                this.setAccount(undefined);
+                this.startRefreshTokenTimer();
+            },
+           }));
 
     }
 

@@ -3,6 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { faCity, faHandHoldingDollar, faIdCard, faLink, faMagnifyingGlass, faPercent, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/models/account-perfil.model';
+import { Account } from 'src/app/models/account.model';
+import { AccountService } from 'src/app/services/account.service';
 import { Header } from 'src/app/utils/header';
 
 @Component({
@@ -24,12 +26,20 @@ export class NavigationComponent implements OnDestroy {
     items: any[] = [];
     homeActive = true;
     padding = 0;
+    account?: Account;
 
 
     constructor(
         private header: Header,
         private router: Router,
+        private accountService: AccountService,
     ) {
+        var account = this.accountService.accountSubject.subscribe(res => {
+            this.account = res;
+            this.setMenu();
+        });
+        this.subscription.push(account);
+
         var events = this.router.events.subscribe(res => {
             if (res instanceof NavigationEnd)
                 this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
@@ -39,7 +49,6 @@ export class NavigationComponent implements OnDestroy {
         this.menuOpen = this.header.menuAsideOpen.value;
         var open = this.header.menuAsideOpen.subscribe(res => this.menuOpen = res);
         this.subscription.push(open);
-        this.setMenu();
     }
 
     ngOnDestroy(): void {
@@ -52,13 +61,14 @@ export class NavigationComponent implements OnDestroy {
 
     setMenu() {
         var i = 1;
-        this.items = [{
+        this.items = [];
+        this.items.push({
             id: i++,
             label: 'Tela inicial',
             paddingLeft: 0,
             routerLink: '/'
-        },
-        {
+        });
+        this.items.push({
             id: i++,
             label: 'Painel CPF',
             paddingLeft: 0,
@@ -76,8 +86,8 @@ export class NavigationComponent implements OnDestroy {
                     paddingLeft: 10,
                 },
             ]
-        },
-        {
+        });
+        this.items.push({
             id: i++,
             label: 'Painel de Documentos',
             paddingLeft: 0,
@@ -123,26 +133,27 @@ export class NavigationComponent implements OnDestroy {
                     ]
                 },
             ]
-        },
-        {
-            id: i++,
-            label: 'Empresas',
-            routerLink: "/empresa",
-            paddingLeft: 0,
-        },
-        {
+        });
+        if (this.account?.perfilAcesso_Id == 1) {
+            this.items.push({
+                id: i++,
+                label: 'Empresas',
+                routerLink: "/empresa",
+                paddingLeft: 0,
+            });
+        }
+        this.items.push({
             id: i++,
             label: 'Logs',
             routerLink: "/log-acoes",
             paddingLeft: 0,
-        },
-        {
+        });
+        this.items.push({
             id: i++,
             label: 'Usuários',
             routerLink: "/usuarios",
             paddingLeft: 0,
-        },
-        ];
+        });
     }
 
     addPadding() {

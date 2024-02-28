@@ -164,7 +164,6 @@ export class FormComponent implements OnDestroy {
         var params = this.activatedRoute.params.subscribe(x => {
             if (x['invoice_id']) {
                 this.objeto.invoice.id = this.crypto.decrypt(x['invoice_id']);
-
                 this.modal.title = 'Editar Invoice';
                 this.modal.routerBack = ['../../'];
                 this.isEditPage = true;
@@ -347,7 +346,6 @@ export class FormComponent implements OnDestroy {
         }
     }
 
-
     fileChange(event: any) {
         var file = event.target.files[0] as File;
         this.assinaturaUploadedFile = file;
@@ -383,7 +381,6 @@ export class FormComponent implements OnDestroy {
             delete this.assinaturaUploadedFile;
         }
     }
-
 
     readonlyRepresentanteLegal() {
         var camposPreenchidos = false;
@@ -453,7 +450,6 @@ export class FormComponent implements OnDestroy {
         this.loading = false;
     }
 
-
     async send(invoice: NgForm, contrato: NgForm) {
         this.loading = false;
         this.erro = '';
@@ -481,8 +477,6 @@ export class FormComponent implements OnDestroy {
                     this.objeto.contrato.invoice_Id = res.objeto.invoice.id;
                     this.objeto.invoice.id = res.objeto.invoice.id;
                     this.objeto.contrato.numContrato = this.objeto.invoice.id.toString();
-
-
                     if (!this.isEditPage) {
                         await lastValueFrom(this.invoiceService.edit(this.objeto));
                     }
