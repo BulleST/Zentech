@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
 import { Empresa } from '../models/empresa.model';
+import { AccountService } from './account.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,14 +17,17 @@ export class EmpresaService {
     empresaSelected: BehaviorSubject<EmpresaSelected>;
     loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     objeto = new BehaviorSubject<Empresa | undefined>(undefined);
+
     constructor(
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private accountService: AccountService 
 
     ) {
-        this.empresaSelected = new BehaviorSubject<EmpresaSelected>(new EmpresaSelected);
 
+        this.empresaSelected = new BehaviorSubject<EmpresaSelected>(new EmpresaSelected);
+       
     }
 
     getList(loading: boolean = false) {

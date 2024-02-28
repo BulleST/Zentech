@@ -53,6 +53,7 @@ export class ListComponent {
             if (res) {
                 this.tableLinks = [
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
+                    { label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] },
                 ];
 
                 if (this.accountService.accountValue?.perfilAcesso_Id == 1) {

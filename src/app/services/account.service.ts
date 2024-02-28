@@ -14,8 +14,8 @@ import { EmpresaService } from './empresa.service';
 export class AccountService {
     url = environment.url;
 
-    accountSubject: BehaviorSubject<Account | undefined>;
-    public account: Observable<Account | undefined>;
+    accountSubject: BehaviorSubject<Account | undefined> = new BehaviorSubject<Account | undefined>(undefined);
+    public account: Observable<Account | undefined> = new Observable<Account | undefined>(undefined);
 
     constructor(
         private router: Router,
@@ -24,7 +24,6 @@ export class AccountService {
         private crypto: Crypto,
         private empresaService: EmpresaService,
     ) {
-        this.accountSubject = new BehaviorSubject<Account | undefined>(undefined);
         this.account = this.accountSubject.asObservable();
     }
 
@@ -39,10 +38,13 @@ export class AccountService {
 
     public get accountValue() {
         var account = localStorage.getItem('account') as string;
-        if (this.accountSubject.value == undefined && account != undefined && account.trim() != '') {
+        if (!this.accountSubject.value) {
+            console.log('oi')
             var accountObj = this.crypto.decrypt(account) as Account;
+            console.log('accountObj', accountObj)
             this.accountSubject.next(accountObj);
         }
+        console.log(this.accountSubject.value)
         return this.accountSubject.value;
     }
 

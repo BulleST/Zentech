@@ -26,9 +26,15 @@ export class EmpresaSelectedComponent implements OnDestroy {
     ) {
 
         
-        var account = this.accountService.account.subscribe(res => this.account = res);
+        var account = this.accountService.accountSubject.subscribe(res => {
+            if (res?.perfilAcesso_Id != 1) {
+                this.empresaService.empresaSelected.next({
+                    id: this.accountService.accountValue?.empresa_Id as number,
+                    empresa: this.accountService.accountValue?.empresa,
+                }); 
+            }
+        });
         this.subscription.push(account);
-
         var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresaSelected = res);
         this.subscription.push(empresa);
 
