@@ -42,7 +42,7 @@ export class ListComponent implements OnDestroy {
                     { label: 'Cadastrar Operação', routePath: ['cadastrar-operacao'], paramsFieldName: ['id'] }, 
                     { label: 'Detalhes', routePath: ['detalhes'], paramsFieldName: ['id'] }, 
                 ];
-                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                if (this.accountService.accountValue?.perfilAcesso_Id != 3) {
                     this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

@@ -425,7 +425,7 @@
                                        #rde="ngModel"
                                        [(ngModel)]="objeto.contrato.rde"
                                        pattern="\S(.*\S)?"
-                                       (change)="objeto.contrato.rde = rde.value.trim();">
+                                       (change)="objeto.contrato.rde = rde.value.trim().toUpperCase();">
                             </div>
                         </div>
                         <div class="row">
@@ -461,7 +461,7 @@
                                        required
                                        pattern="\S(.*\S)?"
                                        readonly
-                                       (change)="objeto.contrato.descricaoFormaEntrega = descricaoFormaEntrega.value.trim();">
+                                       (change)="objeto.contrato.descricaoFormaEntrega = descricaoFormaEntrega.value.trim().toUpperCase();">
                             </div>
                             <!-- Liquidação Até -->
                             <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
@@ -501,7 +501,7 @@
                                        required
                                        pattern="\S(.*\S)?"
                                        readonly
-                                       (change)="objeto.contrato.descricaoNaturezaFato = descricaoNaturezaFato.value.trim();">
+                                       (change)="objeto.contrato.descricaoNaturezaFato = descricaoNaturezaFato.value.trim().toUpperCase();">
                             </div>
                         </div>
                         <div class="row align-items-end">
@@ -534,7 +534,7 @@
                                        [(ngModel)]="objeto.contrato.codigoVinculoPagRecExterior"
                                        required
                                        [readonly]="true"
-                                       (change)="objeto.contrato.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim();">
+                                       (change)="objeto.contrato.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim().toUpperCase();">
                             </div>
                         </div>
                         <div class="row">
@@ -548,7 +548,7 @@
                                           #especificacoes="ngModel"
                                           [(ngModel)]="objeto.contrato.especificacoes"
                                           pattern="\S(.*\S)?"
-                                          (change)="objeto.contrato.especificacoes = especificacoes.value.trim();">
+                                          (change)="objeto.contrato.especificacoes = especificacoes.value.trim().toUpperCase();">
                                   </textarea>
                             </div>
                             <!-- Cláusulas -->
@@ -561,7 +561,7 @@
                                           #clausulas="ngModel"
                                           [(ngModel)]="objeto.contrato.clausulas"
                                           pattern="\S(.*\S)?"
-                                          (change)="objeto.contrato.clausulas = clausulas.value.trim();">
+                                          (change)="objeto.contrato.clausulas = clausulas.value.trim().toUpperCase();">
                                   </textarea>
                             </div>
                             <!-- Instruções de Recebimento/Pagamento -->
@@ -574,7 +574,7 @@
                                           #instrucoesRecebimentoPagamento="ngModel"
                                           [(ngModel)]="objeto.contrato.instrucoesRecebimentoPagamento"
                                           pattern="\S(.*\S)?"
-                                          (change)="objeto.contrato.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
+                                          (change)="objeto.contrato.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim().toUpperCase();">
                                   </textarea>
                             </div>
                         </div>
@@ -663,7 +663,7 @@
                                                    #nomeRepresentanteLegal="ngModel"
                                                    [(ngModel)]="objeto.contrato.nomeRepresentanteLegal"
                                                    pattern="\S(.*\S)?"
-                                                   (change)="objeto.contrato.nomeRepresentanteLegal = nomeRepresentanteLegal.value.trim();"
+                                                   (change)="objeto.contrato.nomeRepresentanteLegal = nomeRepresentanteLegal.value.trim().toUpperCase();"
                                                    required
                                                    [readonly]="readonlyRepresentanteLegal()">
                                             <div *ngIf="nomeRepresentanteLegal.touched && nomeRepresentanteLegal.errors">
@@ -679,7 +679,7 @@
                                                    #codigoRepresentanteLegal="ngModel"
                                                    [(ngModel)]="objeto.contrato.codigoRepresentanteLegal"
                                                    pattern="\S(.*\S)?"
-                                                   (change)="objeto.contrato.codigoRepresentanteLegal = codigoRepresentanteLegal.value.trim();"
+                                                   (change)="objeto.contrato.codigoRepresentanteLegal = codigoRepresentanteLegal.value.trim().toUpperCase();"
                                                    required
                                                    [readonly]="readonlyRepresentanteLegal()">
                                             <div *ngIf="codigoRepresentanteLegal.touched && codigoRepresentanteLegal.errors">

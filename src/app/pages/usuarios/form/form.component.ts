@@ -8,22 +8,23 @@ import { PerfilAcesso, Role, perfil } from 'src/app/models/account-perfil.model'
 import { Account } from 'src/app/models/account.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AccountService } from 'src/app/services/account.service';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { UsuarioService } from 'src/app/services/user.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+    selector: 'app-form',
+    templateUrl: './form.component.html',
+    styleUrls: ['./form.component.css']
 })
 export class FormComponent {
     faUser = faUser;
-     objeto: Usuario = new Usuario;
-     loading = false;
-     erro: string = '';
-     isEditPage: boolean = false;
+    objeto: Usuario = new Usuario;
+    loading = false;
+    erro: string = '';
+    isEditPage: boolean = false;
 
     perfil: PerfilAcesso[] = [];
     subscription: Subscription[] = [];
@@ -34,29 +35,47 @@ export class FormComponent {
     @ViewChild('icon') icon: TemplateRef<any>;
 
     podeEditar = true;
-    account?:Account;
+    account?: Account;
+
     constructor(
         private usuarioService: UsuarioService,
+        private accountService: AccountService,
+        private empresaService: EmpresaService,
         private modalService: ModalService,
         private activatedRoute: ActivatedRoute,
         private crypto: Crypto,
-        private accountService: AccountService,
         private toastr: ToastrService
     ) {
 
         this.perfil = perfil;
         this.account = this.accountService.accountValue;
 
-        if (this.account?.perfilAcesso_Id == Role.Master  ) {
-            this.perfil = [
-                { id: 2, perfil: 'Master' },
-            ];
-        } else {
-            this.perfil = [
-                { id: 1, perfil: 'Admin' },
-                { id: 2, perfil: 'Master' },
-            ];
-        }
+        this.empresaService.empresaSelected.subscribe(res => {
+            this.perfil = [];
+            if (this.account?.perfilAcesso_Id == Role.Admin) {
+                this.perfil = [
+                    { id: 2, perfil: 'Master' },
+                    { id: 3, perfil: 'Consultor' },
+                ];
+
+                if (res.id == 27) {
+                    this.perfil.unshift({ id: 1, perfil: 'Admin' })
+                }
+            } else if (this.account?.perfilAcesso_Id == Role.Master) {
+                this.perfil = [
+                    { id: 2, perfil: 'Master' },
+                    { id: 3, perfil: 'Consultor' },
+                ];
+            } else if (this.account?.perfilAcesso_Id == Role.Consultor) {
+                this.perfil = [
+                    { id: 3, perfil: 'Consultor' },
+                ];
+            }
+        })
+
+
+
+
     }
 
     ngOnDestroy(): void {
@@ -82,7 +101,7 @@ export class FormComponent {
                 lastValueFrom(this.usuarioService.get(this.objeto.id))
                     .then(res => {
                         this.objeto = res;
-                        if (this.account?.perfilAcesso_Id == Role.Master && res.perfilAcesso_Id == Role.Admin ) {
+                        if (this.account?.perfilAcesso_Id == Role.Master && res.perfilAcesso_Id == Role.Admin) {
                             this.podeEditar = false;
                             this.toastr.info('Você não tem permissão para editar uma conta administradora.')
                         } else {
@@ -126,7 +145,7 @@ export class FormComponent {
                 this.erro = getError(res);
             })
             .finally(() => this.loading = false);
-            console.log(this.objeto)
+        console.log(this.objeto)
     }
 
 

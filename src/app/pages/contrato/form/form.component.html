@@ -39,7 +39,7 @@
                            required
                            pattern="\S(.*\S)?"
                            [readonly]="true"
-                           (change)="objeto.numContrato = numContrato.value.trim();">
+                           (change)="objeto.numContrato = numContrato.value.trim().toUpperCase();">
                     <div *ngIf="numContrato.touched && numContrato.errors">
                         <p class="text-danger" *ngIf="numContrato.errors['required']">Este campo é obrigató rio.</p>
                     </div>
@@ -170,7 +170,7 @@
                            #rde="ngModel"
                            [(ngModel)]="objeto.rde"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.rde = rde.value.trim();">
+                           (change)="objeto.rde = rde.value.trim().toUpperCase();">
                 </div>
             </div>
             <div class="row">
@@ -206,7 +206,7 @@
                            required
                            pattern="\S(.*\S)?"
                            readonly
-                           (change)="objeto.descricaoFormaEntrega = descricaoFormaEntrega.value.trim();">
+                           (change)="objeto.descricaoFormaEntrega = descricaoFormaEntrega.value.trim().toUpperCase();">
                 </div>
                 <!-- Liquidação Até -->
                 <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
@@ -247,7 +247,7 @@
                            required
                            pattern="\S(.*\S)?"
                            readonly
-                           (change)="objeto.descricaoNaturezaFato = descricaoNaturezaFato.value.trim();">
+                           (change)="objeto.descricaoNaturezaFato = descricaoNaturezaFato.value.trim().toUpperCase();">
                 </div>
             </div>
             <div class="row align-items-end">
@@ -280,7 +280,7 @@
                            [(ngModel)]="objeto.codigoVinculoPagRecExterior"
                            required
                            [readonly]="true"
-                           (change)="objeto.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim();">
+                           (change)="objeto.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim().toUpperCase();">
                 </div>
             </div>
             <div class="row">
@@ -294,7 +294,7 @@
                               #especificacoes="ngModel"
                               [(ngModel)]="objeto.especificacoes"
                               pattern="\S(.*\S)?"
-                              (change)="objeto.especificacoes = especificacoes.value.trim();">
+                              (change)="objeto.especificacoes = especificacoes.value.trim().toUpperCase();">
                 </textarea>
                 </div>
                 <!-- Cláusulas -->
@@ -307,7 +307,7 @@
                               #clausulas="ngModel"
                               [(ngModel)]="objeto.clausulas"
                               pattern="\S(.*\S)?"
-                              (change)="objeto.clausulas = clausulas.value.trim();">
+                              (change)="objeto.clausulas = clausulas.value.trim().toUpperCase();">
                 </textarea>
                 </div>
                 <!-- Instruções de Recebimento/Pagamento -->
@@ -320,7 +320,7 @@
                               #instrucoesRecebimentoPagamento="ngModel"
                               [(ngModel)]="objeto.instrucoesRecebimentoPagamento"
                               pattern="\S(.*\S)?"
-                              (change)="objeto.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim();">
+                              (change)="objeto.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim().toUpperCase();">
                 </textarea>
                 </div>
             </div>

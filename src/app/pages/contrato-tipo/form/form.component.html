@@ -19,7 +19,7 @@
                          #nome="ngModel"
                          [(ngModel)]="objeto.nome"
                          pattern="\S(.*\S)?"
-                         (change)="objeto.nome = nome.value.trim();"
+                         (change)="objeto.nome = nome.value.trim().toUpperCase();"
                          required>
                   <div *ngIf="nome.touched && nome.errors">
                       <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>

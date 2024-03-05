@@ -20,7 +20,7 @@
                            #nome="ngModel"
                            [(ngModel)]="objeto.nome"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.nome = nome.value.trim();"
+                           (change)="objeto.nome = nome.value.toUpperCase().trim();"
                            required>
                     <div *ngIf="nome.touched && nome.errors">
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
@@ -35,7 +35,7 @@
                            #codigoSwift="ngModel"
                            [(ngModel)]="objeto.codigoSwift"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.codigoSwift = codigoSwift.value.trim();"
+                           (change)="objeto.codigoSwift = codigoSwift.value.trim().toUpperCase();"
                            required>
                     <div *ngIf="codigoSwift.touched && codigoSwift.errors">
                         <p class="text-danger" *ngIf="codigoSwift.errors['required']">Este campo é obrigatório.</p>
@@ -52,7 +52,7 @@
                            #logradouro="ngModel"
                            [(ngModel)]="objeto.logradouro"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.logradouro = logradouro.value.trim();">
+                           (change)="objeto.logradouro = logradouro.value.trim().toUpperCase();">
                     </textarea>
                 </div>
                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12"><!-- Cidade -->
@@ -64,7 +64,7 @@
                            #cidade="ngModel"
                            [(ngModel)]="objeto.cidade"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.cidade = cidade.value.trim();">
+                           (change)="objeto.cidade = cidade.value.trim().toUpperCase();">
                 </div>
                 <div class="form-group col-xl-2 col-lg-2 col-md-2 col-sm-4 col-12"><!-- UF -->
                     <label for="estado">UF: </label> 
@@ -75,7 +75,7 @@
                            #estado="ngModel"
                            [(ngModel)]="objeto.estado"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.estado = estado.value.trim();">
+                           (change)="objeto.estado = estado.value.trim().toUpperCase();">
                 </div>
                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12"><!-- País -->
                     <label for="pais_Id">País: <span class="text-danger">*</span></label> 

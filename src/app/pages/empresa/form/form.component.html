@@ -21,7 +21,7 @@
                  #nome="ngModel"
                  [(ngModel)]="objeto.nome"
                  pattern="\S(.*\S)?"
-                 (change)="objeto.nome = nome.value.trim();"
+                 (change)="objeto.nome = nome.value.trim().toUpperCase();"
                  required>
           <div *ngIf="nome.touched && nome.errors">
             <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
@@ -36,7 +36,7 @@
                  #codigoRegistro="ngModel"
                  [(ngModel)]="objeto.codigoRegistro"
                  pattern="\S(.*\S)?"
-                 (change)="objeto.codigoRegistro = codigoRegistro.value.trim();"
+                 (change)="objeto.codigoRegistro = codigoRegistro.value.trim().toUpperCase();"
                  required>
           <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
             <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
@@ -54,7 +54,7 @@
                  #endereco="ngModel"
                  [(ngModel)]="objeto.endereco"
                  pattern="\S(.*\S)?"
-                 (change)="objeto.endereco = endereco.value.trim();"
+                 (change)="objeto.endereco = endereco.value.trim().toUpperCase();"
                  required>
           <div *ngIf="endereco.touched && endereco.errors">
             <p class="text-danger" *ngIf="endereco.errors['required']">Este campo é obrigatório.</p>
@@ -72,7 +72,7 @@
                      #socioDiretor="ngModel"
                      [(ngModel)]="objeto.socioDiretor"
                      pattern="\S(.*\S)?"
-                     (change)="objeto.socioDiretor = socioDiretor.value.trim();"
+                     (change)="objeto.socioDiretor = socioDiretor.value.trim().toUpperCase();"
                      required>
               <div *ngIf="socioDiretor.touched && socioDiretor.errors">
                 <p class="text-danger" *ngIf="socioDiretor.errors['required']">Este campo é obrigatório.</p>

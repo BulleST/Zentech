@@ -58,7 +58,7 @@ export class ListComponent {
                     { label: 'Editar', routePath: ['editar'], paramsFieldName: ['id'] },
                 ];
 
-                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                if (this.accountService.accountValue?.perfilAcesso_Id != 3) {
                     this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] })
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

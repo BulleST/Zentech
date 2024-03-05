@@ -14,7 +14,7 @@
                        [(ngModel)]="objeto.nome"
                        required
                        pattern="\S(.*\S)?"
-                       (change)="objeto.nome = nome.value.trim(); "
+                       (change)="objeto.nome = nome.value.trim().toUpperCase(); "
                        >
                 <div *ngIf="nome.touched && nome.errors">
                     <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
@@ -73,7 +73,7 @@
                        #nomeMae="ngModel"
                        [(ngModel)]="objeto.nomeMae"
                        pattern="\S(.*\S)?"
-                       (change)="objeto.nomeMae = nomeMae.value.trim(); ">
+                       (change)="objeto.nomeMae = nomeMae.value.trim().toUpperCase(); ">
                 <div *ngIf="nomeMae.touched && nomeMae.errors">
                     <p class="text-danger" *ngIf="nomeMae.errors['required']">Este campo é obrigatório.</p>
                 </div>
@@ -105,7 +105,7 @@
                           #obs="ngModel"
                           [(ngModel)]="objeto.obs"
                           pattern="\S(.*\S)?"
-                          (change)="objeto.obs = obs.value.trim(); ">
+                          (change)="objeto.obs = obs.value.trim().toUpperCase(); ">
                 </textarea>
                 <div *ngIf="obs.touched && obs.errors">
                     <p class="text-danger" *ngIf="obs.errors">{{email.errors|json}}</p>

@@ -15,7 +15,7 @@
                    [(ngModel)]="objeto.name"
                    required
                    pattern="\S(.*\S)?"
-                   (change)="objeto.name = name.value.trim(); "
+                   (change)="objeto.name = name.value.trim().toUpperCase(); "
                    [disabled]="!podeEditar">
             <div *ngIf="name.touched && name.errors">
                 <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p>

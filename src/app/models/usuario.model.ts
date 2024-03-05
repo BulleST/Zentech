@@ -86,6 +86,7 @@ export var userColumns: Column[] = [
         values: [
             { value: 'Admin', output: 'Admin', class: 'flag-yellow' },
             { value: 'Master', output: 'Master', class: 'flag-info' },
+            { value: 'Consultor', output: 'Consultor', class: 'flag-warning' },
         ]
     },
     {

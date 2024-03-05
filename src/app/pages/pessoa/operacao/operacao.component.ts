@@ -37,7 +37,7 @@ export class OperacaoComponent implements OnDestroy {
                     { label: 'Detalhes', routePath: ['operacao', 'detalhes'], paramsFieldName: ['id'] }, 
                     { label: 'Editar', routePath: ['operacao', 'editar'], paramsFieldName: ['id'] }, 
                 ];
-                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
+                if (this.accountService.accountValue?.perfilAcesso_Id != 3) {
                     this.tableLinks.push({ label: 'Excluir', routePath: ['operacao', 'excluir'], paramsFieldName: ['id'] }, )
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

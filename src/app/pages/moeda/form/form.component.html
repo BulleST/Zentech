@@ -19,7 +19,7 @@
                            #nome="ngModel"
                            [(ngModel)]="objeto.nome"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.nome = nome.value.trim();"
+                           (change)="objeto.nome = nome.value.trim().toUpperCase();"
                            required>
                     <div *ngIf="nome.touched && nome.errors">
                         <p class="text-danger" *ngIf="nome.errors['required']">Este campo é obrigatório.</p>
@@ -34,7 +34,7 @@
                            #codigo="ngModel"
                            [(ngModel)]="objeto.codigo"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.codigo = codigo.value.trim();"
+                           (change)="objeto.codigo = codigo.value.trim().toUpperCase();"
                            required>
                     <div *ngIf="codigo.touched && codigo.errors">
                         <p class="text-danger" *ngIf="codigo.errors['required']">Este campo é obrigatório.</p>
@@ -49,7 +49,7 @@
                            #simbolo="ngModel"
                            [(ngModel)]="objeto.simbolo"
                            pattern="\S(.*\S)?"
-                           (change)="objeto.simbolo = simbolo.value.trim();"
+                           (change)="objeto.simbolo = simbolo.value.trim().toUpperCase();"
                            required>
                     <div *ngIf="simbolo.touched && simbolo.errors">
                         <p class="text-danger" *ngIf="simbolo.errors['required']">Este campo é obrigatório.</p>
