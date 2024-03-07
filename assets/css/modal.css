@@ -61,12 +61,13 @@
 
 .modal__header h3 {
     font-size: 20px;
-    color: rgb(var(--secondary));
+    color: var(--neutral);
+    display: flex;
 }
 
 .modal__header .icon {
     margin-right: 6px;
-    color: rgb(var(--primary));
+    color: var(--complementar);
     display: inline-flex;
     translate: 0px -2px;
 }

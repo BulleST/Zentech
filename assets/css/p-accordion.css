@@ -5,13 +5,13 @@
 .p-accordion-tab.p-accordion-tab-active {}
 
 .p-accordion-header {
-    background-color: rgb(var(--primary));
+    background-color: var(--primary);
     color: #fff;
     padding: 9px 10px;
 }
 
 .p-accordion-header.p-highlight {
-    background-color: rgb(var(--primary-light));
+    background-color: var(--primary);
 }
 
 .p-accordion-header-link {
