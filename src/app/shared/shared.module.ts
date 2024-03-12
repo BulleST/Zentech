@@ -1,24 +1,19 @@
-import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from '@angular/forms';
 import { NgModule } from "@angular/core";
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { TableModule } from "primeng/table";
-import { ToastrModule } from "ngx-toastr";
 import { DeleteComponent as DeleteMoeda } from '../pages/moeda/delete/delete.component';
+import { PDropdownActionsComponent } from './p-dropdown-actions/p-dropdown-actions.component';
 import { ListSharedComponent } from "./list/list.component";
 import { ModalComponent } from './modal/modal.component';
 import { InputNumberComponent } from './input-number/input-number.component';
-import { DropdownModule } from "primeng/dropdown";
-import { CalendarModule } from "primeng/calendar";
 import { FormComponent as FormBanco } from './../pages/banco/form/form.component';
 import { FormComponent as FormBeneficiario } from './../pages/beneficiario/form/form.component';
 import { FormComponent as FormContrato } from '../pages/contrato/form/form.component';
 import { FormComponent as FormContratoEvento } from '../pages/contrato-evento/form/form.component';
 import { FormComponent as FormContratoTipo } from '../pages/contrato-tipo/form/form.component';
 import { FormComponent as FormInstituicaoFinanceira } from './../pages/instituicao-financeira/form/form.component';
-import { FormComponent as FormInvoice } from '../pages/invoice/form/form.component';
+// import { FormComponent as FormInvoice } from '../pages/invoice/form/form.component';
 import { FormComponent as FormMoeda } from './../pages/moeda/form/form.component';
 import { FormComponent as FormRepresentante } from './../pages/representante/form/form.component';
 import { DeleteComponent as DeleteTipo } from '../pages/contrato-tipo/delete/delete.component';
@@ -26,17 +21,11 @@ import { DeleteComponent as DeleteEvento } from '../pages/contrato-evento/delete
 import { DeleteComponent as DeleteRepresentante } from '../pages/representante/delete/delete.component';
 import { MyAccountComponent } from './my-account/my-account.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { TabViewModule } from 'primeng/tabview';
-import { InputDateComponent } from './input-date/input-date.component';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
-import { DialogModule } from 'primeng/dialog';
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { InputDateComponent } from './input-date/input-date.component';
+import { LibrariesModule } from "./libraries.module";
 
-import { NgxMaskService } from 'ngx-mask';
-import { FieldsetModule } from 'primeng/fieldset';
-import { FileUploadModule } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
     declarations: [
@@ -53,7 +42,7 @@ import { ToastModule } from 'primeng/toast';
         FormContratoEvento,
         FormContratoTipo,
         FormInstituicaoFinanceira,
-        FormInvoice,
+        // FormInvoice,
         FormMoeda,
         FormRepresentante,
         DeleteEvento,
@@ -66,19 +55,7 @@ import { ToastModule } from 'primeng/toast';
         CommonModule,
         FormsModule,
         RouterModule,
-        FontAwesomeModule,
-        TableModule,
-        ToastrModule,
-        DropdownModule,
-        CalendarModule,
-        TabViewModule,
-        OverlayPanelModule,
-        DialogModule,
-        FieldsetModule,
-        FileUploadModule,
-        ToastModule,
-        NgxMaskDirective,
-        NgxMaskPipe
+        LibrariesModule,
     ],
     exports: [
         ListSharedComponent,
@@ -94,7 +71,7 @@ import { ToastModule } from 'primeng/toast';
         FormContratoEvento,
         FormContratoTipo,
         FormInstituicaoFinanceira,
-        FormInvoice,
+        // FormInvoice,
         FormMoeda,
         DeleteEvento,
         DeleteTipo,
@@ -103,9 +80,6 @@ import { ToastModule } from 'primeng/toast';
         DeleteRepresentante,
         EmpresaSelectedComponent,
     ],
-    providers: [
-        provideNgxMask()
-    ]
 })
 export class SharedModule {
 

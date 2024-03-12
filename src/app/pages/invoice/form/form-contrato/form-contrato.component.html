@@ -1,0 +1,339 @@
+
+<div class="mb-3 row">
+    <div class="d-flex align-items-center flex-wrap">
+        <button type="button" 
+            class="btn btn-dark mb-2" 
+            [disabled]="!podeBaixarPDF" 
+            (click)="contratoDownload()">Baixar PDF</button>
+        <span class="text-danger ms-0 ms-sm-2" *ngIf="!podeBaixarPDF">Você deve primeiro salvar os dados para baixar o PDF</span>
+    </div>
+</div>
+<div class="row">
+    <!-- Data do Contrato -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Data do Contrato">
+        <label for="data">Data do contrato: <span class="text-danger">*</span></label>
+        <app-input-date [valueInput]="objeto.contrato.data"
+                        (valueChanges)="objeto.contrato.data = $event;"
+                        [inputId]="'data'"
+                        [showErrorMessage]="true"
+                        [required]="true"
+                        type="datetime-local"></app-input-date>
+    </div>
+    <!-- Nº do Contrato de Câmbio -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Nº do Contrato de Câmbio">
+        <label for="numContrato">Nº do Contrato de Câmbio: <span class="text-danger">*</span><small>(automático)</small></label>
+        <input type="text"
+               class="form-control"
+               name="numContrato"
+               id="numContrato"
+               #numContrato="ngModel"
+               [(ngModel)]="objeto.contrato.numContrato"
+               [readonly]="true"
+               mask="0*">
+    </div>
+    <!-- Tipos -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Tipos">
+        <label for="tipo_Id">Tipo do Contrato de Câmbio: <span class="text-danger">*</span></label>
+        <p-dropdown
+                    [options]="tipos"
+                    [(ngModel)]="objeto.contrato.tipo_Id"
+                    #tipo_Id="ngModel"
+                    name="tipo_Id"
+                    inputId="tipo_Id"
+                    [styleClass]="'form-control ' + (loadingTipo ? 'form-control-loading' : '')"
+                    [showClear]="true"
+                    [filter]="true"
+                    optionLabel="nome"
+                    optionValue="id"
+                    placeholder="Selecione um tipo"
+                    [required]="true"
+                    [showClear]="true"
+                    appendTo="body">
+            <ng-template let-item pTemplate="item">
+                <div class="d-flex align-items-center">
+                    <span>{{item.nome}} </span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <div *ngIf="tipo_Id.touched && tipo_Id.errors">
+            <p class="text-danger" *ngIf="tipo_Id.errors['required']">Este campo é obrigatório.</p>
+        </div>
+    </div>
+    <!-- Eventos -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12" title="Eventos">
+        <label for="evento_Id">Eventos: <span class="text-danger">*</span></label>
+        <p-dropdown
+                    [options]="eventos"
+                    [(ngModel)]="objeto.contrato.evento_Id"
+                    #evento_Id="ngModel"
+                    name="evento_Id"
+                    inputId="evento_Id"
+                    [styleClass]="'form-control ' + (loadingEvento ? 'form-control-loading' : '')"
+                    [showClear]="true"
+                    [filter]="true"
+                    [filterFields]="['nome']"
+                    optionLabel="nome"
+                    optionValue="id"
+                    placeholder="Selecione um evento"
+                    [required]="true"
+                    [showClear]="true"
+                    appendTo="body">
+            <ng-template let-item pTemplate="item">
+                <div class="d-flex align-items-center">
+                    <span>{{item.nome}} </span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        <div *ngIf="evento_Id.touched && evento_Id.errors">
+            <p class="text-danger" *ngIf="evento_Id.errors['required']">Este campo é obrigatório.</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <!-- Taxa Cambial -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Taxa Cambial">
+        <label for="taxa">Taxa Cambial: <small>(USD)</small>&nbsp;<span class="text-danger">*</span> </label>
+        <app-input-number [valueInput]="objeto.contrato.taxa"
+                          (valueChanges)="objeto.contrato.taxa = $event; calculaMoedaNacional(); calculaVET();"
+                          [inputId]="'taxa'"
+                          [mask]="'separator.4'"
+                          [showErrorMessage]="true"
+                          [allowNegativeNumbers]="false"
+                          [required]="true"
+                          suffix=" USD"
+                          [autoReplaceValue]="false"
+                          [min]="0.1"
+                          [max]="999999999"
+                          [leadZero]="true"></app-input-number>
+    </div>
+    <!-- Valor Moeda Nacional -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Valor Moeda Nacional">
+        <label for="valorNacional">Valor Moeda Nacional: <small>(R$)</small>&nbsp;<span class="text-danger">*</span></label>
+        <input type="text"
+               class="form-control"
+               name="valorNacional"
+               id="valorNacional"
+               #valorNacional="ngModel"
+               #valorNacionalEl
+               [(ngModel)]="objeto.contrato.valorNacional"
+               [readOnly]="true"
+               (focus)="valorNacionalObs.show($event, valorNacionalEl)"
+               (blur)="valorNacionalObs.hide()"
+               (mouseenter)="valorNacionalObs.show($event, valorNacionalEl)"
+               (mouseleave)="valorNacionalObs.hide()"
+               prefix="R$ "
+               [mask]="'separator.2'"
+               thousandSeparator="."
+               decimalMarker=","
+               [min]="0.1"
+               [max]="999999999"
+               [leadZero]="true">
+    </div>
+    <!-- Percentual de Adiantamento -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="Percentual de Adiantamento">
+        <label for="percentualAdiantamento">Percentual de Adiantamento: <small>(%)</small>&nbsp;</label>
+        <app-input-number [valueInput]="objeto.contrato.percentualAdiantamento"
+                          (valueChanges)="objeto.contrato.percentualAdiantamento = $event;"
+                          [inputId]="'percentualAdiantamento'"
+                          [mask]="'separator.2'"
+                          [showErrorMessage]="false"
+                          [allowNegativeNumbers]="false"
+                          [required]="false"
+                          [autoReplaceValue]="false"
+                          [suffix]="'%'"
+                          [min]="0"
+                          [max]="100"
+                          [leadZero]="true"></app-input-number>
+    </div>
+    <!-- RDE -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" title="RDE">
+        <label for="rde">RDE:</label>
+        <input type="text"
+               class="form-control"
+               name="rde"
+               id="rde"
+               #rde="ngModel"
+               [(ngModel)]="objeto.contrato.rde"
+               pattern="\S(.*\S)?"
+               (change)="objeto.contrato.rde = rde.value.trim().toUpperCase();">
+    </div>
+</div>
+<div class="row">
+    <!-- Valor Efetivo Total (VET) -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="Valor Efetivo Total (VET)">
+        <label for="vet">Valor Efetivo Total (VET):</label>
+        <input type="text"
+               class="form-control"
+               name="vet"
+               id="vet"
+               #vet="ngModel"
+               #vetEl
+               [(ngModel)]="objeto.contrato.vet"
+               [readOnly]="true"
+               (focus)="vetObs.show($event, vetEl)"
+               (blur)="vetObs.hide()"
+               (mouseenter)="vetObs.show($event, vetEl)"
+               (mouseleave)="vetObs.hide()"
+               [mask]="'separator.4'"
+               thousandSeparator="."
+               decimalMarker=","
+               [leadZero]="true">
+    </div>
+    <!-- Descrição da Forma de Entrega da moeda estrangeira -->
+    <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Descrição da Forma de Entrega da moeda estrangeira">
+        <label for="descricaoFormaEntrega">Descrição da Forma de Entrega da moeda estrangeira:</label>
+        <input type="text"
+               class="form-control"
+               name="descricaoFormaEntrega"
+               id="descricaoFormaEntrega"
+               #descricaoFormaEntrega="ngModel"
+               [(ngModel)]="objeto.contrato.descricaoFormaEntrega"
+               required
+               pattern="\S(.*\S)?"
+               readonly
+               (change)="objeto.contrato.descricaoFormaEntrega = descricaoFormaEntrega.value.trim().toUpperCase();">
+    </div>
+    <!-- Liquidação Até -->
+    <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Liquidação Até">
+        <label for="dataLiquidacao">Liquidação Até: <span class="text-danger">*</span></label>
+        <app-input-date [valueInput]="objeto.contrato.dataLiquidacao"
+                        (valueChanges)="objeto.contrato.dataLiquidacao = $event;"
+                        [inputId]="'dataLiquidacao'"
+                        [showErrorMessage]="true"
+                        [required]="true"
+                        type="date"></app-input-date>
+    </div>
+</div>
+<div class="row">
+    <!-- Código da Natureza -->
+    <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Natureza">
+        <label for="codigoNatureza">Código da Natureza:</label>
+        <app-input-number [valueInput]="objeto.contrato.codigoNatureza "
+                          (valueChanges)="objeto.contrato.codigoNatureza = $event;"
+                          [inputId]="'codigoNatureza'"
+                          [mask]="'00000-00-A-00-00'"
+                          [showErrorMessage]="false"
+                          [allowNegativeNumbers]="false"
+                          [required]="false"
+                          [readonly]="true"
+                          [autoReplaceValue]="false"
+                          [leadZero]="false"></app-input-number>
+    </div>
+    <!-- Descrição da Natureza do Fato -->
+    <div class="form-group col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12" title="Descrição da Natureza do Fato">
+        <label for="descricaoNaturezaFato">Descrição da Natureza do Fato:</label>
+        <input type="text"
+               class="form-control"
+               name="descricaoNaturezaFato"
+               id="descricaoNaturezaFato"
+               #descricaoNaturezaFato="ngModel"
+               [(ngModel)]="objeto.contrato.descricaoNaturezaFato"
+               required
+               pattern="\S(.*\S)?"
+               readonly
+               (change)="objeto.contrato.descricaoNaturezaFato = descricaoNaturezaFato.value.trim().toUpperCase();">
+    </div>
+</div>
+<div class="row align-items-end">
+    <!-- País do Pagador/Recebedor no Exterior -->
+    <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12" title="País do Pagador/Recebedor no Exterior">
+        <label for="pais_Id">País do Pagador/Recebedor no Exterior:</label>
+        <input type="text"
+               class="form-control"
+               id="pais_Id"
+               [value]="objeto.contrato.paisPagRecExterior ?? 'N/A'"
+               disabled>
+    </div>
+    <!-- Pagador/Recebedor no Exterior -->
+    <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12" title="Pagador/Recebedor no Exterior">
+        <label for="pagRecExterior">Pagador/Recebedor no Exterior:</label>
+        <input type="text"
+               class="form-control"
+               id="pagRecExterior"
+               [value]="objeto.contrato.pagRecExterior ?? 'N/A'"
+               disabled>
+    </div>
+    <!-- Código da Relação de Vínculo entre cliente e o Pagador/Recebedor -->
+    <div class="form-group col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12" title="Código da Relação de Vínculo entre cliente e o Pagador/Recebedor">
+        <label for="codigoVinculoPagRecExterior">Código da Relação de Vínculo entre cliente e o Pagador/Recebedor:</label>
+        <input type="text"
+               class="form-control"
+               name="codigoVinculoPagRecExterior"
+               id="codigoVinculoPagRecExterior"
+               #codigoVinculoPagRecExterior="ngModel"
+               [(ngModel)]="objeto.contrato.codigoVinculoPagRecExterior"
+               required
+               [readonly]="true"
+               (change)="objeto.contrato.codigoVinculoPagRecExterior = codigoVinculoPagRecExterior.value.trim().toUpperCase();">
+    </div>
+</div>
+<div class="row">
+    <!-- Especificações -->
+    <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Especificações">
+        <label for="especificacoes">Especificações: </label>
+        <textarea
+                  class="form-control"
+                  name="especificacoes"
+                  id="especificacoes"
+                  #especificacoes="ngModel"
+                  [(ngModel)]="objeto.contrato.especificacoes"
+                  pattern="\S(.*\S)?"
+                  (change)="objeto.contrato.especificacoes = especificacoes.value.trim().toUpperCase();">
+          </textarea>
+    </div>
+    <!-- Cláusulas -->
+    <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Cláusulas">
+        <label for="clausulas">Cláusulas: </label>
+        <textarea
+                  class="form-control"
+                  name="clausulas"
+                  id="clausulas"
+                  #clausulas="ngModel"
+                  [(ngModel)]="objeto.contrato.clausulas"
+                  pattern="\S(.*\S)?"
+                  (change)="objeto.contrato.clausulas = clausulas.value.trim().toUpperCase();">
+          </textarea>
+    </div>
+    <!-- Instruções de Recebimento/Pagamento -->
+    <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" title="Instruções de Recebimento/Pagamento">
+        <label for="instrucoesRecebimentoPagamento">Instruções de Recebimento/Pagamento: </label>
+        <textarea
+                  class="form-control"
+                  name="instrucoesRecebimentoPagamento"
+                  id="instrucoesRecebimentoPagamento"
+                  #instrucoesRecebimentoPagamento="ngModel"
+                  [(ngModel)]="objeto.contrato.instrucoesRecebimentoPagamento"
+                  pattern="\S(.*\S)?"
+                  (change)="objeto.contrato.instrucoesRecebimentoPagamento = instrucoesRecebimentoPagamento.value.trim().toUpperCase();">
+          </textarea>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+        <button type="button" (click)="anterior()" class="btn btn-step btn-step-next">
+            <fa-icon [icon]="faArrowLeft"></fa-icon>
+            <span class="btn-step-text ms-2 mb-1">Anterior</span>
+        </button>
+        <div *ngIf="form.invalid">
+            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
+        </div>
+        <button type="button" *ngIf="isEditPage" (click)="proximo()" class="btn btn-step btn-step-next ms-auto " [disabled]="form.invalid">
+            <span class="btn-step-text me-2 mb-1">Próximo</span>
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+        <button type="button" *ngIf="!isEditPage" (click)="send.emit(true)" class="btn btn-primary me-0 " [disabled]="loading || form.invalid">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <span>Salvar e Gerar Swift</span>
+        </button>
+    </div>
+</div>
+
+<p-overlayPanel #vetObs>
+    <p class="text-danger">Cálculo</p>
+    <p>IOF = 0,38</p>
+    <p>R$ IOF = Valor Moeda Nacional * 0,38%</p>
+    <p>VET = (Valor Moeda Nacional + R$ IOF) / Valor Invoice</p>
+</p-overlayPanel>
+<p-overlayPanel #valorNacionalObs>
+    <p class="text-danger">Cálculo</p> Valor Moeda Nacional = Valor Invoice * Taxa Cambial
+</p-overlayPanel>

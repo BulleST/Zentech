@@ -74,7 +74,8 @@ export class FormComponent implements OnDestroy {
                         this.fileSrc = res.logoDataUri;
                         this.fileLoading = false;
                         this.fileName = '';
-                        this.fileUploaded = true;
+                        this.fileUploaded = (!!res.logoDataUri && !!res.logoDataUri.trim());
+                        console.log('fileUploaded', this.fileUploaded)
 
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'Empresa');

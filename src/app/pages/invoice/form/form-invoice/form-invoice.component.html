@@ -1,0 +1,263 @@
+    <div class="mb-3 row">
+        <div class="d-flex align-items-center flex-wrap">
+            <button type="button"
+                    class="btn btn-dark mb-2"
+                    [disabled]="!podeBaixarPDF"
+                    (click)="invoiceDownload()">Baixar PDF</button>
+            <span class="text-danger ms-0 ms-sm-2" *ngIf="!podeBaixarPDF">Você deve primeiro salvar os dados para baixar
+                o PDF</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-xl-2 col-lg-2 col-md-6 col-sm-6 col-12"> <!-- Número Invoice -->
+            <label for="id">Nº: <span class="text-danger">*</span> <small>(automático)</small></label>
+            <input type="text"
+                   class="form-control"
+                   name="id"
+                   id="id"
+                   mask="0*"
+                   #id="ngModel"
+                   [(ngModel)]="objeto.invoice.id"
+                   readonly>
+        </div>
+        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Data Invoice -->
+            <label for="data">Data Invoice: <span class="text-danger">*</span></label>
+            <app-input-date [valueInput]="objeto.invoice.data"
+                            (valueChanges)="objeto.invoice.data = $event;"
+                            [inputId]="'data'"
+                            [showErrorMessage]="true"
+                            [required]="true"
+                            type="datetime-local"></app-input-date>
+        </div>
+        <div class="form-group col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12"> <!-- Moeda -->
+            <label for="moeda_Id">Moeda: <span class="text-danger">*</span></label>
+            <p-dropdown [options]="moedas"
+                        [(ngModel)]="objeto.invoice.moeda_Id"
+                        #moeda_Id="ngModel"
+                        name="moeda_Id"
+                        inputId="moeda_Id"
+                        [styleClass]="'form-control ' + (loadingMoedas ? 'form-control-loading' : '')"
+                        [showClear]="true"
+                        [filter]="true"
+                        [filterFields]="['nome', 'simbolo', 'codigo']"
+                        optionLabel="nome"
+                        optionValue="id"
+                        placeholder="Selecione uma moeda"
+                        [required]="true"
+                        [showClear]="true">
+                <ng-template let-item pTemplate="item">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex align-items-center w-100" [title]="item.nome">
+                            <span class="flag flag-info px-2 me-2">{{item.codigo}}</span>
+                            <span class="text-ellipsis">{{item.nome}}</span>
+                            <span class="flag flag-info px-2 ms-auto">{{item.simbolo}}</span>
+                        </div>
+                        <div class="ms-2">
+                            <a class="py-1 px-1 text-dark" (click)="moedaEditar(item)" title="Editar"><fa-icon
+                                         [icon]="faEdit"></fa-icon></a>
+                            <a class="py-1 px-1 text-dark" *ngIf="podeExcluirMoeda" (click)="moedaExcluir(item.id)"
+                               title="Editar"><fa-icon [icon]="faTrash"></fa-icon></a>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info"
+                           [routerLink]="['./moeda']">adicionar</a>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+            <div *ngIf="moeda_Id.touched && moeda_Id.errors">
+                <p class="text-danger" *ngIf="moeda_Id.errors['required']">Este campo é obrigatório.</p>
+            </div>
+        </div>
+        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Valor -->
+            <label for="valor">Valor: <span class="text-danger">*</span></label>
+            <app-input-number [valueInput]="objeto.invoice.valor"
+                              (valueChanges)="objeto.invoice.valor = $event; calculaMoedaNacional(); calculaVET();"
+                              [inputId]="'valor'"
+                              [mask]="'separator.2'"
+                              [showErrorMessage]="true"
+                              [allowNegativeNumbers]="false"
+                              [required]="true"
+                              [autoReplaceValue]="false"
+                              [leadZero]="true"
+                              [min]="0.1"
+                              [max]="999999999"></app-input-number>
+        </div>
+        <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12 my-8"> <!-- Instituição Financeira -->
+            <label for="instituicaoFinanceira_Id">Instituição Financeira: <span class="text-danger">*</span></label>
+            <p-dropdown [styleClass]="'form-control ' + (loadingInstituicaoFinanceira ? 'form-control-loading' : '')"
+                        [showClear]="true"
+                        [options]="instituicaoFinanceira"
+                        #instituicaoFinanceira_Id="ngModel"
+                        [(ngModel)]="objeto.invoice.instituicaoFinanceira_Id"
+                        optionLabel="nome"
+                        optionValue="id"
+                        [placeholder]="'Selecione'"
+                        [disabled]="loadingInstituicaoFinanceira"
+                        name="instituicaoFinanceira_Id"
+                        inputId="instituicaoFinanceira_Id"
+                        [required]="true"
+                        [filter]="true"
+                        [filterFields]="['nome', 'codigoRegistro']"
+                        appendTo="body">
+                <ng-template let-item pTemplate="item">
+                    <div>
+                        <p>{{item.nome}}</p>
+                        <p><strong>Código de Registro:</strong> {{item.codigoRegistro}}</p>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info"
+                           [routerLink]="['./instituicao-financeira']">adicionar</a>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+            <div *ngIf="instituicaoFinanceira_Id.touched && instituicaoFinanceira_Id.errors">
+                <p class="text-danger" *ngIf="instituicaoFinanceira_Id.errors['required']">Este campo é obrigatório.</p>
+            </div>
+        </div>
+        <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- Beneficiário -->
+            <label for="beneficiario_Id">Beneficiário: <span class="text-danger">*</span></label>
+            <p-dropdown
+                        [options]="beneficiarios"
+                        [(ngModel)]="objeto.invoice.beneficiario_Id"
+                        #beneficiario_Id="ngModel"
+                        name="beneficiario_Id"
+                        inputId="beneficiario_Id"
+                        [styleClass]="'form-control ' + (loadingBeneficiarios ? 'form-control-loading' : '')"
+                        [showClear]="true"
+                        [filter]="true"
+                        [filterFields]="['nome', 'codigoRegistro']"
+                        optionLabel="nome"
+                        optionValue="id"
+                        placeholder="Selecione um beneficiário"
+                        [required]="true"
+                        [showClear]="false"
+                        (ngModelChange)="beneficiarioChange()"
+                        appendTo="body">
+                <ng-template let-item pTemplate="item">
+                    <div>
+                        <p>{{item.nome}}</p>
+                        <p><strong>Código de Registro:</strong> {{item.codigoRegistro}}</p>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="py-2 px-3 border-top bg-light"> Não encontrou? Clique para <a class="link text-info"
+                           [routerLink]="['./beneficiario']">adicionar</a>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+            <div *ngIf="beneficiario_Id.touched && beneficiario_Id.errors">
+                <p class="text-danger" *ngIf="beneficiario_Id.errors['required']">Este campo é obrigatório.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Dados do Beneficiário -->
+    <div class="row">
+        <div class="form-group mt-3">
+            <div class="col-sm-12 card py-3 px-4">
+                <div class="row">
+                    <div class="d-flex">
+                        <div col="col-xl-9 col-lg-9 col-md-8 col-sm-7 col-12">
+                            <h6>Dados do Beneficiário </h6>
+                            <p class="mb-3"><small class="text-danger">(Selecione um beneficiário para carregar
+                                    dados)</small></p>
+                        </div>
+                        <div class="ms-auto">
+                            <button type="button" class="btn btn-dark" (click)="alterarContaChange()">
+                                <span *ngIf="!alterarConta">Alterar conta</span>
+                                <span *ngIf="alterarConta">Cancelar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12"> <!-- Banco -->
+                        <label for="nomeBanco">Banco: </label>
+                        <input type="text"
+                               id="nomeBanco"
+                               class="form-control"
+                               [value]="bancoBeneficiarioSelected?.nome ?? 'N/A'"
+                               readonly>
+                    </div>
+                    <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Conta -->
+                        <label for="conta">Conta: </label>
+                        <input type="text"
+                               class="form-control"
+                               id="conta"
+                               name="conta"
+                               #conta="ngModel"
+                               [(ngModel)]="objeto.invoice.conta"
+                               [readonly]="!alterarConta"
+                               required>
+                        <div *ngIf="conta.touched && conta.errors">
+                            <p class="text-danger" *ngIf="conta.errors['required']">Este campo é obrigatório.</p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12"> <!-- Código Swift -->
+                        <label for="codigoSwift">Código Swift <small>(Banco)</small>: </label>
+                        <input type="text"
+                               id="codigoSwift"
+                               class="form-control"
+                               [value]="bancoBeneficiarioSelected?.codigoSwift ?? 'N/A'"
+                               readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <small><b>Endereço do banco</b></small>
+                        <hr class="w-100">
+                    </div>
+                </div>
+                <!-- Endereço do Banco -->
+                <div class="row">
+                    <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 "> <!-- Endereço -->
+                        <label for="logradouro">Endereço: </label>
+                        <textarea rows="1"
+                                  class="form-control"
+                                  id="logradouro"
+                                  [value]="bancoBeneficiarioSelected?.logradouro ?? 'N/A'"
+                                  disabled>
+                            </textarea>
+                    </div>
+                    <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12 "> <!-- Cidade -->
+                        <label for="cidade">Cidade: </label>
+                        <input type="text"
+                               class="form-control"
+                               id="cidade"
+                               [value]="bancoBeneficiarioSelected?.cidade ?? 'N/A'"
+                               disabled>
+                    </div>
+                    <div class="form-group col-xl-2 col-lg-2 col-md-2 col-sm-4 col-12 "> <!-- UF -->
+                        <label for="estado">UF: </label>
+                        <input type="text"
+                               class="form-control"
+                               id="estado"
+                               [value]="bancoBeneficiarioSelected?.estado ?? 'N/A'"
+                               disabled>
+                    </div>
+                    <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-4 col-12 "> <!-- País -->
+                        <label for="pais_Id">País: </label>
+                        <input type="text"
+                               class="form-control"
+                               id="pais_Id"
+                               [value]="bancoBeneficiarioSelected?.pais_Id ?? 'N/A'"
+                               disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+            <div *ngIf="form.invalid">
+                <p *ngIf="form.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Invoice corretamente para continuar.</p>
+            </div>
+            <button type="button" (click)="proximo()" class="btn btn-step btn-step-next ms-auto "
+                    [disabled]="form.invalid">
+                <span class="btn-step-text me-2 mb-1">Próximo</span>
+                <fa-icon [icon]="faArrowRight"></fa-icon>
+            </button>
+        </div>
+    </div>

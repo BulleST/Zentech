@@ -50,7 +50,7 @@
                             required
                             [disabled]="!podeEditar">
                         <option [ngValue]="undefined">Selecione</option>
-                        <option [ngValue]="item.id" *ngFor="let item of perfil">{{item.perfil}}</option>
+                        <option [ngValue]="item.id" *ngFor="let item of perfil" [disabled]="item.disabled">{{item.perfil}}</option>
                     </select>
                     <div *ngIf="perfilAcesso_Id.touched && perfilAcesso_Id.errors">
                         <p class="text-danger" *ngIf="perfilAcesso_Id.errors['required']">Este campo é obrigatório.</p>

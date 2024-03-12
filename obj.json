@@ -1,0 +1,69 @@
+{
+    "invoice": {
+      "id": 63,
+      "data": "2024-03-11T18:53",
+      "valor": 400000,
+      "beneficiario_Id": 46,
+      "instituicaoFinanceira_Id": 18,
+      "moeda_Id": 8,
+      "conta": "456777777778987654321"
+    },
+    "contrato": {
+      "id": 11,
+      "evento_Id": 22,
+      "tipo_Id": 1,
+      "invoice_Id": 63,
+      "data": "2024-03-11T00:00",
+      "dataLiquidacao": "2024-03-11",
+      "taxa": 1,
+      "valorNacional": "400000.00",
+      "numContrato": "63",
+      "paisPagRecExterior": null,
+      "pagRecExterior": null,
+      "percentualAdiantamento": null,
+      "vet": "1.0038",
+      "clausulas": "",
+      "especificacoes": "",
+      "instrucoesRecebimentoPagamento": "",
+      "descricaoNaturezaFato": "Serviço de pagamento ou transferência internacional (eFX) - Aquisição de bens",
+      "descricaoFormaEntrega": "65 - Teletransmissão",
+      "codigoNatureza": "3405209N0590",
+      "codigoVinculoPagRecExterior": "50-Demais",
+      "rde": null,
+      "nomeRepresentanteLegal": "DIRETOR 1",
+      "codigoRepresentanteLegal": "456456",
+      "assinaturaRepresentanteLegal": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAUCAMAAABVlYYBAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVBQTFRFAAAAKalvIKZpH6ZpLr59M8aEM8aEOciIIqZqHaVnHKVnKrt6MMWDMMWCMsaDIqdrHaVnG6RmKbt5L8WCL8WCGYtSF4pQF4pQG5dbGp5hGZ5hGqJkE4hNEIdLEIdLEIdLD4dLD4hMEIhOEo1REpFTIKlqJrV1JrV1EohNDoZKF4tRE4lOFIlODHtDB3Q7B30/FZhaG6RmbbaRbraSEYhNbreScriVOZxq6/Xwfr+eyeTXQJ9waLSO+v37ZLGLCH0/EIdMlMqv6vXwg8GiEohNDXhCDl80D2U3DXxDDYdJC4VHXK6F3+/nXq6GyOTWDndCEFcxEVw0C3M8B30/k8muZbKLmcyyEohNDW09El01DW06CnU9CXc9KpNeJZFbJJBaGW9DDlUwDVQvDVIuDlAtEVw0GGE6E101GGA5El01El01IGZBFmA4FF43FF43HGQ+/NyAUQAAAHB0Uk5TAAIoMzMzMg4p5P////54NvX///+ZGzQ2YPf//6Pz9ff/////////mcz//////////5n///////////////////////////////+Z//////////+Z////qv////+ZBSwwXPf///+ZNvUy8pgFUGZlHfrLIboAAADUSURBVHicY2AAAUYmZjBgYQUBNnawIAMHJxcYcPOAAC8fRJRfQBAMhITBQASHqKiYuLi4hKSUlJQ0kqiMrJycnLyCoqKikrKKqhoYqDNoaGpqaWvqaGlq6urpG0AMMgSJGhmbmJphiJpbWFpZY4hq2tjaaYJE7ZFFHRydnF00NV3d3D08wcALJOrt4+sHVOwfEBikDwbBINGQUAejMAxRKEAWDYeLRgRERkWDQQxDbFx8fHxCYlJSckogDKRCQictPRAZ4BXNyEQRzYKIZufkIoG8fADZbUtViiS/IgAAAABJRU5ErkJggg==",
+      "dataAssinaturaRepresentanteLegal": null,
+      "ipAssinaturaRepresentanteLegal": null,
+      "controleProCambio": null,
+      "dataAssinaturaIntermediadora": null,
+      "dataCertificadoAssinatura": null
+    }
+  }
+
+
+"Boa tarde, pessoal. Nossas pendencias:
+
+1.
+Download Invoice
+Erro: Could not find file 'C:\home\site\wwwroot\Invoice_20240312T170027.pdf'.
+
+2.
+Download Contrato Bicolunado:
+Cannot perform runtime binding on a null reference
+O problema é o valor "string" na assinatura do Beneficiário > Banco > Representante Legal > Assinatura
+
+3.
+Atualizar dados do contrato bicolunado para os dados da empresa atual
+
+3.
+Atualizar dados do contrato na seção Cliente para os dados da empresa
+
+4.
+Atualizar dados do swift para os dados da empresa
+
+5.
+Incluir campos Cidade e UF na tabela empresa
+
+6.
+"

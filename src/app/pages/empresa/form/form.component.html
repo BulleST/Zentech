@@ -167,10 +167,21 @@
                     </div>
                 </div>
             </div>
+            <div class="row hidden">
+                <input type="hidden" 
+                    id="logoDataUri"
+                    name="logoDataUri"
+                    [(ngModel)]="objeto.logoDataUri"
+                    required>
+            </div>
             <div class="row mt-3">
                 <div class="col-12">
                     <div>
-                        <label for="file" class="mb-0">Logo: <span class="text-danger">*</span></label>
+                        <label for="file" class="mb-0">Logo: 
+                            <span class="text-danger">*</span>
+                            <span class="text-danger" *ngIf="!fileUploaded">  (Esse campo é obrigatório)</span>
+
+                        </label>
                         <label for="file" class="input-file-container" *ngIf="!fileUploaded">
                             <p class="icon">
                                 <i class="pi pi-upload"></i>

@@ -54,28 +54,33 @@ export class FormComponent {
         this.account = this.accountService.accountValue;
 
         var empresaSelected = this.empresaService.empresaSelected.subscribe(res => {
-            this.perfil = [];
-            if (this.account?.perfilAcesso_Id == Role.Admin) {
-                this.perfil = [
-                    { id: 2, perfil: 'Master' },
-                    { id: 3, perfil: 'Consultor' },
-                ];
+            
+            this.perfil = [
+                { id: 1, perfil: 'Admin', disabled: this.account?.perfilAcesso_Id != Role.Admin || res.id != 27 },
+                { id: 2, perfil: 'Master', disabled: false },
+                { id: 3, perfil: 'Consultor', disabled: false },
+            ];
+            // if (this.account?.perfilAcesso_Id == Role.Admin) {
+            //     this.perfil = [
+            //         { id: 2, perfil: 'Master' },
+            //         { id: 3, perfil: 'Consultor' },
+            //     ];
 
-                if (res.id == 27) {
-                    this.perfil.unshift({ id: 1, perfil: 'Admin' })
-                }
-            } 
-            else if (this.account?.perfilAcesso_Id == Role.Master) {
-                this.perfil = [
-                    { id: 2, perfil: 'Master' },
-                    { id: 3, perfil: 'Consultor' },
-                ];
-            } 
-            else if (this.account?.perfilAcesso_Id == Role.Consultor) {
-                this.perfil = [
-                    { id: 3, perfil: 'Consultor' },
-                ];
-            };
+            //     if (res.id == 27) {
+            //         this.perfil.unshift({ id: 1, perfil: 'Admin' })
+            //     }
+            // } 
+            // else if (this.account?.perfilAcesso_Id == Role.Master) {
+            //     this.perfil = [
+            //         { id: 2, perfil: 'Master' },
+            //         { id: 3, perfil: 'Consultor' },
+            //     ];
+            // } 
+            // else if (this.account?.perfilAcesso_Id == Role.Consultor) {
+            //     this.perfil = [
+            //         { id: 3, perfil: 'Consultor' },
+            //     ];
+            // };
         });
         this.subscription.push(empresaSelected);
 

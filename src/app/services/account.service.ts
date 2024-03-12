@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, Observable, lastValueFrom, of, throwError } from 'rxjs';
 import { Account, ChangePassword, Login, Register, ResetPassword, UpdateAccount } from '../models/account.model';
 import { Crypto } from '../utils/crypto';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { EmpresaService } from './empresa.service';
 
@@ -87,26 +87,44 @@ export class AccountService {
 
     refreshToken() {
        return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
-           .pipe(tap({
-            next: async account => {
-                this.setAccount(account);
-                this.startRefreshTokenTimer();
-                if (account.perfilAcesso_Id == 1) {
-                    if (this.empresaService.list.value.length == 0) 
-                        await lastValueFrom(this.empresaService.getList());
-                }
-                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                    this.empresaService.empresaSelected.next({
-                        id: account.empresa_Id,
-                        empresa: account.empresa
-                    })
-                }
-            },
-            error: (err) => {
-                this.setAccount(undefined);
-                this.startRefreshTokenTimer();
-            },
-           }));
+           .pipe(map(async account => {
+                    this.setAccount(account);
+                    this.startRefreshTokenTimer();
+                    if (account.perfilAcesso_Id == 1) {
+                        if (this.empresaService.list.value.length == 0) {
+                            await lastValueFrom(this.empresaService.getList());
+                        }
+                    }
+                    if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+                        this.empresaService.empresaSelected.next({
+                            id: account.empresa_Id,
+                            empresa: account.empresa
+                        })
+                    }
+                    return account;
+                }),
+            
+        //     tap({
+        //     // next: async account => {
+        //     //     this.setAccount(account);
+        //     //     this.startRefreshTokenTimer();
+        //     //     if (account.perfilAcesso_Id == 1) {
+        //     //         if (this.empresaService.list.value.length == 0) 
+        //     //             await lastValueFrom(this.empresaService.getList());
+        //     //     }
+        //     //     if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+        //     //         this.empresaService.empresaSelected.next({
+        //     //             id: account.empresa_Id,
+        //     //             empresa: account.empresa
+        //     //         })
+        //     //     }
+        //     // },
+        //     error: (err) => {
+        //         this.setAccount(undefined);
+        //         this.startRefreshTokenTimer();
+        //     },
+        //    })
+           );
 
     }
 

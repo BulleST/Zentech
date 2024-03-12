@@ -1,6 +1,7 @@
 export class PerfilAcesso {
     id: number = undefined as unknown as number;
     perfil: string = '';
+    disabled: boolean = false;
 }
 
 
@@ -11,7 +12,7 @@ export enum Role {
 }
 
 export var perfil: PerfilAcesso[] = [
-    { id: 1, perfil: 'Admin' },
-    { id: 2, perfil: 'Master' },
-    { id: 3, perfil: 'Consultor' },
+    { id: 1, perfil: 'Admin', disabled: false },
+    { id: 2, perfil: 'Master', disabled: false },
+    { id: 3, perfil: 'Consultor', disabled: false },
 ]

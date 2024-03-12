@@ -1,0 +1,274 @@
+<div class="row">
+    <div class="d-flex align-items-center flex-wrap">
+        <button type="button" class="btn btn-dark"
+                [disabled]="!podeBaixarPDF"
+                (click)="contratoBicolunadoDownload()">Baixar PDF</button>
+        <p class="text-danger ms-2" *ngIf="!podeBaixarPDF">Assinaturas e certificado devem estar incluídos para baixar
+            pdf.</p>
+    </div>
+</div>
+<!-- Dados do Representante Legal -->
+<div class="row">
+    <div class="mt-3">
+        <div class="col-sm-12 card py-3 px-4">
+            <div class="row mb-2">
+                <div class="d-flex align-items-center justify-content-between flex-wrap w-100">
+                    <h6 class="my-2">Representante Legal / Contratante</h6>
+                    <!-- Não pode alterar os dados se já tiver assinado uma vez, nem assinar novamente -->
+                    <div *ngIf="!assinadoRepresentanteLegal">
+
+                        <span *ngIf="!podeAssinarRepresentanteLegal" class="text-danger ms-auto me-2">Para assinar,
+                            todos os
+                            campos devem estar preenchidos corretamente.</span>
+                        <button type="button"
+                                class="btn btn-dark me-2"
+                                [disabled]="loading"
+                                (click)="alterarDadosRepresentanteLegal()">
+                            <span *ngIf="alterarRepresentanteLegal">Cancelar</span>
+                            <span *ngIf="!alterarRepresentanteLegal">Alterar dados</span>
+                        </button>
+                        <button type="button"
+                                *ngIf="alterarRepresentanteLegal"
+                                class="btn btn-dark me-2"
+                                (click)="sendValues()"
+                                [disabled]="loading || !podeAssinarRepresentanteLegal">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                            <span>Salvar dados</span>
+                        </button>
+                        <button type="button"
+                                class="btn btn-dark"
+                                [disabled]="loading || alterarRepresentanteLegal || !(objeto.contrato.nomeRepresentanteLegal && objeto.contrato.codigoRepresentanteLegal && objeto.contrato.assinaturaRepresentanteLegal)"
+                                (click)="assinarRepresentanteLegal()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                            <span class="me-1">Assinar </span>
+                            <fa-icon [icon]="faPenClip"></fa-icon>
+                        </button>
+
+                    </div>
+                    <div *ngIf="assinadoRepresentanteLegal" class="d-flex align-items-center justify-content-between">
+                        <p class="me-2">Assinado em
+                            {{objeto.contrato.dataAssinaturaRepresentanteLegal | date : 'dd/MM/yyyy HH:mm'}}
+                        </p>
+                        <span class="btn bg-success text-white" style="cursor: default">
+                            <span class="me-2">Assinado</span>
+                            <fa-icon [icon]="faCheck"></fa-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xl-4 col-lg-6 col-md-6 col-sm-5 col-12"><!-- Nome -->
+                    <label for="nomeRepresentanteLegal">Nome: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="nomeRepresentanteLegal"
+                           id="nomeRepresentanteLegal"
+                           #nomeRepresentanteLegal="ngModel"
+                           [(ngModel)]="objeto.contrato.nomeRepresentanteLegal"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.contrato.nomeRepresentanteLegal = nomeRepresentanteLegal.value.trim().toUpperCase();"
+                           required
+                           [readonly]="readonlyRepresentanteLegal()">
+                    <div *ngIf="nomeRepresentanteLegal.touched && nomeRepresentanteLegal.errors">
+                        <p class="text-danger" *ngIf="nomeRepresentanteLegal.errors['required']">Este campo é
+                            obrigatório.</p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-5 col-12"><!-- Código -->
+                    <label for="codigoRepresentanteLegal">Código: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="codigoRepresentanteLegal"
+                           id="codigoRepresentanteLegal"
+                           #codigoRepresentanteLegal="ngModel"
+                           [(ngModel)]="objeto.contrato.codigoRepresentanteLegal"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.contrato.codigoRepresentanteLegal = codigoRepresentanteLegal.value.trim().toUpperCase();"
+                           required
+                           [readonly]="readonlyRepresentanteLegal()">
+                    <div *ngIf="codigoRepresentanteLegal.touched && codigoRepresentanteLegal.errors">
+                        <p class="text-danger" *ngIf="codigoRepresentanteLegal.errors['required']">Este campo é
+                            obrigatório.</p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12 col-12"> <!-- Assinatura -->
+                    <label for="assinaturaRepresentanteLegal">Assinatura: <span class="text-danger">*</span></label>
+                    <div class="d-flex align-items-center flex-wrap" *ngIf="!assinadoRepresentanteLegal">
+                        <label for="assinaturaRepresentanteLegal"
+                               class="input-file-container btn btn-dark me-2 mb-2"
+                               [class.disabled]="!alterarRepresentanteLegal">
+                            <span *ngIf="!assinaturaIsUploaded">Escolher assinatura</span>
+                            <span *ngIf="assinaturaIsUploaded">Refazer upload</span>
+                            <input type="file"
+                                   name="assinaturaRepresentanteLegal"
+                                   id="assinaturaRepresentanteLegal"
+                                   #assinaturaRepresentanteLegal
+                                   required
+                                   [disabled]="!alterarRepresentanteLegal"
+                                   accept="image/png"
+                                   (input)="fileChange($event)">
+                        </label>
+                        <label class="my-1" *ngIf="!objeto.contrato.assinaturaRepresentanteLegal"
+                               title="Nenhuma assinatura selecionada">Nenhuma assinatura selecionada</label>
+                        <label class="my-1"
+                               *ngIf="objeto.contrato.assinaturaRepresentanteLegal && assinaturaUploadedFile != undefined"
+                               [title]="assinaturaUploadedFile.name">{{assinaturaUploadedFile.name}}</label>
+                    </div>
+                    <div *ngIf="objeto.contrato.assinaturaRepresentanteLegal">
+                        <img [src]="objeto.contrato.assinaturaRepresentanteLegal"
+                             [alt]="assinaturaUploadedFile ? assinaturaUploadedFile.name : 'Assinatura' "
+                             class="input-file-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Assinatura Intermediadora -->
+<div class="row">
+    <div class="mt-3">
+        <div class="col-sm-12 mb-2 card py-3 px-4">
+            <div class="row mb-2">
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <h6 class="my-2 me-3">Assinatura Intermediadora</h6>
+                    <button type="button"
+                            *ngIf="!assinadoIntermediadora"
+                            class="btn btn-dark"
+                            (click)="assinarMAC()"
+                            [disabled]="loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                        <span class="me-1">Assinar </span>
+                        <fa-icon [icon]="faPenClip"></fa-icon>
+                    </button>
+                    <div *ngIf="assinadoIntermediadora" class="d-flex align-items-center justify-content-between">
+                        <p class="me-2">Assinado em
+                            {{objeto.contrato.dataAssinaturaIntermediadora | date : 'dd/MM/yyyy HH:mm'}}
+                        </p>
+                        <span class="btn bg-success text-white" style="cursor: default">
+                            <span class="me-2">Assinado</span>
+                            <fa-icon [icon]="faCheck"></fa-icon>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xl-5 col-lg-6 col-md-6 col-sm-5 col-12"><!-- Nome -->
+                    <label for="nomeMac">Nome:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="nomeMac"
+                           id="nomeMac"
+                           readonly
+                           value='MAC MEIOS DE PAGAMENTO LTDA (A "NEW CLICK")'>
+                </div>
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-5 col-12"><!-- Código -->
+                    <label for="codigoMAX">CNPJ/MF:</label>
+                    <input type="text"
+                           class="form-control"
+                           name="codigoMAX"
+                           id="codigoMAX"
+                           readonly
+                           value="48.997.721/0001-44">
+                </div>
+                <div class="form-group col-xl-4 col-lg-5 col-md-5 col-sm-5 col-12 col-12"> <!-- Assinatura -->
+                    <label for="assinaturaRepresentanteLegal">Assinatura: <span class="text-danger">*</span></label>
+                    <img src="./assets/img/assinatura-mac.png" alt="Assinatura MAC" class="input-file-image">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Certificado de Assinatura -->
+<div class="row">
+    <div class="mt-3">
+        <div class="col-sm-12 mb-2 card py-3 px-4">
+            <div class="row mb-2">
+                <div class="d-flex align-items-center justify-content-between flex-wrap">
+                    <h6 class="my-2">Certificado de Assinatura</h6>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <button type="button"
+                                *ngIf="!certificadoAssinaturaIncluido"
+                                class="btn btn-dark"
+                                [disabled]="loading || !assinadoRepresentanteLegal || !assinadoIntermediadora"
+                                (click)="certificadoAssinatura()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                            <span class="me-1">Gerar Certificado</span>
+                            <fa-icon [icon]="faPenClip"></fa-icon>
+                        </button>
+                        <div *ngIf="certificadoAssinaturaIncluido"
+                             class="d-flex align-items-center justify-content-between">
+                            <p class="me-2">Incluído em
+                                {{objeto.contrato.dataCertificadoAssinatura | date : 'dd/MM/yyyy HH:mm'}}
+                            </p>
+                            <span class="btn bg-success text-white" style="cursor: default">
+                                <span class="me-2">Incluído</span>
+                                <fa-icon [icon]="faCheck"></fa-icon>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="objeto.contrato.dataCertificadoAssinatura">
+                <div class="w-100">
+                    <div class="border border-dark">
+                        <div class="border-bottom border-dark text-center">
+                            <div class="py-3 px-3">
+                                <p>Datas e horários em GMT -3:00 Brasília</p>
+                                <p>Certificado de assinaturas gerado quarta-feira, 24 de janeiro de 2024 18:57:16</p>
+                            </div>
+                        </div>
+                        <div class="border-bottom border-dark">
+                            <div class="py-3 px-3">
+                                <p>MAC MEIOS DE PAGAMENTO LTDA </p>
+                                <p>{{beneficiarioSelected?.nome}}</p>
+                                <p>REF: XXXXXXXXX</p>
+                                <p>Controle PROCAMBIO: {{objeto.contrato.controleProCambio}}</p>
+                                <p>O documento não foi modificado após a aplicação das assinaturas.</p>
+                            </div>
+                        </div>
+                        <div class="border-bottom border-dark">
+                            <div class="py-3 px-3 certificado-icon-container">
+                                <h6 class="mb-2"><b>Assinaturas</b></h6>
+                                <p>- A assinatura é <b>VÁLIDA</b>, assinada por
+                                    <b>{{objeto.contrato.nomeRepresentanteLegal ?? 'REPRESENTANTE LEGAL' }} - ID:
+                                        {{objeto.contrato.codigoRepresentanteLegal ?? '123456'}}</b>
+                                </p>
+                                <p>- SOCIO ADM</p>
+                                <p>- IP: {{objeto.contrato.ipAssinaturaRepresentanteLegal}}</p>
+                                <p>- Hora da Assinatura:
+                                    {{objeto.contrato.dataAssinaturaRepresentanteLegal | date : 'dd/MM/yyyy HH:mm'}}
+                                </p>
+                                <p>- A identidade do assinante é <b>VÁLIDA</b></p>
+                                <img src="./assets/img/check-icon.png" class="certificado-icon">
+                            </div>
+                        </div>
+                        <div class="py-3 px-3">
+                            <p>Esse LOG pertence unica e exclusivamente ao documento:</p>
+                            <p>Controle PROCAMBIO: {{objeto.contrato.controleProCambio}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+                    <button type="button" (click)="anterior()" class="btn btn-step btn-step-next">
+                        <fa-icon [icon]="faArrowLeft"></fa-icon>
+                        <span class="btn-step-text ms-2 mb-1">Anterior</span>
+                    </button>
+
+                    <p class="text-danger px-2 text-center" *ngIf="!objeto.contrato.dataCertificadoAssinatura">Para gerar o certificado
+                        de assinatura, deve conter assinatura do representante
+                        legal.</p>
+
+                    <button type="button" (click)="proximo()" class="btn btn-step btn-step-next ms-auto">
+                        <span class="btn-step-text me-2 mb-1">Próximo</span>
+                        <fa-icon [icon]="faArrowRight"></fa-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+            </div>
+        </div>
+    </div>
+</div>

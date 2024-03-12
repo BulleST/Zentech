@@ -11,12 +11,23 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { TabViewModule } from 'primeng/tabview';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { FormContratoBicolunadoComponent } from './form-contrato-bicolunado/form-contrato-bicolunado.component';
+import { FormComponent } from './form/form.component';
+import { LibrariesModule } from 'src/app/shared/libraries.module';
+import { FormContratoComponent } from './form/form-contrato/form-contrato.component';
+import { FormInvoiceComponent } from './form/form-invoice/form-invoice.component';
+import { FormSwiftComponent } from './form/form-swift/form-swift.component';
 
 @NgModule({
     declarations: [
         ListComponent,
         // FormComponent,
         DeleteComponent,
+        FormContratoBicolunadoComponent,
+        FormComponent,
+        FormContratoComponent,
+        FormInvoiceComponent,
+        FormSwiftComponent
     ],
     imports: [
         CommonModule,
@@ -24,8 +35,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
         FormsModule,
         FontAwesomeModule,
         SharedModule,
-        DropdownModule,
-        TabViewModule,
+        LibrariesModule
     ]
 })
 export class InvoiceModule { }
