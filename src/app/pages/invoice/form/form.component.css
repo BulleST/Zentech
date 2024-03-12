@@ -16,7 +16,7 @@
 
 ::ng-deep .p-tabview-panels {
     flex: 1 0 80%;
-    border: 1px rgb(var(--grey)) solid;
+    border: 1px var(--grey) solid;
     padding: 15px 0;
     background-color: #f7f7f7;
 }
@@ -36,7 +36,7 @@
 }
 
 ::ng-deep .p-tabview-nav li {
-    background-color: rgb(var(--secondary));
+    background-color: var(--neutral);
     display: flex;
     align-items: center;
 }
@@ -48,7 +48,7 @@
     width: 100%;
     display: flex;
     padding: 10px 10px;
-    background-color: rgb(var(--grey));
+    background-color: var(--grey);
 }
 
 ::ng-deep .p-tabview-nav li a>*:not(span) {
@@ -60,23 +60,23 @@
 }
 
 ::ng-deep .p-tabview-nav li:nth-child(even) {
-    background: rgb(var(--secondary));
+    background: var(--neutral);
 }
 
 ::ng-deep .p-tabview-nav li a:hover {
     color: #fff;
-    background-color: rgb(var(--grey));
+    background-color: var(--grey);
 }
 
 ::ng-deep .p-tabview-nav li.p-highlight a {
-    background-color: rgb(var(--primary));
-    border-bottom: 1px rgb(var(--primary)) solid;
+    background-color: var(--primary);
+    border-bottom: 1px var(--primary) solid;
     margin-bottom: 0px;
 }
 
 .swift {
     border-radius: 5px;
-    border: 2px rgb(var(--primary)) dashed;
+    border: 2px var(--primary) dashed;
     height: 200px;
     width: 400px;
     display: flex;
@@ -90,9 +90,9 @@
 }
 
 .btn-step {
-    background-color: rgb(var(--grey));
+    background-color: var(--grey);
     color: #fff;
-    border: 2px rgb(var(--grey)) solid;
+    border: 2px var(--grey) solid;
     padding: 3px 12px 3px;
     display: flex;
     align-items: center;
@@ -103,12 +103,12 @@
 }
 
 .btn-step:hover {
-    background: rgb(var(--grey));
+    background: var(--grey);
     padding: 3px 12px 3px;
     color: #fff;
     position: static;
     background: #fff;
-    color: rgb(var(--grey));
+    color: var(--grey);
 }
 
 .btn.btn-step.disabled,

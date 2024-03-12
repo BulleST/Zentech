@@ -4,7 +4,9 @@ import { faCity, faHandHoldingDollar, faIdCard, faLink, faMagnifyingGlass, faPer
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { AccountService } from 'src/app/services/account.service';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import { Header } from 'src/app/utils/header';
 
 @Component({
@@ -27,12 +29,13 @@ export class NavigationComponent implements OnDestroy {
     homeActive = true;
     padding = 0;
     account?: Account;
-
+    empresa?: Empresa = new Empresa;
 
     constructor(
         private header: Header,
         private router: Router,
         private accountService: AccountService,
+        private empresaService: EmpresaService,
     ) {
         var account = this.accountService.accountSubject.subscribe(res => {
             this.account = res;
@@ -49,6 +52,9 @@ export class NavigationComponent implements OnDestroy {
         this.menuOpen = this.header.menuAsideOpen.value;
         var open = this.header.menuAsideOpen.subscribe(res => this.menuOpen = res);
         this.subscription.push(open);
+        
+        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa)
+        this.subscription.push(empresa);
     }
 
     ngOnDestroy(): void {

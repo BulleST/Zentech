@@ -16,7 +16,6 @@ export class AccountComponent {
         this.router.events.subscribe(res => {
             if (res instanceof NavigationEnd) {
               try {
-                console.log(res.url)
                 var a = res.url;
                 var b = a.split('/')
                 var c = b[2].split('?')[0]

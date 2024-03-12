@@ -11,7 +11,8 @@ import { DeleteComponent } from './delete/delete.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
-
+import { ColorPickerModule as ColorPickerModulePrimeng } from 'primeng/colorpicker';
+import { ColorPickerModule } from 'ngx-color-picker';
 @NgModule({
     declarations: [
         ListComponent,
@@ -28,6 +29,8 @@ import { DeactivatedComponent } from './deactivated/deactivated.component';
         DropdownModule,
         NgxMaskDirective,
         NgxMaskPipe,
+        ColorPickerModulePrimeng,
+        ColorPickerModule
     ],
     providers: [
         provideNgxMask(),

@@ -3,92 +3,122 @@
 </ng-template>
 <ng-template #template>
     <form #form="ngForm" (ngSubmit)="send(form)">
-   <div class="px-2">
-    <div class="row">
-        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-            <label for="name">Nome: <span class="text-danger">*</span></label>
-            <input type="text"
-                   class="form-control"
-                   name="name"
-                   id="name"
-                   #name="ngModel"
-                   [(ngModel)]="objeto.name"
-                   required
-                   pattern="\S(.*\S)?"
-                   (change)="objeto.name = name.value.trim().toUpperCase(); "
-                   [disabled]="!podeEditar">
-            <div *ngIf="name.touched && name.errors">
-                <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="name.errors['pattern']">
-                    <span *ngIf="name.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
-                </p>
+        <div class="px-2">
+            <div class="row">
+                <div class="form-group col-xl-6 col-lg-4 col-md-6 col-sm-6 col-12">
+                    <label for="name">Nome: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="name"
+                           id="name"
+                           #name="ngModel"
+                           [(ngModel)]="objeto.name"
+                           required
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.name = name.value.trim().toUpperCase(); "
+                           [disabled]="!podeEditar">
+                    <div *ngIf="name.touched && name.errors">
+                        <p class="text-danger" *ngIf="name.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="name.errors['pattern']">
+                            <span *ngIf="name.errors['pattern']['requiredPattern'] == '^\\S(.*\\S)?$'">Remova os espaços antes e depois do texto.</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-6 col-lg-4 col-md-6 col-sm-6 col-12">
+                    <label for="telefoneCelular">Telefone/Celular: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="telefoneCelular"
+                           id="telefoneCelular"
+                           #telefoneCelular="ngModel"
+                           [(ngModel)]="objeto.telefoneCelular"
+                           required
+                           [disabled]="!podeEditar">
+                    <div *ngIf="telefoneCelular.touched && telefoneCelular.errors">
+                        <p class="text-danger" *ngIf="telefoneCelular.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="telefoneCelular.errors['mask']">Telefone/celular inválido</p>
+                    </div>
+                </div>
+                <div [class]="account?.perfilAcesso_Id == 1 && isEditPage ? 'form-group col-xl-6 col-lg-4 col-md-6 col-sm-6 col-12' : 'col-12'">
+                    <label for="perfilAcesso_Id">Perfil: <span class="text-danger">*</span></label>
+                    <select
+                            class="form-control"
+                            name="perfilAcesso_Id"
+                            id="perfilAcesso_Id"
+                            #perfilAcesso_Id="ngModel"
+                            [(ngModel)]="objeto.perfilAcesso_Id"
+                            required
+                            [disabled]="!podeEditar">
+                        <option [ngValue]="undefined">Selecione</option>
+                        <option [ngValue]="item.id" *ngFor="let item of perfil">{{item.perfil}}</option>
+                    </select>
+                    <div *ngIf="perfilAcesso_Id.touched && perfilAcesso_Id.errors">
+                        <p class="text-danger" *ngIf="perfilAcesso_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <div class="form-group col-xl-6 col-lg-4 col-md-6 col-sm-6 col-12" *ngIf="account?.perfilAcesso_Id == 1 && isEditPage">
+                    <label for="empresa_Id">Empresa: <span class="text-danger">*</span></label>
+                    <p-dropdown [styleClass]="'form-control ' + (loadingEmpresas ? 'form-control-loading' : '')"
+                                [options]="empresas"
+                                #empresa_Id="ngModel"
+                                [(ngModel)]="objeto.empresa_Id"
+                                optionLabel="nome"
+                                optionValue="id"
+                                [placeholder]="'Selecione'"
+                                [disabled]="loadingEmpresas"
+                                name="empresa_Id"
+                                id="empresa_Id"
+                                [filter]="true"
+                                [filterFields]="['nome', 'codigoRegistro', 'socioDiretor', 'ativo']"
+                                [showClear]="true"
+                                [required]="true"
+                                appendTo="body">
+                        <ng-template let-item pTemplate="item">
+                            <div class="d-flex justify-content-between">
+                                <div class=" w-100">
+                                    <p class="text-ellipsis">{{item.nome}}</p>
+                                    <p class="text-ellipsis"><strong>Código:</strong> {{item.codigoRegistro}}</p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                    <div *ngIf="empresa_Id.touched && empresa_Id.errors">
+                        <p class="text-danger" *ngIf="empresa_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <div class="form-group col email-container">
+                    <label for="email">E-mail: <span class="text-danger">*</span></label>
+                    <input type="email"
+                           [email]="true"
+                           class="form-control"
+                           name="email"
+                           id="email"
+                           #email="ngModel"
+                           placeholder="example@hotmail.com"
+                           [(ngModel)]="objeto.email"
+                           required
+                           [readonly]="isEditPage"
+                           [pattern]="emailPattern"
+                           [disabled]="!podeEditar">
+                    <div *ngIf="email.touched && email.errors">
+                        <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
+                        <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="d-flex align-items-start flex-wrap mt-2 mb-1" *ngIf="podeEditar">
+                    <div *ngIf="erro || form.invalid" class="m-0">
+                        <p class="text-danger" *ngFor="let err of erro">{{err | json}}</p>
+                        <p *ngIf="form.invalid && erro.length == 0" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
+                    </div>
+                    <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading || !podeEditar">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+                        <span>Salvar</span>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-            <label for="telefoneCelular">Telefone/Celular: <span class="text-danger">*</span></label>
-            <input type="text"
-                   class="form-control"
-                   name="telefoneCelular"
-                   id="telefoneCelular"
-                   #telefoneCelular="ngModel"
-                   [(ngModel)]="objeto.telefoneCelular"
-                   required
-                   [disabled]="!podeEditar">
-            <div *ngIf="telefoneCelular.touched && telefoneCelular.errors">
-                <p class="text-danger" *ngIf="telefoneCelular.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="telefoneCelular.errors['mask']">Telefone/celular inválido</p>
-            </div>
-        </div>
-        <div class="form-group col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-            <label for="perfilAcesso_Id">Perfil: <span class="text-danger">*</span></label>
-            <select
-                    class="form-control"
-                    name="perfilAcesso_Id"
-                    id="perfilAcesso_Id"
-                    #perfilAcesso_Id="ngModel"
-                    [(ngModel)]="objeto.perfilAcesso_Id"
-                    required
-                    [disabled]="!podeEditar">
-                <option [ngValue]="undefined">Selecione</option>
-                <option [ngValue]="item.id" *ngFor="let item of perfil">{{item.perfil}}</option>
-            </select>
-            <div *ngIf="perfilAcesso_Id.touched && perfilAcesso_Id.errors">
-                <p class="text-danger" *ngIf="perfilAcesso_Id.errors['required']">Este campo é obrigatório.</p>
-            </div>
-        </div>
-        <div class="form-group col-xl-12 col-lg-12 col-md-6 col-sm-6 col-12 email-container">
-            <label for="email">E-mail: <span class="text-danger">*</span></label>
-            <input type="email"
-                   [email]="true"
-                   class="form-control"
-                   name="email"
-                   id="email"
-                   #email="ngModel"
-                   placeholder="example@hotmail.com"
-                   [(ngModel)]="objeto.email"
-                   required
-                   [readonly]="isEditPage"
-                   [pattern]="emailPattern"
-                   [disabled]="!podeEditar">
-            <div *ngIf="email.touched && email.errors">
-                <p class="text-danger" *ngIf="email.errors['required']">Este campo é obrigatório.</p>
-                <p class="text-danger" *ngIf="email.errors['email']">E-mail inválido</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="d-flex align-items-start flex-wrap mt-2 mb-1" *ngIf="podeEditar">
-            <div *ngIf="erro || form.invalid" class="m-0">
-                <p class="text-danger" *ngFor="let err of erro">{{err | json}}</p>
-                <p *ngIf="form.invalid && erro.length == 0" class="text-danger">Preencha todos os campos obrigatórios (*) corretamente para salvar</p>
-            </div>
-            <button class="btn btn-primary me-0 ms-auto" [disabled]="form.invalid || loading || !podeEditar">
-                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span> 
-                <span>Salvar</span>
-            </button>
-        </div>
-    </div>
-   </div>
     </form>
 </ng-template>
 <router-outlet></router-outlet>

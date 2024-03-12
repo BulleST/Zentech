@@ -1,5 +1,11 @@
 <section class="home">
-    <!-- <div class="home__background" #img ></div> -->
-    <div class="home__background" style="background-image: url(./assets/img/logo-newclick-white.png)"></div>
+    <div class="home__background">
+        <img  [src]="empresa?.logoDataUri" [alt]="empresa?.nome">
+    </div>
 </section>
 <router-outlet></router-outlet>
+
+
+
+
+

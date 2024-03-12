@@ -9,6 +9,8 @@ import { AlertService } from '../alert/alert.service';
 import { MenuItem } from 'primeng/api';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { IsMobile, ScreenWidth } from 'src/app/utils/mobile';
+import { EmpresaSelected, EmpresaService } from 'src/app/services/empresa.service';
+import { Empresa } from 'src/app/models/empresa.model';
 
 @Component({
     selector: 'app-header',
@@ -35,6 +37,8 @@ export class HeaderComponent implements AfterViewInit {
 
     isMobile: boolean = false;
 
+    empresa?: Empresa = new Empresa;
+
     constructor(
         private accountService: AccountService,
         private header: Header,
@@ -42,6 +46,7 @@ export class HeaderComponent implements AfterViewInit {
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private mobile: IsMobile,
+        private empresaService: EmpresaService,
     ) {
         this.mobile.set();
 
@@ -73,6 +78,9 @@ export class HeaderComponent implements AfterViewInit {
         
         var menuMobileOpen = this.header.menuAsideOpen.subscribe(res => this.menuMobileOpen = res);
         this.subscription.push(menuMobileOpen);
+        
+        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa)
+        this.subscription.push(empresa);
 
     }
 

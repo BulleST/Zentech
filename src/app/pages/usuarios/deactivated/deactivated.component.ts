@@ -99,7 +99,7 @@ export class DeactivatedComponent {
         // Enviar para a API
         lastValueFrom(this.usuarioService.deactivated(this.objeto.id, this.habilitar))
             .then(async res => {
-                if (this.habilitar && this.isUser) {
+                if (!this.habilitar && this.isUser) {
                     this.accountService.logout();
                 }
                 var list = await lastValueFrom(this.usuarioService.getList());

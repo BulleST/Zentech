@@ -349,7 +349,6 @@ export class FormComponent implements OnDestroy {
     fileChange(event: any) {
         var file = event.target.files[0] as File;
         this.assinaturaUploadedFile = file;
-        console.log(file)
 
         if (file) {
             var reader = new FileReader();

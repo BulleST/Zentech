@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Situação CPF-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Situação CPF-->
                                         <label for="situacao" style="white-space: nowrap;">Situação CPF: </label>
                                         <input class="form-control"
                                                name="situacao"
@@ -140,7 +140,7 @@
                                                [value]="objeto.situacao ? objeto.situacao :  'N/A'"
                                                readonly>
                                     </div>
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Dígito-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Dígito-->
                                         <label for="digito" style="white-space: nowrap;">Dígito: </label>
                                         <input class="form-control"
                                                name="digito"
@@ -148,7 +148,7 @@
                                                [value]="objeto.digito ? objeto.digito :  'N/A'"
                                                readonly>
                                     </div>
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Data Inscrição-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Data Inscrição-->
                                         <label for="dataInscricao" style="white-space: nowrap;">Data Inscrição: </label>
                                         <input class="form-control"
                                                name="dataInscricao"
@@ -156,7 +156,7 @@
                                                [value]="objeto.dataInscricao ? (objeto.dataInscricao | date : 'dd/MM/yyyy') : 'N/A'"
                                                readonly>
                                     </div>
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Limite Disponível-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Limite Disponível-->
                                         <label for="saldoAtual" style="white-space: nowrap;">Limite Disponível: </label>
                                         <input class="form-control"
                                                name="saldoAtual"
@@ -164,7 +164,7 @@
                                                [value]="(objeto.saldoAtual | currency : 'BRL' : '' : '1.2') "
                                                readonly>
                                     </div>
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Limite Concedido-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Limite Concedido-->
                                         <label for="limiteConcedido" style="white-space: nowrap;">Limite Concedido: </label>
                                         <input class="form-control"
                                                name="limiteConcedido"
@@ -172,7 +172,7 @@
                                                [value]="limiteConcedido | currency : 'BRL' : '' : '1.2'"
                                                readonly>
                                     </div>
-                                    <div class="form-group col-xl-1 col-lg-1 col-md-4 col-sm-4 col-6"><!--Limite Utilizado-->
+                                    <div class="form-group col-xl-2 col-lg-2 col-md-4 col-sm-4 col-6"><!--Limite Utilizado-->
                                         <label for="limiteUtilizado" style="white-space: nowrap;">Limite Utilizado: </label>
                                         <input class="form-control"
                                                name="limiteUtilizado"

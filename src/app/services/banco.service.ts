@@ -33,7 +33,6 @@ export class BancoService {
                 next: list => {
                     this.loading.next(false);
                     this.list.next(Object.assign([], list));
-                    console.log('service', list)
                     return of(list);
 
                 },

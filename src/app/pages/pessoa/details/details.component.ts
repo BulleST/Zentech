@@ -90,7 +90,6 @@ export class DetailsComponent implements OnDestroy {
                 lastValueFrom(this.pessoaSaldoService.getList(this.objeto.id))
                     .then(res => {
                         this.saldos = res;
-                        console.log(res)
                         var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
                             this.saldos = res.map(x => {
                                 x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
@@ -169,22 +168,17 @@ export class DetailsComponent implements OnDestroy {
                 var obj: any;
                 try {
                     obj = JSON.parse(JSON.parse(JSON.stringify(res.retorno))) as BRConsulta;
-                    console.log('try', typeof obj)
                 } catch (e) {
                     obj = res.retorno;
-                    console.log('catch', e)
                 }
 
-                console.log(obj)
                 if(typeof obj == 'object')  {
                     if ((obj.ERRO && obj.ERRO != '') || obj.RETORNO == 'ERRO') {
-                        console.log('if')
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
                         this.erro = obj.ERRO;
                         this.toastr.error(obj.ERRO)
                     } else if (!obj.ERRO) {
-                        console.log('else if')
                         try {
                             this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
                         } catch (e) {
@@ -219,7 +213,6 @@ export class DetailsComponent implements OnDestroy {
                     }
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
                 } else {
-                    console.log('else')
                     this.objeto.brConsulta_Erro = res.retorno as string;
                     this.erro = res.retorno as string;
                     this.toastr.error(res.retorno as string)

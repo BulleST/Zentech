@@ -14,13 +14,9 @@
 }
 
 :root {
-  --primary: 255 196 0;
-  --primary-light: 247 197 29;
-  --primary-dark: 213 164 0;
-  --secondary: 18 17 31;
-  --secondary-light: 23 23 35;
-  --secondary-dark: 5 5 12;
-  --grey: 59 59 71;
+  --primary: #ffc400;
+  --neutral: #3b3b47;
+  --complementar: #12111f;
   --red: #e81717;
   --green: #1a9d24;
 }

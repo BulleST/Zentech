@@ -12,6 +12,7 @@ import { EmpresaService } from 'src/app/services/empresa.service';
 import { insertOrReplace } from 'src/app/utils/service-list';
 import { NgModel } from '@angular/forms';
 import { validateRG } from 'src/app/utils/validate-rg';
+import { Colors } from 'src/app/utils/colors';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private toastr: ToastrService,
         private empresaService: EmpresaService,
+        private colors: Colors
     ) {
     }
 
@@ -66,17 +68,21 @@ export class FormComponent implements OnDestroy {
                     .then(res => {
                         this.objeto = res;
 
+                        this.empresaService.empresaSelected.next({ id: this.objeto.id, empresa: res });
+                        this.colors.setColorsJquery(res);
+
                         this.fileSrc = res.logoDataUri;
                         this.fileLoading = false;
                         this.fileName = '';
                         this.fileUploaded = true;
 
-
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'Empresa');
                         }, 200);
                     })
-                    .catch(res => {
+                    .catch((res: any) => {
+                        console.log('ERROR', res)
+                        this.toastr.error('Não foi possível acessar.')
                         this.voltar();
                     })
             } else {
@@ -110,7 +116,7 @@ export class FormComponent implements OnDestroy {
             this.fileLoading = true;
             var reader = new FileReader();
             var c = this;
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 var src = e.target?.result as string;
                 c.fileSrc = src;
                 c.fileUploaded = true;
@@ -118,7 +124,7 @@ export class FormComponent implements OnDestroy {
                 c.fileName = file.name;
                 c.objeto.logoDataUri = src;
             }
-            reader.onerror = function(e) {
+            reader.onerror = function (e) {
                 c.fileLoading = false;
                 c.toastr.error('Não foi possível realizar upload');
             }
@@ -132,60 +138,87 @@ export class FormComponent implements OnDestroy {
 
 
     validaCPF(input: NgModel, doc: number) {
-      if (!input) {
-          return;
-      }
-      if (!doc || doc == 0) {
-          input.control.setErrors({ required: true });
-          return;
-      }
-
-      if (input.name == 'cpfSocioDiretor') {
-          var valid = validateCPF(doc)
-          if (!valid) {
-              input.control.setErrors({ invalid: true });
-              return;
-          }
-      }
-
-      var lista: any[] = []
-      var existe = lista.filter(x => x.cpf == doc);
-      if (existe.length > 0) {
-          input.control.setErrors({ jaCadastrado: true });
-          return;
-      }
-
-      input.control.setErrors(null);
-  }
-
-
-  validaRG(input: NgModel, doc: number) {
-    if (!input) {
-        return;
-    }
-    if (!doc || doc == 0) {
-        input.control.setErrors({ required: true });
-        return;
-    }
-
-    if (input.name == 'rgSocioDiretor') { // Supondo que o nome do campo para o RG seja 'rgSocioDiretor'
-        var valid = validateRG(doc); // Assumindo que você tenha uma função chamada validateRG para validar o RG
-        if (!valid) {
-            input.control.setErrors({ invalid: true });
+        if (!input) {
             return;
         }
+        if (!doc || doc == 0) {
+            input.control.setErrors({ required: true });
+            return;
+        }
+
+        if (input.name == 'cpfSocioDiretor') {
+            var valid = validateCPF(doc)
+            if (!valid) {
+                input.control.setErrors({ invalid: true });
+                return;
+            }
+        }
+
+        var lista: any[] = []
+        var existe = lista.filter(x => x.cpf == doc);
+        if (existe.length > 0) {
+            input.control.setErrors({ jaCadastrado: true });
+            return;
+        }
+
+        input.control.setErrors(null);
     }
 
-    var lista: any[] = []; // Supondo que esta lista contenha os registros existentes
-    var existe = lista.filter(x => x.rg == doc);
-    if (existe.length > 0) {
-        input.control.setErrors({ jaCadastrado: true });
-        return;
+
+    validaRG(input: NgModel, doc: number) {
+        if (!input) {
+            return;
+        }
+        if (!doc || doc == 0) {
+            input.control.setErrors({ required: true });
+            return;
+        }
+
+        if (input.name == 'rgSocioDiretor') { // Supondo que o nome do campo para o RG seja 'rgSocioDiretor'
+            var valid = validateRG(doc); // Assumindo que você tenha uma função chamada validateRG para validar o RG
+            if (!valid) {
+                input.control.setErrors({ invalid: true });
+                return;
+            }
+        }
+
+        var lista: any[] = []; // Supondo que esta lista contenha os registros existentes
+        var existe = lista.filter(x => x.rg == doc);
+        if (existe.length > 0) {
+            input.control.setErrors({ jaCadastrado: true });
+            return;
+        }
+
+        input.control.setErrors(null);
     }
 
-    input.control.setErrors(null);
-}
+    changePrimary() {
+        var rgb = this.colors.hexToRgb(this.objeto.primaryColor);
+        var white = { r: 255, g: 255, b: 255 };
+        var difference = this.colors.calculateColorDifference(rgb, white);
+        console.log(difference > 30000 ? 'OK' : 'CLARA', difference, rgb);
+        if (difference > 30000) {
+            this.colors.setPrimaryColor(this.objeto.primaryColor);
+        } else {
+            console.log('Clara')
+            this.toastr.warning('Essa cor pode ser considerada muito clara.')
+        }
 
+    }
+    
+    changeNeutral() {
+        var rgb = this.colors.hexToRgb(this.objeto.secundaryColor);
+        var white = { r: 255, g: 255, b: 255 };
+        var difference = this.colors.calculateColorDifference(rgb, white);
+        console.log(difference > 30000 ? 'OK' : 'CLARA', difference, rgb);
+        if (difference > 30000) {
+            this.colors.setNeutralColor(this.objeto.secundaryColor);
+        } else {
+            console.log('Clara')
+            this.toastr.warning('Essa cor pode ser considerada muito clara.')
+        }
+
+    }
 
     importarNovamente() {
         this.fileUploaded = false;
@@ -205,6 +238,7 @@ export class FormComponent implements OnDestroy {
                 this.loading = false;
                 if (res.sucesso == true) {
                     if (res.objeto) {
+                        res.objeto.ativo = !res.objeto.dataDesativado;
                         insertOrReplace(this.empresaService, res.objeto)
                     } else {
                         lastValueFrom(this.empresaService.getList());

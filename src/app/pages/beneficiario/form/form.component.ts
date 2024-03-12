@@ -288,7 +288,6 @@ export class FormComponent implements OnDestroy {
         this.representanteSelected = this.representantes.find(x => x.id == e);
         this.loadingRepresentantes = false;
 
-        console.log(this.objeto.representante_Id, this.representanteSelected)
     }
 
     editar(model: Representante, router: string) {

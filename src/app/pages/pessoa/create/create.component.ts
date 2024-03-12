@@ -113,16 +113,12 @@ export class CreateComponent implements OnDestroy {
                 var obj: any;
                 try {
                     obj = JSON.parse(JSON.parse(JSON.stringify(res.retorno))) as BRConsulta;
-                    console.log('try', typeof obj)
                 } catch (e) {
                     obj = res.retorno;
-                    console.log('catch', e)
                 }
-                console.log(obj)
                 
                 if (typeof obj == 'object') {
                     if ((obj.ERRO && obj.ERRO != '') || obj.RETORNO == 'ERRO') {
-                        console.log('if')
                         this.objeto.brConsulta_Id_Consulta = obj.ID_CONSULTA;
                         this.objeto.brConsulta_Erro = obj.ERRO as unknown as string;
                         this.liberaNome = true;
@@ -130,7 +126,6 @@ export class CreateComponent implements OnDestroy {
                         this.toastr.error(obj.ERRO)
                     } 
                     else if (!obj.ERRO) {
-                        console.log('else if')
                         try {
                             this.objeto.dataNascimento = this.formataData(obj.DATA_NASC).substring(0, 10) as unknown as Date;
                         } catch (e) {
@@ -166,7 +161,6 @@ export class CreateComponent implements OnDestroy {
                     this.objeto.dataAtualizacaoBRConsulta = new Date().toISOString() as unknown as Date;
                     this.liberaNome = false;
                 } else {
-                    console.log('else')
                     this.liberaNome = true;
                     this.objeto.brConsulta_Erro = res.retorno as string;
                     this.erro = res.retorno as string;

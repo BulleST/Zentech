@@ -60,7 +60,8 @@
                                             optionValue="id"
                                             placeholder="Selecione uma moeda"
                                             [required]="true"
-                                            [showClear]="true">
+                                            [showClear]="true"
+                                            appendTo="body">
                                     <ng-template let-item pTemplate="item">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center w-100" [title]="item.nome">
@@ -112,7 +113,8 @@
                                             inputId="instituicaoFinanceira_Id"
                                             [required]="true"
                                             [filter]="true"
-                                            [filterFields]="['nome', 'codigoRegistro']">
+                                            [filterFields]="['nome', 'codigoRegistro']"
+                                            appendTo="body">
                                     <ng-template let-item pTemplate="item">
                                         <div>
                                             <p>{{item.nome}}</p>
@@ -145,7 +147,8 @@
                                             placeholder="Selecione um beneficiário"
                                             [required]="true"
                                             [showClear]="false"
-                                            (ngModelChange)="beneficiarioChange()">
+                                            (ngModelChange)="beneficiarioChange()"
+                                            appendTo="body">
                                     <ng-template let-item pTemplate="item">
                                         <div>
                                             <p>{{item.nome}}</p>
@@ -319,7 +322,8 @@
                                             optionValue="id"
                                             placeholder="Selecione um tipo"
                                             [required]="true"
-                                            [showClear]="true">
+                                            [showClear]="true"
+                                            appendTo="body">
                                     <ng-template let-item pTemplate="item">
                                         <div class="d-flex align-items-center">
                                             <span>{{item.nome}} </span>
@@ -347,7 +351,8 @@
                                             optionValue="id"
                                             placeholder="Selecione um evento"
                                             [required]="true"
-                                            [showClear]="true">
+                                            [showClear]="true"
+                                            appendTo="body">
                                     <ng-template let-item pTemplate="item">
                                         <div class="d-flex align-items-center">
                                             <span>{{item.nome}} </span>

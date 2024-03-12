@@ -60,7 +60,8 @@
                                 optionValue="id"
                                 placeholder="Selecione um tipo"
                                 [required]="true"
-                                [showClear]="true">
+                                [showClear]="true"
+                                appendTo="body">
                         <ng-template let-item pTemplate="item">
                             <div class="d-flex align-items-center">
                                 <span>{{item.nome}} </span>
@@ -88,7 +89,8 @@
                                 optionValue="id"
                                 placeholder="Selecione um evento"
                                 [required]="true"
-                                [showClear]="true">
+                                [showClear]="true"
+                                appendTo="body">
                         <ng-template let-item pTemplate="item">
                             <div class="d-flex align-items-center">
                                 <span>{{item.nome}} </span>

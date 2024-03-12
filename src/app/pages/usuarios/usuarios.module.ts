@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DeactivatedComponent } from './deactivated/deactivated.component';
 import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { FormsModule } from '@angular/forms';
     SharedModule,
     FontAwesomeModule,
     FormsModule,
+    DropdownModule,
   ]
 })
 export class UsuariosModule { }

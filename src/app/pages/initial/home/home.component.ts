@@ -1,7 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import * as $ from 'jquery';
+import { EmpresaService } from 'src/app/services/empresa.service';
+import { Empresa } from 'src/app/models/empresa.model';
+// declare var require: any
+// const ColorThief = require('colorthief');
+declare var ColorThief: any
 
 @Component({
     selector: 'app-home',
@@ -10,39 +15,31 @@ import * as $ from 'jquery';
 })
 export class HomeComponent implements OnDestroy, AfterViewInit {
     homeActive = true;
-    subscriptions: Subscription[] = [];
-
+    subscription: Subscription[] = [];
+    empresa?: Empresa = new Empresa;
+    colors: any[] = [];
     constructor(
-        private router: Router
+        private router: Router,
+        private empresaService: EmpresaService,
     ) {
+
         var e = this.router.events.subscribe(res => {
             if (res instanceof NavigationEnd) {
                 this.homeActive = false
                 this.homeActive = res.url == '/' || res.url == '/home' || res.url == '/minha-conta' || res.url == '/minha-conta/change-password'
-                
+
             }
         })
-        this.subscriptions.push(e)
+        this.subscription.push(e)
     }
 
-   async ngAfterViewInit() {
-        // $('.home').append(`<div class="home__background" style="background-image: url(assets/img/logo-newclick-white.png)" ></div>`)
+    ngAfterViewInit(): void {
+        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa);
+        this.subscription.push(empresa);
     }
 
     ngOnDestroy(): void {
-        this.subscriptions.forEach(e => e.unsubscribe());
+        this.subscription.forEach(e => e.unsubscribe());
         $('.home__background').remove()
     }
-}
-async function toDataUri(src: string) {
-    var a = await fetch(src);
-    var b = await a.blob();
-    var reader = new FileReader();
-    var c = reader.readAsDataURL(b);
-    return new Promise(resolve => {
-        reader.onloadend = (a) => {
-            resolve(reader.result)
-        }
-    });
-
 }

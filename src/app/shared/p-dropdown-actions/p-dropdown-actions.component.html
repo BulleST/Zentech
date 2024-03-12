@@ -12,7 +12,8 @@
             [showClear]="true"
             placeholder="Selecione"
             (ngModelChange)="valueChange(property.value)"
-            [required]="required">
+            [required]="required"
+            appendTo="body">
     <ng-template pTemplate="header">
         <div class="p-dropdown-header">
             <button type="button" class="btn-dropdown-action" title="Adicionar" (click)="formPath(path)">

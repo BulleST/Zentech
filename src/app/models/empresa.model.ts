@@ -16,6 +16,8 @@ export class Empresa {
     ativo?: boolean;
     perfilAcesso_Id: number = undefined as unknown as number;
     perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
+    primaryColor: string = '#ffc107';
+    secundaryColor: string = '#3b3b47';
 }
 
 export var empresaColumns: Column[] = [

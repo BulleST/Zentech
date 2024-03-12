@@ -48,7 +48,6 @@ export class RepresentanteService {
 
 
     create(request: Representante) {
-        console.log(this.empresaService.empresaSelected.value)
         request.empresa_Id = this.empresaService.empresaSelected.value.id;
         return this.http.post<Response>(`${this.url}/representante`, request);
     }

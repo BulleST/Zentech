@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { InitialRoutingModule } from './initial.routing';
@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
 import { NavigationComponent } from 'src/app/parts/navigation/navigation.component';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { PanelModule } from 'primeng/panel';
+import { appInitializer } from 'src/app/helpers/app.initializer';
+import { AccountService } from 'src/app/services/account.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -29,6 +32,10 @@ import { PanelModule } from 'primeng/panel';
         FormsModule,
         PanelMenuModule,
         PanelModule,
+    ],
+    providers: [
+        
+        // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
     ]
 })
 export class InitialModule { }

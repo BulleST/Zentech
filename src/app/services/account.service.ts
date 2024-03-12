@@ -46,7 +46,6 @@ export class AccountService {
     }
 
     login(model: Login) {
-
         return this.http.post<Account>(`${this.url}/accounts/authenticate`, model, { withCredentials: true } /* */).pipe(
             tap(async (account) => {
                 this.setAccount(account);
@@ -54,12 +53,15 @@ export class AccountService {
                 this.router.navigateByUrl(returnUrl);
                 this.startRefreshTokenTimer();
 
-                this.empresaService.empresaSelected.next({
-                    id: account.empresa_Id,
-                    empresa: account.empresa
-                })
                 if (account.perfilAcesso_Id == 1) {
-                    await lastValueFrom(this.empresaService.getList());
+                    if (this.empresaService.list.value.length == 0) 
+                        await lastValueFrom(this.empresaService.getList());
+                }
+                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+                    this.empresaService.empresaSelected.next({
+                        id: account.empresa_Id,
+                        empresa: account.empresa
+                    })
                 }
 
 
@@ -76,7 +78,6 @@ export class AccountService {
     async logout() {
         await lastValueFrom(this.http.post<any>(`${this.url}/accounts/revoke-token`, {token: this.accountValue?.refreshToken}, { withCredentials: true } /**/))
             .catch(error => {
-                console.log(error)
             })
             this.stopRefreshTokenTimer();
             this.setAccount(undefined);
@@ -88,15 +89,17 @@ export class AccountService {
        return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
            .pipe(tap({
             next: async account => {
-                console.log('oi', account)
                 this.setAccount(account);
                 this.startRefreshTokenTimer();
-                this.empresaService.empresaSelected.next({
-                    id: account.empresa_Id,
-                    empresa: account.empresa
-                })
                 if (account.perfilAcesso_Id == 1) {
-                    await lastValueFrom(this.empresaService.getList());
+                    if (this.empresaService.list.value.length == 0) 
+                        await lastValueFrom(this.empresaService.getList());
+                }
+                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+                    this.empresaService.empresaSelected.next({
+                        id: account.empresa_Id,
+                        empresa: account.empresa
+                    })
                 }
             },
             error: (err) => {

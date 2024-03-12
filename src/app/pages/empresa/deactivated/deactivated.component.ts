@@ -27,7 +27,6 @@ export class DeactivatedComponent {
     podeAtivar = true;
     habilitar = false;
     account?: Account;
-    isUser = false;
 
     constructor(
         private empresaService: EmpresaService,
@@ -56,7 +55,7 @@ export class DeactivatedComponent {
             if (x['empresa_id']) {
                 this.objeto.id = this.crypto.decrypt(x['empresa_id']);
 
-                this.isUser = this.account?.id == this.objeto.id
+                
                 this.modal.routerBack = ['../../'];
 
                 lastValueFrom(this.empresaService.get(this.objeto.id))
@@ -99,7 +98,7 @@ export class DeactivatedComponent {
         this.erro = '';
         lastValueFrom(this.empresaService.deactivated(this.objeto.id, this.habilitar))
             .then(async res => {
-                if (this.habilitar && this.isUser) {
+                if (!this.habilitar && this.objeto.id == this.account?.empresa_Id) {
                     this.accountService.logout();
                 }
                 var list = await lastValueFrom(this.empresaService.getList());

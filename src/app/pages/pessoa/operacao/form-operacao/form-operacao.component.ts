@@ -174,7 +174,6 @@ export class FormOperacaoComponent implements OnDestroy {
                         lastValueFrom(this.pessoaService.getList());
                     }
 
-                    console.log(this.objeto.pessoa_Id)
                     lastValueFrom(this.pessoaService.get(this.objeto.pessoa_Id));
                     this.voltar();
                 } 

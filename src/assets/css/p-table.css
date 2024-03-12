@@ -93,7 +93,7 @@
 
 .table .grey th,
 .table th.grey {
-    background-color: rgb(var(--grey));
+    background-color: var(--neutral);
     color: #fff;
 }
 
@@ -237,7 +237,7 @@ tr.selectable {
 }
 
 .flag.flag-yellow {
-    background-color: rgb(var(--primary-dark));
+    background-color: var(--primary);
     color: #fff;
 }
 
@@ -247,7 +247,7 @@ tr.selectable {
 }
 
 .flag.flag-info {
-    background-color: rgb(var(--secondary));
+    background-color: var(--neutral);
     color: #fff;
 }
 
@@ -309,8 +309,8 @@ tr.selectable {
 }
 
 .p-column-filter-matchmode-dropdown.p-dropdown:hover {
-    border: 1px rgb(var(--grey)) solid;
-    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    border: 1px var(--neutral) solid;
+    box-shadow: 0 0 0px 2px var(--neutral);
 }
 
 .p-column-filter-constraint {
@@ -337,8 +337,8 @@ tr.selectable {
 .p-column-filter-matchmode-dropdown:hover,
 .p-column-filter-operator-dropdown:hover,
 .p-column-filter-constraint input:hover {
-    border: 1px rgb(var(--grey)) solid;
-    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    border: 1px var(--neutral) solid;
+    box-shadow: 0 0 0px 2px var(--neutral);
     cursor: pointer;
 }
 
@@ -350,28 +350,28 @@ tr.selectable {
 
 .p-column-filter-buttonbar .p-button.p-button-outlined {
     padding: 5px 10px;
-    border: 1px rgb(var(--secondary)) solid;
+    border: 1px var(--neutral) solid;
     border-radius: 3px;
-    color: rgb(var(--secondary));
+    color: var(--neutral);
     background: none;
     white-space: nowrap;
     margin-right: 6px;
 }
 
 .p-column-filter-buttonbar .p-button:hover {
-    box-shadow: 0 0 0px 2px rgb(var(--primary) / 40%);
+    box-shadow: 0 0 0px 2px var(--primary);
 }
 
 .p-column-filter-buttonbar .p-button-outlined:hover {
-    box-shadow: 0 0 0px 2px rgb(var(--secondary) / 40%);
+    box-shadow: 0 0 0px 2px rgb(var(--neutral) / 40%);
 }
 
 .p-column-filter-buttonbar .p-button {
     padding: 5px 10px;
-    border: 1px rgb(var(--primary)) solid;
+    border: 1px var(--primary) solid;
     border-radius: 3px;
     color: #fff;
-    background-color: rgb(var(--primary));
+    background-color: var(--primary);
 }
 
 .p-inputnumber-button-group {
@@ -382,8 +382,8 @@ tr.selectable {
     padding: 0;
     display: flex;
     align-items: center;
-    border: 1px rgb(var(--grey)) solid;
-    background-color: rgb(var(--grey));
+    border: 1px var(--neutral) solid;
+    background-color: var(--neutral);
     color: #fff;
     flex: 1 1 auto;
     width: 30px;
@@ -412,7 +412,7 @@ tr.selectable {
 }
 
 .p-inputnumber:hover {
-    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    box-shadow: 0 0 0px 2px var(--neutral);
     border-radius: 5px;
 }
 
@@ -425,9 +425,9 @@ tr.selectable {
 }
 
 .p-inputnumber-button-group .p-inputnumber-button:hover {
-    /* box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%); */
+    /* box-shadow: 0 0 0px 2px var(--neutral); */
     cursor: pointer;
-    background-color: rgb(var(--secondary));
+    background-color: var(--neutral);
 }
 
 .p-column-filter-overlay-menu .p-column-filter-operator {
@@ -508,19 +508,19 @@ tr.selectable {
 }
 
 .p-calendar .p-inputtext:hover {
-    border: 1px rgb(var(--grey)) solid;
+    border: 1px var(--neutral) solid;
 }
 
 .p-calendar .p-datepicker-trigger {
     padding: 0 9px;
-    border: 1px rgb(var(--grey)) solid;
-    background-color: rgb(var(--grey));
+    border: 1px var(--neutral) solid;
+    background-color: var(--neutral);
     border-radius: 0 5px 5px 0;
     color: #fff;
 }
 
 .p-calendar:hover {
-    box-shadow: 0 0 0px 2px rgb(var(--grey) / 40%);
+    box-shadow: 0 0 0px 2px var(--neutral);
     border-radius: 5px
 }
 
@@ -529,7 +529,7 @@ tr.selectable {
 }
 
 .p-calendar:hover .p-inputtext {
-    border: 1px rgb(var(--grey)) solid;
+    border: 1px var(--neutral) solid;
 }
 
 .p-datepicker .p-datepicker-header .p-datepicker-title {
@@ -616,10 +616,10 @@ tr.selectable {
 
 .p-column-filter-add-button {
     padding: 5px 10px;
-    border: 1px rgb(var(--grey)) solid;
+    border: 1px var(--neutral) solid;
     border-radius: 3px;
     color: #fff;
-    background-color: rgb(var(--grey));
+    background-color: var(--neutral);
     width: 100%;
 }
 

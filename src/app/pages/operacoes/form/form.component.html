@@ -27,7 +27,8 @@
                                 [disabled]="isEditPage"
                                 [readonly]="isEditPage"
                                 [required]="true"
-                                [showClear]="true">
+                                [showClear]="true"
+                                appendTo="body">
                         <ng-template let-item pTemplate="item">
                             <table class="w-100">
                                 <tbody>
@@ -154,7 +155,8 @@
                                 optionLabel="codigo"
                                 optionValue="codigo"
                                 placeholder="Selecione uma moeda"
-                                [showClear]="true">
+                                [showClear]="true"
+                                appendTo="body">
                         <ng-template let-item pTemplate="item">
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center w-100" [title]="item.nome">

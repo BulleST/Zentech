@@ -59,7 +59,8 @@
                                 [filterFields]="['codigo', 'nome']"
                                 [showClear]="true"
                                 (ngModelChange)="representanteChanged($event)"
-                                [required]="true">
+                                [required]="true"
+                                appendTo="body">
                         <ng-template pTemplate="selectedItem">
                             <div *ngIf="representanteSelected">
                                 <p>{{representanteSelected.codigo}} - {{representanteSelected.nome}}</p>
@@ -187,7 +188,8 @@
                                 id="pais_Id"
                                 [filter]="true"
                                 filterBy="nome"
-                                [showClear]="true">
+                                [showClear]="true"
+                                appendTo="body">
                     </p-dropdown>
                     <div *ngIf="pais_Id.touched && pais_Id.errors">
                         <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>

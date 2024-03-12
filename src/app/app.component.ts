@@ -8,6 +8,8 @@ import { NavigationStart, Router, RouterStateSnapshot } from '@angular/router';
 })
 export class AppComponent implements OnDestroy {
     title = 'ZenTech';
+
+    
     constructor(private router: Router) {
 
     }

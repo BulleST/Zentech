@@ -31,10 +31,9 @@ export class ListComponent {
     ) {
         var list = this.logService.list.subscribe(res => this.list = Object.assign([], res));
         this.subscription.push(list);
-        console.log('teste',list)
+
         var loading = this.logService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
-
 
         var selected = this.table.selected.subscribe(res => {
             if (res) {

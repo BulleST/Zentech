@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PerfilAcesso, Role, perfil } from 'src/app/models/account-perfil.model';
 import { Account } from 'src/app/models/account.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { AccountService } from 'src/app/services/account.service';
 import { EmpresaService } from 'src/app/services/empresa.service';
@@ -26,6 +27,8 @@ export class FormComponent {
     erro: string = '';
     isEditPage: boolean = false;
 
+    empresas: Empresa[] = [];
+    loadingEmpresas = false;
     perfil: PerfilAcesso[] = [];
     subscription: Subscription[] = [];
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -50,7 +53,7 @@ export class FormComponent {
         this.perfil = perfil;
         this.account = this.accountService.accountValue;
 
-        this.empresaService.empresaSelected.subscribe(res => {
+        var empresaSelected = this.empresaService.empresaSelected.subscribe(res => {
             this.perfil = [];
             if (this.account?.perfilAcesso_Id == Role.Admin) {
                 this.perfil = [
@@ -61,32 +64,43 @@ export class FormComponent {
                 if (res.id == 27) {
                     this.perfil.unshift({ id: 1, perfil: 'Admin' })
                 }
-            } else if (this.account?.perfilAcesso_Id == Role.Master) {
+            } 
+            else if (this.account?.perfilAcesso_Id == Role.Master) {
                 this.perfil = [
                     { id: 2, perfil: 'Master' },
                     { id: 3, perfil: 'Consultor' },
                 ];
-            } else if (this.account?.perfilAcesso_Id == Role.Consultor) {
+            } 
+            else if (this.account?.perfilAcesso_Id == Role.Consultor) {
                 this.perfil = [
                     { id: 3, perfil: 'Consultor' },
                 ];
-            }
-        })
+            };
+        });
+        this.subscription.push(empresaSelected);
 
+        if (this.empresaService.list.value.length == 0) {
+            this.loadingEmpresas = true;
+            lastValueFrom(this.empresaService.getList())
+            .then(res => {
+               this.loadingEmpresas = false;
 
+           })
+        }
 
+        var empresas = this.empresaService.list.subscribe(res => this.empresas = res);
+        this.subscription.push(empresas);
 
     }
 
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
-    ngAfterViewInit(): void {
-
+    async ngAfterViewInit(): Promise<void> {
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '900px', overflow: 'visible' };
+        this.modal.style = { 'max-width': '500px', overflow: 'visible' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 
@@ -126,6 +140,10 @@ export class FormComponent {
             }
         });
         this.subscription.push(params);
+        
+
+
+
     }
 
     voltar() {
@@ -145,7 +163,6 @@ export class FormComponent {
                 this.erro = getError(res);
             })
             .finally(() => this.loading = false);
-        console.log(this.objeto)
     }
 
 

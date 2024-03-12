@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, OnDestroy, TemplateRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, catchError, lastValueFrom, of } from 'rxjs';
+import { AccountService } from 'src/app/services/account.service';
 import { Header } from 'src/app/utils/header';
 import { SwipeService } from 'src/app/utils/swipe';
 import { Table } from 'src/app/utils/table';
@@ -20,9 +21,12 @@ export class InitialComponent implements OnDestroy {
         private swipeService: SwipeService,
         private table: Table,
         private header: Header,
+        private accountService: AccountService,
     ) {
         var open = this.header.menuAsideOpen.subscribe(res => this.navigationOpen = res);
         this.subscription.push(open);
+
+        lastValueFrom(this.accountService.refreshToken())
     }
 
     ngOnDestroy(): void {

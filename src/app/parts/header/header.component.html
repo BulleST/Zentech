@@ -1,6 +1,7 @@
 <header class="header" [class.header-mobile]="isMobile" [class.header-home]="homeActive">
     <div class="header-logo">
-        <img src="assets/img/logo-newclick-white.png" alt="Logo New Click">
+        <!-- <img src="assets/img/logo-newclick-white.png" alt="Logo New Click"> -->
+        <img *ngIf="empresa" [src]="empresa.logoDataUri" [attr.alt]="empresa.nome">
     </div>
     <div class="header__userLogado">
         <div class="header__userLogado-content" [class.header__userLogado-submenu--open]="menuMinhaContaOpen"
@@ -18,18 +19,6 @@
             </div>
         </div>
     </div>
-    <!-- <nav class="header-navigation" [class.header-navigation-mobile]="isMobile" [class.mobile-open]="menuMobileOpen">
-        <a class="header-navigation-link" routerLink="/" [class.router-active]="homeActive">Home</a>
-        <a class="header-navigation-link" [routerLink]="['painel-cpf']" routerLinkActive="router-active">New Clickk Buyers</a>
-        <a class="header-navigation-link" [routerLink]="['operacoes']" routerLinkActive="router-active">Pró Câmbio</a>
-        <a class="header-navigation-link" [routerLink]="['invoice']" routerLinkActive="router-active">Invoice</a>
-        <a class="header-navigation-link" [routerLink]="['instituicao-financeira']" routerLinkActive="router-active">Instituições Financeiras</a>
-        <a class="header-navigation-link" [routerLink]="['banco']" routerLinkActive="router-active">Bancos</a>
-        <a class="header-navigation-link" [routerLink]="['beneficiario']" routerLinkActive="router-active">Beneficiários</a>
-        <a class="header-navigation-link" [routerLink]="['contrato']" routerLinkActive="router-active">Contratos</a>
-        <a class="header-navigation-link" [routerLink]="['documento-swift']" routerLinkActive="router-active">Documento Swift</a>
-        <a class="header-navigation-link" [routerLink]="['usuarios']" routerLinkActive="router-active">Gerenciar usuários</a>
-    </nav> -->
 </header>
 <div class="header__userLogado-submenu" [class.header__userLogado-submenu--open]="menuMinhaContaOpen">
     <p class="header__userLogado-submenu-link">Bem-vindo</p>

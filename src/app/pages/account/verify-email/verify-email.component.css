@@ -8,8 +8,8 @@
 }
 
 .modal__bg {
-    background: linear-gradient(45deg, #060a32, rgb(var(--primary)));
-    background-color: rgb(var(--primary));
+    background: linear-gradient(45deg, #060a32, var(--primary));
+    background-color: var(--primary);
 }
 
 .link.text-white {
