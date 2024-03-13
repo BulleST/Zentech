@@ -11,7 +11,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { DropdownModule } from 'primeng/dropdown';
 import { TabViewModule } from 'primeng/tabview';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { FormContratoBicolunadoComponent } from './form-contrato-bicolunado/form-contrato-bicolunado.component';
+import { FormContratoBicolunadoComponent } from './form/form-contrato-bicolunado/form-contrato-bicolunado.component';
 import { FormComponent } from './form/form.component';
 import { LibrariesModule } from 'src/app/shared/libraries.module';
 import { FormContratoComponent } from './form/form-contrato/form-contrato.component';

@@ -44,7 +44,7 @@ export class FormComponent implements OnDestroy {
     faCheck = faCheck;
     objeto: InvoiceRequest = new InvoiceRequest;
     erro: string = '';
-    
+
     loading = false;
     loadingInvoiceFile = false;
     loadingContratoFile = false;
@@ -66,6 +66,9 @@ export class FormComponent implements OnDestroy {
     podeBaixarContrato = false;
     podeBaixarSwift = false;
     podeBaixarKit = false;
+    beneficiarioSelected?: BeneficiarioRequest;
+
+    camposReadonly = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -102,14 +105,15 @@ export class FormComponent implements OnDestroy {
                         res.invoice.data = this.datepipe.transform(res.invoice.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.data = this.datepipe.transform(res.contrato.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.dataLiquidacao = this.datepipe.transform(res.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
-                      
+
                         res.contrato.dataAssinaturaRepresentanteLegal = this.datepipe.transform(res.contrato.dataAssinaturaRepresentanteLegal, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.dataAssinaturaIntermediadora = this.datepipe.transform(res.contrato.dataAssinaturaIntermediadora, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                         res.contrato.dataCertificadoAssinatura = this.datepipe.transform(res.contrato.dataCertificadoAssinatura, 'yyyy-MM-ddTHH:mm') as unknown as Date;
-                       
+                        
                         this.objeto = res;
                         this.objeto.contrato = new Contrato(res.contrato);
-
+                        
+                        this.setCamposReadonly();
                         this.podeBaixarKitChange();
 
                         setTimeout(() => {
@@ -155,24 +159,43 @@ export class FormComponent implements OnDestroy {
         tabChanged(index)
     }
 
-
-    podeBaixarKitChange() {
-        var idDiferenteZero = this.objeto.invoice.id != 0 && this.objeto.contrato.id != 0; 
-        
-        this.podeBaixarInvoice = idDiferenteZero || this.loading || this.loadingInvoiceFile;
-        console.log('podeBaixarInvoice', this.podeBaixarInvoice)
-        this.podeBaixarContrato = idDiferenteZero || this.loading || this.loadingContratoFile;
-        console.log('podeBaixarContrato', this.podeBaixarContrato)
-        this.podeBaixarSwift = idDiferenteZero || this.loading || this.loadingSwiftFile;
-        console.log('podeBaixarSwift', this.podeBaixarSwift)
-
-        this.podeBaixarKit = this.podeBaixarContratoBicolunado 
-                            && this.podeBaixarInvoice
-                            && this.podeBaixarContrato
-                            && this.podeBaixarSwift;
-
+    calculaMoedaNacional() {
+        if (this.objeto.invoice.valor && this.objeto.contrato.taxa) {
+            this.objeto.contrato.valorNacional = this.objeto.invoice.valor * this.objeto.contrato.taxa;
+        }
     }
 
+    calculaVET() {
+        if (this.objeto.invoice.valor && this.objeto.contrato.valorNacional) {
+            // VET = (Valor Moeda Nacional + ( Valor Moeda Nacional * 0.38 )) / Valor Invoice
+            var iof = 0.38 / 100;
+            var iofRS = this.objeto.contrato.valorNacional * iof;
+            this.objeto.contrato.vet = (this.objeto.contrato.valorNacional + iofRS) / this.objeto.invoice.valor;
+        }
+    }
+
+    setCamposReadonly() {
+        if (this.objeto.contrato.dataAssinaturaRepresentanteLegal || this.objeto.contrato.dataAssinaturaIntermediadora || this.objeto.contrato.dataCertificadoAssinatura) {
+            this.camposReadonly = true;
+        } else {
+            this.camposReadonly = false;
+        }
+        console.log('camposReadonly ', this.camposReadonly)
+    }
+
+    podeBaixarKitChange() {
+        var idDiferenteZero = this.objeto.invoice.id != 0 && this.objeto.contrato.id != 0;
+
+        this.podeBaixarInvoice = idDiferenteZero || this.loading || this.loadingInvoiceFile;
+        this.podeBaixarContrato = idDiferenteZero || this.loading || this.loadingContratoFile;
+        this.podeBaixarSwift = idDiferenteZero || this.loading || this.loadingSwiftFile;
+
+        this.podeBaixarKit = this.podeBaixarContratoBicolunado
+            && this.podeBaixarInvoice
+            && this.podeBaixarContrato
+            && this.podeBaixarSwift;
+
+    }
 
     async swiftDownload() {
         if (this.objeto.invoice.id == 0) {
@@ -185,7 +208,6 @@ export class FormComponent implements OnDestroy {
         try {
             await lastValueFrom(this.invoiceService.fileSwift(this.objeto.invoice.id))
         } catch (e: any) {
-            console.log(e)
             this.erro = getError(e);
             this.loadingSwiftFile = false;
             this.loadingService.message.next('');
@@ -201,13 +223,12 @@ export class FormComponent implements OnDestroy {
         this.loading = true;
 
         await lastValueFrom(this.invoiceService.kitZip(this.objeto.invoice.id))
-        .catch(res => {
-            this.erro = getError(res);
-            this.loading = false;
-        });
+            .catch(res => {
+                this.erro = getError(res);
+                this.loading = false;
+            });
         this.loading = false;
     }
-
 
     async send(invoice: NgForm, contrato: NgForm) {
         this.loading = false;

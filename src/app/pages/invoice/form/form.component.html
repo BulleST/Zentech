@@ -24,10 +24,13 @@
                                           [erro]="erro"
                                           [form]="invoice"
                                           [podeBaixarPDF]="podeBaixarInvoice"
+                                          [readonly]="camposReadonly"
+                                          (benefificarioChanged)="beneficiarioSelected = $event"
                                           (erroChange)="erro = $event"
                                           (loadingChange)="loadingInvoiceFile = $event"
-                                          (podeBaixarChanged)="podeBaixarInvoice = $event; podeBaixarKitChange()"
-                                          (tabChanged)="tabChanged($event)"></app-form-invoice>
+                                          (podeBaixarChanged)="podeBaixarInvoice = $event; podeBaixarKitChange();"
+                                          (tabChanged)="tabChanged($event)"
+                                          (objetoChanged)="calculaMoedaNacional(); calculaVET()"></app-form-invoice>
                     </form>
                 </div>
             </p-tabPanel>
@@ -44,11 +47,13 @@
                                           [form]="contrato"
                                           [isEditPage]="isEditPage"
                                           [podeBaixarPDF]="podeBaixarContrato"
+                                          [readonly]="camposReadonly"
                                           (erroChange)="erro = $event"
                                           (loadingChange)="loadingContratoFile = $event"
                                           (podeBaixarChanged)="podeBaixarContrato = $event; podeBaixarKitChange()"
                                           (tabChanged)="tabChanged($event)"
-                                          (send)="send(invoice, contrato)"></app-form-contrato>
+                                          (send)="send(invoice, contrato)"
+                                          (objetoChanged)="calculaMoedaNacional(); calculaVET()"></app-form-contrato>
                     </form>
                 </div>
             </p-tabPanel>
@@ -60,15 +65,16 @@
                     <form #clausulas="ngForm">
                         <app-form-contrato-bicolunado
                                 [objeto]="objeto"
-                                [beneficiarioSelected]="//beneficiarioSelected"
+                                [beneficiarioSelected]="beneficiarioSelected"
                                 [loading]="loading"
                                 [erro]="erro"
                                 [podeBaixarPDF]="podeBaixarContratoBicolunado"
-                                (podeBaixarChanged)="podeBaixarContratoBicolunado = $event; podeBaixarKitChange()"
+                                [readonly]="camposReadonly"
+                                (podeBaixarChanged)="podeBaixarContratoBicolunado = $event; podeBaixarKitChange(); setCamposReadonly()"
                                 (loadingChange)="loading = $event"
                                 (erroChange)="erro = $event"
                                 (tabChanged)="tabChanged($event)"
-                                (send)="send(invoice, contrato)"></app-form-contrato-bicolunado>
+                                (send)="send(invoice, contrato); setCamposReadonly()"></app-form-contrato-bicolunado>
                     </form>
                 </div>
             </p-tabPanel>

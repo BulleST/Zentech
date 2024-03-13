@@ -4,6 +4,7 @@ import { faArrowLeft, faArrowRight, faCheck, faPenClip } from '@fortawesome/free
 import { ToastrService } from 'ngx-toastr';
 import { lastValueFrom } from 'rxjs';
 import { BeneficiarioRequest } from 'src/app/models/beneficiario.model';
+import { Empresa } from 'src/app/models/empresa.model';
 import { InvoiceRequest } from 'src/app/models/invoice.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoService } from 'src/app/services/contrato.service';
@@ -26,11 +27,15 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     @Input() erro: string = '';
     @Input() loading: boolean = false;
     @Input() podeBaixarPDF: boolean = false;
+    @Input() readonly: boolean = false;
+    @Input() empresa: Empresa;
+
 
     assinadoRepresentanteLegal = false;
     assinadoIntermediadora = false;
     certificadoAssinaturaIncluido = false;
 
+    assinaturaUri = '';
     assinaturaUploadedFile?: File;
     assinaturaIsUploaded = false;
     alterarRepresentanteLegal = false;
@@ -55,23 +60,25 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
-            console.log('oi', this.objeto )
-            this.setPodeBaixarChange()
+            this.setPodeBaixarChange();
+            this.assinaturaUri = this.objeto.contrato.assinaturaRepresentanteLegal as string;
 
         }
         if (changes['beneficiarioSelected']) this.beneficiarioSelected = changes['beneficiarioSelected'].currentValue;
         if (changes['erro']) this.erro = changes['erro'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
         if (changes['podeBaixarPDF']) this.podeBaixarPDF = changes['podeBaixarPDF'].currentValue;
+        if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
+        if (changes['empresa']) this.empresa = changes['empresa'].currentValue;
     }
 
     alterarDadosRepresentanteLegal() {
         this.alterarRepresentanteLegal = !this.alterarRepresentanteLegal;
 
         if (!this.alterarRepresentanteLegal) { 
-            this.objeto.contrato.assinaturaRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.assinaturaRepresentanteLegal : '';
             this.objeto.contrato.nomeRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.nomeRepresentanteLegal : '';
             this.objeto.contrato.codigoRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.codigoRepresentanteLegal : '';
+            this.assinaturaUri = this.objeto.contrato.assinaturaRepresentanteLegal as string; // = this.beneficiarioSelected ? this.beneficiarioSelected.assinaturaRepresentanteLegal : '';
             this.assinaturaIsUploaded = false;
             delete this.assinaturaUploadedFile;
         }
@@ -113,6 +120,7 @@ export class FormContratoBicolunadoComponent implements OnChanges {
         })
         this.loadingChange.emit(false);
     }
+
     async assinarMAC() {
         this.loadingChange.emit(true);
         await lastValueFrom(this.contratoService.assinarMAC(this.objeto.contrato.id))
@@ -140,8 +148,8 @@ export class FormContratoBicolunadoComponent implements OnChanges {
             var c = this;
             reader.onload = function (e) {
                 var src = e.target?.result as string;
-                c.objeto.contrato.assinaturaRepresentanteLegal = src;
                 c.assinaturaIsUploaded = true;
+                c.assinaturaUri = src;
             }
             reader.onerror = function (e) {
                 c.toastr.error('Não foi possível realizar upload');
@@ -182,7 +190,6 @@ export class FormContratoBicolunadoComponent implements OnChanges {
         try {
             await lastValueFrom(this.contratoService.contratoBicolunado(this.objeto.contrato.id))
         } catch (e: any) {
-            console.log(e)
             this.erroChange.emit(getError(e));
             this.loadingContratoBicolunadoFile = false;
             this.loadingService.message.next('');
@@ -197,13 +204,14 @@ export class FormContratoBicolunadoComponent implements OnChanges {
                             && this.assinadoIntermediadora 
                             && this.certificadoAssinaturaIncluido
                             && this.objeto.contrato.id != 0;
+
         this.podeBaixarChanged.emit(this.podeBaixarPDF);
         this.podeAssinarRepresentanteLegal = !!(this.objeto.contrato.nomeRepresentanteLegal && this.objeto.contrato.codigoRepresentanteLegal && this.objeto.contrato.assinaturaRepresentanteLegal);
     }
 
-
     sendValues() {
         this.send.emit(true);
+        this.objeto.contrato.assinaturaRepresentanteLegal = this.assinaturaUri;
         this.alterarRepresentanteLegal = false;
     }
     

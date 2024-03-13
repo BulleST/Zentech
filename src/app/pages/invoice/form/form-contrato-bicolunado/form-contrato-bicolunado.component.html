@@ -23,6 +23,7 @@
                         <button type="button"
                                 class="btn btn-dark me-2"
                                 [disabled]="loading"
+                                *ngIf="!readonly"
                                 (click)="alterarDadosRepresentanteLegal()">
                             <span *ngIf="alterarRepresentanteLegal">Cancelar</span>
                             <span *ngIf="!alterarRepresentanteLegal">Alterar dados</span>
@@ -94,9 +95,9 @@
                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12 col-12"> <!-- Assinatura -->
                     <label for="assinaturaRepresentanteLegal">Assinatura: <span class="text-danger">*</span></label>
                     <div class="d-flex align-items-center flex-wrap" *ngIf="!assinadoRepresentanteLegal">
-                        <label for="assinaturaRepresentanteLegal"
+                        <label for="assinaturaRepresentanteLegal" *ngIf="!readonly && alterarRepresentanteLegal"
                                class="input-file-container btn btn-dark me-2 mb-2"
-                               [class.disabled]="!alterarRepresentanteLegal">
+                               >
                             <span *ngIf="!assinaturaIsUploaded">Escolher assinatura</span>
                             <span *ngIf="assinaturaIsUploaded">Refazer upload</span>
                             <input type="file"
@@ -108,14 +109,14 @@
                                    accept="image/png"
                                    (input)="fileChange($event)">
                         </label>
-                        <label class="my-1" *ngIf="!objeto.contrato.assinaturaRepresentanteLegal"
+                        <label class="my-1" *ngIf="!assinaturaUri"
                                title="Nenhuma assinatura selecionada">Nenhuma assinatura selecionada</label>
                         <label class="my-1"
-                               *ngIf="objeto.contrato.assinaturaRepresentanteLegal && assinaturaUploadedFile != undefined"
+                               *ngIf="assinaturaUri && assinaturaUploadedFile != undefined"
                                [title]="assinaturaUploadedFile.name">{{assinaturaUploadedFile.name}}</label>
                     </div>
-                    <div *ngIf="objeto.contrato.assinaturaRepresentanteLegal">
-                        <img [src]="objeto.contrato.assinaturaRepresentanteLegal"
+                    <div *ngIf="assinaturaUri">
+                        <img [src]="assinaturaUri"
                              [alt]="assinaturaUploadedFile ? assinaturaUploadedFile.name : 'Assinatura' "
                              class="input-file-image">
                     </div>
@@ -214,14 +215,22 @@
                         <div class="border-bottom border-dark text-center">
                             <div class="py-3 px-3">
                                 <p>Datas e horários em GMT -3:00 Brasília</p>
-                                <p>Certificado de assinaturas gerado quarta-feira, 24 de janeiro de 2024 18:57:16</p>
+                                <p>
+                                    <span>Certificado de assinaturas gerado </span>
+                                    <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'EEEE'}}</span>,
+                                    <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'dd'}}</span> de 
+                                    <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'MMMM'}}</span> de 
+                                    <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'yyyy'}}</span>&nbsp;
+                                    <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'HH:mm:ss'}}</span> 
+                                    <!-- <span>{{objeto.contrato.dataCertificadoAssinatura | date : 'long' : '' : 'pt-BR'}}</span> -->
+                                </p>
                             </div>
                         </div>
                         <div class="border-bottom border-dark">
                             <div class="py-3 px-3">
-                                <p>MAC MEIOS DE PAGAMENTO LTDA </p>
+                                <p>{{objeto.contrato.nomeEmpresa}} </p>
                                 <p>{{beneficiarioSelected?.nome}}</p>
-                                <p>REF: XXXXXXXXX</p>
+                                <p>REF: {{objeto.contrato.ref}}</p>
                                 <p>Controle PROCAMBIO: {{objeto.contrato.controleProCambio}}</p>
                                 <p>O documento não foi modificado após a aplicação das assinaturas.</p>
                             </div>

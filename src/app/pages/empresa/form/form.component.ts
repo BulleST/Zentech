@@ -75,14 +75,12 @@ export class FormComponent implements OnDestroy {
                         this.fileLoading = false;
                         this.fileName = '';
                         this.fileUploaded = (!!res.logoDataUri && !!res.logoDataUri.trim());
-                        console.log('fileUploaded', this.fileUploaded)
 
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'Empresa');
                         }, 200);
                     })
                     .catch((res: any) => {
-                        console.log('ERROR', res)
                         this.toastr.error('Não foi possível acessar.')
                         this.voltar();
                     })
@@ -197,11 +195,9 @@ export class FormComponent implements OnDestroy {
         var rgb = this.colors.hexToRgb(this.objeto.primaryColor);
         var white = { r: 255, g: 255, b: 255 };
         var difference = this.colors.calculateColorDifference(rgb, white);
-        console.log(difference > 30000 ? 'OK' : 'CLARA', difference, rgb);
         if (difference > 30000) {
             this.colors.setPrimaryColor(this.objeto.primaryColor);
         } else {
-            console.log('Clara')
             this.toastr.warning('Essa cor pode ser considerada muito clara.')
         }
 
@@ -211,11 +207,9 @@ export class FormComponent implements OnDestroy {
         var rgb = this.colors.hexToRgb(this.objeto.secundaryColor);
         var white = { r: 255, g: 255, b: 255 };
         var difference = this.colors.calculateColorDifference(rgb, white);
-        console.log(difference > 30000 ? 'OK' : 'CLARA', difference, rgb);
         if (difference > 30000) {
             this.colors.setNeutralColor(this.objeto.secundaryColor);
         } else {
-            console.log('Clara')
             this.toastr.warning('Essa cor pode ser considerada muito clara.')
         }
 

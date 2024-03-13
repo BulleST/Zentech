@@ -51,7 +51,6 @@ export class AuthGuard implements CanActivate {
         
         // try {
         //     var account = await lastValueFrom(this.accountService.refreshToken())
-        //     console.log('account', account)
 
         //     if (!account)
         //         return this.voltar(state);
