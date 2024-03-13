@@ -60,10 +60,65 @@
                         <p class="text-danger" *ngIf="endereco.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
+                <!-- Cidade -->
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-6 col-7">
+                    <label for="cidade">Cidade: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="cidade"
+                           id="cidade"
+                           #cidade="ngModel"
+                           [(ngModel)]="objeto.cidade"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.cidade = cidade.value.trim().toUpperCase();"
+                           required>
+                    <div *ngIf="cidade.touched && cidade.errors">
+                        <p class="text-danger" *ngIf="cidade.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- UF -->
+                <div class="form-group col-xl-2 col-lg-2 col-md-2 col-sm-6 col-5">
+                    <label for="uf">UF: <span class="text-danger">*</span></label>
+                    <input type="text"
+                           class="form-control"
+                           name="uf"
+                           id="uf"
+                           #uf="ngModel"
+                           [(ngModel)]="objeto.uf"
+                           pattern="\S(.*\S)?"
+                           (change)="objeto.uf = uf.value.trim().toUpperCase();"
+                           required>
+                    <div *ngIf="uf.touched && uf.errors">
+                        <p class="text-danger" *ngIf="uf.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
+                <!-- País -->
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-12 col-12">
+                    <label for="pais_Id">País: <span class="text-danger">*</span></label>
+                    <p-dropdown [styleClass]="'form-control ' + (loadingPaises ? 'form-control-loading' : '')"
+                                [options]="paises"
+                                #pais_Id="ngModel"
+                                [(ngModel)]="objeto.pais_Id"
+                                optionLabel="nome"
+                                optionValue="id"
+                                [placeholder]="'Selecione'"
+                                [disabled]="loadingPaises"
+                                name="pais_Id"
+                                id="pais_Id"
+                                [required]="true"
+                                [filter]="true"
+                                filterBy="nome"
+                                [showClear]="true"
+                                appendTo="body">
+                    </p-dropdown>
+                    <div *ngIf="pais_Id.touched && pais_Id.errors">
+                        <p class="text-danger" *ngIf="pais_Id.errors['required']">Este campo é obrigatório.</p>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <!-- Sócio Diretor -->
-                <div class="form-group col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label for="socioDiretor">Sócio Diretor: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -78,9 +133,7 @@
                         <p class="text-danger" *ngIf="socioDiretor.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- RG do Sócio Diretor -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6"> <!-- RG do Sócio Diretor -->
                     <label for="rgSocioDiretor">RG do Sócio Diretor: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"
@@ -99,7 +152,7 @@
                         <p class="text-danger" *ngIf="rgSocioDiretor.errors['jaCadastrado']">RG já cadastrado</p>
                     </div>
                 </div>
-                <div class="form-group col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12"> <!-- CPF do Sócio Diretor -->
+                <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6"> <!-- CPF do Sócio Diretor -->
                     <label for="cpfSocioDiretor">CPF do Sócio Diretor: <span class="text-danger">*</span></label>
                     <input type="text"
                            class="form-control"

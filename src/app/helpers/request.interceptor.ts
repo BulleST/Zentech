@@ -43,6 +43,7 @@ export class RequestInterceptor implements HttpInterceptor {
         var notLoading = this.excludeUrlsLoading.filter(x => request.url.includes(x));
         var notToastr = this.excludeUrlsToastr.filter(x => request.url.includes(x));
 
+        console.log(request.url, notLoading)
         var loadingHeader = request.headers.get('loading');
         if (notLoading.length == 0 && (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true')) {
             if (notLoading.length == 0) {

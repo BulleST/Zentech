@@ -13,6 +13,8 @@ import { insertOrReplace } from 'src/app/utils/service-list';
 import { NgModel } from '@angular/forms';
 import { validateRG } from 'src/app/utils/validate-rg';
 import { Colors } from 'src/app/utils/colors';
+import { PaisesService } from 'src/app/services/paises.service';
+import { Paises } from 'src/app/models/pais.model';
 
 
 @Component({
@@ -36,6 +38,8 @@ export class FormComponent implements OnDestroy {
     fileName = '';
     fileLoading = false;
 
+    loadingPaises = true;
+    paises: Paises[] = [];
 
 
     constructor(
@@ -44,8 +48,14 @@ export class FormComponent implements OnDestroy {
         private crypto: Crypto,
         private toastr: ToastrService,
         private empresaService: EmpresaService,
-        private colors: Colors
+        private colors: Colors,
+        private paisesService: PaisesService
     ) {
+        lastValueFrom(this.paisesService.getList())
+            .then(res => {
+                this.loadingPaises = false;
+                this.paises = res;
+            });
     }
 
 
@@ -53,7 +63,7 @@ export class FormComponent implements OnDestroy {
         this.modal.id = 0;
         this.modal.template = this.template;
         this.modal.icon = this.icon;
-        this.modal.style = { 'max-width': '600px' };
+        this.modal.style = { 'max-width': '800px' };
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };
 

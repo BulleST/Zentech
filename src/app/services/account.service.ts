@@ -54,7 +54,7 @@ export class AccountService {
                 this.startRefreshTokenTimer();
 
                 if (account.perfilAcesso_Id == 1) {
-                    if (this.empresaService.list.value.length == 0) 
+                    if (this.empresaService.list.value.length == 0)
                         await lastValueFrom(this.empresaService.getList());
                 }
                 if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
@@ -76,55 +76,57 @@ export class AccountService {
     }
 
     async logout() {
-        await lastValueFrom(this.http.post<any>(`${this.url}/accounts/revoke-token`, {token: this.accountValue?.refreshToken}, { withCredentials: true } /**/))
+        await lastValueFrom(this.http.post<any>(`${this.url}/accounts/revoke-token`, { token: this.accountValue?.refreshToken }, { withCredentials: true } /**/))
             .catch(error => {
             })
-            this.stopRefreshTokenTimer();
-            this.setAccount(undefined);
-            this.router.navigate(['account', 'login']);
-            localStorage.clear();
-    } 
+        this.stopRefreshTokenTimer();
+        this.setAccount(undefined);
+        this.router.navigate(['account', 'login']);
+        localStorage.clear();
+    }
 
     refreshToken() {
-       return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
-           .pipe(map(async account => {
-                    this.setAccount(account);
-                    this.startRefreshTokenTimer();
-                    if (account.perfilAcesso_Id == 1) {
-                        if (this.empresaService.list.value.length == 0) {
-                            await lastValueFrom(this.empresaService.getList());
-                        }
+        return this.http.post<Account>(`${this.url}/accounts/refresh-token`, {}, { withCredentials: true })
+            .pipe(map(async account => {
+                this.setAccount(account);
+                this.startRefreshTokenTimer();
+                if (account.perfilAcesso_Id == 1) {
+                    if (this.empresaService.list.value.length == 0) {
+                        await lastValueFrom(this.empresaService.getList());
                     }
-                    if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                        this.empresaService.empresaSelected.next({
-                            id: account.empresa_Id,
-                            empresa: account.empresa
-                        })
-                    }
-                    return account;
-                }),
-            
-        //     tap({
-        //     // next: async account => {
-        //     //     this.setAccount(account);
-        //     //     this.startRefreshTokenTimer();
-        //     //     if (account.perfilAcesso_Id == 1) {
-        //     //         if (this.empresaService.list.value.length == 0) 
-        //     //             await lastValueFrom(this.empresaService.getList());
-        //     //     }
-        //     //     if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-        //     //         this.empresaService.empresaSelected.next({
-        //     //             id: account.empresa_Id,
-        //     //             empresa: account.empresa
-        //     //         })
-        //     //     }
-        //     // },
-        //     error: (err) => {
-        //         this.setAccount(undefined);
-        //         this.startRefreshTokenTimer();
-        //     },
-        //    })
-           );
+                }
+                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+                    this.empresaService.empresaSelected.next({
+                        id: account.empresa_Id,
+                        empresa: account.empresa
+                    })
+                }
+                return account;
+            }),
+
+                tap({
+                    // next: async account => {
+                    //     this.setAccount(account);
+                    //     this.startRefreshTokenTimer();
+                    //     if (account.perfilAcesso_Id == 1) {
+                    //         if (this.empresaService.list.value.length == 0) 
+                    //             await lastValueFrom(this.empresaService.getList());
+                    //     }
+                    //     if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
+                    //         this.empresaService.empresaSelected.next({
+                    //             id: account.empresa_Id,
+                    //             empresa: account.empresa
+                    //         })
+                    //     }
+                    // },
+                    error: (err) => {
+                        this.setAccount(undefined);
+                        this.startRefreshTokenTimer();
+                        this.router.navigate(['account', 'login']);
+                        localStorage.clear();
+                    },
+                })
+            );
 
     }
 
@@ -160,7 +162,7 @@ export class AccountService {
              * ignore de typescrypt warning
              */
             const jwtToken = JSON.parse(atob(this.accountValue.jwtToken.split('.')[1]));
-    
+
             // set a timeout to refresh the token a minute before it expires
             const expires = new Date(jwtToken.exp * 1000);
             const timeout = expires.getTime() - Date.now() - (60 * 1000);

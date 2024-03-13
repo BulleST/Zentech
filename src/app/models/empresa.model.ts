@@ -18,6 +18,9 @@ export class Empresa {
     perfilAcesso: PerfilAcesso = undefined as unknown as PerfilAcesso;
     primaryColor: string = '#ffc107';
     secundaryColor: string = '#3b3b47';
+    cidade: string = '';
+    uf: string = '';
+    pais_Id: number = 0;
 }
 
 export var empresaColumns: Column[] = [
