@@ -138,3 +138,15 @@ input {
     overflow: hidden;
     text-overflow: ellipsis; 
 }
+
+.form-control.disabled, 
+.form-control:disabled, 
+.form-control[readonly] {
+    background-color: #e9ecef;
+    opacity: 1;
+    background-image: none!important;
+    cursor: default!important;
+}
+.form-control.disabled > * {
+    cursor: default!important;
+} 
