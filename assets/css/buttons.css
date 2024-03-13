@@ -476,3 +476,32 @@ button[disabled] {
 button[disabled]:hover, button[disabled]:focus, button[disabled]:active {
     box-shadow: none;
 }
+
+
+
+.btn-step {
+    background-color: var(--neutral);
+    color: #fff;
+    border: 2px var(--neutral) solid;
+    padding: 3px 12px 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .5s;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-step:hover {
+    background: var(--neutral);
+    padding: 3px 12px 3px;
+    color: #fff;
+    position: static;
+    background: #fff;
+    color: var(--neutral);
+}
+
+.btn.btn-step.disabled,
+.btn.btn-step:disabled {
+    pointer-events: none !important;
+}
