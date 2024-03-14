@@ -3,32 +3,17 @@ import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
-import { BancoList, BancoRequest } from 'src/app/models/banco.model';
-import { BeneficiarioList, BeneficiarioRequest } from 'src/app/models/beneficiario.model';
-import { Contrato, Contrato_List } from 'src/app/models/contrato.model';
-import { InstituicaoFinanceiraList } from 'src/app/models/instituicao-financeira.model';
-import { Invoice, InvoiceRequest } from 'src/app/models/invoice.model';
-import { Moeda } from 'src/app/models/moeda.model';
-import { BancoService } from 'src/app/services/banco.service';
-import { BeneficiarioService } from 'src/app/services/beneficiario.service';
-import { ContratoService } from 'src/app/services/contrato.service';
-import { InstituicaoFinanceiraService } from 'src/app/services/instituicao-financeira.service';
+import { BeneficiarioRequest } from 'src/app/models/beneficiario.model';
+import { Contrato } from 'src/app/models/contrato.model';
+import { InvoiceRequest } from 'src/app/models/invoice.model';
 import { InvoiceService } from 'src/app/services/invoice.service';
-import { MoedaService } from 'src/app/services/moeda.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Crypto } from 'src/app/utils/crypto';
 import { getError } from 'src/app/utils/error';
 import { NgForm } from '@angular/forms';
 import { tabChanged } from 'src/app/utils/tabview';
-import { ContratoTipo } from 'src/app/models/contrato-tipo.model';
-import { ContratoEvento } from 'src/app/models/contrato-evento.model';
-import { Paises } from 'src/app/models/pais.model';
 import { faArrowLeft, faArrowRight, faCheck, faEdit, faPenClip, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/parts/loading/loading';
-import { ContratoTipoService } from 'src/app/services/contrato-tipo.service';
-import { ContratoEventoService } from 'src/app/services/contrato-evento.service';
-import { PaisesService } from 'src/app/services/paises.service';
-import { AccountService } from 'src/app/services/account.service';
 
 @Component({
     selector: 'app-form',
@@ -180,7 +165,6 @@ export class FormComponent implements OnDestroy {
         } else {
             this.camposReadonly = false;
         }
-        console.log('camposReadonly ', this.camposReadonly)
     }
 
     podeBaixarKitChange() {
@@ -233,6 +217,7 @@ export class FormComponent implements OnDestroy {
     async send(invoice: NgForm, contrato: NgForm) {
         this.loading = false;
         this.erro = '';
+
         if (invoice.invalid) {
             this.toastr.error('Campos inválidos em invoice.');
             this.erro = 'Campos inválidos em invoice.';
@@ -247,6 +232,12 @@ export class FormComponent implements OnDestroy {
         if (!this.isEditPage) {
             this.objeto.contrato.invoice_Id = 0;
         }
+
+        this.objeto.contrato.valorNacional = parseFloat(this.objeto.contrato.valorNacional as unknown as string);
+        this.objeto.contrato.vet = parseFloat(this.objeto.contrato.vet as unknown as string);
+        this.objeto.contrato.taxa = parseFloat(this.objeto.contrato.taxa as unknown as string);
+        this.objeto.invoice.valor = parseFloat(this.objeto.invoice.valor as unknown as string);
+
         return await this.request()
             .then(async res => {
                 if (res.sucesso == true) {

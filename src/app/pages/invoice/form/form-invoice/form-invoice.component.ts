@@ -61,7 +61,7 @@ export class FormInvoiceComponent implements OnChanges {
     @Output() podeBaixarChanged = new EventEmitter<boolean>();
     @Output() tabChanged = new EventEmitter<number>();
     @Output() benefificarioChanged = new EventEmitter<BeneficiarioRequest>();
-    @Output() objetoChanged = new EventEmitter<InvoiceRequest>()
+    @Output() objetoChanged = new EventEmitter<InvoiceRequest>();
     constructor(
         private toastr: ToastrService,
         private invoiceService: InvoiceService,

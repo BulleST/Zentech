@@ -30,7 +30,7 @@
                                           (loadingChange)="loadingInvoiceFile = $event"
                                           (podeBaixarChanged)="podeBaixarInvoice = $event; podeBaixarKitChange();"
                                           (tabChanged)="tabChanged($event)"
-                                          (objetoChanged)="calculaMoedaNacional(); calculaVET()"></app-form-invoice>
+                                          (objetoChanged)="objeto = $event; calculaMoedaNacional(); calculaVET()"></app-form-invoice>
                     </form>
                 </div>
             </p-tabPanel>
@@ -53,7 +53,7 @@
                                           (podeBaixarChanged)="podeBaixarContrato = $event; podeBaixarKitChange()"
                                           (tabChanged)="tabChanged($event)"
                                           (send)="send(invoice, contrato)"
-                                          (objetoChanged)="calculaMoedaNacional(); calculaVET()"></app-form-contrato>
+                                          (objetoChanged)="objeto = $event; calculaMoedaNacional(); calculaVET()"></app-form-contrato>
                     </form>
                 </div>
             </p-tabPanel>
@@ -74,7 +74,8 @@
                                 (loadingChange)="loading = $event"
                                 (erroChange)="erro = $event"
                                 (tabChanged)="tabChanged($event)"
-                                (send)="send(invoice, contrato); setCamposReadonly()"></app-form-contrato-bicolunado>
+                                (send)="send(invoice, contrato); setCamposReadonly()"
+                                (objetoChanged)="objeto = $event;"></app-form-contrato-bicolunado>
                     </form>
                 </div>
             </p-tabPanel>
