@@ -53,7 +53,7 @@ export class FormComponent {
         this.perfil = perfil;
         this.account = this.accountService.accountValue;
 
-        var empresaSelected = this.empresaService.empresaSelected.subscribe(res => {
+        var empresaSelected = this.empresaService.getEmpresa().subscribe(res => {
             
             this.perfil = [
                 { id: 1, perfil: 'Admin', disabled: this.account?.perfilAcesso_Id != Role.Admin || res.id != 27 },

@@ -15,7 +15,7 @@
     margin: 0 0 0 -1px!important;
 }
 .p-paginator-element.p-highlight, .p-paginator-first.p-highlight, .p-paginator-last.p-highlight, .p-paginator-next.p-highlight, .p-paginator-prev.p-highlight {
-    background: var(--grey)!important;
+    background: var(--neutral)!important;
     color: #fff!important;
 }
 .p-paginator-first, .p-paginator-last, .p-paginator-next, .p-paginator-prev {

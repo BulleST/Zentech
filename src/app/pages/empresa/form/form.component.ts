@@ -78,7 +78,7 @@ export class FormComponent implements OnDestroy {
                     .then(res => {
                         this.objeto = res;
 
-                        this.empresaService.empresaSelected.next({ id: this.objeto.id, empresa: res });
+                        this.empresaService.setEmpresa({ id: this.objeto.id, empresa: res });
                         this.colors.setColorsJquery(res);
 
                         this.fileSrc = res.logoDataUri;

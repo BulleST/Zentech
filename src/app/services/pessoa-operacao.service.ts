@@ -43,7 +43,7 @@ export class PessoaOperacaoService {
     getList(loading: boolean = false) {
         this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<PessoaOperacaoList[]>(`${this.url}/operacao/list/empresa/${empresaId}`)
             .pipe(tap({
                 next: list => {
@@ -52,7 +52,10 @@ export class PessoaOperacaoService {
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de operações.'),
-                finalize: () => this.loading.next(false),
+                finalize: () => {
+                    this.loading.next(false);
+                    this.table.loading.next(false);
+                },
             }));
     }
 
@@ -67,7 +70,10 @@ export class PessoaOperacaoService {
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de operações.'),
-                finalize: () => this.loading.next(false),
+                  finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
             }));
     }
 
@@ -87,8 +93,14 @@ export class PessoaOperacaoService {
         return this.http.delete<Response>(`${this.url}/operacao/${id}`);
     }
 
+
+    deleteList(ids: number[]) {
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
+        return this.http.post<Response>(`${this.url}/operacao/excluir/list/${empresaId}`, {Ids: ids});
+    }
+
     exportacao(request: Filtro) {
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.post(`${this.url}/operacao/exportar-pdf/${empresaId}`, request, { responseType: 'blob' })
             .pipe(tap({
                 next: res => {
@@ -130,7 +142,7 @@ export class PessoaOperacaoService {
     importarArquivo(file: File) {
         var data = new FormData();
         data.append('file', file);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.post<Response>(`${this.url}/operacao/importa-excel/${empresaId}`, data);
     }
 

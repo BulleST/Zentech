@@ -24,23 +24,36 @@
     </div>
     <div class="page__body">
         <ng-template #topActions>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mx-md-1 mb-2 px-0 ng-star-inserted">
+            <div class="mx-md-1 mb-2 px-0 " *ngIf="selectedItems.length > 1">
+                <button (click)="excluirLista($event)" 
+                [disabled]="loading"
+                class="btn btn-danger me-md-0 me-sm-1"  
+                style="height: 33px; line-height: 1;font-size: 13px;">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+                <p-confirmDialog></p-confirmDialog>
+            </div>
+            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-6 col-12 mx-md-1 mb-2 px-0 ">
                 <a class="btn btn-dark exportar-pdf d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['exportar']" style="height: 33px; white-space: nowrap;">
-                    <span class="me-2">
+                    <!-- <span class="me-2">
                         <fa-icon [icon]="faFilePdf"></fa-icon>
+                    </span> -->
+                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 13px;"> Exportar PDF
                     </span>
-                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 12px;"> Exportar PDF</span>
                 </a>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mx-md-1 mb-2 px-0 ng-star-inserted">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12 mx-md-1 mb-2 px-0 ">
                 <a class="btn btn-dark d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['importar']" style="height: 33px; white-space: nowrap;">
-                    <img src="assets/img/icon-excel-white.png" alt="excel.png" class="me-2" style="width: 17px;">
-                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 12px;"> Importar Excel</span>
+                    <!-- <img src="assets/img/icon-excel-white.png" alt="excel.png" class="me-2" style="width: 17px;"> -->
+                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 13px;"> Importar Excel
+                    </span>
                 </a>
             </div>
-            <div class="col-xl-4 col-lg-3 col-md-3 col-sm-6 col-12 mb-2 me-md-2 mx-md-1 px-0 ng-star-inserted">
+            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-6 col-12 mb-2 me-md-2 mx-md-1 px-0 ">
                 <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['cadastrar']" style="height: 33px; white-space: nowrap;">
-                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 12px;"> Cadastrar Operação</span>
+                    <span style="margin-top: -1px; margin-bottom: 1px; font-size: 13px;"> Cadastrar 
+                    <!-- Operação -->
+                    </span>
                 </a>
             </div>
         </ng-template>
@@ -55,6 +68,7 @@
             [columns]="columns"
             [tableLinks]="tableLinks"
             [selectable]="true"
+            [selectionMode]="'multiple'"
         ></app-list-shared>
     </div>
 </section>

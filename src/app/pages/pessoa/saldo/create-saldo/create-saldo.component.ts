@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { Subscription, lastValueFrom } from 'rxjs';
 import { PessoaSaldoRequest } from 'src/app/models/pessoa-saldo.model';
+import { PessoaList } from 'src/app/models/pessoa.model';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { PessoaOperacaoService } from 'src/app/services/pessoa-operacao.service';
 import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
@@ -22,6 +23,7 @@ export class CreateSaldoComponent implements OnDestroy {
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
+    pessoa?: PessoaList;
 
     @ViewChild('template') template: TemplateRef<any>;
     @ViewChild('icon') icon: TemplateRef<any>;
@@ -54,6 +56,13 @@ export class CreateSaldoComponent implements OnDestroy {
             var params = paramsSubscriber.subscribe(x => {
                 if (x['pessoa_id']) {
                     this.objeto.pessoa_Id = this.crypto.decrypt(x['pessoa_id']);
+                    if (this.pessoaService.list.value.length == 0){
+                        lastValueFrom(this.pessoaService.getList()).then(res => {
+                            this.getPessoa();
+                        });
+                    } else {
+                        this.getPessoa();
+                    }
                     setTimeout(() => {
                         this.modal = this.modalService.addModal(this.modal, 'create saldo');
                     }, 200);
@@ -71,6 +80,13 @@ export class CreateSaldoComponent implements OnDestroy {
 
     voltar() {
         this.modalService.removeModal(this.modal);
+    }
+
+
+    getPessoa() {
+        var pessoa = this.pessoaService.list.value.find(x => x.id == this.objeto.pessoa_Id);
+        this.pessoa = pessoa;
+        return pessoa
     }
 
     send() {

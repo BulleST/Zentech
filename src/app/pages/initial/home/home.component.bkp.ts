@@ -20,7 +20,7 @@ export class HomeComponent implements OnDestroy {
         private router: Router,
         private empresaService: EmpresaService,
     ) {
-        var empresa = this.empresaService.empresaSelected.subscribe(res => {
+        var empresa = this.empresaService.getEmpresa().subscribe(res => {
             this.empresa = res.empresa;
             if (res.empresa)
                 this.initPalete(res.empresa?.logoDataUri);

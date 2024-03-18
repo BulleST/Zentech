@@ -53,7 +53,7 @@ export class NavigationComponent implements OnDestroy {
         var open = this.header.menuAsideOpen.subscribe(res => this.menuOpen = res);
         this.subscription.push(open);
         
-        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa)
+        var empresa = this.empresaService.getEmpresa().subscribe(res => this.empresa = res.empresa)
         this.subscription.push(empresa);
     }
 
@@ -129,14 +129,14 @@ export class NavigationComponent implements OnDestroy {
                     label: 'Invoice',
                     routerLink: "/invoice",
                     paddingLeft: 10,
-                    items: [
-                        {
-                            id: i++,
-                            label: 'Contratos',
-                            routerLink: "/contrato",
-                            paddingLeft: 25,
-                        },
-                    ]
+                    // items: [
+                    //     {
+                    //         id: i++,
+                    //         label: 'Contratos',
+                    //         routerLink: "/contrato",
+                    //         paddingLeft: 25,
+                    //     },
+                    // ]
                 },
             ]
         });

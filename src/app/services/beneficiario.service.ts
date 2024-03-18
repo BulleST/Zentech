@@ -29,7 +29,7 @@ export class BeneficiarioService {
     getList(loading: boolean = false) {
         this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<BeneficiarioList[]>(`${this.url}/beneficiario/list/${empresaId}` /*/list/${empresaId} */)
             .pipe(tap({
                 next: list => {
@@ -38,7 +38,10 @@ export class BeneficiarioService {
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de beneficiários.'),
-                finalize: () => this.loading.next(false),
+                  finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
 
             }));
     }
@@ -48,7 +51,7 @@ export class BeneficiarioService {
     }
 
     post(request: BeneficiarioRequest) {
-        request.empresa_Id = this.empresaService.empresaSelected.value.id;
+        request.empresa_Id = this.empresaService.getEmpresa().value.id;
         return this.http.post<Response>(`${this.url}/beneficiario`, request);
     }
 

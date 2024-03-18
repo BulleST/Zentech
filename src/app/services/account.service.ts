@@ -57,8 +57,8 @@ export class AccountService {
                     if (this.empresaService.list.value.length == 0)
                         await lastValueFrom(this.empresaService.getList());
                 }
-                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                    this.empresaService.empresaSelected.next({
+                if (account.perfilAcesso_Id != 1 || !this.empresaService.getEmpresa().value.empresa) {
+                    this.empresaService.setEmpresa({
                         id: account.empresa_Id,
                         empresa: account.empresa
                     })
@@ -94,31 +94,19 @@ export class AccountService {
                     if (this.empresaService.list.value.length == 0) {
                         await lastValueFrom(this.empresaService.getList());
                     }
-                }
-                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                    this.empresaService.empresaSelected.next({
+                    console.log('Admin')
+                    this.empresaService.getEmpresa();
+                
+                } 
+                else if (account.perfilAcesso_Id != 1 || !this.empresaService.getEmpresa().value.empresa) {
+                    this.empresaService.setEmpresa({
                         id: account.empresa_Id,
                         empresa: account.empresa
                     })
                 }
                 return account;
             }),
-
                 tap({
-                    // next: async account => {
-                    //     this.setAccount(account);
-                    //     this.startRefreshTokenTimer();
-                    //     if (account.perfilAcesso_Id == 1) {
-                    //         if (this.empresaService.list.value.length == 0) 
-                    //             await lastValueFrom(this.empresaService.getList());
-                    //     }
-                    //     if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                    //         this.empresaService.empresaSelected.next({
-                    //             id: account.empresa_Id,
-                    //             empresa: account.empresa
-                    //         })
-                    //     }
-                    // },
                     error: (err) => {
                         this.setAccount(undefined);
                         this.startRefreshTokenTimer();

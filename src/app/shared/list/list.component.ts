@@ -2,7 +2,7 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnChange
 import { Router } from '@angular/router';
 import { faBell, faEllipsisV, faFilter, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { ColumnFilter } from 'primeng/table';
+import { ColumnFilter, TableCheckbox } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { MenuTableLink } from 'src/app/helpers/menu-links.interface';
@@ -29,6 +29,7 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() sortTable = true;
     @Input() menuTable = true;
     @Input() selectable = true;
+    @Input() selectionMode: 'multiple' | 'single' = 'single';
     @Input() columns: Column[] = [];
     @Input() tableLinks: MenuTableLink[] = [];
     @Input() showResultLength = true;
@@ -39,17 +40,22 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     @Input() rowActions: TemplateRef<any>;
 
     selected?: any;
+    selectedItems?: any[];
     filters: string[] = [];
     routeRow: string[] = [];
     Role = Role;
 
+    selectedAll = false;
     subscription: Subscription[] = [];
     first = 2;
-    formatedList: any = [];
 
     @ViewChild('rowActions') rowActionsTemplate: TemplateRef<any>;
     @ViewChildren('overlayPanel') logos: QueryList<OverlayPanel>;
     @ViewChild('scrollTipBtn') scrollTipBtn: ElementRef;
+    @ViewChild('dt') dt: TablePrime;
+    @ViewChildren('row') row: QueryList<HTMLTableRowElement>;
+    @ViewChildren('checkbox') checkbox: QueryList<TableCheckbox>;
+
 
     visible = false;
     position: 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright' = 'bottomleft';
@@ -75,6 +81,14 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (this.selectable) {
             var selected = this.table.selected.subscribe(res => this.selected = res);
             this.subscription.push(selected);
+
+            if(this.selectionMode == 'multiple') {
+                var selected = this.table.selectedItems.subscribe(res => {
+                    this.selectedItems = res;
+                    this.selectedAll = this.selectedItems.length == this.list.length;
+                });
+                this.subscription.push(selected);
+            }
         }
     }
 
@@ -85,10 +99,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['list']) {
             this.list = changes['list'].currentValue;
-            this.formatedList = changes['list'].currentValue;
-            if (this.list.length > 0 && this.columns.length > 0) {
-                this.formata();
-            }
         }
         if (changes['columns']) {
             this.columns = changes['columns'].currentValue;
@@ -103,9 +113,10 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['tableLinks']) this.tableLinks = changes['tableLinks'].currentValue;
         if (changes['topActions']) this.topActions = changes['topActions'].currentValue;
         if (changes['tableFooter']) this.tableFooter = changes['tableFooter'].currentValue;
-        if (changes['rowActions']) this.rowActions = changes['rowActions'].currentValue;
+        if (changes['checkboxActions']) this.rowActions = changes['rowActions'].currentValue;
         if (changes['showResultLength']) this.showResultLength = changes['showResultLength'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
+        if (changes['selectionMode']) this.selectionMode = changes['selectionMode'].currentValue;
     }
 
     ngAfterViewInit(): void {
@@ -129,34 +140,49 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         this.table.currentPageChange();
     }
 
-
-    formata() {
-        this.table.loading.next(true);
-        // var list = JSON.parse(JSON.stringify(this.formatedList));
-        // list.every((row: any) => {
-        //     this.columns.every(col => {
-        //         try {
-        //             row[col.field] = this.formatCellData(row, col);
-        //         } catch (e) {
-        //             console.error(e);
-        //         }
-        //         return col;
-        //     })
-        //     return row;
-        // })
-
-        // this.formatedList = Object.assign([], list);
-        this.table.loading.next(false);
-    }
-
-
     onRowSelect(event: any) {
         this.table.onRowSelect(event);
     }
-
+    
     onRowUnselect(event: any) {
+        this.selectedAll = false;
         this.table.onRowUnselect(event)
     }
+    
+
+    selectAllChange(e: any) {
+        this.dt.selectAll = e;
+        this.table.fecharMenuTable();
+        this.table.selectedItems.next(e);
+        if (e.length == 1) {
+            this.table.selected.next(e[0]);
+        } else {
+            this.table.selected.next(undefined);
+        }
+    }
+
+    selectAllClick(selected: boolean) {
+        this.table.fecharMenuTable();
+        this.table.selected.next(undefined)
+        this.loading = true;
+        this.checkbox.forEach(item => {
+            item.checked = selected;
+            item.dt.updateSelectionKeys();
+        });
+        this.loading = false;
+        if (selected) {
+        
+            this.selectAllChange(this.list);
+        } else {
+            this.selectAllChange([]);
+        }
+    }
+
+    checked(item: any) {
+        var checked = this.selectedItems?.findIndex(x => x.id == item.id);
+        return checked != -1 && this.selectedItems && this.selectedItems?.length > 0 ;
+    }
+
 
     formatCellData(row: any, col: Column): any {
         var value = this.table.formatCellData(row, col);

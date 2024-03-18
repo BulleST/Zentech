@@ -37,7 +37,7 @@ export class ListComponent {
 
 
 
-        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+        var empresa = this.empresaService.getEmpresa().subscribe(async res => {
           this.empresaSelected = res.empresa;
           if (res && res.id) {
             await lastValueFrom(this.userService.getList(true));

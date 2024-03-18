@@ -31,14 +31,8 @@
                            id="codigoRegistro"
                            #codigoRegistro="ngModel"
                            [(ngModel)]="objeto.codigoRegistro">
-                    <!--
-                           required
-                           (ngModelChange)="validaCNPJ(cnpj)"
-                           mask="00.000.000/0000-00"
-                           placeholder="00.000.000/0000-00" -->
                     <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
                         <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
-                        <!-- <p class="text-danger" *ngIf="codigoRegistro.errors['mask'] || codigoRegistro.errors['invalid']">CNPJ inválido.</p> -->
                     </div>
                 </div>
             </div>
@@ -59,8 +53,7 @@
                                 [filterFields]="['codigo', 'nome']"
                                 [showClear]="true"
                                 (ngModelChange)="representanteChanged($event)"
-                                [required]="true"
-                                appendTo="body">
+                                [required]="true">
                         <ng-template pTemplate="selectedItem">
                             <div *ngIf="representanteSelected">
                                 <p>{{representanteSelected.codigo}} - {{representanteSelected.nome}}</p>
@@ -72,10 +65,10 @@
                                     <p class="text-ellipsis">{{item.nome}}</p>
                                     <p class="text-ellipsis"><strong>Código:</strong> {{item.codigo}}</p>
                                 </div>
-                                <div class="ms-2">
+                                <!-- <div class="ms-2">
                                     <a class="py-1 px-1 text-dark" (click)="editar(item, 'representante')" title="Editar"><fa-icon [icon]="faEdit"></fa-icon></a>
                                     <a class="py-1 px-1 text-dark" *ngIf="podeExcluir" (click)="excluir(item.id, 'representante')" title="Excluir"><fa-icon [icon]="faTrash"></fa-icon></a>
-                                </div>
+                                </div> -->
                             </div>
                         </ng-template>
                         <ng-template pTemplate="footer">

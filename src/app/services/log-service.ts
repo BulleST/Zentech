@@ -26,7 +26,7 @@ export class LogService {
   getList(loading: boolean = false) {
     this.loading.next(loading);
       this.table.loading.next(true);
-      var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+      var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
       return this.http.get<LogList[]>(`${this.url}/log-acoes/list/${empresaId}` )
           .pipe(
               tap(

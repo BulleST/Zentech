@@ -52,7 +52,7 @@ export class CreateComponent implements OnDestroy {
     ngAfterViewInit(): void {
         this.modal.title = 'Cadastrar Pessoa';
         this.modal.template = this.template;
-        this.modal.style = { 'max-width': '600px' };
+        this.modal.style = { 'max-width': '700px' };
         this.modal.routerBack = ['../'];
         this.modal.activatedRoute = this.activatedRoute;
         this.modal.routerBackOptions = { relativeTo: this.activatedRoute };

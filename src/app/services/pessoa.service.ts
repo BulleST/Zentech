@@ -32,7 +32,7 @@ export class PessoaService {
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(loading);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<PessoaList[]>(`${this.url}/pessoa/list/empresa/${empresaId}`)
         .pipe(tap({
             next: list => {
@@ -45,7 +45,10 @@ export class PessoaService {
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de pessoas.'),
-            finalize: () => this.loading.next(false),
+              finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
         }));
     }
 
@@ -63,18 +66,23 @@ export class PessoaService {
     importarArquivo(file: File){
         var data = new FormData();
         data.append('file', file);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.post<Response>(`${this.url}/pessoa/importa-excel/${empresaId}`, data);
     }
 
 
     post(request: Pessoa) {
-        request.empresa_Id = this.empresaService.empresaSelected.value.id;
+        request.empresa_Id = this.empresaService.getEmpresa().value.id;
         return this.http.post<Response>(`${this.url}/pessoa`, request);
     }
 
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/pessoa/${id}`);
+    }
+
+    deleteList(ids: number[]) {
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
+        return this.http.post<Response>(`${this.url}/pessoa/excluir/list/${empresaId}`, {ids});
     }
 
 

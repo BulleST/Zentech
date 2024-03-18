@@ -12,8 +12,8 @@ export class Representante {
 
 export var representanteColumns: Column[] = [
     {
-        field: 'nome',
-        header: 'Nome',
+        field: 'codigo',
+        header: 'Código',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
@@ -23,8 +23,8 @@ export var representanteColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'codigo',
-        header: 'Código',
+        field: 'nome',
+        header: 'Nome',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

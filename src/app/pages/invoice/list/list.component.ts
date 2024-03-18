@@ -33,7 +33,7 @@ export class ListComponent {
         var loading = this.invoiceService.loading.subscribe(res => this.loading = res);
         this.subscription.push(loading);
 
-        var empresa = this.empresaService.empresaSelected.subscribe(async res => {
+        var empresa = this.empresaService.getEmpresa().subscribe(async res => {
           this.empresaSelected = res.empresa;
           if (res && res.id) {
             await lastValueFrom(this.invoiceService.getList(true));

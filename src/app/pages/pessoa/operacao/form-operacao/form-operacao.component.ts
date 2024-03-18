@@ -7,13 +7,12 @@ import { Subscription, lastValueFrom } from 'rxjs';
 import { getError } from 'src/app/utils/error';
 import { Crypto } from 'src/app/utils/crypto';
 import { DatePipe } from '@angular/common';
-import { ToastrService } from 'ngx-toastr';
-import { PessoaSaldoService } from 'src/app/services/pessoa-saldo.service';
 import { Modal, ModalService } from 'src/app/services/modal.service';
 import { Moeda } from 'src/app/models/moeda.model';
 import { MoedaService } from 'src/app/services/moeda.service';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { insertOrReplace } from 'src/app/utils/service-list';
+import { PessoaList } from 'src/app/models/pessoa.model';
 
 @Component({
     selector: 'app-form-operacao',
@@ -25,6 +24,7 @@ export class FormOperacaoComponent implements OnDestroy {
     faTrash = faTrash;
 
     objeto: PessoaOperacaoRequest = new PessoaOperacaoRequest;
+    pessoa?: PessoaList;
     erro: string = '';
     loading = false;
     subscription: Subscription[] = [];
@@ -85,7 +85,13 @@ export class FormOperacaoComponent implements OnDestroy {
             var params = paramsSubscriber.subscribe(x => {
                 if (x['pessoa_id']) {
                     this.objeto.pessoa_Id = this.crypto.decrypt(x['pessoa_id']);
-
+                    if (this.pessoaService.list.value.length == 0){
+                        lastValueFrom(this.pessoaService.getList()).then(res => {
+                            this.getPessoa();
+                        });
+                    } else {
+                        this.getPessoa();
+                    }
                 } else {
                     this.voltar();
                 }
@@ -128,6 +134,12 @@ export class FormOperacaoComponent implements OnDestroy {
             }
         });
         this.subscription.push(params);
+    }
+
+    getPessoa() {
+        var pessoa = this.pessoaService.list.value.find(x => x.id == this.objeto.pessoa_Id);
+        this.pessoa = pessoa;
+        return pessoa
     }
 
     ngOnDestroy(): void {

@@ -8,6 +8,8 @@ import { Empresa } from 'src/app/models/empresa.model';
 import { InvoiceRequest } from 'src/app/models/invoice.model';
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { ContratoService } from 'src/app/services/contrato.service';
+import { EmpresaSelected, EmpresaService } from 'src/app/services/empresa.service';
+import { InvoiceService } from 'src/app/services/invoice.service';
 import { getError } from 'src/app/utils/error';
 
 @Component({
@@ -29,60 +31,66 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     @Input() podeBaixarPDF: boolean = false;
     @Input() readonly: boolean = false;
     @Input() empresa: Empresa;
+    @Input() isEditPage: boolean = false;
+    @Input() form: NgForm;
 
 
     certificadoAssinaturaIncluido = false;
-
     assinatura_Contratante: Assinatura = new Assinatura;
     assinatura_Intermediadora: Assinatura = new Assinatura;
-
     loadingContratoBicolunadoFile = false;
+    empresaSelected?: Empresa;
 
     @Output() erroChange: EventEmitter<string> = new EventEmitter<string>();
     @Output() loadingChange: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() podeBaixarChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
-    @Output() send: EventEmitter<any> = new EventEmitter<any>();
     @Output() tabChanged: EventEmitter<number> = new EventEmitter<number>();
     @Output() objetoChanged = new EventEmitter<InvoiceRequest>();
+    @Output() send = new EventEmitter<boolean>();
 
     constructor(
         private contratoService: ContratoService,
         private toastr: ToastrService,
         private loadingService: LoadingService,
+        private invoiceService: InvoiceService,
+        private empresaService: EmpresaService
     ) {
+        this.empresaService.getEmpresa().subscribe(res =>{
+            console.log('empresa selected', res)
+            this.empresaSelected = res.empresa;
+        })
 
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
+            console.log('objeto', this.objeto)
+            this.setContratante(this.objeto.contrato.nomeRepresentanteLegal, this.objeto.contrato.codigoRepresentanteLegal, this.objeto.contrato.assinaturaRepresentanteLegal);
+            this.setIntermediadora(this.objeto.contrato.assinaturaIntermediadora);
             this.setPodeBaixarChange();
-            console.log('obj', this.objeto)
-
-
-            this.assinatura_Contratante.uri = this.objeto.contrato.assinaturaRepresentanteLegal as string;
-            this.assinatura_Contratante.assinado = !!this.objeto.contrato.dataAssinaturaRepresentanteLegal;
-            this.assinatura_Contratante.podeAssinar = !this.assinatura_Contratante.assinado;
-
-            this.assinatura_Intermediadora.uri = this.objeto.contrato.assinaturaIntermediadora as string;
-            this.assinatura_Intermediadora.assinado = !!this.objeto.contrato.dataAssinaturaIntermediadora;
-            this.assinatura_Intermediadora.podeAssinar = !this.assinatura_Intermediadora.assinado;
+            // this.setFormValid();
         }
-        if (changes['beneficiarioSelected']) this.beneficiarioSelected = changes['beneficiarioSelected'].currentValue;
+        if (changes['beneficiarioSelected']) {
+            this.beneficiarioSelected = changes['beneficiarioSelected'].currentValue;
+            this.setContratante(this.beneficiarioSelected?.nomeRepresentanteLegal, this.beneficiarioSelected?.codigoRepresentanteLegal, this.beneficiarioSelected?.assinaturaRepresentanteLegal);
+            this.setPodeBaixarChange();
+            // this.setFormValid();
+        };
         if (changes['erro']) this.erro = changes['erro'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
         if (changes['podeBaixarPDF']) this.podeBaixarPDF = changes['podeBaixarPDF'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
         if (changes['empresa']) this.empresa = changes['empresa'].currentValue;
+        if (changes['isEditPage']) this.isEditPage = changes['isEditPage'].currentValue;
+        if (changes['form']) this.form = changes['form'].currentValue;
     }
 
     alterarDados_Contratante() {
         this.assinatura_Contratante.alterarDados = !this.assinatura_Contratante.alterarDados;
 
         if (!this.assinatura_Contratante.alterarDados) {
-            this.objeto.contrato.nomeRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.nomeRepresentanteLegal : '';
-            this.objeto.contrato.codigoRepresentanteLegal = this.beneficiarioSelected ? this.beneficiarioSelected.codigoRepresentanteLegal : '';
-            this.assinatura_Contratante.uri = this.objeto.contrato.assinaturaRepresentanteLegal as string;
+            this.setContratante(this.beneficiarioSelected?.nomeRepresentanteLegal, this.beneficiarioSelected?.codigoRepresentanteLegal, this.beneficiarioSelected?.assinaturaRepresentanteLegal)
             this.assinatura_Contratante.isUploaded = false;
             delete this.assinatura_Contratante.file;
         }
@@ -90,13 +98,9 @@ export class FormContratoBicolunadoComponent implements OnChanges {
 
     alterarDados_Intermediadora() {
         this.assinatura_Intermediadora.alterarDados = !this.assinatura_Intermediadora.alterarDados;
-        /**
-                * Intermediadora só pode assinar se tiver uma assinatura incluida
-                */
-        this.assinatura_Intermediadora.podeAssinar = !!this.objeto.contrato.assinaturaIntermediadora && !this.assinatura_Intermediadora.alterarDados;
 
         if (!this.assinatura_Intermediadora.alterarDados) {
-            this.assinatura_Intermediadora.uri = this.objeto.contrato.assinaturaIntermediadora as string;
+            this.setIntermediadora(this.objeto.contrato.assinaturaIntermediadora)
             this.assinatura_Intermediadora.isUploaded = false;
             delete this.assinatura_Intermediadora.file;
         }
@@ -111,26 +115,6 @@ export class FormContratoBicolunadoComponent implements OnChanges {
         return eReadOnly;
     }
 
-    salvarDados_Contratante() {
-        this.objeto.contrato.assinaturaRepresentanteLegal = this.assinatura_Contratante.uri;
-        this.assinatura_Contratante.alterarDados = false;
-
-        this.objetoChanged.emit(this.objeto);
-        this.send.emit(true);
-
-        this.setPodeBaixarChange();
-
-    }
-
-    salvarDados_Intermediadora() {
-        this.objeto.contrato.assinaturaIntermediadora = this.assinatura_Intermediadora.uri;
-        this.assinatura_Intermediadora.alterarDados = false;
-
-        this.objetoChanged.emit(this.objeto);
-        this.send.emit(true);
-
-        this.setPodeBaixarChange();
-    }
 
     async assinar_Contratante() {
         if (!this.objeto.contrato.assinaturaRepresentanteLegal) {
@@ -148,6 +132,9 @@ export class FormContratoBicolunadoComponent implements OnChanges {
             .then(res => {
                 if (res.sucesso) {
                     this.objeto.contrato = res.objeto;
+                    var contrato = res.objeto;
+                    this.assinatura_Contratante.alterarDados = false;
+                    this.setContratante(contrato.nomeRepresentanteLegal, contrato.codigoRepresentanteLegal, contrato.assinaturaRepresentanteLegal);
                     this.setPodeBaixarChange();
                 } else {
                     this.erroChange.emit(res.mensagem);
@@ -164,7 +151,11 @@ export class FormContratoBicolunadoComponent implements OnChanges {
         await lastValueFrom(this.contratoService.assinarMAC(this.objeto.contrato.id))
             .then(res => {
                 if (res.sucesso) {
-                    this.objeto.contrato = res.objeto;
+                    var contrato = res.objeto;
+                    this.objeto.contrato = contrato;
+                    this.assinatura_Intermediadora.alterarDados = false;
+                    this.setIntermediadora(contrato.assinatura);
+                    console.log('contrato assinatura', contrato.assinatura)
                     this.setPodeBaixarChange();
                 } else {
                     this.erroChange.emit(res.mensagem);
@@ -212,12 +203,7 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     }
 
     setPodeBaixarChange() {
-
-        // Se tiver data preenchidos está assinado
-        this.assinatura_Contratante.assinado = !!this.objeto.contrato.dataAssinaturaRepresentanteLegal;
-        this.assinatura_Intermediadora.assinado = !!this.objeto.contrato.dataAssinaturaIntermediadora;
         this.certificadoAssinaturaIncluido = !!this.objeto.contrato.dataCertificadoAssinatura;
-        console.log('setPodeBaixarChange', this.objeto.contrato.dataCertificadoAssinatura)
         // Pode baixar PDF se as assinaturas e certificados estão incluidos
         this.podeBaixarPDF = this.assinatura_Contratante.assinado
             && this.assinatura_Intermediadora.assinado
@@ -225,28 +211,78 @@ export class FormContratoBicolunadoComponent implements OnChanges {
             && this.objeto.contrato.id != 0;
 
         this.podeBaixarChanged.emit(this.podeBaixarPDF);
-        /**
-         * Contratante só pode assinar se tiver Nome, Código e Assinatura preenchidos
-         */
-        this.assinatura_Contratante.podeAssinar = !!(this.objeto.contrato.nomeRepresentanteLegal && this.objeto.contrato.codigoRepresentanteLegal && this.objeto.contrato.assinaturaRepresentanteLegal);
-        /**
-         * Intermediadora só pode assinar se tiver uma assinatura incluida
-         */
-        this.assinatura_Intermediadora.podeAssinar = !!this.objeto.contrato.assinaturaIntermediadora && !this.assinatura_Intermediadora.alterarDados;
+    }
+
+    setContratante(nome?: string, codigo?: string, assinatura?: string) {
+        this.objeto.contrato.nomeRepresentanteLegal = nome;
+        this.objeto.contrato.codigoRepresentanteLegal = codigo;
+        this.objeto.contrato.assinaturaRepresentanteLegal = assinatura;
+
+        this.assinatura_Contratante.uri = assinatura;
+        this.assinatura_Contratante.assinado = !!this.objeto.contrato.dataAssinaturaRepresentanteLegal; // Se tiver data, está assinado
+        this.assinatura_Contratante.podeAssinar = !!(this.objeto.contrato.nomeRepresentanteLegal  // Nome está preenchido
+                                                        && this.objeto.contrato.codigoRepresentanteLegal  // Código está preenchido
+                                                        && this.objeto.contrato.assinaturaRepresentanteLegal // Assinatura está preenchido
+                                                        && !this.assinatura_Contratante.assinado); // Não foi assinado
+    }
+
+    setIntermediadora(assinatura?: string) {
+        this.objeto.contrato.assinaturaIntermediadora = assinatura;
+        this.assinatura_Intermediadora.uri = assinatura;
+        this.assinatura_Intermediadora.assinado = !!this.objeto.contrato.dataAssinaturaIntermediadora; // Se tiver data, está assinado
+        this.assinatura_Intermediadora.podeAssinar = !!(assinatura // Assinatura está preenchido
+                                                        && !this.assinatura_Intermediadora.assinado); // Não foi assinado
+    }
+
+    async salvarDados_Contratante(nome?: string, codigo?: string, assinatura?: string) {
+        this.loading = true;
+        this.setContratante(nome, codigo, assinatura);
+        if (this.assinatura_Contratante.podeAssinar) { 
+            await lastValueFrom(this.invoiceService.edit(this.objeto))
+            .then(res => {
+                this.objeto = res.objeto;
+                this.loading = false;
+                this.assinatura_Contratante.alterarDados = false;
+                this.setContratante(nome, codigo, assinatura);
+            })
+            .catch(res => {
+                this.erro = getError(res);
+                this.loading = false;
+            })
+        }
+    }
+    async salvarDados_Intermediadora( ) {
+        this.loading = true;
+        this.setIntermediadora(this.assinatura_Intermediadora.uri);
+        if (this.assinatura_Intermediadora.podeAssinar) { 
+            await lastValueFrom(this.invoiceService.edit(this.objeto))
+            .then(res => {
+                this.objeto = res.objeto;
+                this.loading = false;
+                this.assinatura_Intermediadora.alterarDados = false;
+                this.setIntermediadora(this.assinatura_Intermediadora.uri);
+            })
+            .catch(res => {
+                this.erro = getError(res);
+                this.loading = false;
+            })
+        }
     }
 
     proximo() {
-        this.tabChanged.emit(3)
+        this.objetoChanged.emit(this.objeto);
+            this.tabChanged.emit(3)
     }
 
     anterior() {
+        this.objetoChanged.emit(this.objeto);
         this.tabChanged.emit(1)
     }
 }
 
 
 class Assinatura {
-    uri: string = '';
+    uri?: string;
     file?: File;
     isUploaded: boolean = false;
     assinado: boolean = false;
@@ -254,8 +290,9 @@ class Assinatura {
     erro: string = '';
     alterarDados = false;
 
-    fileChange(event: any) {
+    fileChange(event: any, component: FormContratoBicolunadoComponent) {
         var file = event.target.files[0] as File;
+        console.log(event.target.id)
         this.file = file;
 
         if (file) {
@@ -265,6 +302,13 @@ class Assinatura {
                 var src = e.target?.result as string;
                 c.isUploaded = true;
                 c.uri = src;
+                console.log('objeto fileChange', component.objeto)
+                if (event.target.id == '_assinatura_Contratante') {
+                    component.objeto.contrato.assinaturaRepresentanteLegal = src;
+                } else {
+                    component.objeto.contrato.assinaturaIntermediadora = src;
+                }
+                // component.setFormValid();
             }
             reader.onerror = function (e) {
                 c.erro = 'Não foi possível realizar upload';

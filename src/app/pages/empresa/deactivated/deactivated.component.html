@@ -4,6 +4,8 @@
         <p>Tem certeza que deseja <span *ngIf="habilitar" class="font-weight-bold">habilitar</span>
             <span *ngIf="!habilitar" class="font-weight-bold">desabilitar</span> esse registro?
         </p>
+
+        <p *ngIf="habilitar">Para acessar o sistema, reabilite os usuários correspondentes ao perfil desta empresa.</p>
         <!-- <p class="text-danger" *ngIf="isUser && habilitar && objeto.email == account?.email">Você automaticamente será  deslogado e não poderá acessar o Planner.</p>
         <p class="text-danger" *ngIf="isUser && habilitar && objeto.email != account?.email">Após isso, o usuário não poderá acessar o Planner.</p> -->
 

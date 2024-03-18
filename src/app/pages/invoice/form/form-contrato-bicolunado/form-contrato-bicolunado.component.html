@@ -24,17 +24,19 @@
                             <span *ngIf="assinatura_Contratante.alterarDados">Cancelar</span>
                             <span *ngIf="!assinatura_Contratante.alterarDados">Alterar dados</span>
                         </button>
-                        <button type="button"
-                                *ngIf="assinatura_Contratante.alterarDados"
+                        <button type="button" 
                                 class="btn btn-dark me-2"
-                                (click)="salvarDados_Contratante()"
-                                [disabled]="loading || !assinatura_Contratante.podeAssinar">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                            <span>Salvar dados</span>
+                                *ngIf="assinatura_Contratante.alterarDados && isEditPage"
+                                [disabled]="!assinatura_Contratante.podeAssinar"
+                                (click)="salvarDados_Contratante(nomeRepresentanteLegal.value, codigoRepresentanteLegal.value, assinatura_Contratante.uri)">
+                            Salvar Dados
                         </button>
+                        <!-- Assinar -->
                         <button type="button"
                                 class="btn btn-dark"
-                                [disabled]="loading || assinatura_Contratante.alterarDados || !assinatura_Contratante.podeAssinar"
+                                [disabled]="loading 
+                                || assinatura_Contratante.alterarDados 
+                                || !assinatura_Contratante.podeAssinar"
                                 (click)="assinar_Contratante()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                             <span class="me-1">Assinar </span>
@@ -99,7 +101,7 @@
                                    required
                                    accept="image/png"
                                    [disabled]="!assinatura_Contratante.alterarDados"
-                                   (input)="assinatura_Contratante.fileChange($event)">
+                                   (input)="assinatura_Contratante.fileChange($event, this)">
                         </label>
                         <label class="my-1" *ngIf="!assinatura_Contratante.uri"
                                title="Nenhuma assinatura selecionada">Nenhuma assinatura selecionada</label>
@@ -133,22 +135,25 @@
                                 [disabled]="loading"
                                 (click)="alterarDados_Intermediadora()">
                             <span *ngIf="assinatura_Intermediadora.alterarDados">Cancelar</span>
-                            <span *ngIf="!assinatura_Intermediadora.alterarDados">Alterar dados</span>
+                            <span *ngIf="!assinatura_Intermediadora.alterarDados">
+                                <span *ngIf="objeto.contrato.assinaturaIntermediadora">Alterar</span>
+                                <span *ngIf="!objeto.contrato.assinaturaIntermediadora">Incluir</span>
+                                assinatura</span>
                         </button>
-                        <!-- Salvar dados -->
-                        <button type="button"
-                                *ngIf="assinatura_Intermediadora.alterarDados"
+                        <button type="button" 
                                 class="btn btn-dark me-2"
-                                (click)="salvarDados_Intermediadora()"
-                                [disabled]="loading || !assinatura_Intermediadora.uri">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                            <span>Salvar dados</span>
+                                *ngIf="assinatura_Intermediadora.alterarDados && isEditPage"
+                                [disabled]="!assinatura_Intermediadora.podeAssinar"
+                                (click)="salvarDados_Intermediadora()">
+                            Salvar Dados
                         </button>
                         <!-- Assinar -->
                         <button type="button"
                                 class="btn btn-dark"
                                 (click)="assinar_Intermediadora()"
-                                [disabled]="loading || !assinatura_Intermediadora.podeAssinar">
+                                [disabled]="loading 
+                                        || assinatura_Intermediadora.alterarDados
+                                        || !assinatura_Intermediadora.podeAssinar">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
                             <span class="me-1">Assinar </span>
                             <fa-icon [icon]="faPenClip"></fa-icon>
@@ -172,7 +177,7 @@
                            name="nomeEmpresa"
                            id="nomeEmpresa"
                            readonly
-                           [value]="objeto.contrato.nomeEmpresa">
+                           [value]="empresaSelected?.nome">
                 </div>
                 <div class="form-group col-xl-3 col-lg-3 col-md-3 col-sm-3 col-12"><!-- Código Empresa -->
                     <label for="codigoEmpresa">CNPJ/MF:</label>
@@ -181,7 +186,7 @@
                            name="codigoEmpresa"
                            id="codigoEmpresa"
                            readonly
-                           [value]="objeto.contrato.codigoEmpresa">
+                           [value]="empresaSelected?.codigoRegistro">
                 </div>
                 <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12"> <!-- Assinatura Empresa -->
                     <label for="_assinaturaIntermediraria">Assinatura: <span class="text-danger">*</span></label>
@@ -198,7 +203,7 @@
                                    required
                                    accept="image/png"
                                    [disabled]="!assinatura_Intermediadora.alterarDados"
-                                   (input)="assinatura_Intermediadora.fileChange($event)">
+                                   (input)="assinatura_Intermediadora.fileChange($event, this);">
                         </label>
                         <label class="my-1" *ngIf="!assinatura_Intermediadora.uri"
                                title="Nenhuma assinatura selecionada">Nenhuma assinatura selecionada</label>
@@ -285,21 +290,30 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-2">
-                <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
-                    <button type="button" (click)="anterior()" class="btn btn-step btn-step-next">
-                        <fa-icon [icon]="faArrowLeft"></fa-icon>
-                        <span class="btn-step-text ms-2 mb-1">Anterior</span>
-                    </button>
-                    <p class="text-danger px-2 text-center" *ngIf="!objeto.contrato.dataCertificadoAssinatura">Para gerar o certificado de assinatura, deve conter assinatura do representante legal.</p>
-                    <button type="button" (click)="proximo()" class="btn btn-step btn-step-next ms-auto">
-                        <span class="btn-step-text me-2 mb-1">Próximo</span>
-                        <fa-icon [icon]="faArrowRight"></fa-icon>
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-            </div>
+            
         </div>
+    </div>
+</div>
+<hr class="row w-100 mx-1 my-4 px-5 border-1 opacity-75">
+<div class="row mt-2">
+    <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
+        <button type="button" (click)="anterior()" class="btn btn-step btn-step-next">
+            <fa-icon [icon]="faArrowLeft"></fa-icon>
+            <span class="btn-step-text ms-2 mb-1">Anterior</span>
+        </button>
+        <div *ngIf="form.invalid">
+            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
+        </div>
+        <button type="button" *ngIf="isEditPage" (click)="proximo()" class="btn btn-step btn-step-next ms-auto " [disabled]="form.invalid">
+            <span class="btn-step-text me-2 mb-1">Próximo</span>
+            <fa-icon [icon]="faArrowRight"></fa-icon>
+        </button>
+        <button type="button" *ngIf="!isEditPage" 
+            (click)="send.emit(true)" 
+            class="btn btn-primary me-0 " 
+            [disabled]="loading || form.invalid">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <span>Salvar e Gerar Swift</span>
+        </button>
     </div>
 </div>

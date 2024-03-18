@@ -815,3 +815,11 @@ tr.selected td {
     padding-left: 6px;
     padding-right: 45px;
 }
+.table .p-checkbox .p-checkbox-box.p-highlight {
+    background-color: var(--complementar);
+    border-color: var(--complementar);
+}
+
+.p-datatable-wrapper .p-scroller-viewport {
+    padding: 0 !important;
+}

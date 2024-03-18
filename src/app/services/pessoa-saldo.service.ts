@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import { Table } from '../utils/table';
 import { PessoaSaldo, PessoaSaldoRequest } from '../models/pessoa-saldo.model';
 import { Response } from '../helpers/request-response.interface';
-import { PessoaList } from '../models/pessoa.model';
+import { EmpresaService } from './empresa.service';
 
 @Injectable({
     providedIn: 'root'
@@ -20,6 +20,7 @@ export class PessoaSaldoService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
+        private empresaService: EmpresaService,
     ) {
     }
 
@@ -39,7 +40,10 @@ export class PessoaSaldoService {
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de saldos.'),
-            finalize: () => this.loading.next(false),
+              finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
         }));
     }
 
@@ -50,6 +54,11 @@ export class PessoaSaldoService {
 
     delete(id: number) {
         return this.http.delete<Response>(`${this.url}/pessoaSaldo/${id}`);
+    }
+
+    deleteList(ids: number[]) {
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
+        return this.http.post<Response>(`${this.url}/pessoaSaldo/${empresaId}`, {ids});
     }
 
 }

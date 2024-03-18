@@ -7,6 +7,7 @@ import { Table } from '../utils/table';
 import { Response } from '../helpers/request-response.interface';
 import { Empresa } from '../models/empresa.model';
 import { AccountService } from './account.service';
+import { Crypto } from '../utils/crypto';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ import { AccountService } from './account.service';
 export class EmpresaService {
     url = environment.url;
     list = new BehaviorSubject<Empresa[]>([]);
-    empresaSelected: BehaviorSubject<EmpresaSelected>;
+    private empresaSelected: BehaviorSubject<EmpresaSelected>;
     loading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     objeto = new BehaviorSubject<Empresa | undefined>(undefined);
 
@@ -22,12 +23,34 @@ export class EmpresaService {
         private table: Table,
         private http: HttpClient,
         private toastr: ToastrService,
-        private accountService: AccountService 
+        private accountService: AccountService,
+        private crypto: Crypto
 
     ) {
 
         this.empresaSelected = new BehaviorSubject<EmpresaSelected>(new EmpresaSelected);
        
+    }
+
+    setEmpresa(value: EmpresaSelected) {
+        this.empresaSelected.next(value);
+        localStorage.setItem('empresaSelected', this.crypto.encrypt(value) ?? '');
+    }
+
+    getEmpresa() {
+        if (!this.empresaSelected.value.empresa) {
+            console.log('não tem empresa selecionada')
+            var encrypted = localStorage.getItem('empresaSelected');
+            if (encrypted) {
+                console.log('não tem local storage')
+                var empresaSelected: EmpresaSelected = this.crypto.decrypt(encrypted)
+                this.empresaSelected.next(empresaSelected);
+            } else if (this.accountService.accountValue) {
+                console.log('tem conta selecionada')
+                this.empresaSelected.next(this.accountService.accountValue?.empresa)
+            }
+        } 
+        return this.empresaSelected;
     }
 
     getList(loading: boolean = false) {
@@ -45,7 +68,10 @@ export class EmpresaService {
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de Empresas.'),
-                finalize: () => this.loading.next(false),
+                  finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
 
             }));
     }

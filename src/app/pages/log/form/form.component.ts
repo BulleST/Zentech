@@ -68,21 +68,29 @@ export class FormComponent implements OnDestroy {
                 this.modal.routerBack = ['../../'];
                 this.isEditPage = true;
 
+                // Carrega lista
                 if (this.logService.list.value.length == 0) {
                     await lastValueFrom(this.logService.getList());
                 }
+
+                // Encontra log
                 var log = this.logService.list.value.find(x => x.id == this.obj.id);
                 if (!log) {
                     this.voltar();
                     return;
                 }
 
+                console.log('log', log);
+
+
+                // se for string passa pra json
                 if (typeof log.objeto == 'string') {
                     log.objeto = JSON.parse(log.objeto);
                 }
 
-
+                // Transforma em model log request
                 this.obj = log as LogRequest;
+
 
                 this.insereDados(this.obj.objeto);
                 this.ordenaArray();
@@ -154,17 +162,8 @@ export class FormComponent implements OnDestroy {
                 campo = moeda ? moeda.nome : 'Id: ' + campo;
                 break;
 
-            case 'Usuario_Cadastro_Id':
-                label = 'Id do Usuário de Cadastro';
-                insere = false;
-                break;
-
             case 'Operacao_Status_Id':
                 label = 'Id do Status da Operação';
-                break;
-
-            case 'Pessoa_Id':
-                label = 'Id da Pessoa';
                 break;
 
             case 'Lote_Id':
@@ -594,6 +593,7 @@ export class FormComponent implements OnDestroy {
     }
 
     insereDados(objeto: any) {
+        // Pra cada propriedade desse objeto
         for (const [key, value] of Object.entries(objeto)) {
 
             var a: any;
@@ -604,8 +604,10 @@ export class FormComponent implements OnDestroy {
                 a = objeto[key];
             }
 
+            console.log('a', a);
+            // Se for objeto e não for perfilacesso
             if (a != null && typeof a == 'object' && key != 'PerfilAcesso') {
-                this.insereDados(a)
+                this.insereDados(a) // loop
             } else {
                 var [label, campo, insere] = this.formataCampos(key, value as string);
                 if (insere) {
@@ -683,3 +685,95 @@ export class FormComponent implements OnDestroy {
     }
 }
 
+
+
+var a = [
+    {
+        entidade: 'Pessoa',
+        campos: {
+            'Id': '',
+            'Nome': '',
+            'CPF': '',
+            'Data de Cadastro': '',
+            'Saldo Atual	': '',
+            'Status Saldo': '',
+            'Nome do Usuário de Cadastro': '',
+            'E-mail do Usuário de Cadastro': '',
+        }
+    },
+    {
+        entidade: 'Operação',
+        campos: {
+            'Id': '',
+            'Nome': '',
+            'CPF': '',
+            'Data de Cadastro': '',
+            'Saldo Atual	': '',
+            'Status Saldo': '',
+            'Nome do Usuário de Cadastro': '',
+            'E-mail do Usuário de Cadastro': '',
+        }
+    },
+    {
+        entidade: 'Banco',
+        campos: [
+            { field: 'Id', label: '', value: '' },
+            { field: 'Nome', label: '', value: '' },
+            { field: 'CodigoSwift', label: '', value: '' },
+            { field: 'Logradouro', label: '', value: '' },
+            { field: 'Cidade', label: '', value: '' },
+            { field: 'Estado', label: '', value: '' },
+            { field: 'Pais', label: '', value: '' },
+        ]
+    },
+    {
+        entidade: 'Beneficiario',
+        campos: [
+            { field: 'Id', label: '', value: '' },
+            { field: 'Nome', label: '', value: '' },
+            { field: 'CodigoRegistro', label: '', value: '' },
+            { field: 'Conta', label: '', value: '' },
+            { field: 'Representante', label: '', value: '' },
+            { field: 'NomeBanco', label: '', value: '' },
+            { field: 'CodigoSwift', label: '', value: '' },
+            { field: 'NomeRepresentanteLegal', label: '', value: '' },
+            { field: 'CodigoRepresentanteLegal', label: '', value: '' },
+            { field: 'AssinaturaRepresentanteLegal', label: '', value: '' },
+            { field: 'Logradouro', label: '', value: '' },
+            { field: 'Cidade', label: '', value: '' },
+            { field: 'Estado', label: '', value: '' },
+            { field: 'NomePais', label: '', value: '' },
+        ]
+    },
+    {
+        entidade: 'Empresa',
+        campos: [
+            { field: 'Id', label: '', value: '' },
+            { field: 'Nome', label: '', value: '' },
+            { field: 'CodigoRegistro', label: '', value: '' },
+            { field: 'LogoDataUri', label: '', value: '' },
+            { field: 'Endereco', label: '', value: '' },
+            { field: 'Cidade', label: '', value: '' },
+            { field: 'Uf', label: '', value: '' },
+            { field: 'Pais', label: '', value: '' },
+            { field: 'SocioDiretor', label: '', value: '' },
+            { field: 'RGSocioDiretor', label: '', value: '' },
+            { field: 'CPFSocioDiretor', label: '', value: '' },
+            { field: 'DataDesativado', label: '', value: '' },
+            { field: 'PrimaryColor', label: '', value: '' },
+            { field: 'SecundaryColor', label: '', value: '' },
+        ]
+    },
+    {
+        entidade: 'Instituicão Financeira',
+        campos: [
+            { field: 'Id', label: '', value: '' },
+            { field: 'Nome', label: '', value: '' },
+            { field: 'CodigoRegistro', label: '', value: '' },
+            { field: 'Logradouro', label: '', value: '' },
+            { field: 'Cidade', label: '', value: '' },
+            { field: 'Estado', label: '', value: '' },
+            { field: 'Pais', label: '', value: '' },
+        ]
+    },
+]

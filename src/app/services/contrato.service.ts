@@ -30,7 +30,7 @@ export class ContratoService {
     getList(loading: boolean = false) {
         this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<Contrato_List[]>(`${this.url}/contrato/list/${empresaId}`)
             .pipe(tap({
                 next: list => {
@@ -39,7 +39,10 @@ export class ContratoService {
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de contratos.'),
-                finalize: () => this.loading.next(false),
+                  finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
             }));
     }
 

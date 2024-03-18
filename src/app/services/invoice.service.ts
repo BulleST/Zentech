@@ -30,7 +30,7 @@ export class InvoiceService {
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<Invoice_List[]>(`${this.url}/invoice/list/${empresaId}`)
         .pipe(tap({
             next: list => {
@@ -43,7 +43,10 @@ export class InvoiceService {
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar listagem de invoices.'),
-            finalize: () => this.loading.next(false),
+              finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
         }));
     }
 

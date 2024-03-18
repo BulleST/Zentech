@@ -42,7 +42,6 @@ export class FormContratoComponent implements OnChanges {
     @Output() loadingChange = new EventEmitter<boolean>();
     @Output() podeBaixarChanged = new EventEmitter<boolean>();
     @Output() tabChanged = new EventEmitter<number>();
-    @Output() send = new EventEmitter<boolean>();
     @Output() objetoChanged = new EventEmitter<InvoiceRequest>()
 
     constructor(
@@ -94,11 +93,13 @@ export class FormContratoComponent implements OnChanges {
         }
     }
     proximo() {
-        this.tabChanged.emit(2)
+        this.objetoChanged.emit(this.objeto);
+        this.tabChanged.emit(2);
     }
 
     anterior() {
-        this.tabChanged.emit(0)
+        this.objetoChanged.emit(this.objeto);
+        this.tabChanged.emit(0);
     }
 
 }

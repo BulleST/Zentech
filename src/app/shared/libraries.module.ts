@@ -12,7 +12,7 @@ import { OverlayPanelModule } from "primeng/overlaypanel";
 import { TableModule } from "primeng/table";
 import { TabViewModule } from "primeng/tabview";
 import { ToastModule } from "primeng/toast";
-
+import { CheckboxModule } from 'primeng/checkbox';
 @NgModule({
     declarations: [
     ],
@@ -31,6 +31,7 @@ import { ToastModule } from "primeng/toast";
         TableModule,
         ToastrModule,
         ToastModule,
+        CheckboxModule,
     ],
     exports: [
         CommonModule,
@@ -47,6 +48,7 @@ import { ToastModule } from "primeng/toast";
         TableModule,
         ToastrModule,
         ToastModule,
+        CheckboxModule,
     ],
     providers: [
         provideNgxMask()

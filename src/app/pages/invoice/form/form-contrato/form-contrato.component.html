@@ -320,6 +320,8 @@
           </textarea>
     </div>
 </div>
+
+<hr class="row w-100 mx-1 my-4 px-5 border-1 opacity-75">
 <div class="row mt-2">
     <div class="d-flex flex-row flex-wrap align-items-center justify-content-between">
         <button type="button" (click)="anterior()" class="btn btn-step btn-step-next">
@@ -327,16 +329,16 @@
             <span class="btn-step-text ms-2 mb-1">Anterior</span>
         </button>
         <div *ngIf="form.invalid">
-            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para salvar.</p>
+            <p *ngIf="form.invalid && !erro" class="text-danger">Preencha os campos obrigatórios (*) de Contrato corretamente para continuar.</p>
         </div>
-        <button type="button" *ngIf="isEditPage" (click)="proximo()" class="btn btn-step btn-step-next ms-auto " [disabled]="form.invalid">
+        <button type="button" (click)="proximo()" class="btn btn-step btn-step-next ms-auto " [disabled]="form.invalid">
             <span class="btn-step-text me-2 mb-1">Próximo</span>
             <fa-icon [icon]="faArrowRight"></fa-icon>
         </button>
-        <button type="button" *ngIf="!isEditPage" (click)="send.emit(true)" class="btn btn-primary me-0 " [disabled]="loading || form.invalid">
+        <!-- <button type="button" *ngIf="!isEditPage" (click)="send.emit(true)" class="btn btn-primary me-0 " [disabled]="loading || form.invalid">
             <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
             <span>Salvar e Gerar Swift</span>
-        </button>
+        </button> -->
     </div>
 </div>
 

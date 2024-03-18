@@ -19,15 +19,24 @@
     </div>
     <div class="page__body">
             <ng-template #topActions>
-                <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-12 mx-md-1 mb-2 px-0 ng-star-inserted">
+                <div class="mx-md-1 mb-2 px-0 " *ngIf="selectedItems.length > 1">
+                    <button (click)="excluirLista($event)" 
+                    [disabled]="loading"
+                    class="btn btn-danger me-md-0 me-sm-1" 
+                    style="line-height: 1;height: 31.5px;font-size: 13px;">
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                    </button>
+                    <p-confirmDialog></p-confirmDialog>
+                </div>
+                <div class="col-xl-3 col-lg-5 col-md-6 col-sm-6 col-12 mx-md-1 mb-2 px-0 ng-star-inserted">
                     <a class="btn btn-dark d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['importar']">
-                        <img src="assets/img/icon-excel-white.png" alt="excel.png" class="me-2">
-                        <span style="margin-top: -1px; margin-bottom: 1px;"> Importar Excel</span>
+                        <!-- <img src="assets/img/icon-excel-white.png" alt="excel.png" class="me-2"> -->
+                        <span style="margin-top: -1px; margin-bottom: 1px; font-size: 13px;"> Importar Excel</span>
                     </a>
                 </div>
-                <div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-12 mb-2 me-md-2 mx-md-1 px-0 ng-star-inserted">
+                <div class="col-xl-3 col-lg-5 col-md-5 col-sm-6 col-12 mb-2 me-md-2 mx-md-1 px-0 ng-star-inserted">
                     <a class="btn btn-primary d-flex align-items-center align-baseline justify-content-center me-md-0 me-sm-1" [routerLink]="['cadastrar']">
-                        <span style="margin-top: -1px; margin-bottom: 1px;"> Cadastrar Pessoa</span>
+                        <span style="margin-top: -1px; margin-bottom: 1px; font-size: 13px;"> Cadastrar Pessoa</span>
                     </a>
                 </div>
             </ng-template>
@@ -41,7 +50,8 @@
                              [menuTable]="true"
                              [columns]="columns"
                              [tableLinks]="tableLinks"
-                             [selectable]="true"></app-list-shared>
+                             [selectable]="true"
+                             [selectionMode]="'multiple'"></app-list-shared>
     </div>
 </section>
 <router-outlet></router-outlet>

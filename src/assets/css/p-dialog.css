@@ -8,6 +8,7 @@
     justify-content: center;
     align-items: center;
     pointer-events: none;
+    background: #0000006e;
 }
 
 .p-dialog {
@@ -15,11 +16,10 @@
     flex-direction: column;
     pointer-events: auto;
     max-height: 90%;
+    width: min-content;
+    min-width: 400px;
     transform: scale(1);
     position: relative;
-}
-
-.p-dialog {
     border-radius: 6px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     border: 0 none;
@@ -89,8 +89,13 @@
     background: #ffffff;
     color: #4b5563;
     padding: 0 20px 20px;
+    display: flex;
+    align-items: center;
 }
-
+.p-confirm-dialog-icon {
+    font-size: 29px;
+    margin-right: 7px;
+}
 .p-dialog .p-dialog-content:last-of-type {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
@@ -122,4 +127,12 @@
     height: 12px;
     right: 1px;
     bottom: 1px;
+}
+
+.p-dialog-footer {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
 }

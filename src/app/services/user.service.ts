@@ -49,7 +49,7 @@ export class UsuarioService {
     getList(loading: boolean = false) {
        this.loading.next(loading);
         this.table.loading.next(true);
-        var empresaId = this.empresaService.empresaSelected.value.id as unknown as number;
+        var empresaId = this.empresaService.getEmpresa().value.id as unknown as number;
         return this.http.get<Usuario[]>(`${this.url}/usuario/list/${empresaId}`)
         .pipe(tap({
             next: list => {
@@ -62,7 +62,10 @@ export class UsuarioService {
                 return of(list);
             },
             error: res => this.toastr.error('Não foi possível carregar usuários.'),
-            finalize: () => this.loading.next(false),
+              finalize: () => {
+                    this.loading.next(false);
+this.table.loading.next(false);
+                },
         }));
     }
 
@@ -82,12 +85,12 @@ export class UsuarioService {
     }
 
     create(request: Usuario) {
-        request.empresa_Id = this.empresaService.empresaSelected.value.id;
+        request.empresa_Id = this.empresaService.getEmpresa().value.id;
         return this.http.post<Usuario>(`${this.url}/usuario`, request);
     }
 
     edit(request: Usuario) {
-        request.empresa_Id = this.empresaService.empresaSelected.value.id;
+        request.empresa_Id = this.empresaService.getEmpresa().value.id;
         return this.http.put<Usuario>(`${this.url}/usuario`, request);
     }
 

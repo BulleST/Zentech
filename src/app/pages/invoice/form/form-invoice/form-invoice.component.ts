@@ -158,6 +158,8 @@ export class FormInvoiceComponent implements OnChanges {
                     this.objeto.contrato.paisPagRecExterior = res.pais_Id;
                     this.objeto.contrato.pagRecExterior = res.nome;
 
+                    this.objetoChanged.emit(this.objeto);
+                    
                     await lastValueFrom(this.bancoService.get(res.banco_Id))
                         .then(res => {
                             res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
@@ -191,9 +193,8 @@ export class FormInvoiceComponent implements OnChanges {
         }
     }
     
-
-
     proximo() {
+        this.objetoChanged.emit(this.objeto);
         this.tabChanged.emit(1)
     }
 

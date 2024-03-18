@@ -3,6 +3,7 @@
     <fa-icon [icon]="faDollarSign"></fa-icon>
 </ng-template>
 <ng-template #template>
+    <h6 *ngIf="pessoa" class="my-3" style="color: var(--complementar);">{{pessoa.nome}} - {{pessoa.cpf}}</h6>
     <form #form="ngForm" (ngSubmit)="send()" class="needs-validation">
         <div class="form-row">
             <div class="form-group col-12">

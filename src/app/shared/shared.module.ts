@@ -24,7 +24,8 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { EmpresaSelectedComponent } from './empresa-selected/empresa-selected.component';
 import { InputDateComponent } from './input-date/input-date.component';
 import { LibrariesModule } from "./libraries.module";
-
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @NgModule({
@@ -56,6 +57,8 @@ import { LibrariesModule } from "./libraries.module";
         FormsModule,
         RouterModule,
         LibrariesModule,
+        ConfirmPopupModule,
+        ConfirmDialogModule,
     ],
     exports: [
         ListSharedComponent,
@@ -79,6 +82,8 @@ import { LibrariesModule } from "./libraries.module";
         FormRepresentante,
         DeleteRepresentante,
         EmpresaSelectedComponent,
+        ConfirmPopupModule,
+        ConfirmDialogModule,
     ],
 })
 export class SharedModule {

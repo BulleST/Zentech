@@ -7,31 +7,32 @@
 </div>
 <div class="content">
     <p-table class="table table-striped"
-             [class.mt-2]="formatedList.length == 0"
+             [class.mt-2]="list.length == 0"
              #dt
              [columns]="columns"
-             [value]="formatedList"
+             [value]="list"
              [rows]="100"
              [rowHover]="true"
              [rowsPerPageOptions]="[10, 25, 50, 100]"
              responsiveLayout="scroll"
-             [paginator]="paginator && formatedList.length > 0"
+             [paginator]="paginator && list.length > 0"
              [showCurrentPageReport]="true"
              currentPageReportTemplate="Exibindo {first} de {totalRecords} resultado(s)"
              [globalFilterFields]="filters"
-             [(selection)]="selected"
-             [selectionMode]="'single'"
+             [(selection)]="selectedItems"
+             [selectionMode]="selectionMode"
              (onRowSelect)="onRowSelect($event)"
              (onRowUnselect)="onRowUnselect($event)"
+             (selectionChange)="selectAllChange($event)"
              [filterDelay]="200">
         <ng-template pTemplate="caption">
             <div
                  class="d-flex justify-content-between align-items-end flex-wrap w-100 px-0 py-0 flex-sm-row flex-column-reverse">
                 <div class="col-xl-3 col-lg-3 col-md-2 col-sm-2 col-12 p-0 mb-sm-0 mb-2">
-                    <p *ngIf="!loading && formatedList.length > 0 && showResultLength">
-                        <small> {{ formatedList.length }} resultado(s) </small>
+                    <p *ngIf="!loading && list.length > 0 && showResultLength">
+                        <small> {{ list.length }} resultado(s) </small>
                     </p>
-                    <p *ngIf="loading && formatedList.length > 0" class="mb-2">
+                    <p *ngIf="loading && list.length > 0" class="mb-2">
                         <span class="spinner-border spinner-border-sm me-1"></span>
                     </p>
                 </div>
@@ -49,13 +50,21 @@
                                (input)="dt.filterGlobal(filter.value , 'contains')"
                                #filter
                                placeholder="Pesquisar"
-                               [disabled]="formatedList.length == 0" />
+                               [disabled]="list.length == 0" />
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr class="grey">
+                <th *ngIf="selectionMode == 'multiple'" style="width: 4rem">
+                    <p-checkbox 
+                        [(ngModel)]="selectedAll" 
+                        [binary]="true" 
+                        inputId="binary"
+                        (onChange)="selectAllClick(selectedAll)"
+                    ></p-checkbox>
+                </th>
                 <th [pSortableColumn]="col.field" *ngFor="let col of columns; index as i" [class.ps-4]="i == 0">
                     <div class="d-flex align-items-center justify-content-between">
                         <span class="me-3" [class.text-center]="col.maskType == 'options'" [innerHTML]="col.header"></span>
@@ -149,10 +158,18 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item let-columns="columns" let-rowIndex="rowIndex">
-            <tr [class.selected]="item == selected" [class.selectable]="item.canSelect != false && selectable"
-                [pSelectableRow]="item.canSelect != false && selectable? item : null"
-                [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
-                <td *ngFor="let col of columns; index as i" [class.ps-4]="i == 0" class="td-{{col.maskType}}">
+            <tr [class.selected]="item == selected || checked(item)" 
+                [class.selectable]="item.canSelect != false && selectable"
+                #row
+               >
+                <td *ngIf="selectionMode == 'multiple'" style="width: 4rem">
+                    <p-tableCheckbox [value]="item" #checkbox></p-tableCheckbox>
+                </td>
+                <td *ngFor="let col of columns; index as i" 
+                    [pSelectableRow]="item.canSelect != false && selectable ? item : null"
+                    [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null"
+                    [class.ps-4]="i == 0" 
+                    class="td-{{col.maskType}}">
                     <input type="hidden" [value]="getCellValue(item, col)" #value>
                     <div *ngIf="value.value; else NA" [ngSwitch]="col.maskType">
                         <div *ngSwitchCase="maskType.options">
@@ -175,6 +192,12 @@
                                 <span>{{value.value | currency : 'BRL' : '' : col.decimal}}</span>
                             </p>
                         </div>
+                        <div *ngSwitchCase="maskType.mask">
+                            <p>
+                                <span *ngIf="col.padStart; else maskValue">{{(value.value.padStart(col.padStart.length, col.padStart.string)) | mask : col.mask }}</span>
+                                <ng-template #maskValue><span>{{value.value | mask : col.mask }}</span></ng-template>
+                            </p>
+                        </div>
                         <div *ngSwitchCase="maskType.money">
                             <p [class.text-danger]="value.value < '0'"> {{value.value | currency : 'BRL' : col.moeda : col.decimal}} </p>
                         </div>
@@ -192,7 +215,9 @@
                         </div>
                     </div>
                 </td>
-                <td class="td-actions">
+                <td class="td-actions"
+                [pSelectableRow]="item.canSelect != false && selectable ? item : null"
+                [pSelectableRowIndex]="item.canSelect != false && selectable? rowIndex : null">
                     <div class="d-flex align-items-center">
                         <ng-template #rowActions *ngIf="rowActions" [ngTemplateOutlet]="rowActions"></ng-template>
                         <div class="actions" *ngIf="item.showMenuOption != false && menuTable">

@@ -25,11 +25,11 @@
                                           [form]="invoice"
                                           [podeBaixarPDF]="podeBaixarInvoice"
                                           [readonly]="camposReadonly"
-                                          (benefificarioChanged)="beneficiarioSelected = $event"
+                                          (tabChanged)="tabChanged($event)"
                                           (erroChange)="erro = $event"
                                           (loadingChange)="loadingInvoiceFile = $event"
+                                          (benefificarioChanged)="beneficiarioSelected = $event"
                                           (podeBaixarChanged)="podeBaixarInvoice = $event; podeBaixarKitChange();"
-                                          (tabChanged)="tabChanged($event)"
                                           (objetoChanged)="objeto = $event; calculaMoedaNacional(); calculaVET()"></app-form-invoice>
                     </form>
                 </div>
@@ -52,12 +52,11 @@
                                           (loadingChange)="loadingContratoFile = $event"
                                           (podeBaixarChanged)="podeBaixarContrato = $event; podeBaixarKitChange()"
                                           (tabChanged)="tabChanged($event)"
-                                          (send)="send(invoice, contrato)"
                                           (objetoChanged)="objeto = $event; calculaMoedaNacional(); calculaVET()"></app-form-contrato>
                     </form>
                 </div>
             </p-tabPanel>
-            <p-tabPanel *ngIf="isEditPage">
+            <p-tabPanel [disabled]="invoice.invalid == true || contrato.invalid == true" >
                 <ng-template pTemplate="header">
                     <span>Contrato Bicolunado</span>
                 </ng-template>
@@ -70,6 +69,8 @@
                                 [erro]="erro"
                                 [podeBaixarPDF]="podeBaixarContratoBicolunado"
                                 [readonly]="camposReadonly"
+                                [isEditPage]="isEditPage"
+                                [form]="clausulas"
                                 (podeBaixarChanged)="podeBaixarContratoBicolunado = $event; podeBaixarKitChange(); setCamposReadonly()"
                                 (loadingChange)="loading = $event"
                                 (erroChange)="erro = $event"
@@ -106,9 +107,16 @@
                 <span>Baixar Kit</span>
             </button>
             <button (click)="send(invoice, contrato)" class="btn btn-primary me-0 "
-                    [disabled]="invoice.invalid || contrato.invalid || loading || loadingSwiftFile || loadingContratoBicolunadoFile || loadingContratoFile || loadingInvoiceFile">
+                    [disabled]="invoice.invalid 
+                                || contrato.invalid 
+                                || clausulas.invalid 
+                                || loading 
+                                || loadingSwiftFile 
+                                || loadingContratoBicolunadoFile 
+                                || loadingContratoFile 
+                                || loadingInvoiceFile">
                 <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-                <span>Salvar e Gerar Swift</span>
+                <span>Salvar</span>
             </button>
         </div>
     </div>

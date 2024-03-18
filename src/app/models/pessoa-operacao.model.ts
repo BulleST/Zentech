@@ -107,6 +107,7 @@ export var pessoaOperacaoColumns: Column[] = [
         header: 'Nº Operação',
         maskType: MaskType.mask,
         mask: '0000',
+        padStart: { length: 4, string: '0'},
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,
         showAddButton: false,

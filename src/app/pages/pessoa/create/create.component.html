@@ -4,7 +4,7 @@
 <ng-template #template>
     <form #form="ngForm" (ngSubmit)="send(form)" class="px-2">
         <div class="row">
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="form-group col-12">
                 <label for="nome">Nome Completo: <span class="text-danger">*</span>  </label>
                 <input type="text"
                        class="form-control"
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-lg-5 col-md-5 col-sm-6 col-12">
+            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6"> <!-- CPF -->
                 <label for="cpf">CPF: <span class="text-danger">*</span></label>
                 <input type="text"
                        class="form-control"
@@ -46,7 +46,7 @@
                     <p class="text-danger" *ngIf="cpf.errors['jaCadastrado']">CPF já cadastrado</p>
                 </div>
             </div>
-            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-6"><!-- Data de Nascimento -->
                 <label for="dataNascimento">Data de Nascimento: <span class="text-danger">*</span></label>
                 <app-input-date [valueInput]="objeto.dataNascimento"
                                 (valueChanges)="objeto.dataNascimento = $event;"
@@ -59,12 +59,7 @@
                     <p class="text-danger" *ngIf="cpf.touched && (cpf.invalid || cpf.errors)">Preencha CPF corretamente.</p>
                 </ng-template>
             </div>
-        </div>
-        <div class="row" *ngIf="loadingConsultaApi">
-            <p>Consultando BR API</p>
-        </div>
-        <div class="row">
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-12"><!-- Nome da Mãe -->
                 <label for="nomeMae">Nome da Mãe:</label>
                 <input type="text"
                        class="form-control"
@@ -79,6 +74,25 @@
                 </div>
             </div>
         </div>
+        <!-- <div class="row" *ngIf="loadingConsultaApi">
+            <p>Consultando BR API</p>
+        </div> -->
+        <!-- <div class="row">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
+                <label for="nomeMae">Nome da Mãe:</label>
+                <input type="text"
+                       class="form-control"
+                       name="nomeMae"
+                       id="nomeMae"
+                       #nomeMae="ngModel"
+                       [(ngModel)]="objeto.nomeMae"
+                       pattern="\S(.*\S)?"
+                       (change)="objeto.nomeMae = nomeMae.value.trim().toUpperCase(); ">
+                <div *ngIf="nomeMae.touched && nomeMae.errors">
+                    <p class="text-danger" *ngIf="nomeMae.errors['required']">Este campo é obrigatório.</p>
+                </div>
+            </div>
+        </div> -->
         <div class="row">
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12">
                 <label for="email">E-mail: </label>

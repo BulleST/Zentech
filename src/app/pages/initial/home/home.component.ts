@@ -34,7 +34,7 @@ export class HomeComponent implements OnDestroy, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa);
+        var empresa = this.empresaService.getEmpresa().subscribe(res => this.empresa = res.empresa);
         this.subscription.push(empresa);
     }
 

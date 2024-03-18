@@ -16,7 +16,7 @@
 
 ::ng-deep .p-tabview-panels {
     flex: 1 0 80%;
-    border: 1px var(--grey) solid;
+    border: 1px var(--neutral) solid;
     padding: 15px 0;
     background-color: #f7f7f7;
 }
@@ -42,7 +42,7 @@
     width: 100%;
     display: flex;
     padding: 10px 10px;
-    background-color: var(--grey);
+    background-color: var(--neutral);
 }
 
 ::ng-deep .p-tabview-nav li a>*:not(span) {
@@ -59,7 +59,7 @@
 
 ::ng-deep .p-tabview-nav li a:hover {
     color: #fff;
-    background-color: var(--grey);
+    background-color: var(--neutral);
 }
 
 ::ng-deep .p-tabview-nav li.p-highlight a {

@@ -33,8 +33,8 @@ export class EmpresaSelectedComponent implements OnDestroy {
                     if (this.empresaService.list.value.length == 0) 
                         await lastValueFrom(this.empresaService.getList());
                 }
-                if (account.perfilAcesso_Id != 1 || !this.empresaService.empresaSelected.value.empresa) {
-                    this.empresaService.empresaSelected.next({
+                if (account.perfilAcesso_Id != 1 || !this.empresaService.getEmpresa().value.empresa) {
+                    this.empresaService.setEmpresa({
                         id: account.empresa_Id,
                         empresa: account.empresa
                     })
@@ -43,7 +43,7 @@ export class EmpresaSelectedComponent implements OnDestroy {
         });
         this.subscription.push(account);
 
-        var empresa = this.empresaService.empresaSelected.subscribe(res => {
+        var empresa = this.empresaService.getEmpresa().subscribe(res => {
             this.empresaSelected = res;
             if (res) {
                 this.setColorsJquery();
@@ -67,7 +67,7 @@ export class EmpresaSelectedComponent implements OnDestroy {
                 if (this.empresas.length == 0)
                     await lastValueFrom(this.empresaService.getList());
                 var empresa = this.empresas.find(x => x.id == id) as Empresa;
-                this.empresaService.empresaSelected.next({ empresa, id });
+                this.empresaService.setEmpresa({ empresa, id });
             }
         }
     }

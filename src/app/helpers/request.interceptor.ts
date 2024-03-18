@@ -107,7 +107,7 @@ export class RequestInterceptor implements HttpInterceptor {
                                     setTimeout(() => {
                                         this.table.goToCurrentPage();
                                     }, 100);
-                                    this.table.loading.next(false)
+                                    // this.table.loading.next(false)
                                     this.loadingUtils.loading.next(false);
                                 }
 
@@ -142,7 +142,7 @@ export class RequestInterceptor implements HttpInterceptor {
             }),
             // Log when response observable either completes or errors
             finalize(() => {
-                this.table.loading.next(false)
+                // this.table.loading.next(false)
                 this.loadingUtils.loading.next(false);
                 if (request.method == 'POST' || request.method == 'PUT' || request.method == 'DELETE' || loadingHeader == 'true') {
                     this.loadingUtils.removeLoadingRequest();

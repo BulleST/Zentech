@@ -6,6 +6,7 @@ export interface Column {
     colgroup?: string;
     maskType: MaskType,
     mask?: string;
+    padStart?: { length: number, string: string };
     decimal?: string,
     moeda?: string
     filterType: FilterType;

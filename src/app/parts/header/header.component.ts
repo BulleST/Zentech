@@ -79,7 +79,7 @@ export class HeaderComponent implements AfterViewInit {
         var menuMobileOpen = this.header.menuAsideOpen.subscribe(res => this.menuMobileOpen = res);
         this.subscription.push(menuMobileOpen);
         
-        var empresa = this.empresaService.empresaSelected.subscribe(res => this.empresa = res.empresa)
+        var empresa = this.empresaService.getEmpresa().subscribe(res => this.empresa = res.empresa)
         this.subscription.push(empresa);
 
     }
