@@ -90,7 +90,6 @@ this.table.loading.next(false);
     }
 
     edit(request: Usuario) {
-        request.empresa_Id = this.empresaService.getEmpresa().value.id;
         return this.http.put<Usuario>(`${this.url}/usuario`, request);
     }
 

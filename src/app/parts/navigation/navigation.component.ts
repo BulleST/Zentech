@@ -150,16 +150,16 @@ export class NavigationComponent implements OnDestroy {
         }
         this.items.push({
             id: i++,
-            label: 'Logs',
-            routerLink: "/log-acoes",
-            paddingLeft: 0,
-        });
-        this.items.push({
-            id: i++,
             label: 'Usuários',
             routerLink: "/usuarios",
             paddingLeft: 0,
         });
+        // this.items.push({
+        //     id: i++,
+        //     label: 'Logs',
+        //     routerLink: "/log-acoes",
+        //     paddingLeft: 0,
+        // });
     }
 
     addPadding() {

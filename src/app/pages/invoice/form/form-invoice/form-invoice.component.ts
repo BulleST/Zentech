@@ -143,7 +143,6 @@ export class FormInvoiceComponent implements OnChanges {
                 .then(async (res: BeneficiarioRequest) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
                     
-                    console.log('beneficiarioChange', this.beneficiarioSelected?.id  != this.objeto.invoice.beneficiario_Id)
                     // Só altera a assinatura e conta se o beneficiário mudar
                     if (this.beneficiarioSelected?.id != this.objeto.invoice.beneficiario_Id) {
                         this.objeto.invoice.conta = res.conta;

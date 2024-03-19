@@ -70,7 +70,6 @@ export class Table {
         var td = $(target).closest('td');
         let tr = $(td).parent('tr');
         let btnActions: JQuery<HTMLElement> = $(tr).find('.actions__toggle')
-        console.log('btnActions', btnActions)
         if (tr && td && btnActions) {
             let height = $(tr).height() ?? 0
             let trTop = ($(tr).offset()?.top ?? 0);

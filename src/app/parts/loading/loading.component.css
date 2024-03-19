@@ -13,6 +13,7 @@
     transition: .4s;
     opacity: 0;
     visibility: hidden;
+    flex-flow: wrap;
 }
 
 .loading.active {

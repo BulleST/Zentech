@@ -145,7 +145,7 @@
                                 *ngIf="assinatura_Intermediadora.alterarDados && isEditPage"
                                 [disabled]="!assinatura_Intermediadora.podeAssinar"
                                 (click)="salvarDados_Intermediadora()">
-                            Salvar Dados
+                            Salvar Dados <!--- Pode assinar: {{assinatura_Intermediadora.podeAssinar}}-->
                         </button>
                         <!-- Assinar -->
                         <button type="button"

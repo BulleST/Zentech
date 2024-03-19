@@ -2,5 +2,5 @@
     <span class="spinner-border spinner-border-sm me-1"></span>
     <br>
     <p *ngIf="!message">Carregando</p>
-    <p *ngIf="message" class="message">{{message}}</p>
+    <p *ngIf="message" class="message w-100" [innerHTML]="message"></p>
 </div>

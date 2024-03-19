@@ -248,14 +248,14 @@ export class FormComponent implements OnDestroy {
                     this.objeto.contrato.invoice_Id = res.objeto.invoice.id;
                     this.objeto.invoice.id = res.objeto.invoice.id;
                     this.objeto.contrato.numContrato = this.objeto.invoice.id.toString();
-                    if (!this.isEditPage) {
-                        await lastValueFrom(this.invoiceService.edit(this.objeto));
-                    }
+                    // if (!this.isEditPage) {
+                        // await lastValueFrom(this.invoiceService.edit(this.objeto));
+                    // }
 
-                    var a = this.crypto.encrypt(this.objeto.invoice.id);
+                    var idEncrypted = this.crypto.encrypt(this.objeto.invoice.id);
                     if (!this.isEditPage) {
                         this.modalService.removeModalAnimation(this.modal.id);
-                        this.router.navigate(['../editar', a], { relativeTo: this.activatedRoute })
+                        this.router.navigate(['../editar', idEncrypted], { relativeTo: this.activatedRoute })
                     }
                     await lastValueFrom(this.invoiceService.getList());
 

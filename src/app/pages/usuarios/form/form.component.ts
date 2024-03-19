@@ -60,27 +60,6 @@ export class FormComponent {
                 { id: 2, perfil: 'Master', disabled: false },
                 { id: 3, perfil: 'Consultor', disabled: false },
             ];
-            // if (this.account?.perfilAcesso_Id == Role.Admin) {
-            //     this.perfil = [
-            //         { id: 2, perfil: 'Master' },
-            //         { id: 3, perfil: 'Consultor' },
-            //     ];
-
-            //     if (res.id == 27) {
-            //         this.perfil.unshift({ id: 1, perfil: 'Admin' })
-            //     }
-            // } 
-            // else if (this.account?.perfilAcesso_Id == Role.Master) {
-            //     this.perfil = [
-            //         { id: 2, perfil: 'Master' },
-            //         { id: 3, perfil: 'Consultor' },
-            //     ];
-            // } 
-            // else if (this.account?.perfilAcesso_Id == Role.Consultor) {
-            //     this.perfil = [
-            //         { id: 3, perfil: 'Consultor' },
-            //     ];
-            // };
         });
         this.subscription.push(empresaSelected);
 
@@ -89,7 +68,6 @@ export class FormComponent {
             lastValueFrom(this.empresaService.getList())
             .then(res => {
                this.loadingEmpresas = false;
-
            })
         }
 
@@ -101,6 +79,7 @@ export class FormComponent {
     ngOnDestroy(): void {
         this.subscription.forEach(item => item.unsubscribe());
     }
+
     async ngAfterViewInit(): Promise<void> {
         this.modal.id = 0;
         this.modal.template = this.template;
@@ -145,10 +124,6 @@ export class FormComponent {
             }
         });
         this.subscription.push(params);
-        
-
-
-
     }
 
     voltar() {

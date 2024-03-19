@@ -3,7 +3,6 @@ import { sortList } from "./sort-list";
 export function removeIds(service: any, ids: number[], property = 'list') {
     var list = JSON.parse(JSON.stringify(service[property].value))  as any[];
     list = list.filter(x => !ids.includes(x.id));
-    console.log('list', list)
     service[property].next(list);
 }
 

@@ -66,7 +66,7 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.EQUALS,
     },
     {
-        field: 'nomeBanco',
+        field: 'banco',
         header: 'Banco',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
@@ -77,7 +77,7 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'nomeBeneficiario',
+        field: 'beneficiario',
         header: 'Beneficiario',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
@@ -88,8 +88,8 @@ export var invoiceColumns: Column[] = [
         filterMatchMode: FilterMatchMode.CONTAINS,
     },
     {
-        field: 'representante',
-        header: 'Representante',
+        field: 'instituicaoFinanceira',
+        header: 'Instituição Financeira',
         maskType: MaskType.undefined,
         filterType: FilterType.text,
         filterDisplay: FilterDisplay.menu,

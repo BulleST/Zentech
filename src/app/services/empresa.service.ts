@@ -39,14 +39,11 @@ export class EmpresaService {
 
     getEmpresa() {
         if (!this.empresaSelected.value.empresa) {
-            console.log('não tem empresa selecionada')
             var encrypted = localStorage.getItem('empresaSelected');
             if (encrypted) {
-                console.log('não tem local storage')
                 var empresaSelected: EmpresaSelected = this.crypto.decrypt(encrypted)
                 this.empresaSelected.next(empresaSelected);
             } else if (this.accountService.accountValue) {
-                console.log('tem conta selecionada')
                 this.empresaSelected.next(this.accountService.accountValue?.empresa)
             }
         } 

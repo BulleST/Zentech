@@ -82,13 +82,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
             var selected = this.table.selected.subscribe(res => this.selected = res);
             this.subscription.push(selected);
 
-            if(this.selectionMode == 'multiple') {
-                var selected = this.table.selectedItems.subscribe(res => {
-                    this.selectedItems = res;
-                    this.selectedAll = this.selectedItems.length == this.list.length;
-                });
-                this.subscription.push(selected);
-            }
         }
     }
 
@@ -116,7 +109,20 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         if (changes['checkboxActions']) this.rowActions = changes['rowActions'].currentValue;
         if (changes['showResultLength']) this.showResultLength = changes['showResultLength'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
-        if (changes['selectionMode']) this.selectionMode = changes['selectionMode'].currentValue;
+        if (changes['selectionMode']) {
+            this.selectionMode = changes['selectionMode'].currentValue;
+            if(this.selectionMode == 'multiple') {
+                var selected = this.table.selectedItems.subscribe(res => {
+                    this.selectedItems = res;
+                    this.selectedAll = this.list.length > 0 && this.selectedItems.length == this.list.length;
+                    if (this.dt) {
+                        this.dt.selectAll = this.selectedAll;
+                    }
+                    this.table.fecharMenuTable();
+                });
+                this.subscription.push(selected);
+            }
+        }
     }
 
     ngAfterViewInit(): void {
@@ -148,11 +154,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         this.selectedAll = false;
         this.table.onRowUnselect(event)
     }
-    
 
     selectAllChange(e: any) {
-        this.dt.selectAll = e;
-        this.table.fecharMenuTable();
         this.table.selectedItems.next(e);
         if (e.length == 1) {
             this.table.selected.next(e[0]);
@@ -163,7 +166,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
 
     selectAllClick(selected: boolean) {
         this.table.fecharMenuTable();
-        this.table.selected.next(undefined)
         this.loading = true;
         this.checkbox.forEach(item => {
             item.checked = selected;
@@ -171,7 +173,6 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
         });
         this.loading = false;
         if (selected) {
-        
             this.selectAllChange(this.list);
         } else {
             this.selectAllChange([]);
@@ -179,8 +180,8 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     }
 
     checked(item: any) {
-        var checked = this.selectedItems?.findIndex(x => x.id == item.id);
-        return checked != -1 && this.selectedItems && this.selectedItems?.length > 0 ;
+        var checked = this.selectedItems && this.selectedItems.length > 0 ? this.selectedItems?.findIndex(x => x.id == item.id) : -1; 
+        return checked != -1;
     }
 
 

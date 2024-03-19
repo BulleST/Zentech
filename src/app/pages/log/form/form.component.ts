@@ -599,8 +599,8 @@ export class FormComponent implements OnDestroy {
             var a: any;
             try {
                 a = JSON.parse(JSON.parse(JSON.stringify(objeto[key])));
-            } 
-            catch(e) {
+            }
+            catch (e) {
                 a = objeto[key];
             }
 
@@ -611,7 +611,7 @@ export class FormComponent implements OnDestroy {
             } else {
                 var [label, campo, insere] = this.formataCampos(key, value as string);
                 if (insere) {
-                    var existe = this.values.find(x => x[0] == label) 
+                    var existe = this.values.find(x => x[0] == label)
                     if (!existe) {
                         this.values.push([label, campo]);
                     }
@@ -626,7 +626,7 @@ export class FormComponent implements OnDestroy {
         switch (this.obj.entidade) {
             case 'Pessoa': {
                 if (this.obj.acao == 'BR Consulta') {
-                    order = ['Id da Consulta', 'Nome', 'CPF', 'Data de Nascimento',  'Situação', 'Data de Inscrição', 'Dígito', 'Controle' , 'Status', 'Data de Captação', 'Hora de Captação', 'Retorno', 'Erro'];                    
+                    order = ['Id da Consulta', 'Nome', 'CPF', 'Data de Nascimento', 'Situação', 'Data de Inscrição', 'Dígito', 'Controle', 'Status', 'Data de Captação', 'Hora de Captação', 'Retorno', 'Erro'];
                 } else {
                     order = ['Id', 'Nome', 'CPF', 'Data de Nascimento', 'Data de Cadastro', 'Situação CPF', 'Saldo Atual', 'Status Saldo', 'Nome da Mãe', 'Situação', 'Telefone', 'E-mail', 'Observações', 'Nome do Usuário de Cadastro', 'E-mail do Usuário de Cadastro', 'Excel - Data de Inscrição', 'Excel - Dígito', 'Excel - Ano Óbito', 'Excel - Status', 'Excel - Data de Captação', 'Excel - Hora de Captação', 'Excel - Id Num', 'Excel - Controle', 'Excel - Tipo Erro', 'Excel - Lote Id', 'Excel - PEP', 'Data de Atualização pelo Excel', 'BR Consulta - Status', 'BR Consulta - Data de Captação', 'BR Consulta - Hora de Captação', 'BR Consulta - Id Consulta', 'BR Consulta - Controle', 'BR Consulta - Erro', 'Data de Atualização pelo BR Consulta']
                 }
@@ -665,7 +665,7 @@ export class FormComponent implements OnDestroy {
                 break;
             };
             case 'Contrato': {
-                order = ['Id', 'Tipo', 'Evento','Nº do Contrato', 'Data', 'Valor Nacional', 'Instituição Financeira', 'Beneficiário', 'Banco', 'Percentual de Adiantamento', 'Pagador/Recebedor no Exterior', 'País', 'Taxa', 'Data de Liquidação'];
+                order = ['Id', 'Tipo', 'Evento', 'Nº do Contrato', 'Data', 'Valor Nacional', 'Instituição Financeira', 'Beneficiário', 'Banco', 'Percentual de Adiantamento', 'Pagador/Recebedor no Exterior', 'País', 'Taxa', 'Data de Liquidação'];
                 break;
             };
         }
@@ -775,5 +775,43 @@ var a = [
             { field: 'Estado', label: '', value: '' },
             { field: 'Pais', label: '', value: '' },
         ]
+    },
+    {
+        entidade: 'Contrato',
+        campos: [
+            { field: 'Id', label: '', value: '' },
+            { field: 'Data', label: '', value: '' },
+            { field: 'NumContrato', label: '', value: '' },
+            { field: 'Tipo', label: '', value: '' },
+            { field: 'Evento', label: '', value: '' },
+            { field: 'Taxa', label: '', value: '' },
+            { field: 'ValorNacional', label: '', value: '' },
+            { field: 'PercentualAdiantamento', label: '', value: '' },
+            { field: 'RDE', label: '', value: '' },
+            { field: 'VET', label: '', value: '' },
+            { field: 'DataLiquidacao', label: '', value: '' },
+            { field: 'PagRecExterior', label: '', value: '' },
+            { field: 'PaisPagRecExterior', label: '', value: '' },
+            { field: 'Especificacoes', label: '', value: '' },
+            { field: 'Clausulas', label: '', value: '' },
+            { field: 'InstrucoesRecebimentoPagamento', label: '', value: '' },
+            { field: 'NomeRepresentanteLegal', label: '', value: '' },
+            { field: 'CodigoRepresentanteLegal', label: '', value: '' },
+            { field: 'AssinaturaRepresentanteLegal', label: '', value: '' },
+            { field: 'IpAssinaturaRepresentanteLegal', label: '', value: '' },
+            { field: 'DataAssinaturaRepresentanteLegal', label: '', value: '' },
+            { field: 'AssinaturaIntermediadora', label: '', value: '' },
+            { field: 'DataAssinaturaIntermediadora', label: '', value: '' },
+            { field: 'DataCertificadoAssinatura', label: '', value: '' },
+            { field: 'ControleProCambio', label: '', value: '' },
+            { field: 'REF', label: '', value: '' },
+            { field: 'Empresa_Id', label: '', value: '' },
+        ],
+    },
+    {
+        entidade: 'Invoice',
+        campos: [
+            { field: '', label: '', value: '' },
+        ],
     },
 ]

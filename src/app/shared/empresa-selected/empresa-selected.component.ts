@@ -7,6 +7,7 @@ import { Empresa } from 'src/app/models/empresa.model';
 import { AccountService } from 'src/app/services/account.service';
 import { EmpresaSelected, EmpresaService } from 'src/app/services/empresa.service';
 import { Colors } from 'src/app/utils/colors';
+import { Table } from 'src/app/utils/table';
 
 @Component({
     selector: 'app-empresa-selected',
@@ -24,7 +25,8 @@ export class EmpresaSelectedComponent implements OnDestroy {
     constructor(
         private empresaService: EmpresaService,
         private accountService: AccountService,
-        private colors: Colors
+        private colors: Colors,
+        private table: Table
     ) {
         var account = this.accountService.accountSubject.subscribe(async account => {
             this.account = account;
@@ -45,6 +47,8 @@ export class EmpresaSelectedComponent implements OnDestroy {
 
         var empresa = this.empresaService.getEmpresa().subscribe(res => {
             this.empresaSelected = res;
+            this.table.selected.next(undefined);
+            this.table.selectedItems.next([]);
             if (res) {
                 this.setColorsJquery();
             }

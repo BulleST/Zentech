@@ -94,7 +94,6 @@ export class AccountService {
                     if (this.empresaService.list.value.length == 0) {
                         await lastValueFrom(this.empresaService.getList());
                     }
-                    console.log('Admin')
                     this.empresaService.getEmpresa();
                 
                 } 

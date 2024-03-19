@@ -55,6 +55,8 @@ export class ListComponent {
         }
         var empresa = this.empresaService.getEmpresa().subscribe(async res => {
             this.empresaSelected = res.empresa;
+            this.table.onRowUnselect();
+            this.table.selectedItems.next([]);
             if (res && res.id) {
                 await lastValueFrom(this.pessoaOperacaoService.getList(true));
             }
