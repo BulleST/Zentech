@@ -77,12 +77,18 @@
                 <div *ngSwitchCase="maskType.percentage">
                     <p [class.text-danger]="item[col.field] < 0"> {{item[col.field] | currency : 'BRL' : '' : col.decimal}}% </p>
                 </div>
+                <div *ngSwitchCase="maskType.date">
+                    <p>  {{ (setDate(item[col.field])) | date : 'dd/MM/yyyy' }} </p>
+                </div>
+                <div *ngSwitchCase="maskType.dateTime">
+                    <p>  {{ (setDate(item[col.field])) | date : 'dd/MM/yyyy HH:mm' }} </p>
+                </div>
                 <div *ngSwitchDefault>
                     <p> {{item[col.field]}} </p>
                 </div>
             </td>
             <td class="td-actions">
-                <a class="btn btn-dark" *ngIf="podeExcluir && lastIdDelete == item.id" [routerLink]="['saldo/excluir', item.idEncrypted]">Excluir</a>
+                <a class="btn btn-dark" *ngIf="podeExcluir && lastIdDelete == item.id" (click)="excluir(item.id)">Excluir</a>
             </td>
         </tr>
     </ng-template>

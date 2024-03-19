@@ -43,7 +43,6 @@ export class DetailsComponent implements OnDestroy {
 
     limiteConcedido = 0;
     limiteUtilizado = 0;
-    lastIdDeleteSaldo: number = 0;
 
     loadingConsultaApi = false;
     emailPattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -92,11 +91,10 @@ export class DetailsComponent implements OnDestroy {
                         this.saldos = res;
                         var listSaldos = this.pessoaSaldoService.list.subscribe(res => {
                             this.saldos = res.map(x => {
-                                x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
-                                x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
+                                // x.dataConcessao = this.datepipe.transform(x.dataConcessao, 'dd/MM/yyyy HH:mm', 'pt-BR') as unknown as Date;
+                                // x.idEncrypted = this.crypto.encrypt(x.id) ?? '';
                                 return x
                             }).sort((x, y) => x.id - y.id);
-                            this.lastIdDeleteSaldo = res.length > 0 ? res[res.length - 1].id : 0;
                             
                             this.calculaLimiteConcedido();
                         });

@@ -54,7 +54,7 @@ export class ListComponent {
                     { label: 'Resetar senha', routePath: [ 'reset-password'], paramsFieldName: ['id'] },
                 ];
 
-                if (this.accountService.accountValue?.perfilAcesso_Id != 3) {
+                if (this.accountService.accountValue?.perfilAcesso_Id == 1) {
                     this.tableLinks.push({ label: 'Excluir', routePath: ['excluir'], paramsFieldName: ['id'] } )
                 }
                 this.tableLinks = this.table.encryptParams(this.tableLinks);

@@ -7,7 +7,7 @@ export class LogList {
     id: number = 0;
     data: Date = new Date;
     acao: string = '';
-    objeto: string = '';
+    objeto: any;
     entidade: string = '';
     usuarioNome: string = '';
     usuarioEmail: string = '';

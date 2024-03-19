@@ -49,6 +49,7 @@ export class PessoaOperacaoService {
                 next: list => {
                     this.list.next(list);
                     this.loading.next(false);
+                    this.table.loading.next(false);
                     return of(list);
                 },
                 error: res => this.toastr.error('Não foi possível carregar listagem de operações.'),

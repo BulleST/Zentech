@@ -15,8 +15,11 @@ export function remove(service: any, objeto: any, property = 'list') {
 
 export function insertOrReplace(service: any, object: any, property = 'list') {
     var list =  JSON.parse(JSON.stringify(service[property].value)) as any[];
+    console.log('list', list)
+    console.log('id', object.id)
     if (object.id) {
         var index = list.findIndex(x => x.id == object.id);
+        console.log('index', index)
         if (index == -1 ) {
             list.push(object);
         }
@@ -24,5 +27,6 @@ export function insertOrReplace(service: any, object: any, property = 'list') {
     } else {
         list.push(object);
     }
+    console.log('list', list)
     service[property].next(list);
 }

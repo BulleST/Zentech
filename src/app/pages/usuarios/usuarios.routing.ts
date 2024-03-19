@@ -14,7 +14,7 @@ const routes: Routes = [
     { path: '', component: ListComponent, children: [
         { path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 }, title: 'Zentech - Cadastrar usuário' },
         { path: 'editar/:usuario_id', component: FormComponent, data: { modalOrder: 1 }, title: 'Zentech - Editar usuário', canActivate: [UserEditableAuth] },
-        { path: 'excluir/:usuario_id', component: DeleteComponent, data: { modalOrder: 1,  roles: [ Role.Admin ] }, title: 'Zentech - Excluir usuário', canActivate: [UserEditableAuth, RoleGuard] },
+        { path: 'excluir/:usuario_id', component: DeleteComponent, data: { modalOrder: 1,  roles: [ Role.Admin, Role.Master ] }, title: 'Zentech - Excluir usuário', canActivate: [UserEditableAuth, RoleGuard] },
         { path: 'reset-password/:usuario_id', component: ResetPasswordComponent, data: { modalOrder: 1 }, title: 'Zentech - Resetar senha', canActivate: [UserEditableAuth] },
         { path: 'habilitar/:usuario_id', component: DeactivatedComponent, data: { modalOrder: 1 }, title: 'Zentech - Habilitar usuário', canActivate: [UserEditableAuth] },
         { path: 'desabilitar/:usuario_id', component: DeactivatedComponent, data: { modalOrder: 1 }, title: 'Zentech - Desabilitar usuário', canActivate: [UserEditableAuth] },

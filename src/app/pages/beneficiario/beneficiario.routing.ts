@@ -17,19 +17,19 @@ const routes: Routes = [
                 path: 'cadastrar', component: FormComponent, title: 'Zentech - Cadastrar Beneficiário', data: { modalOrder: 1 }, children: [
                     { path: 'banco', component: FormBanco, title: 'Zentech - Cadastrar Banco', data: { modalOrder: 2 } },
                     { path: 'representante', component: FormRepresentante, title: 'Zentech - Cadastrar Representante', data: { modalOrder: 2 } },
-                    { path: 'representante/:representante_id', component: FormRepresentante, title: 'Zentech - Editar Representante', data: { modalOrder: 2 } },
-                    { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, title: 'Zentech - Excluir Representante', data: { modalOrder: 2, data: [Role.Admin] }, canActivate: [RoleGuard] },
+                    // { path: 'representante/:representante_id', component: FormRepresentante, title: 'Zentech - Editar Representante', data: { modalOrder: 2 } },
+                    // { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, title: 'Zentech - Excluir Representante', data: { modalOrder: 2, data: [Role.Admin, Role.Master] }, canActivate: [RoleGuard] },
                 ]
             },
             {
                 path: 'editar/:beneficiario_id', title: 'Zentech - Editar Beneficiário', component: FormComponent, data: { modalOrder: 1 }, children: [
                     { path: 'banco', component: FormBanco, title: 'Zentech - Cadastrar Banco', data: { modalOrder: 2 } },
                     { path: 'representante', component: FormRepresentante, title: 'Zentech - Cadastrar Representante', data: { modalOrder: 2 } },
-                    { path: 'representante/:representante_id', component: FormRepresentante, title: 'Zentech - Editar Representante', data: { modalOrder: 2 } },
-                    { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, title: 'Zentech - Excluir Representante', data: { modalOrder: 2, data: [Role.Admin] }, canActivate: [RoleGuard] },
+                    // { path: 'representante/:representante_id', component: FormRepresentante, title: 'Zentech - Editar Representante', data: { modalOrder: 2 } },
+                    // { path: 'representante/excluir/:representante_id', component: DeleteRepresentante, title: 'Zentech - Excluir Representante', data: { modalOrder: 2, data: [Role.Admin, Role.Master] }, canActivate: [RoleGuard] },
                 ]
             },
-            { path: 'excluir/:beneficiario_id', title: 'Zentech - Excluir Beneficiário', component: DeleteComponent, data: { modalOrder: 1, data: [Role.Admin] }, canActivate: [RoleGuard] },
+            { path: 'excluir/:beneficiario_id', title: 'Zentech - Excluir Beneficiário', component: DeleteComponent, data: { modalOrder: 1, data: [Role.Admin, Role.Master] }, canActivate: [RoleGuard] },
             MyAccountRouter,
         ]
     }

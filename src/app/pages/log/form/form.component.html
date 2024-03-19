@@ -4,27 +4,91 @@
     </span>
 </ng-template>
 <ng-template #template>
-    <h6 class="mb-2 mt-2 ms-2">{{obj.acao}} de {{obj.entidade}}</h6>
+    <h6 class="mb-2 mt-2 ms-2">{{log.acao}} de {{log.entidade}}</h6>
     <div class="table-responsive">
         <table class="table table-striped mt-2">
             <tbody>
                 <tr>
-                    <td><strong>Data:</strong> {{obj.data | date : 'dd/MM/yyyy \'às\' HH:mm' }}</td>
-                    <td><strong>Ação:</strong> {{obj.acao }}</td>
-                    <td><strong>Objeto da Ação:</strong> {{obj.entidade }}</td>
+                    <td><strong>Data:</strong> {{log.data | date : 'dd/MM/yyyy \'às\' HH:mm' }}</td>
+                    <td><strong>Ação:</strong> {{log.acao }}</td>
+                    <td><strong>Objeto da Ação:</strong> {{log.entidade }}</td>
                 </tr>
                 <tr>
-                    <td colspan="3"><strong>Usuário:</strong> {{obj.usuarioNome}} - {{obj.usuarioEmail}}</td>
+                    <td colspan="3"><strong>Usuário:</strong> {{log.usuarioNome}} - {{log.usuarioEmail}}</td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-striped mb-3">
+        <table class="table table-striped mb-3 table-log">
             <tbody class="padding-tr">
-                <tr *ngFor="let item of values">
-                    <td style="white-space: nowrap;"><strong>{{item[0]}}</strong></td>
-                    <td colspan="2" [innerHTML]="item[1]"></td>
-                </tr>
+                <ng-template let-obj ngFor [ngForOf]="obj.campos">
+                    <ng-container 
+                        [ngTemplateOutlet]="campoContainer" 
+                        [ngTemplateOutletContext]="{obj: obj}">
+                    </ng-container>
+                </ng-template>
             </tbody>
         </table>
     </div>
+</ng-template>
+
+
+<ng-template  #campoContainer let-obj="obj">
+    <ng-template ngIf [ngIf]="obj.campos && obj.campos.length > 0">
+        <tr class="bg-dark text-white">
+            <td colspan="2" class="text-white"><b>{{obj.label}}</b></td>
+        </tr>
+        <ng-template let-ref ngFor [ngForOf]="obj.campos">
+            <ng-container 
+                [ngTemplateOutlet]="campoContainer" 
+                [ngTemplateOutletContext]="{obj: ref}">
+            </ng-container>
+        </ng-template>
+    </ng-template>
+
+    <!--  -->
+
+    <ng-container *ngIf="!obj.campos"
+        [ngTemplateOutlet]="itemContainer" 
+        [ngTemplateOutletContext]="{item: obj}">
+    </ng-container>
+</ng-template>
+
+<ng-template #itemContainer let-item="item">
+    <tr>
+        <td style="white-space: nowrap;"><b>{{item.label}}</b></td>
+        <td>
+            <div [ngSwitch]="[null, undefined, 0, '', '   '.trim()].includes(item.value)">
+                <div *ngSwitchCase="true">N/A</div>
+                <div *ngSwitchDefault>
+                    <div [ngSwitch]="item.type">
+                        <div *ngSwitchCase="'image'">
+                            <img [src]="item.value" alt="">
+                        </div>
+                        <div *ngSwitchCase="'date'">
+                            <span>{{item.value | date : 'dd/MM/yyyy'}}</span>
+                        </div>
+                        <div *ngSwitchCase="'datetime'">
+                            <span>{{item.value | date : 'dd/MM/yyyy HH:mm'}}</span>
+                        </div>
+                        <div *ngSwitchCase="'percentual'">
+                            <span>{{item.value | currency : 'BRL' : '' : '1.2'}}%</span>
+                        </div>
+                        <div *ngSwitchCase="'number'">
+                            <span>{{item.value | currency : 'BRL' : '' : '1.0-4'}}</span>
+                        </div>
+                        <div *ngSwitchCase="'money'">
+                            <span>{{item.value | currency : 'BRL' : 'R$' : '1.2'}}</span>
+                        </div>
+                        <div *ngSwitchCase="'boolean'">
+                            <span *ngIf="item.value">Sim</span>
+                            <span *ngIf="!item.value">Não</span>
+                        </div>
+                        <div *ngSwitchDefault>
+                            <span>{{item.value}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
 </ng-template>

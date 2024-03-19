@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: '', component: ListComponent, title: 'Zentech - Representantes', children: [
         { path: 'cadastrar', component: FormComponent, data: { modalOrder: 1 }, title: 'Zentech - Cadastrar Representante' },
         { path: 'editar/:representante_id', component: FormComponent, data: { modalOrder: 1 }, title: 'Zentech - Editar Representante' },
-        { path: 'excluir/:representante_id', component: DeleteComponent, data: { modalOrder: 1,  roles: [ Role.Admin ] }, canActivate: [ RoleGuard ], title: 'Zentech - Excluir Representante' },
+        { path: 'excluir/:representante_id', component: DeleteComponent, data: { modalOrder: 1,  roles: [ Role.Admin, Role.Master ] }, canActivate: [ RoleGuard ], title: 'Zentech - Excluir Representante' },
         MyAccountRouter,
     ] }
 ];

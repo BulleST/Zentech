@@ -1,8 +1,10 @@
-.table td, .table th {
+.table td,
+.table th {
     color: #433f3f;
     padding-top: 7px;
     padding-bottom: 7px;
 }
+
 /* .table td:first-child, .table th:first-child {
     padding-left: 0px;
 } */
@@ -11,7 +13,13 @@ tr td {
     white-space: unset;
     text-wrap: wrap;
 }
+
 .table .padding-tr td {
     padding-top: 7px;
     padding-bottom: 7px;
+}
+
+.table-striped img {
+    width: 150px;
+    height: auto;
 }

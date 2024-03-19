@@ -154,12 +154,12 @@ export class NavigationComponent implements OnDestroy {
             routerLink: "/usuarios",
             paddingLeft: 0,
         });
-        // this.items.push({
-        //     id: i++,
-        //     label: 'Logs',
-        //     routerLink: "/log-acoes",
-        //     paddingLeft: 0,
-        // });
+        this.items.push({
+            id: i++,
+            label: 'Logs',
+            routerLink: "/log-acoes",
+            paddingLeft: 0,
+        });
     }
 
     addPadding() {

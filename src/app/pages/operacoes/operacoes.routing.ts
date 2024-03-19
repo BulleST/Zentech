@@ -27,7 +27,7 @@ const routes: Routes = [
             { path: 'moeda/excluir/:moeda_id', component: DeleteMoeda, canActivate: [RoleGuard], data: { modalOrder: 2, roles: [Role.Admin] }, title: 'Zentech - Excluir Moeda' },
         ] },
         { path: 'detalhes/:operacao_id', component: DetailsComponent, title: 'Zentech - Operação', data: { modalOrder: 1 } },
-        { path: 'excluir/:operacao_id', component: DeleteComponent, title: 'Zentech - Excluir Operação', canActivate: [RoleGuard], data: { modalOrder: 1, roles: [Role.Admin] } },
+        { path: 'excluir/:operacao_id', component: DeleteComponent, title: 'Zentech - Excluir Operação', canActivate: [RoleGuard], data: { modalOrder: 1, roles: [Role.Admin, Role.Master] } },
         MyAccountRouter,
     ] }
 ];

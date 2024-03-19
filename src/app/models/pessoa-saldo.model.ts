@@ -16,12 +16,23 @@ export class PessoaSaldoRequest {
 }
 
 export var pessoaSaldoColumns: Column[] = [
+    {
+        field: 'id',
+        header: 'Id',
+        maskType: MaskType.undefined,
+        filterType: FilterType.text,
+        filterDisplay: FilterDisplay.menu,
+        showAddButton: false,
+        showMatchMode: false,
+        showOperator: false,
+        filterMatchMode: FilterMatchMode.EQUALS,
+    },
 
     {
         field: 'dataConcessao',
         header: 'Data de Concessão',
-        maskType: MaskType.undefined,
-        filterType: FilterType.text,
+        maskType: MaskType.dateTime,
+        filterType: FilterType.datetime,
         filterDisplay: FilterDisplay.menu,
         showAddButton: true,
         showMatchMode: true,

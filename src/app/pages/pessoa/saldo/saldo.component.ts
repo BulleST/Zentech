@@ -1,10 +1,12 @@
 import { Component, Input, OnChanges, OnDestroy, SimpleChanges, AfterViewChecked } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import { ColumnFilter } from 'primeng/table';
 import { Subscription } from 'rxjs';
 import { Column, MaskType } from 'src/app/helpers/column.interface';
 import { PessoaSaldo, pessoaSaldoColumns } from 'src/app/models/pessoa-saldo.model';
 import { AccountService } from 'src/app/services/account.service';
+import { Crypto } from 'src/app/utils/crypto';
 import { Table } from 'src/app/utils/table';
 
 @Component({
@@ -22,15 +24,18 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     @Input() saldos: PessoaSaldo[] = [];
     @Input() loading: boolean = false;
     @Input() limiteConcedido: number = 0;
-    @Input() lastIdDelete: number = 0;
+    lastIdDelete: number = 0;
     subscription: Subscription[] = [];
     podeExcluir = false;
 
     constructor(
         private table: Table,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private activatedRoute: ActivatedRoute,
+        private router: Router,
+        private crypto: Crypto
     ) {
-        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1;
+        this.podeExcluir =  this.accountService.accountValue?.perfilAcesso_Id == 1 || this.accountService.accountValue?.perfilAcesso_Id == 2;
 
     }
     ngAfterViewChecked(): void {
@@ -40,11 +45,11 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['saldos']) {
             this.saldos = changes['saldos'].currentValue;
+            this.lastIdDelete = this.saldos.length > 0 ? this.saldos[this.saldos.length - 1].id : 0;
             this.formata();
         }
         if (changes['loading']) this.loading = changes['loading'].currentValue;
         if (changes['limiteConcedido']) this.limiteConcedido = changes['limiteConcedido'].currentValue;
-        if (changes['lastIdDelete']) this.lastIdDelete = changes['lastIdDelete'].currentValue;
     }
     
     ngOnDestroy(): void {
@@ -58,18 +63,6 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
     formata() {
         this.table.loading.next(true);
         var list = JSON.parse(JSON.stringify(this.saldos));
-        // list.every((row: any) => {
-        //     this.columns.every(col => {
-        //         try {
-        //             row[col.field] = this.table.formatCellData(row, col);
-        //         } catch (e) {
-        //             console.error(e);
-        //         }
-        //         return col;
-        //     })
-        //     return row;
-        // })
-
         this.saldos = Object.assign([], list);
         this.table.loading.next(false);
     }
@@ -98,4 +91,14 @@ export class SaldoComponent implements OnChanges, OnDestroy, AfterViewChecked  {
         else
             filterEl.clearFilter();
     }
+    
+    setDate(date: string) {
+        return new Date(date) ?? 'N/A'
+    }
+
+    excluir(id: number) {
+        var encrypted = this.crypto.encrypt(id)
+        this.router.navigate(['saldo', 'excluir', encrypted], { relativeTo: this.activatedRoute })
+    }
+
 }

@@ -32,7 +32,6 @@ export class CreateSaldoComponent implements OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private modalService: ModalService,
-        private pessoaOperacaoService: PessoaOperacaoService,
         private pessoaSaldoService: PessoaSaldoService,
         private pessoaService: PessoaService,
         private crypto: Crypto

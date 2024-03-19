@@ -12,7 +12,7 @@ const routes: Routes = [
         path: '', component: ListComponent, title: 'Zentech - Bancos', children: [
             { path: 'cadastrar', component: FormComponent, title: 'Zentech - Cadastrar Banco', data: { modalOrder: 1 } },
             { path: 'editar/:banco_id', component: FormComponent, title: 'Zentech - Editar Banco', data: { modalOrder: 1 } },
-            { path: 'excluir/:banco_id', component: DeleteComponent, title: 'Zentech - Excluir Banco', data: { modalOrder: 1, data: [Role.Admin] }, canActivate: [RoleGuard] },
+            { path: 'excluir/:banco_id', component: DeleteComponent, title: 'Zentech - Excluir Banco', data: { modalOrder: 1, data: [Role.Admin, Role.Master] }, canActivate: [RoleGuard] },
             MyAccountRouter,
         ]
     }

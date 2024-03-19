@@ -30,7 +30,9 @@
                            name="codigoRegistro"
                            id="codigoRegistro"
                            #codigoRegistro="ngModel"
-                           [(ngModel)]="objeto.codigoRegistro">
+                           [(ngModel)]="objeto.codigoRegistro"
+                           (change)="objeto.codigoRegistro = codigoRegistro.value.trim().toUpperCase();"
+                           >
                     <div *ngIf="codigoRegistro.touched && codigoRegistro.errors">
                         <p class="text-danger" *ngIf="codigoRegistro.errors['required']">Este campo é obrigatório.</p>
                     </div>

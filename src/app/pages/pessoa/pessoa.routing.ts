@@ -54,7 +54,7 @@ const routes: Routes = [
                         path: 'excluir/:pessoa_id', 
                         title: 'Zentech - Excluir Pessoa' ,
                         component: DeleteComponent, 
-                        data: { modalOrder: 1, roles: [Role.Admin] },
+                        data: { modalOrder: 1, roles: [Role.Admin, Role.Master] },
                         canActivate: [RoleGuard], 
                     },
                     MyAccountRouter
@@ -75,7 +75,7 @@ const routes: Routes = [
                         path: 'saldo/excluir/:saldo_id', 
                         title: 'Zentech - Excluir Saldo', 
                         component: DeleteSaldoComponent, 
-                        data: { modalOrder: 1, roles: [Role.Admin] },
+                        data: { modalOrder: 1, roles: [Role.Admin, Role.Master] },
                         canActivate: [RoleGuard] 
                     },
                     {
@@ -143,7 +143,7 @@ const routes: Routes = [
                         title: 'Zentech - Excluir Operação', 
                         component: DeleteOperacaoComponent, 
                         canActivate: [RoleGuard], 
-                        data: { modalOrder: 1, roles: [Role.Admin] } 
+                        data: { modalOrder: 1, roles: [Role.Admin, Role.Master] } 
                     },
                     MyAccountRouter
                 ]

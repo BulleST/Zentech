@@ -50,7 +50,7 @@ const routes: Routes = [
                     },
                 ]
             },
-            { path: 'excluir/:invoice_id', component: DeleteComponent, title: 'Zentech - Excluir Invoice', canActivate: [RoleGuard], data: { modalOrder: 1, roles: [Role.Admin] }, },
+            { path: 'excluir/:invoice_id', component: DeleteComponent, title: 'Zentech - Excluir Invoice', canActivate: [RoleGuard], data: { modalOrder: 1, roles: [Role.Admin, Role.Master] }, },
             MyAccountRouter,
         ]
     }

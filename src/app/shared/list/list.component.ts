@@ -156,11 +156,16 @@ export class ListSharedComponent implements OnDestroy, OnChanges, AfterViewInit,
     }
 
     selectAllChange(e: any) {
-        this.table.selectedItems.next(e);
-        if (e.length == 1) {
-            this.table.selected.next(e[0]);
+        if (this.selectionMode == 'multiple' ) {
+            this.table.selectedItems.next(e);
+            if (e.length == 1) {
+                this.table.selected.next(e[0]);
+            } else {
+                this.table.selected.next(undefined);
+            }
         } else {
-            this.table.selected.next(undefined);
+         
+            this.table.selected.next(e);   
         }
     }
 
