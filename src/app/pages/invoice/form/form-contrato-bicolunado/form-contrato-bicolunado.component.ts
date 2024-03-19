@@ -150,7 +150,7 @@ export class FormContratoBicolunadoComponent implements OnChanges {
                     var contrato = res.objeto;
                     this.objeto.contrato = contrato;
                     this.assinatura_Intermediadora.alterarDados = false;
-                    this.setIntermediadora(contrato.assinatura);
+                    this.setIntermediadora(contrato.assinaturaIntermediadora);
                     this.setPodeBaixarChange();
                 } else {
                     this.erroChange.emit(res.mensagem);
