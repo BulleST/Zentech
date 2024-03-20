@@ -11,13 +11,13 @@ import { TableModule } from 'primeng/table';
 import { CalendarModule } from 'primeng/calendar';
 import { FormComponent } from './form/form.component';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { TypeofPipe } from 'src/app/utils/typeof.pipe';
 
 @NgModule({
     declarations: [
         ListComponent,
         FormComponent,
-
-
+        TypeofPipe
     ],
     imports: [
         CommonModule,
@@ -31,9 +31,10 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
         CalendarModule,
         NgxMaskDirective, 
         NgxMaskPipe,
+
     ],
     providers: [
-        provideNgxMask()
+        provideNgxMask(),
     ]
 })
 export class LogModule { }

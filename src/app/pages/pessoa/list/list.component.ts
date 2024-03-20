@@ -123,6 +123,8 @@ export class ListComponent implements OnDestroy {
                 this.pessoaService.loading.next(false);
                 this.loadingService.message.next('');
                 if (res.sucesso) {
+                    this.table.selected.next(undefined);
+                    this.table.selectedItems.next([]);
                     this.toastr.success('Exclusão concluída com sucesso')
                 } else {
                     this.toastr.error('Ocorreu um erro na exclusão.');

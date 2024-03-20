@@ -18,77 +18,133 @@
                 </tr>
             </tbody>
         </table>
-        <table class="table table-striped mb-3 table-log">
-            <tbody class="padding-tr">
-                <ng-template let-obj ngFor [ngForOf]="obj.campos">
-                    <ng-container 
-                        [ngTemplateOutlet]="campoContainer" 
-                        [ngTemplateOutletContext]="{obj: obj}">
-                    </ng-container>
-                </ng-template>
-            </tbody>
-        </table>
     </div>
+    <ng-container [ngTemplateOutlet]="table" [ngTemplateOutletContext]="{obj: obj}"></ng-container>
 </ng-template>
 
-
-<ng-template  #campoContainer let-obj="obj">
-    <ng-template ngIf [ngIf]="obj.campos && obj.campos.length > 0">
-        <tr class="bg-dark text-white">
-            <td colspan="2" class="text-white"><b>{{obj.label}}</b></td>
-        </tr>
-        <ng-template let-ref ngFor [ngForOf]="obj.campos">
-            <ng-container 
-                [ngTemplateOutlet]="campoContainer" 
-                [ngTemplateOutletContext]="{obj: ref}">
-            </ng-container>
-        </ng-template>
-    </ng-template>
-
-    <!--  -->
-
-    <ng-container *ngIf="!obj.campos"
-        [ngTemplateOutlet]="itemContainer" 
-        [ngTemplateOutletContext]="{item: obj}">
-    </ng-container>
+<ng-template #table let-obj="obj">
+ <div class="table-responsive">
+    <table class="table table-striped">
+        <tbody>
+            <ng-template let-campo ngFor [ngForOf]="obj.campos">
+                <!-- Não é lista -->
+                <ng-template [ngIf]="campo.type != 'list'">
+                    <!-- Não é um subobjeto -->
+                    <ng-template [ngIf]="campo.value && campo.value.toString() != '[object Object]'">
+                        <ng-container [ngTemplateOutlet]="item" 
+                                        [ngTemplateOutletContext]="{ 
+                                                    value:  campo.value,
+                                                    label: campo.label,
+                                                    type: campo.type,
+                                                     }"></ng-container>
+                    </ng-template>
+                    <ng-template [ngIf]="campo.value && campo.value.toString() == '[object Object]'">
+                        <tr class="w-100 p-2 bg-dark">
+                            <td colspan="2" class="text-white">{{campo.entidade ?? campo.label}}</td>
+                        </tr>
+                        <!-- pra cada subcampo desse objeto -->
+                        <ng-template let-subcampo ngFor [ngForOf]="campo.campos">
+                            <ng-container [ngTemplateOutlet]="item" 
+                                            [ngTemplateOutletContext]="{ 
+                                                        value: subcampo.value,
+                                                        label: subcampo.label,
+                                                        type: subcampo.type,
+                                                         }"></ng-container>
+    
+                   
+                        </ng-template>
+                    </ng-template>
+                </ng-template>
+                <!-- É uma lista -->
+                <ng-template [ngIf]="campo.type == 'list'">
+                    <tr class="w-100 p-2 bg-dark">
+                        <td colspan="2" class="text-white">{{campo.entidade ?? campo.label}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="p-0">
+                            <div class="table-responsive mb-2" style="max-width: 660px;">
+                                <table class="table table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let item of campo.campos">{{item.label}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Pra cada item da lista -->
+                                        <ng-template let-item ngFor [ngForOf]="campo.value">
+                                            <tr>
+                                                <td *ngFor="let col of campo.campos">
+                                                    
+                                                    <ng-container [ngTemplateOutlet]="templateValue" 
+                                                            [ngTemplateOutletContext]="{ value: item[col.field], type: col.type }"></ng-container>    
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </ng-template> 
+            
+        </tbody>
+    </table>
+ </div>
 </ng-template>
 
-<ng-template #itemContainer let-item="item">
+<ng-template #item let-value="value" let-label="label" let-type="type">
     <tr>
-        <td style="white-space: nowrap;"><b>{{item.label}}</b></td>
+        <td style="white-space: nowrap;"><b>{{label}}</b></td>
         <td>
-            <div [ngSwitch]="[null, undefined, 0, '', '   '.trim()].includes(item.value)">
-                <div *ngSwitchCase="true">N/A</div>
-                <div *ngSwitchDefault>
-                    <div [ngSwitch]="item.type">
-                        <div *ngSwitchCase="'image'">
-                            <img [src]="item.value" alt="">
-                        </div>
-                        <div *ngSwitchCase="'date'">
-                            <span>{{item.value | date : 'dd/MM/yyyy'}}</span>
-                        </div>
-                        <div *ngSwitchCase="'datetime'">
-                            <span>{{item.value | date : 'dd/MM/yyyy HH:mm'}}</span>
-                        </div>
-                        <div *ngSwitchCase="'percentual'">
-                            <span>{{item.value | currency : 'BRL' : '' : '1.2'}}%</span>
-                        </div>
-                        <div *ngSwitchCase="'number'">
-                            <span>{{item.value | currency : 'BRL' : '' : '1.0-4'}}</span>
-                        </div>
-                        <div *ngSwitchCase="'money'">
-                            <span>{{item.value | currency : 'BRL' : 'R$' : '1.2'}}</span>
-                        </div>
-                        <div *ngSwitchCase="'boolean'">
-                            <span *ngIf="item.value">Sim</span>
-                            <span *ngIf="!item.value">Não</span>
-                        </div>
-                        <div *ngSwitchDefault>
-                            <span>{{item.value}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ng-container [ngTemplateOutlet]="templateValue" 
+                        [ngTemplateOutletContext]="{ value: value, type: type }"></ng-container>    
         </td>
     </tr>
+</ng-template>
+ <ng-template #templateValue let-value="value" let-type="type">
+    <span [ngSwitch]="[null, undefined,  '', '   '.trim()].includes(value)">
+        <span *ngSwitchCase="true">N/A</span>
+        <span *ngSwitchDefault>
+            <span [ngSwitch]="type">
+                <span *ngSwitchCase="'image'">
+                    <img [src]="value" alt="">
+                </span>
+                <span *ngSwitchCase="'date'">
+                    <span>{{value | date : 'dd/MM/yyyy'}}</span>
+                </span>
+                <span *ngSwitchCase="'rg'">
+                    <span>{{value | mask : '00.000.000-0'}}</span> 
+                </span>
+                <span *ngSwitchCase="'cpf'">
+                    <span>{{value  | mask : '000.000.000-00'}}</span>
+                </span>
+                <span *ngSwitchCase="'datetime'">
+                    <span>{{value | date : 'dd/MM/yyyy HH:mm'}}</span>
+                </span>
+                <span *ngSwitchCase="'percentual'">
+                    <span>{{value | currency : 'BRL' : '' : '1.2'}}%</span>
+                </span>
+                <span *ngSwitchCase="'number'">
+                    <span>{{value | currency : 'BRL' : '' : '1.0-4'}}</span>
+                </span>
+                <span *ngSwitchCase="'money'">
+                    <span>{{value | currency : 'BRL' : 'R$' : '1.2'}}</span>
+                </span>
+                <span *ngSwitchCase="'boolean'">
+                    <span *ngIf="value">Sim</span>
+                    <span *ngIf="!value">Não</span>
+                </span>
+                <span *ngSwitchCase="'color'">
+                    <div class="d-flex align-items-center">
+                        <div [ngStyle]="{'background-color': value}" class="p-3 rounded-circle"></div>
+                        <span class="ms-2">{{value}}</span>
+                    </div>
+                </span>
+                <span *ngSwitchDefault>
+                    <span>{{value}}</span>
+                </span>
+            </span>
+        </span>
+    </span>
 </ng-template>

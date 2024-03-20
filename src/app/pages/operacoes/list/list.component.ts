@@ -124,6 +124,10 @@ export class ListComponent {
             this.loadingService.message.next('');
             this.pessoaOperacaoService.loading.next(false);
             if (res.sucesso) {
+                
+                this.table.selected.next(undefined);
+                this.table.selectedItems.next([]);
+
                 this.toastr.success('Exclusão concluída com sucesso')
             } else {
                 this.toastr.error('Ocorreu um erro na exclusão.');

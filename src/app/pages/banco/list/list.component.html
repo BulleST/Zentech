@@ -7,11 +7,11 @@
 
             <h3 class="page__header-title">Bancos</h3>
 
-            <p class="page__header-subtitle" *ngIf="empresaSelected">
+            <!-- <p class="page__header-subtitle" *ngIf="empresaSelected">
                 <small>Bancos cadastrados em
                     <strong>{{empresaSelected.nome || "Empresa X"}}</strong>
                 </small>
-            </p>
+            </p> -->
         </div>
         <div class="ms-auto mt-auto" style="margin-bottom: 7px;">
             <button class="btn btn-dark" (click)="getList()" [disabled]="loading"><span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>Atualizar</button>
