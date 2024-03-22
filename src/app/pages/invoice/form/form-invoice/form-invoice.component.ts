@@ -33,8 +33,8 @@ export class FormInvoiceComponent implements OnChanges {
     faArrowRight = faArrowRight;
     beneficiarios: BeneficiarioList[] = [];
     loadingBeneficiarios = false;
-    beneficiarioSelected?: BeneficiarioRequest;
     bancoBeneficiarioSelected?: BancoRequest;
+    beneficiarioSelected?: BeneficiarioRequest;
 
     paises: Paises[] = [];
     loadingPais = true;
@@ -62,6 +62,7 @@ export class FormInvoiceComponent implements OnChanges {
     @Output() tabChanged = new EventEmitter<number>();
     @Output() benefificarioChanged = new EventEmitter<BeneficiarioRequest>();
     @Output() objetoChanged = new EventEmitter<InvoiceRequest>();
+
     constructor(
         private toastr: ToastrService,
         private invoiceService: InvoiceService,
@@ -110,13 +111,14 @@ export class FormInvoiceComponent implements OnChanges {
     async ngOnChanges(changes: SimpleChanges) {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
-            await this.beneficiarioChange();
+            await this.beneficiarioChange(this.objeto.invoice.beneficiario_Id);
         }
         if (changes['erro']) this.erro = changes['erro'].currentValue;
         if (changes['loading']) this.loading = changes['loading'].currentValue;
         if (changes['form']) this.form = changes['form'].currentValue;
         if (changes['podeBaixarPDF']) this.podeBaixarPDF = changes['podeBaixarPDF'].currentValue;
         if (changes['readonly']) this.readonly = changes['readonly'].currentValue;
+      
     }
 
     
@@ -135,16 +137,16 @@ export class FormInvoiceComponent implements OnChanges {
     }
 
 
-    async beneficiarioChange() {
-        if (this.objeto.invoice.beneficiario_Id) {
+    async beneficiarioChange(beneficiario_Id: number) {
+        if (beneficiario_Id) {
             this.loadingBeneficiarios = true;
 
-            await lastValueFrom(this.beneficiarioService.get(this.objeto.invoice.beneficiario_Id))
+            await lastValueFrom(this.beneficiarioService.get(beneficiario_Id))
                 .then(async (res: BeneficiarioRequest) => {
                     res.pais_Id = (this.paises.find(x => x.id == res.pais_Id)?.nome ?? '') as unknown as number;
                     
                     // Só altera a assinatura e conta se o beneficiário mudar
-                    if (this.beneficiarioSelected?.id != this.objeto.invoice.beneficiario_Id) {
+                    if (this.beneficiarioSelected?.id != beneficiario_Id) {
                         this.objeto.invoice.conta = res.conta;
                         this.objeto.contrato.nomeRepresentanteLegal = res.nomeRepresentanteLegal;
                         this.objeto.contrato.codigoRepresentanteLegal = res.codigoRepresentanteLegal;

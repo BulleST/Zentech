@@ -62,6 +62,10 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['objeto']) {
             this.objeto = changes['objeto'].currentValue;
+            
+            this.assinatura_Contratante.alterarDados = false;
+            this.assinatura_Intermediadora.alterarDados = false;
+
             this.setContratante(this.objeto.contrato.nomeRepresentanteLegal, this.objeto.contrato.codigoRepresentanteLegal, this.objeto.contrato.assinaturaRepresentanteLegal);
             this.setIntermediadora(this.objeto.contrato.assinaturaIntermediadora);
             this.setPodeBaixarChange();
@@ -198,12 +202,14 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     }
 
     setPodeBaixarChange() {
-        this.certificadoAssinaturaIncluido = !!this.objeto.contrato.dataCertificadoAssinatura;
-        // Pode baixar PDF se as assinaturas e certificados estão incluidos
-        this.podeBaixarPDF = this.assinatura_Contratante.assinado
-            && this.assinatura_Intermediadora.assinado
-            && this.certificadoAssinaturaIncluido
-            && this.objeto.contrato.id != 0;
+        // this.certificadoAssinaturaIncluido = !!this.objeto.contrato.dataCertificadoAssinatura;
+        // // Pode baixar PDF se as assinaturas e certificados estão incluidos
+        // this.podeBaixarPDF = this.assinatura_Contratante.assinado
+        //     && this.assinatura_Intermediadora.assinado
+        //     && this.certificadoAssinaturaIncluido
+        //     && this.objeto.contrato.id != 0;
+
+        this.podeBaixarPDF = this.objeto.contrato.id != 0;
 
         this.podeBaixarChanged.emit(this.podeBaixarPDF);
     }
@@ -234,19 +240,24 @@ export class FormContratoBicolunadoComponent implements OnChanges {
     async salvarDados_Contratante(nome?: string, codigo?: string, assinatura?: string) {
         this.loading = true;
         this.setContratante(nome, codigo, assinatura);
-        if (this.assinatura_Contratante.podeAssinar) { 
-            await lastValueFrom(this.invoiceService.edit(this.objeto))
-            .then(res => {
+
+        await lastValueFrom(this.invoiceService.edit(this.objeto))
+        .then(res => {
+            this.loading = false;
+            if (res.sucesso) {
                 this.objeto = res.objeto;
-                this.loading = false;
                 this.assinatura_Contratante.alterarDados = false;
                 this.setContratante(nome, codigo, assinatura);
-            })
-            .catch(res => {
-                this.erro = getError(res);
-                this.loading = false;
-            })
-        }
+            } else {
+                this.erro = res.mensagem;
+                this.toastr.error(res.mensagem);
+            }
+        })
+        .catch(res => {
+            this.erro = getError(res);
+            this.loading = false;
+        })
+      
     }
     async salvarDados_Intermediadora( ) {
         this.loading = true;

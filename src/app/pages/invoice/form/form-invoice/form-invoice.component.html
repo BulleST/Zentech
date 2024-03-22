@@ -57,7 +57,7 @@
                         <a class="py-1 px-1 text-dark" (click)="moedaEditar(item)" title="Editar"><fa-icon
                                      [icon]="faEdit"></fa-icon></a>
                         <a class="py-1 px-1 text-dark" *ngIf="podeExcluirMoeda" (click)="moedaExcluir(item.id)"
-                           title="Editar"><fa-icon [icon]="faTrash"></fa-icon></a>
+                           title="Excluir"><fa-icon [icon]="faTrash"></fa-icon></a>
                     </div>
                 </div>
             </ng-template>
@@ -136,7 +136,7 @@
                     optionValue="id"
                     placeholder="Selecione um beneficiário"
                     [required]="true"
-                    (ngModelChange)="beneficiarioChange()"
+                    (ngModelChange)="beneficiarioChange(objeto.invoice.beneficiario_Id)"
                     appendTo="body"
                     [dropdownIcon]="readonly ? 'd-none' : 'pi pi-angle-down'"
                     [showClear]="!readonly"

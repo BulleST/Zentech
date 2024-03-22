@@ -18,7 +18,7 @@
                 </ng-template>
                 <div class="px-4">
                     <form #invoice="ngForm">
-                        <app-form-invoice
+                        <app-form-invoice #appInvoice
                                           [objeto]="objeto"
                                           [loading]="loading"
                                           [erro]="erro"
@@ -62,7 +62,7 @@
                 </ng-template>
                 <div class="px-4">
                     <form #clausulas="ngForm">
-                        <app-form-contrato-bicolunado
+                        <app-form-contrato-bicolunado #appBicolunado
                                 [objeto]="objeto"
                                 [beneficiarioSelected]="beneficiarioSelected"
                                 [loading]="loading"
@@ -109,7 +109,6 @@
             <button (click)="send(invoice, contrato)" class="btn btn-primary me-0 "
                     [disabled]="invoice.invalid 
                                 || contrato.invalid 
-                                || clausulas.invalid 
                                 || loading 
                                 || loadingSwiftFile 
                                 || loadingContratoBicolunadoFile 
@@ -120,5 +119,12 @@
             </button>
         </div>
     </div>
+    <p>invoice.invalid {{invoice.invalid }}</p>
+    <p>contrato.invalid {{contrato.invalid }}</p>
+    <p>loading {{loading}}</p>
+    <p>loadingSwiftFile {{loadingSwiftFile}}</p>
+    <p>loadingContratoBicolunadoFile {{loadingContratoBicolunadoFile}}</p>
+    <p>loadingContratoFile {{loadingContratoFile}}</p>
+    <p>loadingInvoiceFile {{loadingInvoiceFile}}</p>
 </ng-template>
 <router-outlet></router-outlet>

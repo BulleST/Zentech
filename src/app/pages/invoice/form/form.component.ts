@@ -14,6 +14,8 @@ import { NgForm } from '@angular/forms';
 import { tabChanged } from 'src/app/utils/tabview';
 import { faArrowLeft, faArrowRight, faCheck, faEdit, faPenClip, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/parts/loading/loading';
+import { FormInvoiceComponent } from './form-invoice/form-invoice.component';
+import { FormContratoBicolunadoComponent } from './form-contrato-bicolunado/form-contrato-bicolunado.component';
 
 @Component({
     selector: 'app-form',
@@ -54,6 +56,9 @@ export class FormComponent implements OnDestroy {
     beneficiarioSelected?: BeneficiarioRequest;
 
     camposReadonly = false;
+
+    @ViewChild('appInvoice') appInvoice: FormInvoiceComponent;
+    @ViewChild('appBicolunado') appBicolunado: FormContratoBicolunadoComponent;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -242,15 +247,21 @@ export class FormComponent implements OnDestroy {
             .then(async res => {
                 if (res.sucesso == true) {
 
-                    // this.alterarRepresentanteLegal = false;
-
                     this.objeto.contrato.id = res.objeto.contrato.id;
                     this.objeto.contrato.invoice_Id = res.objeto.invoice.id;
                     this.objeto.invoice.id = res.objeto.invoice.id;
                     this.objeto.contrato.numContrato = this.objeto.invoice.id.toString();
-                    // if (!this.isEditPage) {
-                        // await lastValueFrom(this.invoiceService.edit(this.objeto));
-                    // }
+
+                    var change = {
+                        objeto: {
+                            previousValue: this.objeto,
+                            currentValue: this.objeto,
+                            firstChange: false,
+                            isFirstChange: () => false,
+                        },
+                    };
+                    this.appInvoice.ngOnChanges(change);
+                    this.appBicolunado.ngOnChanges(change);
 
                     var idEncrypted = this.crypto.encrypt(this.objeto.invoice.id);
                     if (!this.isEditPage) {

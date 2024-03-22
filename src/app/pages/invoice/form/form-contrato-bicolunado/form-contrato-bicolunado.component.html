@@ -24,13 +24,13 @@
                             <span *ngIf="assinatura_Contratante.alterarDados">Cancelar</span>
                             <span *ngIf="!assinatura_Contratante.alterarDados">Alterar dados</span>
                         </button>
-                        <button type="button" 
+                        <!-- <button type="button" 
                                 class="btn btn-dark me-2"
                                 *ngIf="assinatura_Contratante.alterarDados && isEditPage"
                                 [disabled]="!assinatura_Contratante.podeAssinar"
                                 (click)="salvarDados_Contratante(nomeRepresentanteLegal.value, codigoRepresentanteLegal.value, assinatura_Contratante.uri)">
                             Salvar Dados
-                        </button>
+                        </button> -->
                         <!-- Assinar -->
                         <button type="button"
                                 class="btn btn-dark"
@@ -140,13 +140,13 @@
                                 <span *ngIf="!objeto.contrato.assinaturaIntermediadora">Incluir</span>
                                 assinatura</span>
                         </button>
-                        <button type="button" 
+                        <!-- <button type="button" 
                                 class="btn btn-dark me-2"
                                 *ngIf="assinatura_Intermediadora.alterarDados && isEditPage"
                                 [disabled]="!assinatura_Intermediadora.podeAssinar"
                                 (click)="salvarDados_Intermediadora()">
-                            Salvar Dados <!--- Pode assinar: {{assinatura_Intermediadora.podeAssinar}}-->
-                        </button>
+                            Salvar Dados
+                        </button> -->
                         <!-- Assinar -->
                         <button type="button"
                                 class="btn btn-dark"
@@ -311,7 +311,7 @@
         <button type="button" *ngIf="!isEditPage" 
             (click)="send.emit(true)" 
             class="btn btn-primary me-0 " 
-            [disabled]="loading || form.invalid">
+            [disabled]="loading">
             <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
             <span>Salvar e Gerar Swift</span>
         </button>
