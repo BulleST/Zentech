@@ -1,5 +1,5 @@
 import { validateCPF } from 'src/app/utils/validate-cpf';
-import { Component, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, TemplateRef, ViewChild, EventEmitter } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, lastValueFrom } from 'rxjs';
@@ -33,13 +33,11 @@ export class FormComponent implements OnDestroy {
     isEditPage = false;
     modal: Modal = new Modal;
 
-    fileUploaded = false;
-    fileSrc = '';
-    fileName = '';
-    fileLoading = false;
-
     loadingPaises = true;
     paises: Paises[] = [];
+
+    assinatura_Intermediadora: FileUri = new FileUri;
+    logo: FileUri = new FileUri;
 
 
     constructor(
@@ -56,6 +54,19 @@ export class FormComponent implements OnDestroy {
                 this.loadingPaises = false;
                 this.paises = res;
             });
+
+
+            this.logo.onChange.subscribe(res => {
+                console.log('logo change', res)
+                this.objeto.logoDataUri = res;
+                this.logo.isUploaded = (!!res && !!res.trim());
+            })
+
+            this.assinatura_Intermediadora.onChange.subscribe(res => {
+                console.log('assinatura_Intermediadora change', res)
+                this.objeto.assinaturaIntermediadora = res;
+                this.assinatura_Intermediadora.isUploaded = (!!res && !!res.trim());
+            })
     }
 
 
@@ -81,10 +92,11 @@ export class FormComponent implements OnDestroy {
                         this.empresaService.setEmpresa({ id: this.objeto.id, empresa: res });
                         this.colors.setColorsJquery(res);
 
-                        this.fileSrc = res.logoDataUri;
-                        this.fileLoading = false;
-                        this.fileName = '';
-                        this.fileUploaded = (!!res.logoDataUri && !!res.logoDataUri.trim());
+                        this.logo.uri = res.logoDataUri;
+                        this.logo.onChange.emit(res.logoDataUri);
+                        
+                        this.assinatura_Intermediadora.uri = res.assinaturaIntermediadora;
+                        this.assinatura_Intermediadora.onChange.emit(res.assinaturaIntermediadora);
 
                         setTimeout(() => {
                             this.modal = this.modalService.addModal(this.modal, 'Empresa');
@@ -116,36 +128,6 @@ export class FormComponent implements OnDestroy {
         this.modalService.removeModal(this.modal);
     }
 
-    fileChange(event: any) {
-        var file = event.target.files[0] as File;
-
-        this.importarNovamente();
-
-        if (file) {
-            this.fileLoading = true;
-            var reader = new FileReader();
-            var c = this;
-            reader.onload = function (e) {
-                var src = e.target?.result as string;
-                c.fileSrc = src;
-                c.fileUploaded = true;
-                c.fileLoading = false;
-                c.fileName = file.name;
-                c.objeto.logoDataUri = src;
-            }
-            reader.onerror = function (e) {
-                c.fileLoading = false;
-                c.toastr.error('Não foi possível realizar upload');
-            }
-
-            var a = reader.readAsDataURL(file)
-
-        } else {
-            this.toastr.error('Selecione uma imagem para salvar.')
-        }
-    }
-
-
     validaCPF(input: NgModel, doc: number) {
         if (!input) {
             return;
@@ -172,7 +154,6 @@ export class FormComponent implements OnDestroy {
 
         input.control.setErrors(null);
     }
-
 
     validaRG(input: NgModel, doc: number) {
         if (!input) {
@@ -225,12 +206,6 @@ export class FormComponent implements OnDestroy {
 
     }
 
-    importarNovamente() {
-        this.fileUploaded = false;
-        this.fileSrc = '';
-        this.fileName = '';
-    }
-
     send(form: NgForm) {
         if (form.invalid) {
             this.toastr.error('Campos inválidos');
@@ -259,6 +234,7 @@ export class FormComponent implements OnDestroy {
             })
 
     }
+
     request() {
         if (this.objeto.id == 0)
             return lastValueFrom(this.empresaService.create(this.objeto));
@@ -266,4 +242,35 @@ export class FormComponent implements OnDestroy {
         return lastValueFrom(this.empresaService.edit(this.objeto));
     }
 
+}
+
+class FileUri {
+    uri?: string;
+    file?: File;
+    isUploaded: boolean = false;
+    erro: string = '';
+
+    onChange = new EventEmitter<string>();
+    fileChange(event: any) {
+        var file = event.target.files[0] as File;
+        this.file = file;
+
+        if (file) {
+            var reader = new FileReader();
+            var c = this;
+            reader.onload = function (e) {
+                var src = e.target?.result as string;
+                c.isUploaded = true;
+                c.uri = src;
+                c.onChange.emit(src);
+            }
+            reader.onerror = function (e) {
+                c.erro = 'Não foi possível realizar upload';
+            }
+            reader.readAsDataURL(file)
+
+        } else {
+            this.erro = 'Selecione uma imagem para salvar.';
+        }
+    }
 }

@@ -59,3 +59,38 @@
 .input-color-picker:focus {
     box-shadow: 0px 0px 0px 2px #3d3a3a54;
 }
+
+
+
+
+
+
+.input-file-container-inline {
+    margin-bottom: 0;
+    min-width: 170px;
+    width: auto;
+}
+
+.input-file-container-inline input[type=file] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
+}
+.input-file-container-inline~label,
+.input-file-container-inline label {
+    width: unset;
+}
+
+.input-file-image-inline {
+    width: auto;
+    max-width: 100%;
+    max-height: 60px;
+    margin: 0;
+    padding: 0;
+    box-sizing: content-box;
+}
+

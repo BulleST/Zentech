@@ -219,6 +219,35 @@
                         <p class="text-danger" *ngIf="secundaryColor.errors['required']">Este campo é obrigatório.</p>
                     </div>
                 </div>
+                <div class="form-group col-xl-5 col-lg-5 col-md-5 col-sm-5 col-12"> <!-- Assinatura Empresa -->
+                    <label for="_assinaturaIntermediraria">Assinatura: <span class="text-danger">*</span></label>
+                    <!-- <p>{{assinatura_Intermediadora|json}}</p> -->
+                    <div class="d-flex align-items-center flex-wrap">
+                        <label for="_assinaturaIntermediraria"
+                               class="input-file-container-inline btn btn-dark me-2">
+                            <span *ngIf="!assinatura_Intermediadora.isUploaded">Escolher assinatura</span>
+                            <span *ngIf="assinatura_Intermediadora.isUploaded">Refazer upload</span>
+                            <input type="file"
+                                   name="_assinaturaIntermediraria"
+                                   id="_assinaturaIntermediraria"
+                                   #_assinaturaIntermediraria
+                                   required
+                                   accept="image/png"
+                                   (input)="assinatura_Intermediadora.fileChange($event);">
+                        </label>
+                        <label class="my-1" *ngIf="!assinatura_Intermediadora.uri"
+                               title="Nenhuma assinatura selecionada">Nenhuma assinatura selecionada</label>
+                        <label class="my-1"
+                               *ngIf="assinatura_Intermediadora.uri && assinatura_Intermediadora.file != undefined"
+                               [title]="assinatura_Intermediadora.file.name">{{assinatura_Intermediadora.file.name}}</label>
+                    </div>
+                    <div *ngIf="assinatura_Intermediadora.uri">
+                        <img [src]="assinatura_Intermediadora.uri"
+                             [alt]="assinatura_Intermediadora.file ? assinatura_Intermediadora.file.name : 'Assinatura' "
+                             class="input-file-image-inline">
+                    </div>
+                </div>
+                
             </div>
             <div class="row hidden">
                 <input type="hidden" 
@@ -232,10 +261,11 @@
                     <div>
                         <label for="file" class="mb-0">Logo: 
                             <span class="text-danger">*</span>
-                            <span class="text-danger" *ngIf="!fileUploaded">  (Esse campo é obrigatório)</span>
-
+                            <span class="text-danger" *ngIf="!logo.isUploaded">  (Esse campo é obrigatório)</span>
                         </label>
-                        <label for="file" class="input-file-container" *ngIf="!fileUploaded">
+                        <label for="file" 
+                            [hidden]="logo.uri"
+                            class="input-file-container">
                             <p class="icon">
                                 <i class="pi pi-upload"></i>
                             </p>
@@ -247,13 +277,13 @@
                                    #file
                                    required
                                    accept="image/png, image/gif, image/jpeg, image/svg"
-                                   (input)="fileChange($event)">
+                                   (input)="logo.fileChange($event)">
                         </label>
                         <div class="my-3">
-                            <button *ngIf="fileUploaded" (click)="importarNovamente(); " class="btn btn-dark  ">Refazer upload</button>
+                            <label *ng  If="logo.isUploaded" for="file" class="btn btn-dark">Refazer upload</label>
                         </div>
                         <div class="">
-                            <img [src]="fileSrc" *ngIf="fileSrc && fileUploaded" [alt]="fileName" class="input-file-image">
+                            <img [src]="logo.uri" *ngIf="logo.uri && logo.isUploaded" [alt]="logo.file?.name" class="input-file-image">
                         </div>
                     </div>
                 </div>

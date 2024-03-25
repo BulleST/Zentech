@@ -237,46 +237,6 @@ export class FormContratoBicolunadoComponent implements OnChanges {
                                                         && this.isEditPage); // Se for tela de edição
     }
 
-    async salvarDados_Contratante(nome?: string, codigo?: string, assinatura?: string) {
-        this.loading = true;
-        this.setContratante(nome, codigo, assinatura);
-
-        await lastValueFrom(this.invoiceService.edit(this.objeto))
-        .then(res => {
-            this.loading = false;
-            if (res.sucesso) {
-                this.objeto = res.objeto;
-                this.assinatura_Contratante.alterarDados = false;
-                this.setContratante(nome, codigo, assinatura);
-            } else {
-                this.erro = res.mensagem;
-                this.toastr.error(res.mensagem);
-            }
-        })
-        .catch(res => {
-            this.erro = getError(res);
-            this.loading = false;
-        })
-      
-    }
-    async salvarDados_Intermediadora( ) {
-        this.loading = true;
-        this.setIntermediadora(this.assinatura_Intermediadora.uri);
-        if (this.assinatura_Intermediadora.podeAssinar) { 
-            await lastValueFrom(this.invoiceService.edit(this.objeto))
-            .then(res => {
-                this.objeto = res.objeto;
-                this.loading = false;
-                this.assinatura_Intermediadora.alterarDados = false;
-                this.setIntermediadora(this.assinatura_Intermediadora.uri);
-            })
-            .catch(res => {
-                this.erro = getError(res);
-                this.loading = false;
-            })
-        }
-    }
-
     proximo() {
         this.objetoChanged.emit(this.objeto);
             this.tabChanged.emit(3)

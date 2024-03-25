@@ -21,6 +21,7 @@ export class Empresa {
     cidade: string = '';
     uf: string = '';
     pais_Id: number = 0;
+    assinaturaIntermediadora?: string;
 }
 
 export var empresaColumns: Column[] = [

@@ -16,6 +16,7 @@ import { faArrowLeft, faArrowRight, faCheck, faEdit, faPenClip, faTrash } from '
 import { LoadingService } from 'src/app/parts/loading/loading';
 import { FormInvoiceComponent } from './form-invoice/form-invoice.component';
 import { FormContratoBicolunadoComponent } from './form-contrato-bicolunado/form-contrato-bicolunado.component';
+import { EmpresaService } from 'src/app/services/empresa.service';
 
 @Component({
     selector: 'app-form',
@@ -69,6 +70,7 @@ export class FormComponent implements OnDestroy {
         private modalService: ModalService,
         private loadingService: LoadingService,
         private router: Router,
+        private empresaService: EmpresaService,
     ) {
 
 
@@ -122,6 +124,8 @@ export class FormComponent implements OnDestroy {
                 this.objeto.invoice.data = this.datepipe.transform(this.objeto.invoice.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
                 this.objeto.contrato.dataLiquidacao = this.datepipe.transform(this.objeto.contrato.dataLiquidacao, 'yyyy-MM-dd') as unknown as Date;
                 this.objeto.contrato.data = this.datepipe.transform(this.objeto.contrato.data, 'yyyy-MM-ddTHH:mm') as unknown as Date;
+                this.objeto.contrato.assinaturaIntermediadora = this.empresaService.getEmpresa().value.empresa?.assinaturaIntermediadora;
+
                 setTimeout(() => {
                     this.modal = this.modalService.addModal(this.modal, 'invoice');
                 }, 200);
