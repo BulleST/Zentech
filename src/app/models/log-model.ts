@@ -100,6 +100,7 @@ export var logColumns: Column[] = [
             { value: 'Edição Campo Conta', output: 'Edição Campo Conta', class: 'flag-dark' },
             { value: 'Habilitar Empresa', output: 'Habilitar Empresa', class: 'flag-dark' },
             { value: 'Desabilitar Empresa', output: 'Desabilitar Empresa', class: 'flag-dark' },
+            { value: 'Atualização de Assinatura', output: 'Atualização de Assinatura', class: 'flag-dark' },
         ]
     },
     {
